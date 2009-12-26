@@ -21,6 +21,10 @@
     	$("#tabs").tabs();
   	});
 
+	$(function() {
+		$("#accordion").accordion();
+	});
+	
 	</script>
 </head>
 <body style="margin:0px;">
@@ -58,9 +62,11 @@
 						</ol>
 						</div>
 					</td>
-					<td style="width:40%; vertical-align:top; text-align:center;"><br><br>
-						<input type="button" onClick="" value="Seleccionar Todos" style="width:250px;"><br><br>
-						<input type="button" onClick="" value="Encender" style="width:120px;">&nbsp;&nbsp;&nbsp;<input type="button" onClick="" value="Apagar" style="width:120px;">
+					<td style="width:50%; vertical-align:top; text-align:center;"><br>
+						<img src="img/icoEncenderApagar.png"><br>
+						Mediante esta opci&oacute;n, usted podr&aacute;<br> encender uno o varios equipos de alumnos<br>bla bla bla bla...<br><br>
+						<input type="button" onClick="" value="Seleccionar Todos" style="width:200px;"><br><br>
+						<input type="button" onClick="" value="Encender" style="width:100px;">&nbsp;&nbsp;&nbsp;<input type="button" onClick="" value="Apagar" style="width:100px;">
 					</td>
 				</tr>
 				</table>
@@ -86,7 +92,9 @@
 						</ol>
 						</div>
 					</td>
-					<td style="width:40%; vertical-align:top; text-align:center;"><br><br>
+					<td style="width:50%; vertical-align:top; text-align:center;"><br>
+						<img src="img/icoInternet.png"><br>
+						Mediante esta opci&oacute;n, usted podr&aacute;<br> tener el control de los alumnos que acceden<br> a internet bla bla bla bla...<br><br>
 						<input type="button" onClick="" value="Seleccionar Todos" style="width:250px;"><br><br>
 						<input type="button" onClick="" value="Habilitar" style="width:120px;">&nbsp;&nbsp;&nbsp;<input type="button" onClick="" value="Deshabilitar" style="width:120px;">
 					</td>
@@ -114,13 +122,49 @@
 						</ol>
 						</div>
 					</td>
-					<td style="width:40%; vertical-align:top; text-align:center;"><br><br>
+					<td style="width:50%; vertical-align:top; text-align:center;"><br>
+						<img src="img/icoRatonTeclado.png"><br>
+						Mediante esta opci&oacute;n, usted podr&aacute;<br> habilitar y deshabilitar el teclado y rat&oacute;n<br> bla bla bla bla...<br><br>
 						<input type="button" onClick="" value="Seleccionar Todos" style="width:250px;"><br><br>
 						<input type="button" onClick="" value="Habilitar" style="width:120px;">&nbsp;&nbsp;&nbsp;<input type="button" onClick="" value="Deshabilitar" style="width:120px;">
 					</td>
 				</tr>
 				</table>
 		    </div>
+		</div>
+	</td>
+	<td style="vertical-align:top;">
+		<div id="accordion" style="width:300px;">
+			<h3><a href="#">Proyector</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoProyector.png"><br>
+				<input type="button" value="Iniciar Proyector">
+			</div>
+			<h3><a href="#">Gran hermano</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoGranHermano.png"><br>
+				bla bla bla
+			</div>
+			<h3><a href="#">Emitir Video/Audio</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoEmitirVideo.png">
+				<br>bla bla bla
+			</div>
+			<h3><a href="#">Enviar Fichero</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoEnviarFichero.png">
+				<br>bla bla bla
+			</div>
+			<h3><a href="#">Enviar Mensaje</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoEnviarMensaje.png">
+				<br>bla bla bla
+			</div>
+			<h3><a href="#">Trabajo en Grupo</a></h3>
+			<div style="text-align:center;">
+				<img src="img/icoTrabajoGrupo.png">
+				<br>bla bla bla
+			</div>
 		</div>
 	</td>
 </tr>
