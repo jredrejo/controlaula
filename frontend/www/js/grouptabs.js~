@@ -35,7 +35,8 @@ Ext.onReady(function() {
                     iconCls: 'x-icon-tickets',
                     tabTip: 'Encender/Apagar equipos',
                     style: 'padding: 10px;',
-					html:""
+					html:"<div id='equiposAula'></div>",
+    				items: [pintarAula]
     			}, 
                 {
                     xtype: 'portal',
