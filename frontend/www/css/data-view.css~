@@ -13,7 +13,7 @@
 	padding: 3px;
 }
 #images-view .thumb img{
-	height: 80px;
+	height: 90px;
 	width: 80px;
 }
 #images-view .thumb-wrap{
@@ -35,7 +35,8 @@
 }
 
 #images-view .x-view-selected{
-	background: #eff5fb url(images/selected.gif) no-repeat right bottom;
+	/*background: #eff5fb url(images/selected.gif) no-repeat right bottom;*/
+	background: #cb8a81 url(images/selected.gif) no-repeat right bottom;
 	border:1px solid #99bbe8;
 	padding: 4px;
 }
