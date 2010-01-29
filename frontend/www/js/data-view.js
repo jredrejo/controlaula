@@ -27,7 +27,7 @@ Ext.onReady(function(){
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
-        width:535,
+        width:630,
         autoHeight:true,
         collapsible:true,
         layout:'fit',

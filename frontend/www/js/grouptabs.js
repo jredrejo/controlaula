@@ -35,61 +35,160 @@ Ext.onReady(function() {
                     iconCls: 'x-icon-tickets',
                     tabTip: 'Encender/Apagar equipos',
                     style: 'padding: 10px;',
-					html:""
+					html:	"aquí colocamos equiposAlumnos.html"
     			}, 
                 {
                     xtype: 'portal',
                     title: 'Equipos',
                     tabTip: 'Equipos del Aula',
                     items:[{
-                        columnWidth:.33,
+                        columnWidth:.16,
                         style:'padding:10px 0 10px 10px',
                         items:[{
                             title: 'Equipo 1',
                             tools: tools,
-                            html: '<br><br><br>'
-                        },{
-                            title: 'Equipo 4',
-                            tools: tools,
-                            html: '<br><br><br>'
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
                         },{
                             title: 'Equipo 7',
                             tools: tools,
-                            html: '<br><br><br>'
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 13',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 19',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 25',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
                         }]
                     },{
-                        columnWidth:.33,
+                        columnWidth:.16,
                         style:'padding:10px 0 10px 10px',
                         items:[{
                             title: 'Equipo 2',
                             layout:'fit',
                             tools: tools,
-                            html:'<br><br><br>',
-                        },{
-                            title: 'Equipo 5',
-                            tools: tools,
-                            html: '<br><br><br>'
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
                         },{
                             title: 'Equipo 8',
                             tools: tools,
-                            html: '<br><br><br>'                        
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 14',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 20',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 26',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
                         }]
                     },{
-                        columnWidth:.33,
+                        columnWidth:.16,
                         style:'padding:10px',
                         items:[{
                             title: 'Equipo 3',
                             layout:'fit',
                             tools: tools,
-                            html: '<br><br><br>'
-                        },{
-                            title: 'Equipo 6',
-                            tools: tools,
-                            html: '<br><br><br>'
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
                         },{
                             title: 'Equipo 9',
                             tools: tools,
-                            html: '<br><br><br>'
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 15',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 21',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 27',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        }]
+                    },{
+                        columnWidth:.16,
+                        style:'padding:10px',
+                        items:[{
+                            title: 'Equipo 4',
+                            layout:'fit',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 10',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 16',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 22',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 28',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        }]
+                    },{
+                        columnWidth:.16,
+                        style:'padding:10px',
+                        items:[{
+                            title: 'Equipo 5',
+                            layout:'fit',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 11',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 17',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 23',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 29',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        }]
+                    },{
+                        columnWidth:.16,
+                        style:'padding:10px',
+                        items:[{
+                            title: 'Equipo 6',
+                            layout:'fit',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 12',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 18',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 24',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+                        },{
+                            title: 'Equipo 30',
+                            tools: tools,
+                            html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
                         }]
                     }]                    
                 }, {
