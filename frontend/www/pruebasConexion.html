@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ControlAula</title>
+
+    <!-- ** CSS ** -->
+    <!-- base library -->
+    <link rel="stylesheet" type="text/css" href="css/ext-all.css" />
+
+
+    <!-- ** Javascript ** -->
+    <!-- ExtJS library: base/adapter -->
+    <script type="text/javascript" src="js/ext-base.js"></script>
+
+    <!-- ExtJS library: all widgets -->
+    <script type="text/javascript" src="js/ext-all.js"></script>
+
+	<script type="text/javascript" src="js/json2.js"></script>
+
+    <script type="text/javascript" src="js/conexion.js"></script>
+
+</head>
+<body>
+	<table cellpading="4" cellspacing="4" style="border:1px solid; width:100%">
+	<tr>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Ver Estado Aula" onClick="estadoAula();"></td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Ver Estado Equipos" onClick="estadoEquipos('02,05,11');"></td>
+		<td style="border:1px solid; text-align:center;">
+			<select id="ordenes">
+				<option value="bigbrother">bigbrother</option>
+				<option value="projector">projector</option>
+				<option value="enableInternet">enableInternet</option>
+				<option value="disableInternet">disableInternet</option>
+				<option value="enableMouse">enableMouse</option>
+				<option value="disableMouse">disableMouse</option>
+				<option value="sharePrinter">sharePrinter</option>
+				<option value="unsharePrinter">unsharePrinter</option>
+				<option value="enableMessages">enableMessages</option>
+				<option value="disableMessages">disableMessages</option>
+				<option value="wakeup">wakeup</option>
+				<option value="sleep">sleep</option>
+			</select>
+			<input type="button" value="Enviar Orden" onClick="enviarOrdenPuestos(document.getElementById('ordenes').value,'02,05,11','');">
+		</td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Lanzar Web" onClick="enviarOrdenPuestos('launchweb','02,05,11','http://www.educarex.es');"></td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Enviar Mensaje" onClick="enviarOrdenPuestos('sendmessage','02,05,11','Mensaje de prueba');"></td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Arrancar Aplicacion" onClick="enviarOrdenPuestos('startapplication','02,05,11','gedit');"></td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Broadcast" onClick="enviarOrdenPuestos('broadcast','02,05,11','file:///');"></td>
+		<td style="border:1px solid; text-align:center;"><input type="button" value="Enviar Fichero" onClick="enviarOrdenPuestos('sendfile','02,05,11','file:///');"></td>
+	</tr>
+	</table>
+<br><br>
+<div id="contenedor"></div>
+</body>
+</html>
