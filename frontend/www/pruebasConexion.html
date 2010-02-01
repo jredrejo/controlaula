@@ -24,9 +24,13 @@
 <body>
 	<table cellpading="4" cellspacing="4" style="border:1px solid; width:100%">
 	<tr>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Ver Estado Aula" onClick="estadoAula();"></td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Ver Estado Equipos" onClick="estadoEquipos('02,05,11');"></td>
-		<td style="border:1px solid; text-align:center;">
+		<td colspan="6" style="width:30%">Equipos:&nbsp;<input type="text" id="equipos" value="01,02,03"></td>
+		<td rowspan="10"><div id="contenedor" style="height:600px; overflow:auto;"></div><br><input type="button" value="Limpiar Frame" onClick="document.getElementById('contenedor').innerHTML='';"></td>
+	</tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="button" value="Ver Estado Aula" onClick="estadoAula();"></td></tr></tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="button" value="Ver Estado Equipos" onClick="estadoEquipos(document.getElementById('equipos').value);"></td></tr>
+	<tr>
+		<td style="border:1px solid; text-align:left;">
 			<select id="ordenes">
 				<option value="bigbrother">bigbrother</option>
 				<option value="projector">projector</option>
@@ -41,16 +45,15 @@
 				<option value="wakeup">wakeup</option>
 				<option value="sleep">sleep</option>
 			</select>
-			<input type="button" value="Enviar Orden" onClick="enviarOrdenPuestos(document.getElementById('ordenes').value,'02,05,11','');">
+			<input type="button" value="Enviar Orden" onClick="enviarOrdenPuestos(document.getElementById('ordenes').value,document.getElementById('equipos').value,'');">
 		</td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Lanzar Web" onClick="enviarOrdenPuestos('launchweb','02,05,11','http://www.educarex.es');"></td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Enviar Mensaje" onClick="enviarOrdenPuestos('sendmessage','02,05,11','Mensaje de prueba');"></td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Arrancar Aplicacion" onClick="enviarOrdenPuestos('startapplication','02,05,11','gedit');"></td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Broadcast" onClick="enviarOrdenPuestos('broadcast','02,05,11','file:///');"></td>
-		<td style="border:1px solid; text-align:center;"><input type="button" value="Enviar Fichero" onClick="enviarOrdenPuestos('sendfile','02,05,11','file:///');"></td>
 	</tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="text" id="web" value="http://www.educarex.es">&nbsp;<input type="button" value="Lanzar Web" onClick="enviarOrdenPuestos('launchweb',document.getElementById('equipos').value,document.getElementById('web').value);"></td></tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="button" value="Enviar Mensaje" onClick="enviarOrdenPuestos('sendmessage',document.getElementById('equipos').value,'Mensaje de prueba');"></td></tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="text" id="aplicacion" value="gedit" size="15">&nbsp;<input type="button" value="Arrancar Aplicacion" onClick="enviarOrdenPuestos('startapplication',document.getElementById('equipos').value,document.getElementById('aplicacion').value);"></td></tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="text" id="video" value="file:///" size="20">&nbsp;<input type="button" value="Broadcast" onClick="enviarOrdenPuestos('broadcast',document.getElementById('equipos').value,document.getElementById('video').value);"></td></tr>
+	<tr><td style="border:1px solid; text-align:left;"><input type="text" id="fichero" value="file:///" size="20">&nbsp;<input type="button" value="Enviar Fichero" onClick="enviarOrdenPuestos('sendfile',document.getElementById('equipos').value,document.getElementById('fichero').value);"></td></tr>
 	</table>
 <br><br>
-<div id="contenedor"></div>
 </body>
 </html>
