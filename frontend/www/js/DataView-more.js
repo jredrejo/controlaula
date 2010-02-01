@@ -107,7 +107,7 @@ Ext.DataView.DragSelector = function(cfg){
             proxy.setDisplayed('block');
         }
         fillRegions();
-        view.clearSelections();
+       // view.clearSelections();
     }
 
     function onDrag(e){
