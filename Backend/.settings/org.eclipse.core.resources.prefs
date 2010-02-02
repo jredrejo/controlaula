@@ -1,0 +1,12 @@
+#Mon Feb 01 17:02:29 CET 2010
+eclipse.preferences.version=1
+encoding//src/Monitor.py=utf-8
+encoding//src/Monitor/Classroom.py=utf-8
+encoding//src/Monitor/Publications.py=utf-8
+encoding//src/Monitor/ScanTeachers.py=utf-8
+encoding//src/Monitor/StudentLoop.py=utf-8
+encoding//src/Monitor/TeacherMainLoop.py=utf-8
+encoding//src/Monitor/TeacherServer.py=utf-8
+encoding//src/Sirvecole.py=utf-8
+encoding//src/Utils/MyUtils.py=utf-8
+encoding//src/Utils/NetworkUtils.py=utf-8

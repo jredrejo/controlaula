@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Sirvecole</name>
+	<name>Backend</name>
 	<comment></comment>
 	<projects>
+		<project>Sirvecole</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
