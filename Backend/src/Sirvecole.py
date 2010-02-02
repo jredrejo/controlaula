@@ -1,11 +1,11 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
-# Project:     Controlaula/Monitor
-# Module:     StartUp.py
+# Project:     Controlaula/Sirvecole
+# Module:     Sirvecole.py
 # Purpose:     Starting module for this daemon
 # Language:    Python 2.5
 # Date:        15-Jan-2010.
-# Ver.:        27-Jan-2010.
+# Ver.:        2-Feb-2010.
 # Copyright:    2009-2010 - José L. Redrejo Rodríguez       <jredrejo @nospam@ debian.org>
 #
 # This program is free software: you can redistribute it and/or modify

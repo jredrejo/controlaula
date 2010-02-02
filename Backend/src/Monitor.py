@@ -1,7 +1,7 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
 # Project:     Controlaula/Monitor
-# Module:     StartUp.py
+# Module:     Monitor.py
 # Purpose:     Starting module for this daemon
 # Language:    Python 2.5
 # Date:        15-Jan-2010.
