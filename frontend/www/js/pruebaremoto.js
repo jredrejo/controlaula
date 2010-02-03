@@ -1,7 +1,10 @@
-/*!
- * polling.js
- * Copyright(c) Juan Sanguino González
- * Licencia GNU/GPL
+/*
+ * pruebaremoto.js
+ *
+ * Copyright (c) 2009-2010 Juan Sanguino González <juan.sanguino @nospam@ gmail.com>
+ * Licensed under the GPL (GPL-LICENSE.txt) license.
+ *
+ * 
  */
 var llamadaRemota = function(){
     Ext.Direct.addProvider(

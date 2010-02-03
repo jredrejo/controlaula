@@ -1,3 +1,11 @@
+/*
+ * panelAlumnos.js
+ *
+ * Copyright (c) 2009-2010 Juan Sanguino González
+ * Licensed under the GPL (GPL-LICENSE.txt) license.
+ *
+ * 
+ */
   Ext.BLANK_IMAGE_URL = '../../resources/images/default/s.gif';
   Ext.ns('Dashboard');
   Dashboard.Portlet = Ext.extend(Ext.Panel, {

@@ -1,4 +1,11 @@
-
+/*
+ * menuOpciones.js
+ *
+ * Copyright (c) 2009-2010 Juan Sanguino González
+ * Licensed under the GPL (GPL-LICENSE.txt) license.
+ *
+ * 
+ */
 	var iconProyector ={
 			html:'<div style="text-align:center;"><img src="img/computer.png"></div>'}
 	var AccnProyector = new Ext.Toolbar({

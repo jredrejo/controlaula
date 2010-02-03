@@ -1,3 +1,11 @@
+/*
+ * conexion.js
+ *
+ * Copyright (c) 2009-2010 Manu Mora Gordillo <manuito @nospam@ gmail.com>
+ * Licensed under the GPL (GPL-LICENSE.txt) license.
+ *
+ * 
+ */
 
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
