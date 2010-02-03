@@ -97,8 +97,21 @@ function pintarEquiposAula(equipos){
 	var clase = eval('(' + equipos + ')');
 
 	var alumnos = {"images":[]}	
-	for(i=0;i<2;i++){
-		alumnos.images[i]={"name":clase.classroom[i].loginname,"url":clase.classroom[i].photo}
+
+	for(i=0;i<4;i++){
+
+		var nombre = clase.classroom[i].loginname;
+		var foto = clase.classroom[i].photo;
+
+		if(clase.classroom[i].ON=="0"){
+			nombre = "";
+			foto = "images/pc_apagado.png";
+		}else if(clase.classroom[i].loginname=="unlogin"){
+			nombre = "";
+			foto = "images/pc_no_logueado.png";
+		}
+
+		alumnos.images[i]={"name":nombre,"url":foto}
 	}
 
 	dataString = JSON.stringify(alumnos);
