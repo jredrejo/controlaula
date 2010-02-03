@@ -11,7 +11,7 @@
     var store = new Ext.data.JsonStore({
         url: 'js/get-images',
         root: 'images',
-        fields: ['name', 'url', {name:'size', type: 'float'}, {name:'lastmod', type:'date', dateFormat:'timestamp'}]
+        fields: ['name', 'url']
     });
     store.load();
 
@@ -24,6 +24,42 @@
         '<div class="x-clear"></div>'
 	);
 
+
+
+	var alumnosAula =	new Ext.DataView({
+								//store: store,
+								tpl: tpl,
+								autoHeight:true,
+								multiSelect: true,
+								overClass:'x-view-over',
+								itemSelector:'div.thumb-wrap',
+								emptyText: 'No images to display',
+
+								plugins: [
+									new Ext.DataView.DragSelector(),
+									new Ext.DataView.LabelEditor({dataIndex: 'name'})
+								],
+
+								prepareData: function(data){
+									data.shortName = Ext.util.Format.ellipsis(data.name, 15);
+					/*                data.sizeString = Ext.util.Format.fileSize(data.size);
+									data.dateString = data.lastmod.format("m/d/Y g:i a");*/
+									return data;
+								},
+						
+								listeners: {
+									selectionchange: {
+										fn: function(dv,nodes){
+											var l = nodes.length;
+											var s = l != 1 ? 's' : '';
+											panel.setTitle('Encender/Apagar Equipos Aula ('+l+' alumno'+s+' seleccionado'+s+')');
+										}
+									}
+								}
+							})
+
+
+
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
@@ -33,37 +69,7 @@
         layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
 
-        items: new Ext.DataView({
-            store: store,
-            tpl: tpl,
-            autoHeight:true,
-            multiSelect: true,
-            overClass:'x-view-over',
-            itemSelector:'div.thumb-wrap',
-            emptyText: 'No images to display',
-
-            plugins: [
-                new Ext.DataView.DragSelector(),
-                new Ext.DataView.LabelEditor({dataIndex: 'name'})
-            ],
-
-            prepareData: function(data){
-                data.shortName = Ext.util.Format.ellipsis(data.name, 15);
-                data.sizeString = Ext.util.Format.fileSize(data.size);
-                data.dateString = data.lastmod.format("m/d/Y g:i a");
-                return data;
-            },
-            
-            listeners: {
-            	selectionchange: {
-            		fn: function(dv,nodes){
-            			var l = nodes.length;
-            			var s = l != 1 ? 's' : '';
-            			panel.setTitle('Encender/Apagar Equipos Aula ('+l+' alumno'+s+' seleccionado'+s+')');
-            		}
-            	}
-            }
-        })
+        items: alumnosAula
     });    
 
     var panel2 = new Ext.Panel({
@@ -91,8 +97,8 @@
 
             prepareData: function(data){
                 data.shortName = Ext.util.Format.ellipsis(data.name, 15);
-                data.sizeString = Ext.util.Format.fileSize(data.size);
-                data.dateString = data.lastmod.format("m/d/Y g:i a");
+               /* data.sizeString = Ext.util.Format.fileSize(data.size);
+                data.dateString = data.lastmod.format("m/d/Y g:i a");*/
                 return data;
             },
             
@@ -133,8 +139,8 @@
 
             prepareData: function(data){
                 data.shortName = Ext.util.Format.ellipsis(data.name, 15);
-                data.sizeString = Ext.util.Format.fileSize(data.size);
-                data.dateString = data.lastmod.format("m/d/Y g:i a");
+                /*data.sizeString = Ext.util.Format.fileSize(data.size);
+                data.dateString = data.lastmod.format("m/d/Y g:i a");*/
                 return data;
             },
             
