@@ -76,7 +76,7 @@ if __name__ == '__main__':
     #############Initialization#############
     
     isTeacher=MyUtils.userIsTeacher()
-    isTeacher=False
+    #isTeacher=False
     
     if not isTeacher:        
         from twisted.internet import glib2reactor
@@ -106,7 +106,8 @@ if __name__ == '__main__':
     
     if  isTeacher:        
         logging.getLogger().debug("The user is a teacher")
-        from Monitor import Publications, TeacherMainLoop, Classroom
+        from Monitor import TeacherMainLoop, Classroom
+        from Utils  import Publications
         from twisted.web import server
         
         service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + NetworkUtils.get_ip_inet_address(),"web=" + str( WEBPORT) ])

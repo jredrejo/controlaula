@@ -52,3 +52,28 @@ def isLTSP():
 
 
 
+
+
+def createVNCPassword( passwd,file):
+    """
+    createVNCPassword("micasa","/tmp/vnc")
+    """
+    import crippled_des
+    #
+    # We use a fixed key to store passwords, since we assume that our local
+    # file system is secure but nonetheless don't want to store passwords
+    # as plaintext.
+    #
+    
+    fixedKey = "\x17Rk\x06#NX\x07"    
+
+    pw = (passwd + '\0' * 8)[:8]        #make sure its 8 chars long, zero padded
+    des = crippled_des.DesCipher(fixedKey)
+    response = des.encrypt(pw)
+
+    f = open(file, "w")
+    f.write(response)
+    f.close
+
+
+

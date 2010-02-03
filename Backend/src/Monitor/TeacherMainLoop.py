@@ -5,7 +5,7 @@
 # Purpose:     ControlAula server for the Teacher functions
 # Language:    Python 2.5
 # Date:        18-Jan-2010.
-# Ver:        27-Jan-2010.
+# Ver:        3-Feb-2010.
 # Author:    José L.  Redrejo Rodríguez
 # Copyright:    2009-2010 - José L. Redrejo Rodríguez       <jredrejo @nospam@ debian.org>
 #
@@ -25,7 +25,7 @@
 
 
 from twisted.web import server,resource,  static
-
+from Plugins  import Handler
 
 import simplejson as json
 import os
@@ -98,30 +98,34 @@ class ControlAulaProtocol(resource.Resource):
 
 
         #Filter the command needed.
-        command=request.path
-        def doblue (): print "The sea is blue"
-        def dogreen (): print "Grass is green"
-        def doyellow (): print "Sand is yellow"       
-        def errhandler ():   print "Your input has not been recognised"
-        takeaction = { "blue": doblue,
-    "green": dogreen,
-    "yellow": doyellow}
-        #takeaction.get(colour,errhandler)()
-        
-
-
-
-        # Get the JSON data from the message.
-        respjson=None
-        try:
-            request.content.read()
-            recvjson = request.args['classroom'][0]           
-            # Analyse the request and construct a response.
-            respjson= self._HandleMessage(recvjson) 
-            print respjson 
-        except:
-            # The data wasn't found in the headers.
-            pass
+        command=request.path[1:]
+        handler=Handler.Plugins()
+        respjson=None       
+         
+        if handler.existCommand(command):
+            #if it's a petition to execute some command
+            try:
+                request.content.read()
+                recvjson = request.args['data'][0] 
+                args=json.loads(recvjson)['args']
+                if len(args)>0:
+                    handler.args=[args]
+                handler.targets=json.loads(recvjson)['pclist']
+                handler.process(command)
+                respjson= json.dumps({'result':'ack'})
+            except:
+                pass
+                
+        else:
+            #it's sending the classroom data
+            try:
+                request.content.read()
+                recvjson = request.args['classroom'][0]           
+                # Analyse the request and construct a response.
+                respjson= self._HandleMessage(recvjson) 
+            except:
+                # The data wasn't found in the headers.
+                pass
 
 
 
