@@ -24,8 +24,6 @@
         '<div class="x-clear"></div>'
 	);
 
-
-
 	var alumnosAula =	new Ext.DataView({
 								//store: store,
 								tpl: tpl,
@@ -57,7 +55,6 @@
 									}
 								}
 							})
-
 
 
     var panel = new Ext.Panel({

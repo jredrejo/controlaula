@@ -129,8 +129,11 @@ function pintarEquiposAula(equipos){
 	// Ahora tenemos que almacenarlo en DataView
 	// Para ello nos creamos un objeto Store, insertamos el json y lo almacenamos en el DataView
 
-/*	var myStore = new Ext.data.Store();
-	myStore.loadData(alumnos);
+  var myStore = new Ext.data.Store({
+		reader:alumnos
+	  });
 
-	alumnosAula.setStore(myStore);*/
+	//myStore.load();
+
+    alumnosAula.setStore(myStore);
 }
