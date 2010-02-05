@@ -100,10 +100,7 @@ function conexion(dir,accion,datos){
 
 function pintarEquiposAula(equipos){
 
-	document.getElementById("contenedor").innerHTML += "Datos recibidos del backend:<br><b>"+equipos+"</b><br><br>";	
-
 	var clase = eval('(' + equipos + ')');
-
 	var alumnos = {"images":[]}	
 
 	for(i=0;i<4;i++){
@@ -122,18 +119,14 @@ function pintarEquiposAula(equipos){
 		alumnos.images[i]={"name":nombre,"url":foto}
 	}
 
-	dataString = JSON.stringify(alumnos);
-
-	document.getElementById("contenedor").innerHTML += "Tras parsearla nos queda:<br><b>"+dataString+"</b><br><br>";	
-
 	// Ahora tenemos que almacenarlo en DataView
-	// Para ello nos creamos un objeto Store, insertamos el json y lo almacenamos en el DataView
+	var myStore = new Ext.data.JsonStore({
+		data: alumnos,
+		root: 'images',
+		fields: ['name','url']
+	});
 
-  var myStore = new Ext.data.Store({
-		reader:alumnos
-	  });
-
-	//myStore.load();
-
-    alumnosAula.setStore(myStore);
+    dataviewON.setStore(myStore);
+    dataviewNet.setStore(myStore);
+    dataviewMouse.setStore(myStore);
 }

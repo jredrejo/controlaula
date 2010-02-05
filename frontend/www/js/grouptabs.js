@@ -171,7 +171,7 @@ Ext.onReady(function() {
 		iconCls: 'x-icon-tickets',
 		style: 'padding: 10px;',
 		items:[panel],
-		html:"<input type='button' value='Probar Rellenar Alumnos' onClick='estadoAulaPruebas();'><div id='contenedor'></div>"
+		html:"<div id='contenedor'></div>"
 	};
 	var optInternet={
 		xtype: 'portal',
@@ -297,4 +297,5 @@ Ext.onReady(function() {
             }]
 		}]
     });
+	estadoAulaPruebas();
 });
