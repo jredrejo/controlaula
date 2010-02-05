@@ -109,17 +109,22 @@ function pintarEquiposAula(equipos){
 		var foto = clase.classroom[i].photo;
 
 		if(clase.classroom[i].ON=="0"){
-			nombre = "";
+			nombre = "Apagado";
 			foto = "images/pc_apagado.png";
 		}else if(clase.classroom[i].loginname=="unlogin"){
-			nombre = "";
+			nombre = "Login";
 			foto = "images/pc_no_logueado.png";
 		}
 
 		alumnos.images[i]={"name":nombre,"url":foto}
 	}
 
-	// Ahora tenemos que almacenarlo en DataView
+	pintarDataView(alumnos);
+	pintarConfiguracionAula(alumnos);
+}
+
+// pintar DataView de alumnos
+function pintarDataView(alumnos){
 	var myStore = new Ext.data.JsonStore({
 		data: alumnos,
 		root: 'images',
@@ -127,6 +132,46 @@ function pintarEquiposAula(equipos){
 	});
 
     dataviewON.setStore(myStore);
-    dataviewNet.setStore(myStore);
-    dataviewMouse.setStore(myStore);
+    //dataviewNet.setStore(myStore);
+   // dataviewMouse.setStore(myStore);
+}
+
+// pintar pantalla de configuracion
+function pintarConfiguracionAula(alumnos){
+/*	column1.items[6]:{
+	       title: 'Equipo prueba',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+	}*/
+
+
+	var column6={
+	   columnWidth:.16,
+       style:'padding:10px 0 10px 10px',
+	   items:[{
+	       title: 'Equipo 6',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+	   },{
+	       title: 'Equipo 12',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
+	   },{
+	       title: 'Equipo 18',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
+	   },{
+	       title: 'Equipo 24',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
+	   },{
+	       title: 'Equipo 30',
+	       tools: tools,
+	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
+	   }]
+	};   
+
+	optConfigurar.items[5] = column6;
+//	alert(optConfigurar.items[5].items[0].title);
+
 }
