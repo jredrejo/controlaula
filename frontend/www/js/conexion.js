@@ -102,7 +102,7 @@ function pintarEquiposAula(equipos){
 	var clase = eval('(' + equipos + ')');
 	var alumnos = {"images":[]}	
 
-	for(i=0;i<4;i++){
+	for(i=0;i<clase.classroom.pclist.length;i++){
 
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
@@ -131,8 +131,8 @@ function pintarDataView(alumnos){
 	});
 
     dataviewON.setStore(myStore);
-    //dataviewNet.setStore(myStore);
-   // dataviewMouse.setStore(myStore);
+    dataviewNet.setStore(myStore);
+    dataviewMouse.setStore(myStore);
 }
 
 // pintar pantalla de configuracion

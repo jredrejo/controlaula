@@ -109,7 +109,7 @@
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
-        width:625,
+        width:475,
         autoHeight:true,
         collapsible:true,
         layout:'fit',
@@ -120,7 +120,7 @@
     var panel2 = new Ext.Panel({
         id:'images-view',
         frame:true,
-        width:625,
+        width:475,
         autoHeight:true,
         collapsible:true,
         layout:'fit',
@@ -131,7 +131,7 @@
     var panel3 = new Ext.Panel({
         id:'images-view',
         frame:true,
-        width:625,
+        width:475,
         autoHeight:true,
         collapsible:true,
         layout:'fit',
