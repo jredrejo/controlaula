@@ -318,5 +318,5 @@
 		iconCls: 'x-icon-configuration',
 		tabTip: 'Configurar el Aula',
 		style: 'padding: 10px; ',
-		items:[column1,column2,column3,column4,column5]	            
+		items:[column1,column2,column3,column4,column5] 
 	};

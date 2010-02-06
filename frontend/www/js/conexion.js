@@ -99,19 +99,18 @@ function conexion(dir,accion,datos){
 //##############################################################
 
 function pintarEquiposAula(equipos){
-
 	var clase = eval('(' + equipos + ')');
 	var alumnos = {"images":[]}	
 
 	for(i=0;i<4;i++){
 
-		var nombre = clase.classroom[i].loginname;
-		var foto = clase.classroom[i].photo;
+		var nombre = clase.classroom.pclist[i].loginname;
+		var foto = clase.classroom.pclist[i].photo;
 
-		if(clase.classroom[i].ON=="0"){
+		if(clase.classroom.pclist[i].ON=="0"){
 			nombre = "Apagado";
 			foto = "images/pc_apagado.png";
-		}else if(clase.classroom[i].loginname=="unlogin"){
+		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
 			nombre = "Login";
 			foto = "images/pc_no_logueado.png";
 		}
@@ -120,7 +119,7 @@ function pintarEquiposAula(equipos){
 	}
 
 	pintarDataView(alumnos);
-	pintarConfiguracionAula(alumnos);
+	pintarConfiguracionAula(clase);
 }
 
 // pintar DataView de alumnos
@@ -137,41 +136,31 @@ function pintarDataView(alumnos){
 }
 
 // pintar pantalla de configuracion
-function pintarConfiguracionAula(alumnos){
-/*	column1.items[6]:{
-	       title: 'Equipo prueba',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	}*/
+function pintarConfiguracionAula(clase){
+
+	// creacion dinamica de columnas
+	for(i=0;i<clase.classroom.structure.cols;i++){
+		eval("var column"+i+"={columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
+	}
+
+	// añadimos los equipos a cada columna
+	for(i=0;i<clase.classroom.pclist.length;i++){
+		var computer={
+	       	title: clase.classroom.pclist[i].loginname,
+	        tools: tools,
+	        html: '<div style="text-align:center;"><img src="'+clase.classroom.pclist[i].photo+'" style="height:50px;"/></div>'
+	   }
+	   
+	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
+	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
+	   eval("column"+parseInt(queColumna)+".items["+parseInt(posicionEnColumna)+"] = computer;");
+	   
+	   //alert("col: "+parseInt(queColumna)+" - row: "+parseInt(posicionEnColumna)+" - pc: "+i);
+	}
+
+//alert(	JSON.stringify(column1));
 
 
-	var column6={
-	   columnWidth:.16,
-       style:'padding:10px 0 10px 10px',
-	   items:[{
-	       title: 'Equipo 6',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 12',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 18',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 24',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 30',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   }]
-	};   
-
-	optConfigurar.items[5] = column6;
-//	alert(optConfigurar.items[5].items[0].title);
+	// Ahora tenemos que agregar las columnas al portal
 
 }
