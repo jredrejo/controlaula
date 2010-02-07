@@ -107,7 +107,10 @@ function pintarEquiposAula(equipos){
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
 
-		if(clase.classroom.pclist[i].ON=="0"){
+		if(clase.classroom.pclist[i].PCname=="none"){
+			nombre = "Sin equipo";
+			foto = "images/pc_none.png";			
+		}else if(clase.classroom.pclist[i].ON=="0"){
 			nombre = "Apagado";
 			foto = "images/pc_apagado.png";
 		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
@@ -149,10 +152,25 @@ function pintarConfiguracionAula(clase){
 
 	// añadimos los equipos a cada columna
 	for(i=0;i<clase.classroom.pclist.length;i++){
+		
+		var nombre = clase.classroom.pclist[i].loginname;
+		var foto = clase.classroom.pclist[i].photo;
+
+		if(clase.classroom.pclist[i].PCname=="none"){
+			nombre = "Sin equipo";
+			foto = "images/pc_none.png";			
+		}else if(clase.classroom.pclist[i].ON=="0"){
+			nombre = "Apagado";
+			foto = "images/pc_apagado.png";
+		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
+			nombre = "Login";
+			foto = "images/pc_no_logueado.png";
+		}
+		
 		var computer={
-	       	title: clase.classroom.pclist[i].loginname,
+	       	title: nombre,
 	        tools: tools,
-	        html: '<div style="text-align:center;"><img src="'+clase.classroom.pclist[i].photo+'" style="height:50px;"/></div>'
+	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/></div>'
 	   }
 	   
 	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);

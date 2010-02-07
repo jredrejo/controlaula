@@ -1,18 +1,18 @@
 {"classroom":{
 	"pclist":[
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','position':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','position':'2','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09','classname':'aula1'},
-	 	{'ON':'1','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'images/pc_apagado.png','visible':'3','position':'2','loginname':'unlogin','username':'','PCname':'aula1-o07','classname':'aula1'},
-	 	{'ON':'0','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'images/pc_apagado.png','visible':'4','position':'3','loginname':'unlogin','username':'','PCname':'aula1-o08','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','position':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','position':'2','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','position':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','position':'2','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09','classname':'aula1'},
-	 	{'ON':'1','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'images/pc_no_logueado.png','visible':'3','position':'2','loginname':'unlogin','username':'','PCname':'aula1-o07','classname':'aula1'},
-	 	{'ON':'1','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'images/pc_no_logueado.png','visible':'3','position':'2','loginname':'unlogin','username':'','PCname':'aula1-o07','classname':'aula1'},
-	 	{'ON':'0','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'images/pc_no_logueado.png','visible':'4','position':'3','loginname':'unlogin','username':'','PCname':'aula1-o08','classname':'aula1'},
-		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','position':'2','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09','classname':'aula1'}
+	 	{'ON':'0','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'','visible':'3','loginname':'','username':'','PCname':'none'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09'},
+	 	{'ON':'0','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'','visible':'4','loginname':'unlogin','username':'','PCname':'a25-o03'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno2.png','visible':'1','loginname':'gredrejos','username':'Gema Redrejo Santiago','PCname':'aula1-o06'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09'},
+	 	{'ON':'0','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'','visible':'4','loginname':'','username':'','PCname':'none'},
+	 	{'ON':'1','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'','visible':'3','loginname':'unlogin','username':'','PCname':'aula1-o07'},
+	 	{'ON':'1','mouseEnabled':'1','internetEnabled':'0','messagesEnabled':'0','printerShared':'0','photo':'','visible':'3','loginname':'unlogin','username':'','PCname':'aula1-o07'},
+		{'ON':'1','mouseEnabled':'1','internetEnabled':'1','messagesEnabled':'0','printerShared':'1','photo':'images/alumnos/alumno1.png','visible':'1','loginname':'jsanchez','username':'Antonio Sanchez','PCname':'aula1-o09'}
 	],
-	"structure":{"cols":3,"rows":4}
+	"structure":{"classname":"aula1","cols":4,"rows":3}
 	}
 }
