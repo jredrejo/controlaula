@@ -158,6 +158,7 @@
 
 	var column1={
 	   columnWidth:.16,
+	   id:'col1',
 	   style:'padding:10px 0 10px 10px',
 	   items:[{
 	       title: 'Equipo 1',
@@ -314,9 +315,10 @@
 	};
 	var optConfigurar={
 		xtype: 'portal',
+		id:'config',
 		title: 'Configurar Aula',
 		iconCls: 'x-icon-configuration',
 		tabTip: 'Configurar el Aula',
 		style: 'padding: 10px; ',
-		items:[column1,column2,column3,column4,column5] 
+		items:[] 
 	};

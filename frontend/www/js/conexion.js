@@ -131,17 +131,21 @@ function pintarDataView(alumnos){
 	});
 
     dataviewON.setStore(myStore);
-    dataviewNet.setStore(myStore);
-    dataviewMouse.setStore(myStore);
+  //  dataviewNet.setStore(myStore);
+  //  dataviewMouse.setStore(myStore);
 }
 
 // pintar pantalla de configuracion
 function pintarConfiguracionAula(clase){
 
+	var configClass = Ext.getCmp('config');
+	
 	// creacion dinamica de columnas
 	for(i=0;i<clase.classroom.structure.cols;i++){
-		eval("var column"+i+"={columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
+		eval("var column"+i+"={columnWidth:.16,id:'col"+i+"',style:'padding:10px 0 10px 10px',items:[]}");
+		eval("configClass.add("+i+",column"+i+")");
 	}
+	configClass.doLayout();
 
 	// añadimos los equipos a cada columna
 	for(i=0;i<clase.classroom.pclist.length;i++){
@@ -154,13 +158,11 @@ function pintarConfiguracionAula(clase){
 	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
 	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
 	   eval("column"+parseInt(queColumna)+".items["+parseInt(posicionEnColumna)+"] = computer;");
-	   
+		
+	   var colTMP = Ext.getCmp('col'+parseInt(queColumna));
+	   colTMP.add(computer);
+	   colTMP.doLayout();
+	  
 	   //alert("col: "+parseInt(queColumna)+" - row: "+parseInt(posicionEnColumna)+" - pc: "+i);
 	}
-
-//alert(	JSON.stringify(column1));
-
-
-	// Ahora tenemos que agregar las columnas al portal
-
 }
