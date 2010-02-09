@@ -1,4 +1,4 @@
-#Wed Feb 03 18:06:01 CET 2010
+#Thu Feb 04 19:00:18 CET 2010
 eclipse.preferences.version=1
 encoding//src/Monitor.py=utf-8
 encoding//src/Monitor/Classroom.py=utf-8
@@ -8,5 +8,9 @@ encoding//src/Monitor/TeacherMainLoop.py=utf-8
 encoding//src/Monitor/TeacherServer.py=utf-8
 encoding//src/Plugins/Handler.py=utf-8
 encoding//src/Sirvecole.py=utf-8
+encoding//src/Utils/Internet.py=utf-8
 encoding//src/Utils/MyUtils.py=utf-8
 encoding//src/Utils/NetworkUtils.py=utf-8
+encoding//src/Utils/Printer.py=utf-8
+encoding//src/Utils/RemoteOnOff.py=utf-8
+encoding//src/Utils/VNC.py=utf-8

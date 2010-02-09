@@ -1,6 +1,6 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
-# Project:     Controlaula/Sirvecole
+# Project:     Controlaula
 # Module:     Printer.py
 # Purpose:     Module to share/unshare teacher printer to the user
 # Language:    Python 2.5

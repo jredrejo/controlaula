@@ -76,4 +76,14 @@ def createVNCPassword( passwd,file):
     f.close
 
 
-
+def generateUUID(length=5):
+    """returns a pseudo random string to be used as password.
+    The length of the password is determined by the length parameter"""
+    import uuid
+    if length>32:
+        length=32
+    original=str(uuid.uuid1()).replace('-','')
+    return original[:length]
+    
+    
+   

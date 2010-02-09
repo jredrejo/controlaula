@@ -1,6 +1,6 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
-# Project:     Controlaula/Sirvecole
+# Project:     Controlaula
 # Module:     RemoteOnOff.py
 # Purpose:     Module to switch on and off the computer
 # Language:    Python 2.5
