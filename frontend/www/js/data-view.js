@@ -19,6 +19,10 @@
         '<div class="x-clear"></div>'
 	);
 
+	function prueba(){
+		alert("prueba");
+	}
+
 	var dataviewON = new Ext.DataView({
 								tpl: tpl,
 								autoHeight:true,
@@ -114,7 +118,19 @@
         collapsible:true,
         layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
-        items: dataviewON
+        items: dataviewON,
+        tbar:['->',{
+            text: 'Seleccionar Todo',
+            iconCls: 'all'
+        },'-',{
+            text: 'Encender',
+            iconCls: 'on'
+        },'-',{
+            text: 'Apagar',
+            iconCls: 'off',
+            handler:prueba
+        }]
+
     });    
 
     var panel2 = new Ext.Panel({
