@@ -107,7 +107,9 @@ function pintarEquiposAula(equipos){
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
 		var pcname = clase.classroom.pclist[i].PCname;
-
+		var internet="images/pc_none.png";
+		var mouse="images/pc_none.png";
+		
 		if(clase.classroom.pclist[i].PCname=="none"){
 			nombre = "Sin equipo";
 			foto = "images/pc_none.png";			
@@ -119,7 +121,10 @@ function pintarEquiposAula(equipos){
 			foto = "images/pc_no_logueado.png";
 		}
 
-		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname}
+		if(clase.classroom.pclist[i].internetEnabled=="1") internet="images/icon_web.png";
+		if(clase.classroom.pclist[i].mouseEnabled=="1") mouse="images/icon_mouse.png";
+
+		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse}
 	}
 
 	pintarDataView(alumnos,clase.classroom.structure.cols);
@@ -131,10 +136,11 @@ function pintarDataView(alumnos,cols){
 	var myStore = new Ext.data.JsonStore({
 		data: alumnos,
 		root: 'images',
-		fields: ['name','url','pcname']
+		fields: ['name','url','pcname','internet','mouse']
 	});
 
-	dataviewON.setWidth(105*parseInt(cols));
+	dataviewON.setWidth(130*parseInt(cols));
+	panel.setWidth(130*parseInt(cols)+30);
 /*	dataviewNet.setWidth(105*parseInt(cols));
 	dataviewMouse.setWidth(105*parseInt(cols));*/
 

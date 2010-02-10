@@ -16,7 +16,7 @@
 		'<tpl for=".">',
             '<div class="thumb-wrap" id="{name}">',
             '<span class="x-editable" style="background-color:#4e78b1; color:#dfe8f0; height:17px;padding-top:3px;">{pcName}</span>',
-		    '<div class="thumb"><img src="{url}" title="{name}"></div>',
+		    '<div class="thumb"><div style="float:right;"><img src="{internet}" style="width:28px; height:28px;"><br><img src="{mouse}" style="padding-top:10px; width:28px; height:28px;"></div><img src="{url}" title="{name}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
