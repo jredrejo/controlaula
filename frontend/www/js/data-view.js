@@ -1,8 +1,10 @@
-/*!
- * Ext JS Library 3.1.0
- * Copyright(c) 2006-2009 Ext JS, LLC
- * licensing@extjs.com
- * http://www.extjs.com/license
+/*
+ * data-view.js
+ *
+ * Copyright (c) 2009-2010 Manu Mora Gordillo <manuito @nospam@ gmail.com>
+ * Licensed under the GPL (GPL-LICENSE.txt) license.
+ *
+ * 
  */
 
 
@@ -23,38 +25,22 @@
 		dataviewON.selectRange(0,dataviewON.getNodes().length);
 	}
 	
-	function encenderSeleccionados(){
-		if(dataviewON.getSelectedRecords().length=="0"){
+	function enviarOrdenSeleccionados(orden,dataview){
+		if(dataview.getSelectedRecords().length=="0"){
 			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
 			return;
 		}
 		
 		var seleccionados="";
-		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-			seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
+		for(i=0;i<dataview.getSelectedRecords().length;i++){
+			seleccionados+=dataview.getSelectedRecords()[i].get("pcname");
 			
-			if(i+1!=dataviewON.getSelectedRecords().length)
+			if(i+1!=dataview.getSelectedRecords().length)
 				seleccionados+=",";
 		}	
-		enviarOrdenPuestos("wakeup",seleccionados,"");
+		enviarOrdenPuestos(orden,seleccionados,"");
 	}
 	
-	function apagarSeleccionados(){
-		if(dataviewON.getSelectedRecords().length=="0"){
-			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
-			return;
-		}
-		
-		var seleccionados="";
-		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-			seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
-			
-			if(i+1!=dataviewON.getSelectedRecords().length)
-				seleccionados+=",";
-		}	
-		enviarOrdenPuestos("sleep",seleccionados,"");
-	}
-
 
 	var dataviewON = new Ext.DataView({
 								id:'dataviewON',
@@ -87,6 +73,7 @@
 							});
 
 	var dataviewNet = new Ext.DataView({
+								id:'dataviewNet',
 								tpl: tpl,
 								autoHeight:true,
 								multiSelect: true,
@@ -116,6 +103,7 @@
 							});
 
 	var dataviewMouse = new Ext.DataView({
+								id:'dataviewMouse',
 								tpl: tpl,
 								autoHeight:true,
 								multiSelect: true,
@@ -144,6 +132,10 @@
 								}
 							});
 
+//#########################################################################################################
+//####################################### Parametros de los paneles #######################################
+//#########################################################################################################
+
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
@@ -160,11 +152,11 @@
         },'-',{
             text: 'Encender',
             iconCls: 'on',
-            handler:encenderSeleccionados
+            handler:clickHandler.createDelegate(this, [], true)
         },'-',{
             text: 'Apagar',
             iconCls: 'off',
-            handler:apagarSeleccionados
+            handler:clickHandler.createDelegate(this, [], true)
         }]
     });    
 
@@ -176,7 +168,20 @@
         collapsible:true,
         layout:'fit',
         title:'Habilitar/Deshabilitar Internet (0 alumnos seleccionados)',
-        items: dataviewNet
+        items: dataviewNet,
+        tbar:['->',{
+            text: 'Seleccionar Todo',
+            iconCls: 'all',
+            handler:selectAllDataView
+        },'-',{
+            text: 'Habilitar Internet',
+            iconCls: 'on',
+            handler:clickHandler.createDelegate(this, [], true)
+        },'-',{
+            text: 'Deshabilitar Internet',
+            iconCls: 'off',
+            handler:clickHandler.createDelegate(this, [], true)
+        }]
     });
 
     var panel3 = new Ext.Panel({
@@ -187,9 +192,32 @@
         collapsible:true,
         layout:'fit',
         title:'Habilitar/Deshabilitar Ratón/Teclado (0 alumnos seleccionados)',
-        items: dataviewMouse
+        items: dataviewMouse,
+        tbar:['->',{
+            text: 'Seleccionar Todo',
+            iconCls: 'all',
+            handler:selectAllDataView
+        },'-',{
+            text: 'Habilitar Ratón/Teclado',
+            iconCls: 'on',
+            handler:clickHandler.createDelegate(this, [], true)
+        },'-',{
+            text: 'Deshabilitar Ratón/Teclado',
+            iconCls: 'off',
+            handler:clickHandler.createDelegate(this, [], true)
+        }]
     });
 
+	function clickHandler(item, opts){
+		switch(item.text){
+			case 'Encender':{ enviarOrdenSeleccionados("wakeup",dataviewON); break; }
+			case 'Apagar':{ enviarOrdenSeleccionados("sleep",dataviewON); break; }
+			case 'Habilitar Internet':{ enviarOrdenSeleccionados("enableInternet",dataviewNet); break; }
+			case 'Deshabilitar Internet':{ enviarOrdenSeleccionados("disableInternet",dataviewNet); break; }
+			case 'Habilitar Ratón/Teclado':{ enviarOrdenSeleccionados("enableMouse",dataviewMouse); break; }
+			case 'Deshabilitar Ratón/Teclado':{ enviarOrdenSeleccionados("disableMouse",dataviewMouse); break; }
+		}
+	}
 
 //#########################################################################################################
 //####################################### Parametros de ConfigAula ########################################
@@ -200,145 +228,12 @@
         handler: function(){
             Ext.Msg.alert('Message', 'Opciones de configuracion.');
         }
-    },{
+    }/*,{
         id:'close',
         handler: function(e, target, panel){
             panel.ownerCt.remove(panel, true);
         }
-    }];
-
-	var column1={
-	   columnWidth:.16,
-	   id:'col1',
-	   style:'padding:10px 0 10px 10px',
-	   items:[{
-	       title: 'Equipo 1',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 7',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 13',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 19',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 25',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   }]
-	};
-
-	var column2={
-      columnWidth:.16,
-      style:'padding:10px 0 10px 10px',
-      items:[{
-          title: 'Equipo 2',
-          layout:'fit',
-          tools: tools,
-          html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-      },{
-          title: 'Equipo 8',
-          tools: tools,
-          html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-      },{
-          title: 'Equipo 14',
-          tools: tools,
-          html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-      },{
-          title: 'Equipo 20',
-          tools: tools,
-          html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-      },{
-          title: 'Equipo 26',
-          tools: tools,
-          html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-      }]
-	};
-	
-	var column3={
-	   columnWidth:.16,
-       style:'padding:10px 0 10px 10px',
-	   items:[{
-	       title: 'Equipo 3',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 9',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 15',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 21',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 27',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   }]
-	};
-	    
-	var column4={
-	  columnWidth:.16,
-       style:'padding:10px 0 10px 10px',
-	   items:[{
-	       title: 'Equipo 4',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 10',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 16',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 22',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 28',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   }]
-	};
-	   
-	var column5={
-	   columnWidth:.16,
-       style:'padding:10px 0 10px 10px',
-	   items:[{
-	       title: 'Equipo 5',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 11',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno2.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 17',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno1.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 23',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno4.png" style="height:50px;"/></div>'
-	   },{
-	       title: 'Equipo 29',
-	       tools: tools,
-	       html: '<div style="text-align:center;"><img src="images/alumnos/alumno3.png" style="height:50px;"/></div>'
-	   }]
-	};    
-
+    }*/];
 
 	var optEncender={
 		xtype: 'portal',
@@ -353,6 +248,7 @@
 		title: 'Internet',
 		iconCls: 'x-icon-subscriptions',
 		tabTip: 'Habilitar/Deshabilitar Internet',
+		style: 'padding: 10px;',
 		items:[panel2]
 	};
 	
@@ -365,11 +261,12 @@
 		items:[panel3]          
 	};
 	var optConfigurar={
+        id:'config',
 		xtype: 'portal',
-		id:'config',
 		title: 'Configurar Aula',
 		iconCls: 'x-icon-configuration',
 		tabTip: 'Configurar el Aula',
 		style: 'padding: 10px; ',
-		items:[] 
+		items:[]
+//		html:"<div style='align:right'><input type='button' value='Guardar Configuracion'></div>"
 	};

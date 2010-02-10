@@ -135,9 +135,12 @@ function pintarDataView(alumnos,cols){
 	});
 
 	dataviewON.setWidth(105*parseInt(cols));
+/*	dataviewNet.setWidth(105*parseInt(cols));
+	dataviewMouse.setWidth(105*parseInt(cols));*/
+
     dataviewON.setStore(myStore);
-  //  dataviewNet.setStore(myStore);
-  //  dataviewMouse.setStore(myStore);
+//    dataviewNet.setStore(myStore);
+//    dataviewMouse.setStore(myStore);
 }
 
 // pintar pantalla de configuracion
