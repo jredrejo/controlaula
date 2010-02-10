@@ -19,11 +19,45 @@
         '<div class="x-clear"></div>'
 	);
 
-	function prueba(){
-		alert("prueba");
+	function selectAllDataView(){
+		dataviewON.selectRange(0,dataviewON.getNodes().length);
+	}
+	
+	function encenderSeleccionados(){
+		if(dataviewON.getSelectedRecords().length=="0"){
+			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
+			return;
+		}
+		
+		var seleccionados="";
+		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
+			seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
+			
+			if(i+1!=dataviewON.getSelectedRecords().length)
+				seleccionados+=",";
+		}	
+		enviarOrdenPuestos("wakeup",seleccionados,"");
+	}
+	
+	function apagarSeleccionados(){
+		if(dataviewON.getSelectedRecords().length=="0"){
+			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
+			return;
+		}
+		
+		var seleccionados="";
+		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
+			seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
+			
+			if(i+1!=dataviewON.getSelectedRecords().length)
+				seleccionados+=",";
+		}	
+		enviarOrdenPuestos("sleep",seleccionados,"");
 	}
 
+
 	var dataviewON = new Ext.DataView({
+								id:'dataviewON',
 								tpl: tpl,
 								autoHeight:true,
 								multiSelect: true,
@@ -121,16 +155,17 @@
         items: dataviewON,
         tbar:['->',{
             text: 'Seleccionar Todo',
-            iconCls: 'all'
+            iconCls: 'all',
+            handler:selectAllDataView
         },'-',{
             text: 'Encender',
-            iconCls: 'on'
+            iconCls: 'on',
+            handler:encenderSeleccionados
         },'-',{
             text: 'Apagar',
             iconCls: 'off',
-            handler:prueba
+            handler:apagarSeleccionados
         }]
-
     });    
 
     var panel2 = new Ext.Panel({

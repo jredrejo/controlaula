@@ -106,6 +106,7 @@ function pintarEquiposAula(equipos){
 
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
+		var pcname = clase.classroom.pclist[i].PCname;
 
 		if(clase.classroom.pclist[i].PCname=="none"){
 			nombre = "Sin equipo";
@@ -118,21 +119,22 @@ function pintarEquiposAula(equipos){
 			foto = "images/pc_no_logueado.png";
 		}
 
-		alumnos.images[i]={"name":nombre,"url":foto}
+		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname}
 	}
 
-	pintarDataView(alumnos);
+	pintarDataView(alumnos,clase.classroom.structure.cols);
 	pintarConfiguracionAula(clase);
 }
 
 // pintar DataView de alumnos
-function pintarDataView(alumnos){
+function pintarDataView(alumnos,cols){
 	var myStore = new Ext.data.JsonStore({
 		data: alumnos,
 		root: 'images',
-		fields: ['name','url']
+		fields: ['name','url','pcname']
 	});
 
+	dataviewON.setWidth(105*parseInt(cols));
     dataviewON.setStore(myStore);
   //  dataviewNet.setStore(myStore);
   //  dataviewMouse.setStore(myStore);
