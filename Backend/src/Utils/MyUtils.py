@@ -9,7 +9,7 @@
 # Author:    José L. Redrejo Rodríguez
 # Copyright:   2009 - José L. Redrejo Rodríguez    <jredrejo @nospam@ debian.org>
 #
-# ZeroConf-Services is free software: you can redistribute it and/or modify
+# ControlAula is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.

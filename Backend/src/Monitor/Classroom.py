@@ -60,7 +60,7 @@ class Classroom():
     def addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True,printerShared=False):
         """Add a pc to the classroom"""
         if not self.Hosts.has_key(hostip):
-            self.Hosts[hostip]=[hostip,hostname,classname,ltsp,0,0,internetEnabled,printerShared,datetime.datetime.now() ]
+            self.Hosts[hostip]=[login,hostname,hostip,mac,ltsp,classname,internetEnabled,printerShared,datetime.datetime.now() ]
             #intialize list of commands for this client
             self.CommandStack[hostip]=[]
     
@@ -69,7 +69,7 @@ class Classroom():
         """Add a logged user to the classroom"""
         key=login+'@'+hostip
         if not self.LoggedUsers.has_key(key):
-            self.LoggedUsers[key]=[hostip,hostname,classname,ltsp,0,0,internetEnabled,login,username,internetEnabled,mouseEnabled,messagesEnabled,photo,datetime.datetime.now() ]
+            self.LoggedUsers[key]=[login,hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,printerShared,messagesEnabled,photo,datetime.datetime.now() ]
             #intialize list of commands for this client
             self.CommandStack[key]=[]    
     

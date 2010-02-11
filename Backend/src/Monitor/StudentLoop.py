@@ -23,7 +23,8 @@
 ##############################################################################
 
 import xmlrpclib
-from Utils import NetworkUtils, MyUtils
+from Utils import NetworkUtils, MyUtils,Configs
+import pdb
 
 class Obey(object):
     '''
@@ -64,7 +65,6 @@ class Obey(object):
         #pending: checkings to be sure this is the right teacher
         self.myteacher=xmlrpclib.Server('http://'+str( newteacher[0]) + ':' + str(newteacher[1]) + '/RPC2')
         self.catched=name
-        
         self.myIp=NetworkUtils.get_ip_inet_address(str(newteacher[0] )) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(str(newteacher[0]))
         order=self.myteacher.hostPing( self.mylogin, self.myIp )
@@ -77,14 +77,14 @@ class Obey(object):
                 #                 internetEnabled=True, mouseEnabled=True,printerShared=False,
                 #              messagesEnabled=False,photo=False)                
                 self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp,
-                                       MyUtils.isLTSP(),'',self.myFullName,MyUtils.ipLTSP,
+                                       MyUtils.isLTSP(),Configs.classroomName()   ,self.myFullName,MyUtils.ipLTSP,
                                       True, True,False,
                                        False,False)            
             else:
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
                 #classname='',internetEnabled=True,printerShared=False):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       MyUtils.isLTSP(),'',True,False)
+                                       MyUtils.isLTSP(),Configs.classroomName(),True,False)
                 
                 
                 

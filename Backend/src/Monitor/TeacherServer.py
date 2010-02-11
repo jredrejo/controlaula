@@ -39,15 +39,20 @@ class RPCServer(xmlrpc.XMLRPC):
         executing addUser or addHost"""
         if login=='root':
             key=hostip
+            if not self.classroom.existPC(key):
+                return 'new'
+            else:
+                self.classroom.updateHostTimeStamp(key)
         else:
             key =login+'@'+hostip
+            if not self.classroom.existUser(key):
+                return 'new'
+            else:
+                self.classroom.updateUserTimeStamp(key)
 
-        if not self.classroom.existUser(key):
-            return 'new' #addUser or addHost must be called by the student
-        else:
-            self.classroom.updateUserTimeStamp(key)
-            if self.classroom.hasCommands(key):
-                return 'commands' #getCommands must be called by the student        
+                
+        if self.classroom.hasCommands(key):
+            return 'commands' #getCommands must be called by the student        
         #return if the new host has to send its data
         return False
             

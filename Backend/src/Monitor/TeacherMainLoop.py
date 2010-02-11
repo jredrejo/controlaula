@@ -31,7 +31,6 @@ import simplejson as json
 import os
 import TeacherServer
 
-
 class ControlAulaProtocol(resource.Resource):
     """Respond with the appropriate ControlAUla  protocol response.
     A GET should return a file. A POST should use JSON to retrieve and send data
@@ -42,7 +41,7 @@ class ControlAulaProtocol(resource.Resource):
 
     def __init__ (self):
         resource.Resource.__init__(self)
-        self.classroom=None
+        
         self.PageDir=""        
         self.teacher = TeacherServer.RPCServer()
 
@@ -99,7 +98,7 @@ class ControlAulaProtocol(resource.Resource):
 
         #Filter the command needed.
         command=request.path[1:]
-        handler=Handler.Plugins()
+        handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
          
         if handler.existCommand(command):
@@ -118,11 +117,18 @@ class ControlAulaProtocol(resource.Resource):
                 
         else:
             #it's sending the classroom data
-            try:
+            try:                
                 request.content.read()
-                recvjson = request.args['classroom'][0]           
-                # Analyse the request and construct a response.
-                respjson= self._HandleMessage(recvjson) 
+                recvjson = request.args['action'][0]
+                if recvjson == 'estadoAulaPruebas':
+                    #testing file used by Manu:
+                    inputFile=open(os.path.join(self.PageDir, 'datosAulaPrueba'),'r')
+                    #inputFile=open('/var/www/datosAulaPrueba','r')
+                    respjson= inputFile.read()
+                    inputFile.close()
+                else:
+                    # Analyse the request and construct a response.
+                    respjson= self._HandleMessage(recvjson) 
             except:
                 # The data wasn't found in the headers.
                 pass

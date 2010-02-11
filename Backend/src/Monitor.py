@@ -34,7 +34,7 @@ USERNAME=''
 USERHOME=''
 LOG_FILENAME = ''
 HOSTNAME=''
-PORT=9000
+PORT=8900
 PAGES='/var/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5

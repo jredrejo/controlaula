@@ -25,9 +25,10 @@ import logging
 
 class Plugins(object):
     
-    def __init__(self):
+    def __init__(self,classroom):
         self.args=[]
         self.targets=[]    
+        self.classroom=classroom
         self.handlers = {
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
