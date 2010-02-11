@@ -14,6 +14,7 @@ function estadoAula(){
 
 // Funcion para hacer pruebas
 function estadoAulaPruebas(){
+	//setInterval('conexion("datosAulaPrueba","estadoAulaPruebas","")','3000');
 	conexion("datosAulaPrueba","estadoAulaPruebas","");
 }
 
@@ -107,8 +108,8 @@ function pintarEquiposAula(equipos){
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
 		var pcname = clase.classroom.pclist[i].PCname;
-		var internet="images/pc_none.png";
-		var mouse="images/pc_none.png";
+		var internet=mouse=message="images/pc_none.png";
+//		var mouse="images/pc_none.png";
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
 			nombre = "Sin equipo";
@@ -123,8 +124,9 @@ function pintarEquiposAula(equipos){
 
 		if(clase.classroom.pclist[i].internetEnabled=="1") internet="images/icon_web.png";
 		if(clase.classroom.pclist[i].mouseEnabled=="1") mouse="images/icon_mouse.png";
+		if(clase.classroom.pclist[i].messagesEnabled=="1") message="images/icon_messages.png";
 
-		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse}
+		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message}
 	}
 
 	pintarDataView(alumnos,clase.classroom.structure.cols);
@@ -136,16 +138,22 @@ function pintarDataView(alumnos,cols){
 	var myStore = new Ext.data.JsonStore({
 		data: alumnos,
 		root: 'images',
-		fields: ['name','url','pcname','internet','mouse']
+		fields: ['name','url','pcname','internet','mouse','message']
 	});
 
-	dataviewON.setWidth(130*parseInt(cols));
-	panel.setWidth(130*parseInt(cols)+30);
-/*	dataviewNet.setWidth(105*parseInt(cols));
-	dataviewMouse.setWidth(105*parseInt(cols));*/
-
+	var sizeDataview = 130*parseInt(cols);
+	var sizePanel = 130*parseInt(cols)+30;
+	
+	dataviewON.setWidth(sizeDataview);
+	dataviewNet.setWidth(sizeDataview);
+	dataviewMouse.setWidth(sizeDataview);
+	
+	panel.setWidth(sizePanel);
+	panel2.setWidth(sizePanel);
+	panel3.setWidth(sizePanel);
+	
     dataviewON.setStore(myStore);
-//    dataviewNet.setStore(myStore);
+ //   dataviewNet.setStore(myStore);
 //    dataviewMouse.setStore(myStore);
 }
 

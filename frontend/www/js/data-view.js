@@ -16,7 +16,11 @@
 		'<tpl for=".">',
             '<div class="thumb-wrap" id="{name}">',
             '<span class="x-editable" style="background-color:#4e78b1; color:#dfe8f0; height:17px;padding-top:3px;">{pcName}</span>',
-		    '<div class="thumb"><div style="float:right;"><img src="{internet}" style="width:28px; height:28px;"><br><img src="{mouse}" style="padding-top:10px; width:28px; height:28px;"></div><img src="{url}" title="{name}"></div>',
+		    '<div class="thumb"><div style="float:right;">',
+		    '<img src="{internet}" style="width:28px; height:28px;"><br>',
+		    '<img src="{mouse}" style="padding-top:5px; width:28px; height:28px;"><br>',
+		    '<img src="{message}" style="padding-top:1px; width:28px; height:28px;">',
+		    '</div><img src="{url}" title="{name}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
@@ -42,7 +46,6 @@
 		enviarOrdenPuestos(orden,seleccionados,"");
 	}
 	
-
 	var dataviewON = new Ext.DataView({
 								id:'dataviewON',
 								tpl: tpl,
@@ -54,7 +57,7 @@
 
 								plugins: [
 									new Ext.DataView.DragSelector(),
-									new Ext.DataView.LabelEditor({dataIndex: 'name'})
+									//new Ext.DataView.LabelEditor({dataIndex: 'name'})
 								],
 
 								prepareData: function(data){
@@ -85,7 +88,7 @@
 
 								plugins: [
 									new Ext.DataView.DragSelector(),
-									new Ext.DataView.LabelEditor({dataIndex: 'name'})
+									//new Ext.DataView.LabelEditor({dataIndex: 'name'})
 								],
 
 								prepareData: function(data){
@@ -115,7 +118,7 @@
 
 								plugins: [
 									new Ext.DataView.DragSelector(),
-									new Ext.DataView.LabelEditor({dataIndex: 'name'})
+									//new Ext.DataView.LabelEditor({dataIndex: 'name'})
 								],
 
 								prepareData: function(data){
