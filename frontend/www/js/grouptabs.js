@@ -18,7 +18,7 @@ Ext.onReady(function() {
 	    		activeGroup: 0,
 	    		items: [{
     				mainItem: 1,
-    				items: [optInternet,optEncender,optRaton,optConfigurar]
+    				items: [optConfigurar,optEncender]
             },{
             expanded: true,
             items: [{

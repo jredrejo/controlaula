@@ -145,16 +145,10 @@ function pintarDataView(alumnos,cols){
 	var sizePanel = 130*parseInt(cols)+30;
 	
 	dataviewON.setWidth(sizeDataview);
-	dataviewNet.setWidth(sizeDataview);
-	dataviewMouse.setWidth(sizeDataview);
 	
 	panel.setWidth(sizePanel);
-	panel2.setWidth(sizePanel);
-	panel3.setWidth(sizePanel);
 	
     dataviewON.setStore(myStore);
- //   dataviewNet.setStore(myStore);
-//    dataviewMouse.setStore(myStore);
 }
 
 // pintar pantalla de configuracion
