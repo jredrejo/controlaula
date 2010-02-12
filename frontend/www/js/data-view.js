@@ -115,6 +115,22 @@
         iconCls: 'cancel'
     });
 
+    var messagesON = new Ext.Action({
+        text: 'Habilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("enabledMessages");
+        },
+        iconCls: 'done'
+    });
+
+    var messagesOFF = new Ext.Action({
+        text: 'Deshabilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("disabledMessages");
+        },
+        iconCls: 'cancel'
+    });
+
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
@@ -125,7 +141,7 @@
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
         items: dataviewON,
         tbar:['->',{
-            text: 'Seleccionar Todo',
+            text: 'Selecc. Todo',
             iconCls: 'all',
             handler:selectAllDataView
         },'-',{
@@ -145,9 +161,13 @@
             iconCls: 'internet',
 			menu: [internetON,internetOFF]
 		},'-',{
-			text: 'Ratón/Teclado',
+			text: 'Ratón/Tecl',
             iconCls: 'mouse',
 			menu: [mouseON,mouseOFF]
+		},'-',{
+			text: 'Mensajes',
+            iconCls: 'messages',
+			menu: [messagesON,messagesOFF]
 		}]
     });    
 
