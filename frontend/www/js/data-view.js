@@ -140,7 +140,7 @@
         layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
         items: dataviewON,
-        tbar:['->',{
+/*        tbar:['->',{
             text: 'Selecc. Todo',
             iconCls: 'all',
             handler:selectAllDataView
@@ -168,6 +168,91 @@
 			text: 'Mensajes',
             iconCls: 'messages',
 			menu: [messagesON,messagesOFF]
+		}]*/
+ 		tbar: ["->",{
+            text: 'Selecc. Todo',
+            iconCls: 'all',
+            handler:selectAllDataView
+        },'-',{
+            xtype: 'buttongroup',
+            title: 'Equipos',
+            columns: 1,
+            defaults: {
+                scale: 'small'
+            },
+            items: [{
+		        text: 'Encender',
+		        iconCls: 'on',
+		        handler:function(){
+					enviarOrdenSeleccionados("wakeup");
+			    },
+            },{
+		        text: 'Apagar',
+		        iconCls: 'off',
+		        handler:function(){
+					enviarOrdenSeleccionados("sleep");
+			    },
+            }]
+        },"-",{
+            xtype: 'buttongroup',
+            title: 'Internet',
+            columns: 1,
+            defaults: {
+                scale: 'small'
+            },
+            items: [{
+				text: 'Habilitar',
+		        iconCls: 'done',
+		        handler:function(){
+					enviarOrdenSeleccionados("enabledInternet");
+			    },
+            },{
+				text: 'Deshabilitar',
+		        iconCls: 'cancel',
+		        handler:function(){
+					enviarOrdenSeleccionados("disabledInternet");
+			    },
+            }]
+        },"-",{
+            xtype: 'buttongroup',
+            title: 'Ratón/Teclado',
+            columns: 1,
+            defaults: {
+                scale: 'small'
+            },
+            items: [{
+				text: 'Habilitar',
+		        iconCls: 'done',
+		        handler:function(){
+					enviarOrdenSeleccionados("endabledMouse");
+			    },
+            },{
+				text: 'Deshabilitar',
+		        iconCls: 'cancel',
+		        handler:function(){
+					enviarOrdenSeleccionados("disabledMouse");
+			    },
+            }]
+		},"-",{
+            xtype: 'buttongroup',
+            title: 'Mensajes',
+            columns: 1,
+            defaults: {
+                scale: 'small'
+            },
+            items: [{
+				text: 'Habilitar',
+		        iconCls: 'done',
+		        handler:function(){
+					enviarOrdenSeleccionados("enabledMessages");
+			    },
+            },{
+				text: 'Deshabilitar',
+		        iconCls: 'cancel',
+		        handler:function(){
+					enviarOrdenSeleccionados("disabledMessages");
+			    },
+            }]
 		}]
     });    
 
