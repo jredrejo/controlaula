@@ -140,36 +140,58 @@
         layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
         items: dataviewON,
-/*        tbar:['->',{
-            text: 'Selecc. Todo',
-            iconCls: 'all',
-            handler:selectAllDataView
-        },'-',{
-            text: 'Encender',
-            iconCls: 'on',
-            handler:function(){
-				enviarOrdenSeleccionados("wakeup");
-    	    },
-        },'-',{
-            text: 'Apagar',
-            iconCls: 'off',
-            handler:function(){
-				enviarOrdenSeleccionados("sleep");
-    	    },
-        },'-',{
-			text: 'Internet',
-            iconCls: 'internet',
-			menu: [internetON,internetOFF]
-		},'-',{
-			text: 'Ratón/Tecl',
-            iconCls: 'mouse',
-			menu: [mouseON,mouseOFF]
-		},'-',{
-			text: 'Mensajes',
-            iconCls: 'messages',
-			menu: [messagesON,messagesOFF]
-		}]*/
- 		tbar: ["->",{
+        tbar:[{
+            xtype: 'buttongroup',
+            columns: 2,
+            defaults: {
+                scale: 'small'
+            },
+	        items:[{
+	            text: 'Selecc. Todo',
+	            iconCls: 'all',
+	            handler:selectAllDataView
+	        },{
+	            text: 'Encender',
+	            iconCls: 'on',
+	            handler:function(){
+					enviarOrdenSeleccionados("wakeup");
+	    	    },
+	        },{
+	            text: 'Selecc. Ninguno',
+	            iconCls: 'none',
+	            handler:selectAllDataView
+	        },{
+	            text: 'Apagar',
+	            iconCls: 'off',
+	            handler:function(){
+					enviarOrdenSeleccionados("sleep");
+	    	    },
+	        }]
+        },{
+            xtype: 'buttongroup',
+            columns: 2,
+            defaults: {
+                scale: 'small'
+            },
+	        items:[{
+	            text: 'Altavoz',
+	            iconCls: 'sound',
+				menu: [internetON,internetOFF]
+	        },{
+				text: 'Internet',
+	            iconCls: 'internet',
+				menu: [internetON,internetOFF]
+			},{
+				text: 'Ratón/Teclado',
+	            iconCls: 'mouse',
+				menu: [mouseON,mouseOFF]
+			},{
+				text: 'Mensajes',
+	            iconCls: 'messages',
+				menu: [messagesON,messagesOFF]
+			}]
+        }]
+ 	/*	tbar: ["->",{
             text: 'Selecc. Todo',
             iconCls: 'all',
             handler:selectAllDataView
@@ -253,7 +275,7 @@
 					enviarOrdenSeleccionados("disabledMessages");
 			    },
             }]
-		}]
+		}]*/
     });    
 
 

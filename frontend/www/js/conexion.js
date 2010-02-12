@@ -168,12 +168,13 @@ function pintarConfiguracionAula(clase){
 		
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
-
+		var pcname = clase.classroom.pclist[i].PCname;
+		
 		if(clase.classroom.pclist[i].PCname=="none"){
-			nombre = "Sin equipo";
+			pcname = "Sin equipo";
 			foto = "images/pc_none.png";			
+			nombre="&nbsp;";
 		}else if(clase.classroom.pclist[i].ON=="0"){
-			nombre = "Apagado";
 			foto = "images/pc_apagado.png";
 		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
 			nombre = "Login";
@@ -181,9 +182,9 @@ function pintarConfiguracionAula(clase){
 		}
 		
 		var computer={
-	       	title: nombre,
+	       	title: pcname,
 	        tools: tools,
-	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/></div>'
+	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
 	   }
 	   
 	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
