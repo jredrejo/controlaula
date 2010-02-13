@@ -30,6 +30,10 @@
 		dataviewON.selectRange(0,dataviewON.getNodes().length);
 	}
 	
+	function selectNoneDataView(){
+		dataviewON.selectRange(-1,-1);
+	}
+		
 	function enviarOrdenSeleccionados(orden){
 		if(dataviewON.getSelectedRecords().length=="0"){
 			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
@@ -131,6 +135,22 @@
         iconCls: 'cancel'
     });
 
+    var soundON = new Ext.Action({
+        text: 'Habilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("enabledSound");
+        },
+        iconCls: 'done'
+    });
+
+    var soundOFF = new Ext.Action({
+        text: 'Deshabilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("disabledSound");
+        },
+        iconCls: 'cancel'
+    });
+
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
@@ -159,7 +179,7 @@
 	        },{
 	            text: 'Selecc. Ninguno',
 	            iconCls: 'none',
-	            handler:selectAllDataView
+	            handler:selectNoneDataView
 	        },{
 	            text: 'Apagar',
 	            iconCls: 'off',
@@ -174,14 +194,14 @@
                 scale: 'small'
             },
 	        items:[{
-	            text: 'Altavoz',
-	            iconCls: 'sound',
-				menu: [internetON,internetOFF]
-	        },{
 				text: 'Internet',
 	            iconCls: 'internet',
 				menu: [internetON,internetOFF]
 			},{
+	            text: 'Altavoz',
+	            iconCls: 'sound',
+				menu: [soundON,soundOFF]
+	        },{
 				text: 'Ratón/Teclado',
 	            iconCls: 'mouse',
 				menu: [mouseON,mouseOFF]
@@ -295,6 +315,12 @@
         }
     }*/];
 
+	var structureClass = {
+		id:"sctructureClass",
+		cols: "",
+		rows:""
+	};
+
 	var optEncender={
 		xtype: 'portal',
 		title: 'Equipos',
@@ -313,17 +339,29 @@
 		style: 'padding: 10px; ',
 		items:[],
     	listeners:{
-			drop:function(portal){
+			drop:function(){
+				
+				//Tras mover el equipo, obtenemos la nueva configuracion del aula
+				var classroom = { "pclist": []};
+				var i=0;
+				var j=0;
 
-		//		this.setSpacing(15);
-			//	portal.setSpacing(15);
-		//		optConfigurar.setSpacing(15);
-				var configtmp = Ext.getCmp('config');
-				alert(configtmp.items.length);
-				var coltmp = Ext.getCmp('col3');
-
-//				conexion("configClass","configurarAula","");
+				//Recorremos Columnas y filas para crear el nuevo pclist				
+				this.items.each(function(item,index,length){
+					if(item.items.length>0){
+						this.items.each(function(){									
+							var pos = (parseInt(j)*parseInt(structureClass.cols))+parseInt(i);
+							classroom.pclist[pos]=this.title;	
+			                j++
+		                });
+						j=0;		                
+						i++;	
+					}
+                });
+				
+				// Enviamos la nueva configuracion de los puestos al backend
+				dataString = Ext.util.JSON.encode(classroom);				
+				conexion("classroomConfig",dataString);
 			}
 		},
-//		html:"<div style='align:right'><input type='button' value='Guardar Configuracion'></div>"	
 	};

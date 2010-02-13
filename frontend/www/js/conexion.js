@@ -9,13 +9,13 @@
 
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
-	conexion("datosaula","estadoAula","");
+	conexion("datosaula","");
 }
 
 // Funcion para hacer pruebas
 function estadoAulaPruebas(){
 	//setInterval('conexion("datosAulaPrueba","estadoAulaPruebas","")','3000');
-	conexion("datosAulaPrueba","estadoAulaPruebas","");
+	conexion("datosAulaPrueba","");
 }
 
 
@@ -29,12 +29,12 @@ function estadoEquipos(equipos){
 		classroom.pcs[i] = { "name": arrayEquipos[i]};
 	}
 
-	dataString = JSON.stringify(classroom);
+	dataString = Ext.util.JSON.encode(classroom);
 
 	// Para ejecutarlo cada 5 segundos
-	//setInterval('conexion("datosaula","estadoEquipos",dataString)','5000');
+	//setInterval('conexion("datosaula",dataString)','5000');
 
-	conexion("datosaula","estadoEquipos",dataString);
+	conexion("datosaula",dataString);
 }
 
 // Enviar Orden a los equipos del aula
@@ -45,14 +45,14 @@ function enviarOrdenPuestos(dir,puestos,argumentos){
 		"args" : argumentos
 	}
 
-	dataString = JSON.stringify(classroom);
+	dataString = Ext.util.JSON.encode(classroom);
 
-	conexion(dir,"enviarOrden",dataString);
+	conexion(dir,dataString);
 }
 
 
 // Funcion general de conexion
-function conexion(dir,accion,datos){
+function conexion(dir,datos){
 
 	document.getElementById("contenedor").innerHTML += "Enviando peticion a la URL: <b>"+dir+"</b>";
 
@@ -63,27 +63,23 @@ function conexion(dir,accion,datos){
 
 	Ext.Ajax.request({
 		url : dir , 
-		params : { action : accion, data : datos },
+		params : { data : datos },
 		method: 'POST',
 		success: function ( result, request) { 
 
 			// distintas respuestas segun la accion enviada
-			switch(accion){
-				case "estadoAula":{
+			switch(dir){
+				case "datosAula":{
 					// repintarAula(result.responseText);
 					document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
 					break;
 				}
-				case "estadoAulaPruebas":{
+				case "datosAulaPrueba":{
 					pintarEquiposAula(result.responseText);
 					break;
 				}
-				case "estadoEquipos":{
+				default:{
 					// repintarEquipos(result.responseText);
-					document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
-					break;
-				}
-				case "enviarOrden":{
 					document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
 					break;
 				}
@@ -109,7 +105,6 @@ function pintarEquiposAula(equipos){
 		var foto = clase.classroom.pclist[i].photo;
 		var pcname = clase.classroom.pclist[i].PCname;
 		var internet=mouse=message="images/pc_none.png";
-//		var mouse="images/pc_none.png";
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
 			nombre = "Sin equipo";
@@ -145,26 +140,26 @@ function pintarDataView(alumnos,cols){
 	var sizePanel = 130*parseInt(cols)+30;
 	
 	dataviewON.setWidth(sizeDataview);
-	
 	panel.setWidth(sizePanel);
-	
     dataviewON.setStore(myStore);
 }
 
 // pintar pantalla de configuracion
 function pintarConfiguracionAula(clase){
 
-	var configClass = Ext.getCmp('config');
+	structureClass.cols=clase.classroom.structure.cols;
+	structureClass.rows=clase.classroom.structure.rows;
 	
+	var configClass = Ext.getCmp('config');
 	// creacion dinamica de columnas
 	for(i=0;i<clase.classroom.structure.cols;i++){
-		eval("var column"+i+"={columnWidth:.16,id:'col"+i+"',style:'padding:10px 0 10px 10px',items:[]}");
+		eval("var column"+i+"={id:'col"+i+"',columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
 		eval("configClass.add("+i+",column"+i+")");
 	}
 	configClass.doLayout();
-
+	
 	// añadimos los equipos a cada columna
-	for(i=0;i<clase.classroom.pclist.length;i++){
+   for(i=0;i<clase.classroom.pclist.length;i++){
 		
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
@@ -180,6 +175,9 @@ function pintarConfiguracionAula(clase){
 			nombre = "Login";
 			foto = "images/pc_no_logueado.png";
 		}
+
+	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
+	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
 		
 		var computer={
 	       	title: pcname,
@@ -187,14 +185,10 @@ function pintarConfiguracionAula(clase){
 	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
 	   }
 	   
-	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
-	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
 	   eval("column"+parseInt(queColumna)+".items["+parseInt(posicionEnColumna)+"] = computer;");
 		
 	   var colTMP = Ext.getCmp('col'+parseInt(queColumna));
 	   colTMP.add(computer);
 	   colTMP.doLayout();
-	  
-	   //alert("col: "+parseInt(queColumna)+" - row: "+parseInt(posicionEnColumna)+" - pc: "+i);
 	}
 }
