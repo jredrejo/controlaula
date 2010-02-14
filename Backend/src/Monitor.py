@@ -1,5 +1,6 @@
-##############################################################################
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+##############################################################################
 # Project:     Controlaula/Monitor
 # Module:     Monitor.py
 # Purpose:     Starting module for this daemon
