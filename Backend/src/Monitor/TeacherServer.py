@@ -23,7 +23,7 @@
 ##############################################################################
 from twisted.web import xmlrpc
 from twisted.internet import defer
-
+import User,Host
 
 class RPCServer(xmlrpc.XMLRPC):
     """Object used to communicate students pcs with teacher pc
@@ -57,12 +57,14 @@ class RPCServer(xmlrpc.XMLRPC):
         return False
             
     
-    def xmlrpc_addUser(self,login, hostname,hostip,ltsp=False,classname='',username='',ipLTSP='',internetEnabled=True,mouseEnabled=True,printerShared=False,messagesEnabled=False,photo=False):
-        self.classroom.addUser(login, hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,printerShared,messagesEnabled,photo)
+    def xmlrpc_addUser(self,login, hostname,hostip,ltsp=False,classname='',username='',ipLTSP='',internetEnabled=True,mouseEnabled=True,soundEnabled=True,messagesEnabled=False,photo=''):
+        user=User.User(login,hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,soundEnabled,messagesEnabled,photo)
+        self.classroom.addUser(user)
         return True
-    
-    def xmlrpc_addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True,printerShared=False):
-        self.classroom.addHost(login,hostname,hostip,mac,ltsp,classname,internetEnabled,printerShared)
+   
+    def xmlrpc_addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True):
+        host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
+        self.classroom.addHost(host)
         return True
     
     def xmlrpc_getCommands(self, login,hostip):
@@ -108,13 +110,33 @@ class RPCServer(xmlrpc.XMLRPC):
     def xmlrpc_Hosts(self):
         """Return the list of the detected hosts
         Only to be used with test purposes"""
-        return self.classroom.Hosts
-    
+        list=[]
+        for i in self.classroom.Hosts:
+            list.append(i.__str__())
+        return list
+
+    def xmlrpc_Desktops(self):
+        """Return the list of the classroom structure
+        Only to be used with test purposes"""
+        list=[]
+        for i in self.classroom.Desktops:
+            list.append(i.__str__())
+        return list
+        
     def xmlrpc_Users(self):
         """Return the list of the detected hosts
         Only to be used with test purposes"""
-        return self.classroom.LoggedUsers
-    
+        list=[]
+        for i in self.classroom.LoggedUsers:
+            list.append(i.__str__())
+        return list        
+        
+    def xmlrpc_Json(self):
+        """Return the list of the json structure for the frontend
+        Only to be used with test purposes"""
+
+        return self.classroom.getJSONFrontend()
+        
     def xmlrpc_Commands(self):
         """Return the list of the remaining commands
         Only to be used with test purposes"""

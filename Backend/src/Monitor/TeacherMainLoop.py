@@ -119,13 +119,15 @@ class ControlAulaProtocol(resource.Resource):
             #it's sending the classroom data
             try:                
                 request.content.read()
-                recvjson = request.args['action'][0]
-                if recvjson == 'estadoAulaPruebas':
+                #recvjson = request.args['action'][0]
+                if command == 'datosAulaPrueba':
                     #testing file used by Manu:
                     inputFile=open(os.path.join(self.PageDir, 'datosAulaPrueba'),'r')
                     #inputFile=open('/var/www/datosAulaPrueba','r')
                     respjson= inputFile.read()
                     inputFile.close()
+                elif command == 'datosaula':
+                    respjson= self.teacher.classroom.getJSONFrontend()
                 else:
                     # Analyse the request and construct a response.
                     respjson= self._HandleMessage(recvjson) 

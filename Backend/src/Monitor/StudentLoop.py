@@ -24,7 +24,6 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
-import pdb
 
 class Obey(object):
     '''
@@ -74,17 +73,16 @@ class Obey(object):
                 #pending catch configurations and photo
                 #_addUser(self.mylogin,self.myHostname,self.myIp,
                 #                    ltsp=False,classname='',username=self.myFullName,ipLTSP='',
-                #                 internetEnabled=True, mouseEnabled=True,printerShared=False,
-                #              messagesEnabled=False,photo=False)                
+                #                 internetEnabled=True, mouseEnabled=True,soundEnabled=False,
+                #              messagesEnabled=False,photo='')                
                 self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp,
                                        MyUtils.isLTSP(),Configs.classroomName()   ,self.myFullName,MyUtils.ipLTSP,
-                                      True, True,False,
-                                       False,False)            
+                                      1,1,1,0,'')            
             else:
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
-                #classname='',internetEnabled=True,printerShared=False):
+                #classname='',internetEnabled=True):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       MyUtils.isLTSP(),Configs.classroomName(),True,False)
+                                       MyUtils.isLTSP(),Configs.classroomName(),1)
                 
                 
                 
@@ -92,7 +90,7 @@ class Obey(object):
             self.getCommands()
 
     def removeMyTeacher(self):
-        self.Teachers.pop(self.catched)
+        self.Teachers.pop(self.catched)        
         self.catched=''
         self.myteacher=None
 
