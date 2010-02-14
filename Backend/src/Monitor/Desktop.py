@@ -89,10 +89,10 @@ class Desktop(object):
             dict['ON']='0'
         else:
             dict['ON']='1'
-        dict['mouseEnabled']=self.mouse
-        dict['internetEnabled']=self.internet
-        dict['messagesEnabled']=self.messages
-        dict['printerShared']=self.sound
+        dict['mouseEnabled']=str(self.mouse)
+        dict['internetEnabled']=str(self.internet)
+        dict['messagesEnabled']=str(self.messages)
+        dict['printerShared']=str(self.sound)
         dict['photo']=self.photo
         dict['visible']='1'
         dict['loginname']=self.login
