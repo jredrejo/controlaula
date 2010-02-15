@@ -13,7 +13,7 @@ function estadoAula(){
 	dataString = Ext.util.JSON.encode({"args" : "refresh"});
 
 	conexion("datosaula",dataString,"pintaaula");
-	setInterval('conexion("datosaula","","pintaaula")','10000');
+	setInterval('conexion("datosaula","","pintaaula")','5000');
 }
 
 function estadoAulaConfig(){
@@ -22,13 +22,6 @@ function estadoAulaConfig(){
 
 	conexion("datosaula",dataString,"pintaconfig");
 }
-
-// Funcion para hacer pruebas
-function estadoAulaPruebas(){
-	//setInterval('conexion("datosAulaPrueba","")','10000');
-	conexion("datosAulaPrueba","","datosAulaPrueba");
-}
-
 
 //Pregunta el estado de uno o varios equipos del aula
 function estadoEquipos(equipos){
@@ -115,6 +108,12 @@ function pintarDataView(equipos){
 	var clase = eval('(' + equipos + ')');
 	var alumnos = {"images":[]};
 	var cols = clase.classroom.structure.cols;
+
+	try{
+		if(clase.classroom.pclist.length==0){return;}
+	}catch(e){
+		return;
+	}
 
 	for(i=0;i<clase.classroom.pclist.length;i++){
 
