@@ -28,7 +28,7 @@ class Desktop(object):
         self.userkey=''
         self.login=''
         self.username=''
-        self.hostname='none'
+        self.hostname='None'
         self.ip=''
         self.ltsp=False
         self.internet=1

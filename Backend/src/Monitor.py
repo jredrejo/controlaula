@@ -71,6 +71,8 @@ def _remove_teacher(self, name, address, port):
         if  Teachers.has_key(name):
             logging.getLogger().debug('teacher disappeared: ' + name)
             Teachers.pop(name)
+            if MyStudent.catched==name:
+                MyStudent.removeMyTeacher()
         
         
         

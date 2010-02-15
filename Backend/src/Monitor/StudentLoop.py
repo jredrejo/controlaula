@@ -90,7 +90,8 @@ class Obey(object):
             self.getCommands()
 
     def removeMyTeacher(self):
-        self.Teachers.pop(self.catched)        
+        if self.Teachers.has_key(self.catched): #in case avahi hasn't detected the teacher has already gone..
+            self.Teachers.pop(self.catched)        
         self.catched=''
         self.myteacher=None
 

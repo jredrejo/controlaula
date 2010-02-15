@@ -106,9 +106,10 @@ class ControlAulaProtocol(resource.Resource):
             try:
                 request.content.read()
                 recvjson = request.args['data'][0] 
-                args=json.loads(recvjson)['args']
-                if len(args)>0:
-                    handler.args=[args]
+                if json.loads(recvjson).has_key('args'):
+                    args=json.loads(recvjson)['args']
+                    if len(args)>0:
+                        handler.args=[args]
                 handler.targets=json.loads(recvjson)['pclist']
                 handler.process(command)
                 respjson= json.dumps({'result':'ack'})

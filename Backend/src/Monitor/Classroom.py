@@ -57,6 +57,7 @@ class Classroom():
 
         self.classname=Configs.classroomName()
         self.interval=refreshInterval
+        self.oldJSON=''
 
     def existUser(self,key):
         """Check if a logged user has already been added to the classroom"""
@@ -263,5 +264,30 @@ class Classroom():
         classroom['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
         for i in self.Desktops:
             classroom['pclist'].append(i.getFrontendInfo())
-             
-        return json.dumps({'classroom':classroom})
+        
+        newJSON=json.dumps({'classroom':classroom})
+        if newJSON!=self.oldJSON:
+            self.oldJSON=newJSON
+        else:
+            classroom.pop('pclist')
+            newJSON=json.dumps({'classroom':classroom})
+        return newJSON
+    
+    def redistributeDesktops(self,targets):
+        for i in range (0,len(targets)-1):
+            if targets[i]!=self.Desktops[i].hostname:
+                self.moveDesktopAt(targets[i],i)
+        
+                
+    def moveDesktopAt(self, desktop,position):
+        '''Move a Destkop in the list of Desktops at a fixed position'''
+        previousDesktop=self.Desktops[position]
+        oldposition=-1
+        for i in range(0,len(self.Desktops)-1):
+            if self.Desktops[i].hostname==desktop:
+                newDesktop=self.Desktops[i]
+                oldposition=i
+                break
+        #makes the moving:    
+        self.Desktops[oldposition]=previousDesktop
+        self.Desktops[position]=newDesktop

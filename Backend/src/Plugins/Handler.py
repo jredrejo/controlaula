@@ -30,6 +30,7 @@ class Plugins(object):
         self.targets=[]    
         self.classroom=classroom
         self.handlers = {
+                'classroomConfig':self.classroomConfig,    
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
@@ -95,4 +96,9 @@ class Plugins(object):
     def launchUrl(self,url):
         pass
           
-        
+    def classroomConfig(self):
+        for i in range(0, len(self.targets)-1):
+            if self.targets[i]=='Sin equipo':
+                self.targets[i]='None'
+        self.classroom.oldJSON=''
+        self.classroom.redistributeDesktops(self.targets)
