@@ -269,7 +269,7 @@ class Classroom():
         if newJSON!=self.oldJSON:
             self.oldJSON=newJSON
         else:
-            classroom.pop('pclist')
+            classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
         return newJSON
     
