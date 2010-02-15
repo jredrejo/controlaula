@@ -37,9 +37,9 @@ function estadoEquipos(equipos){
 	dataString = Ext.util.JSON.encode(classroom);
 
 	// Para ejecutarlo cada 5 segundos
-	//setInterval('conexion("datosaula",dataString)','5000');
+	//setInterval('conexion("datosaula",dataString,"pintaaula")','5000');
 
-	conexion("datosaula",dataString,"aula");
+	conexion("datosaula",dataString,"pintaaula");
 }
 
 // Enviar Orden a los equipos del aula
@@ -51,7 +51,7 @@ function enviarOrdenPuestos(dir,puestos,argumentos){
 	}
 
 	dataString = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataString,"orden");
+	conexion(dir,dataString,"cambiaconfig");
 }
 
 
