@@ -132,7 +132,7 @@ class ControlAulaProtocol(resource.Resource):
                     inputFile.close()
                 elif command == 'datosaula':
                     if args=='refresh':
-                        self.teacher.classroom.self.oldJSON=''
+                        self.teacher.classroom.oldJSON=''
                     respjson= self.teacher.classroom.getJSONFrontend()
                 else:
                     # Analyse the request and construct a response.
