@@ -108,12 +108,10 @@ function pintarDataView(equipos){
 	var clase = eval('(' + equipos + ')');
 	var alumnos = {"images":[]};
 	var cols = clase.classroom.structure.cols;
+	var seleccionados = dataviewON.getSelectedIndexes();
 
-	try{
-		if(clase.classroom.pclist.length==0){return;}
-	}catch(e){
+	if(clase.classroom.pclist.length==0)
 		return;
-	}
 
 	for(i=0;i<clase.classroom.pclist.length;i++){
 
@@ -152,6 +150,7 @@ function pintarDataView(equipos){
 	dataviewON.setWidth(sizeDataview);
 	panel.setWidth(sizePanel);
    dataviewON.setStore(myStore);
+	dataviewON.select(seleccionados);
 }
 
 // pintar pantalla de configuracion
