@@ -361,7 +361,7 @@
 				
 				// Enviamos la nueva configuracion de los puestos al backend
 				dataString = Ext.util.JSON.encode(classroom);				
-				conexion("classroomConfig",dataString);
+				conexion("classroomConfig",dataString,"cambiaconfig");
 			}
 		},
 	};

@@ -82,6 +82,10 @@ function conexion(dir,datos,accion){
 					pintarConfiguracionAula(result.responseText);
 					break;
 				}
+				case "cambiaconfig":{
+					conexion("datosaula","","pintaaula");
+					break;
+				}
 				case "datosAulaPrueba":{
 					pintarEquiposAula(result.responseText);
 					break;
