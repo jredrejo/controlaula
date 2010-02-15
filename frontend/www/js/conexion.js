@@ -9,12 +9,18 @@
 
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
-	conexion("datosaula","","pintaaula");
+
+	dataString = Ext.util.JSON.encode({"args" : "refresh"});
+
+	conexion("datosaula",dataString,"pintaaula");
 	setInterval('conexion("datosaula","","pintaaula")','10000');
 }
 
 function estadoAulaConfig(){
-	conexion("datosaula","","pintaconfig");
+
+	dataString = Ext.util.JSON.encode({"args" : "refresh"});
+
+	conexion("datosaula",dataString,"pintaconfig");
 }
 
 // Funcion para hacer pruebas
@@ -84,10 +90,6 @@ function conexion(dir,datos,accion){
 				}
 				case "cambiaconfig":{
 					conexion("datosaula","","pintaaula");
-					break;
-				}
-				case "datosAulaPrueba":{
-					pintarEquiposAula(result.responseText);
 					break;
 				}
 				default:{
