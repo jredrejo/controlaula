@@ -9,13 +9,18 @@
 
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
-	conexion("datosaula","");
+	conexion("datosaula","","pintaaula");
+	setInterval('conexion("datosaula","","pintaaula")','10000');
+}
+
+function estadoAulaConfig(){
+	conexion("datosaula","","pintaconfig");
 }
 
 // Funcion para hacer pruebas
 function estadoAulaPruebas(){
-	//setInterval('conexion("datosAulaPrueba","estadoAulaPruebas","")','3000');
-	conexion("datosAulaPrueba","");
+	//setInterval('conexion("datosAulaPrueba","")','10000');
+	conexion("datosAulaPrueba","","datosAulaPrueba");
 }
 
 
@@ -34,7 +39,7 @@ function estadoEquipos(equipos){
 	// Para ejecutarlo cada 5 segundos
 	//setInterval('conexion("datosaula",dataString)','5000');
 
-	conexion("datosaula",dataString);
+	conexion("datosaula",dataString,"aula");
 }
 
 // Enviar Orden a los equipos del aula
@@ -46,32 +51,35 @@ function enviarOrdenPuestos(dir,puestos,argumentos){
 	}
 
 	dataString = Ext.util.JSON.encode(classroom);
-
-	conexion(dir,dataString);
+	conexion(dir,dataString,"orden");
 }
 
 
 // Funcion general de conexion
-function conexion(dir,datos){
+function conexion(dir,datos,accion){
 
-	document.getElementById("contenedor").innerHTML += "Enviando peticion a la URL: <b>"+dir+"</b>";
+	/*document.getElementById("contenedor").innerHTML += "Enviando peticion a la URL: <b>"+dir+"</b>";
 
 	if(datos!="")
 		document.getElementById("contenedor").innerHTML += " los datos: <b>"+datos+"</b>";
 
-	document.getElementById("contenedor").innerHTML += "<br><br>";
+	document.getElementById("contenedor").innerHTML += "<br><br>";*/
 
 	Ext.Ajax.request({
 		url : dir , 
 		params : { data : datos },
 		method: 'POST',
 		success: function ( result, request) { 
-
 			// distintas respuestas segun la accion enviada
-			switch(dir){
-				case "datosAula":{
-					// repintarAula(result.responseText);
-					document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
+			switch(accion){
+				case "pintaaula":{
+				//	document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
+					pintarDataView(result.responseText);
+					break;
+				}
+				case "pintaconfig":{
+				//	document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
+					pintarConfiguracionAula(result.responseText);
 					break;
 				}
 				case "datosAulaPrueba":{
@@ -80,7 +88,7 @@ function conexion(dir,datos){
 				}
 				default:{
 					// repintarEquipos(result.responseText);
-					document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
+					//document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
 					break;
 				}
 			}
@@ -95,9 +103,12 @@ function conexion(dir,datos){
 //# Funciones de utilidades (en el futuro ira en otro archivo) #
 //##############################################################
 
-function pintarEquiposAula(equipos){
+// pintar DataView de alumnos
+function pintarDataView(equipos){
+
 	var clase = eval('(' + equipos + ')');
-	var alumnos = {"images":[]}	
+	var alumnos = {"images":[]};
+	var cols = clase.classroom.structure.cols;
 
 	for(i=0;i<clase.classroom.pclist.length;i++){
 
@@ -107,7 +118,7 @@ function pintarEquiposAula(equipos){
 		var internet=mouse=message="images/pc_none.png";
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
-			nombre = "Sin equipo";
+			nombre = "None";
 			foto = "images/pc_none.png";			
 		}else if(clase.classroom.pclist[i].ON=="0"){
 			nombre = "Apagado";
@@ -122,14 +133,8 @@ function pintarEquiposAula(equipos){
 		if(clase.classroom.pclist[i].messagesEnabled=="1") message="images/icon_messages.png";
 
 		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message}
-	}
+	}	
 
-	pintarDataView(alumnos,clase.classroom.structure.cols);
-	pintarConfiguracionAula(clase);
-}
-
-// pintar DataView de alumnos
-function pintarDataView(alumnos,cols){
 	var myStore = new Ext.data.JsonStore({
 		data: alumnos,
 		root: 'images',
@@ -141,16 +146,20 @@ function pintarDataView(alumnos,cols){
 	
 	dataviewON.setWidth(sizeDataview);
 	panel.setWidth(sizePanel);
-    dataviewON.setStore(myStore);
+   dataviewON.setStore(myStore);
 }
 
 // pintar pantalla de configuracion
-function pintarConfiguracionAula(clase){
+function pintarConfiguracionAula(equipos){
+
+	var clase = eval('(' + equipos + ')');
 
 	structureClass.cols=clase.classroom.structure.cols;
 	structureClass.rows=clase.classroom.structure.rows;
 	
 	var configClass = Ext.getCmp('config');
+	configClass.removeAll();
+
 	// creacion dinamica de columnas
 	for(i=0;i<clase.classroom.structure.cols;i++){
 		eval("var column"+i+"={id:'col"+i+"',columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
@@ -166,10 +175,11 @@ function pintarConfiguracionAula(clase){
 		var pcname = clase.classroom.pclist[i].PCname;
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
-			pcname = "Sin equipo";
+			pcname = "None";
 			foto = "images/pc_none.png";			
 			nombre="&nbsp;";
 		}else if(clase.classroom.pclist[i].ON=="0"){
+			nombre="Apagado";
 			foto = "images/pc_apagado.png";
 		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
 			nombre = "Login";

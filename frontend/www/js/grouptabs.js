@@ -97,5 +97,6 @@ Ext.onReady(function() {
             }]
 		}]
     });
-	estadoAulaPruebas();
+	estadoAula();
+	estadoAulaConfig();
 });

@@ -90,7 +90,7 @@
     var internetON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enabledInternet");
+			enviarOrdenSeleccionados("enableInternet");
         },
         iconCls: 'done'
     });
@@ -98,7 +98,7 @@
     var internetOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disabledInternet");
+			enviarOrdenSeleccionados("disableInternet");
         },
         iconCls: 'cancel'
     });
@@ -106,7 +106,7 @@
     var mouseON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enabledMouse");
+			enviarOrdenSeleccionados("enableMouse");
         },
         iconCls: 'done'
     });
@@ -114,7 +114,7 @@
     var mouseOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disabledMouse");
+			enviarOrdenSeleccionados("disableMouse");
         },
         iconCls: 'cancel'
     });
@@ -122,7 +122,7 @@
     var messagesON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enabledMessages");
+			enviarOrdenSeleccionados("enableMessages");
         },
         iconCls: 'done'
     });
@@ -130,7 +130,7 @@
     var messagesOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disabledMessages");
+			enviarOrdenSeleccionados("disableMessages");
         },
         iconCls: 'cancel'
     });
@@ -138,7 +138,7 @@
     var soundON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enabledSound");
+			enviarOrdenSeleccionados("enableSound");
         },
         iconCls: 'done'
     });
@@ -146,7 +146,7 @@
     var soundOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disabledSound");
+			enviarOrdenSeleccionados("disableSound");
         },
         iconCls: 'cancel'
     });
@@ -246,13 +246,13 @@
 				text: 'Habilitar',
 		        iconCls: 'done',
 		        handler:function(){
-					enviarOrdenSeleccionados("enabledInternet");
+					enviarOrdenSeleccionados("enableInternet");
 			    },
             },{
 				text: 'Deshabilitar',
 		        iconCls: 'cancel',
 		        handler:function(){
-					enviarOrdenSeleccionados("disabledInternet");
+					enviarOrdenSeleccionados("disableInternet");
 			    },
             }]
         },"-",{
@@ -272,7 +272,7 @@
 				text: 'Deshabilitar',
 		        iconCls: 'cancel',
 		        handler:function(){
-					enviarOrdenSeleccionados("disabledMouse");
+					enviarOrdenSeleccionados("disableMouse");
 			    },
             }]
 		},"-",{
@@ -286,13 +286,13 @@
 				text: 'Habilitar',
 		        iconCls: 'done',
 		        handler:function(){
-					enviarOrdenSeleccionados("enabledMessages");
+					enviarOrdenSeleccionados("enableMessages");
 			    },
             },{
 				text: 'Deshabilitar',
 		        iconCls: 'cancel',
 		        handler:function(){
-					enviarOrdenSeleccionados("disabledMessages");
+					enviarOrdenSeleccionados("disableMessages");
 			    },
             }]
 		}]*/
