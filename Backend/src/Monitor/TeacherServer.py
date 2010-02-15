@@ -24,7 +24,7 @@
 from twisted.web import xmlrpc
 from twisted.internet import defer
 import User,Host
-
+from Utils import NetworkUtils
 class RPCServer(xmlrpc.XMLRPC):
     """Object used to communicate students pcs with teacher pc
     """
@@ -63,6 +63,8 @@ class RPCServer(xmlrpc.XMLRPC):
         return True
    
     def xmlrpc_addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True):
+        if NetworkUtils.get_ip_inet_address()== hostip and NetworkUtils.getHostName()==hostname:
+            return False #the teacher host is not added to the list
         host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
         self.classroom.addHost(host)
         return True
