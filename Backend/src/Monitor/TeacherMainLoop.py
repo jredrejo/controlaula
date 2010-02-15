@@ -100,16 +100,21 @@ class ControlAulaProtocol(resource.Resource):
         command=request.path[1:]
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
+        args=''
+
+        try:
+            request.content.read()
+            recvjson = request.args['data'][0] 
+            if json.loads(recvjson).has_key('args'):
+                args=json.loads(recvjson)['args']
+        except:
+            pass
          
         if handler.existCommand(command):
             #if it's a petition to execute some command
             try:
-                request.content.read()
-                recvjson = request.args['data'][0] 
-                if json.loads(recvjson).has_key('args'):
-                    args=json.loads(recvjson)['args']
-                    if len(args)>0:
-                        handler.args=[args]
+                if len(args)>0:
+                    handler.args=[args]
                 handler.targets=json.loads(recvjson)['pclist']
                 handler.process(command)
                 respjson= json.dumps({'result':'ack'})
@@ -119,8 +124,6 @@ class ControlAulaProtocol(resource.Resource):
         else:
             #it's sending the classroom data
             try:                
-                request.content.read()
-                #recvjson = request.args['action'][0]
                 if command == 'datosAulaPrueba':
                     #testing file used by Manu:
                     inputFile=open(os.path.join(self.PageDir, 'datosAulaPrueba'),'r')
@@ -128,6 +131,8 @@ class ControlAulaProtocol(resource.Resource):
                     respjson= inputFile.read()
                     inputFile.close()
                 elif command == 'datosaula':
+                    if args=='refresh':
+                        self.teacher.classroom.self.oldJSON=''
                     respjson= self.teacher.classroom.getJSONFrontend()
                 else:
                     # Analyse the request and construct a response.
