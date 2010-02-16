@@ -26,6 +26,7 @@
 
 from twisted.web import server,resource,  static
 from Plugins  import Handler
+from Utils import Configs
 
 import simplejson as json
 import os
@@ -53,8 +54,10 @@ class ControlAulaProtocol(resource.Resource):
     def render_GET(self, request):
 
         # Check if requested file exists.    
-
-        requestedfile = os.path.join(self.PageDir, request.path[1:])
+        if request.path[:13]=='/loginimages/':
+            requestedfile=os.path.join(Configs.APP_DIR , request.path[1:])
+        else:    
+            requestedfile = os.path.join(self.PageDir, request.path[1:])
         
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.
@@ -134,6 +137,7 @@ class ControlAulaProtocol(resource.Resource):
                     if args=='refresh':
                         self.teacher.classroom.oldJSON=''
                     respjson= self.teacher.classroom.getJSONFrontend()
+                    
                 else:
                     # Analyse the request and construct a response.
                     respjson= self._HandleMessage(recvjson) 

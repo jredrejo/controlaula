@@ -24,6 +24,7 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
+from Plugins  import Handler
 
 class Obey(object):
     '''
@@ -43,7 +44,7 @@ class Obey(object):
         self.myteacher=None
         self.catched=''
         self.myMAC=''
-        
+        self.handler=Handler.Plugins(None)
         
     def listen(self):
         from twisted.internet import reactor           
@@ -63,6 +64,7 @@ class Obey(object):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         self.myteacher=xmlrpclib.Server('http://'+str( newteacher[0]) + ':' + str(newteacher[1]) + '/RPC2')
+        self.handler.myteacher=self.myteacher
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(str(newteacher[0] )) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(str(newteacher[0]))
@@ -77,7 +79,20 @@ class Obey(object):
                 #              messagesEnabled=False,photo='')                
                 self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp,
                                        MyUtils.isLTSP(),Configs.classroomName()   ,self.myFullName,MyUtils.ipLTSP,
-                                      1,1,1,0,'')            
+                                      1,1,1,0,'')       
+                
+
+                face=Configs.getFaceFile()
+                if face=='':
+                    print "no photo to send"
+                else:
+                    try:
+                        f = xmlrpclib.Binary(open(face, 'rb').read())
+                        self.myteacher.facepng(self.mylogin,self.myIp,f)         
+                    except:
+                        pass #it couldn't send the photo, that's no problem       
+                
+                     
             else:
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
                 #classname='',internetEnabled=True):
@@ -98,6 +113,7 @@ class Obey(object):
     def getCommands(self):
         commands=self.myteacher.getCommands( self.mylogin, self.myIp )
         for i in commands:
-            print i
+            if self.handler.existCommand(i):
+                self.handler.process(i)
         
         

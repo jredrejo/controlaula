@@ -85,7 +85,7 @@ class Desktop(object):
        
         '''
         dict={}
-        if self.userkey=='':
+        if self.hostkey=='':
             dict['ON']='0'
         else:
             dict['ON']='1'

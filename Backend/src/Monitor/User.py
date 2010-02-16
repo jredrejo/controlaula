@@ -37,6 +37,8 @@ class User(object):
         self.sound=soundEnabled
         self.messages=messagesEnabled
         self.photo=photo
+        if self.photo=='':
+            self.photo='loginimages/nobody.png'
         self.timestamp=datetime.datetime.now()
 
     def __str__(self):

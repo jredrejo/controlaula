@@ -22,6 +22,7 @@
 #
 ##############################################################################
 import logging
+from Utils import MyUtils
 
 class Plugins(object):
     
@@ -29,6 +30,7 @@ class Plugins(object):
         self.args=[]
         self.targets=[]    
         self.classroom=classroom
+        self.myteacher=None
         self.handlers = {
                 'classroomConfig':self.classroomConfig,    
                 'bigbrother':self.bigBrother,
@@ -47,7 +49,7 @@ class Plugins(object):
                 'sendmessage':self.sendMessage,
                 'sendfile':self.sendFile,
                 'startapplication':self.startApp,
-                'launchweb':self.launchUrl               
+                'launchweb':self.launchUrl            
                 }  
     def existCommand(self,command):
         return self.handlers.has_key(command)  
@@ -102,3 +104,4 @@ class Plugins(object):
                 self.targets[i]='None'
         self.classroom.oldJSON=''
         self.classroom.redistributeDesktops(self.targets)
+        

@@ -21,7 +21,7 @@
 # along with ControlAula. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import datetime
+import datetime,os
 import Desktop
 from Utils import  Configs
 
@@ -83,7 +83,14 @@ class Classroom():
             self.LoggedUsers[key]=user
             self.placeUserDesktop(key)
             #intialize list of commands for this client
-            self.CommandStack[key]=[]    
+            self.CommandStack[key]=[]  
+                
+    def addPhoto(self,path,key):
+        self.LoggedUsers[key].photo=path
+        for i in self.Desktops:
+            if i.userkey==key:
+                i.photo=path
+                break
     
     def removeUser(self,key):
         """Remove a logout user from the classroom data"""

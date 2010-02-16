@@ -28,16 +28,12 @@
 
 import signal
 import sys
-import os
 import logging
-from Utils import NetworkUtils, MyUtils
+from Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 
 
-USERNAME=''
-USERHOME=''
-LOG_FILENAME = ''
-HOSTNAME=''
+LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
 PAGES='/var/www'
 #Interval to check if the hosts are off or users have logout
@@ -90,18 +86,14 @@ if __name__ == '__main__':
     
     from twisted.internet import reactor
     
-    
 
     # Initialise the signal handler.
     signal.signal(signal.SIGINT, SigHandler)  
     
     USERNAME=MyUtils.getLoginName()
-    USERHOME=MyUtils.getHomeUser()
     HOSTNAME=NetworkUtils.getHostName()
     WEBPORT=NetworkUtils.getUsableTCPPort("localhost",PORT)
-    LOG_FILENAME=USERHOME + "/.controlaula/controlaula.log"
-    if not os.path.isdir(USERHOME + "/.controlaula"):
-        os.mkdir(USERHOME + "/.controlaula")
+    
     logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
