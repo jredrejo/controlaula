@@ -146,7 +146,10 @@ function pintarDataView(equipos){
 
 	var sizeDataview = 130*parseInt(cols);
 	var sizePanel = 130*parseInt(cols)+30;
-	
+
+	if(parseInt(sizePanel)<430)
+		sizePanel=430;
+
 	dataviewON.setWidth(sizeDataview);
 	panel.setWidth(sizePanel);
    dataviewON.setStore(myStore);
@@ -185,7 +188,7 @@ function pintarConfiguracionAula(equipos){
 		}else if(clase.classroom.pclist[i].ON=="0"){
 			nombre="Apagado";
 			foto = "images/pc_apagado.png";
-		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
+		}else if(clase.classroom.pclist[i].loginname=="" && clase.classroom.pclist[i].ON=="1"){
 			nombre = "Login";
 			foto = "images/pc_no_logueado.png";
 		}
