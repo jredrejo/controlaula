@@ -126,7 +126,7 @@ function pintarDataView(equipos){
 		}else if(clase.classroom.pclist[i].ON=="0"){
 			nombre = "Apagado";
 			foto = "images/pc_apagado.png";
-		}else if(clase.classroom.pclist[i].loginname=="unlogin"){
+		}else if(clase.classroom.pclist[i].loginname=="" && clase.classroom.pclist[i].ON=="1"){
 			nombre = "Login";
 			foto = "images/pc_no_logueado.png";
 		}
