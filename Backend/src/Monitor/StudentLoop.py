@@ -24,13 +24,13 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
-from Plugins  import Handler
+from Plugins  import StudentHandler
+import logging
 
 class Obey(object):
     '''
    What the student must do :D
     '''
-
 
     def __init__(self, teachers,interval):
         '''
@@ -44,7 +44,7 @@ class Obey(object):
         self.myteacher=None
         self.catched=''
         self.myMAC=''
-        self.handler=Handler.Plugins(None)
+        self.handler=StudentHandler.Plugins(None)
         
     def listen(self):
         from twisted.internet import reactor           
@@ -73,31 +73,33 @@ class Obey(object):
 
             if self.mylogin !='root':
                 #pending catch configurations and photo
-                #_addUser(self.mylogin,self.myHostname,self.myIp,
-                #                    ltsp=False,classname='',username=self.myFullName,ipLTSP='',
-                #                 internetEnabled=True, mouseEnabled=True,soundEnabled=False,
-                #              messagesEnabled=False,photo='')                
-                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp,
-                                       MyUtils.isLTSP(),Configs.classroomName()   ,self.myFullName,MyUtils.ipLTSP,
-                                      1,1,1,0,'')       
+                #self,login, hostname,hostip,ltsp=False,classname='',username='',
+                #ipLTSP='',internetEnabled=True,mouseEnabled=True,
+                #soundEnabled=True,messagesEnabled=False,photo=''):
+                            
+                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, MyUtils.isLTSP(),
+                                      Configs.RootConfigs['classroomname']  ,self.myFullName,MyUtils.ipLTSP,
+                                      Configs.MonitorConfigs.GetGeneralConfig('internet') ,
+                                      Configs.MonitorConfigs.GetGeneralConfig('mouse') ,
+                                      Configs.MonitorConfigs.GetGeneralConfig('sound'),
+                                      Configs.MonitorConfigs.GetGeneralConfig('messages'), '')       
                 
-
-                face=Configs.getFaceFile()
+                face=MyUtils.getFaceFile()
                 if face=='':
-                    print "no photo to send"
+                    logging.getLogger().debug('The user %s has not photo to send' % (self.mylogin))
                 else:
                     try:
                         f = xmlrpclib.Binary(open(face, 'rb').read())
                         self.myteacher.facepng(self.mylogin,self.myIp,f)         
                     except:
-                        pass #it couldn't send the photo, that's no problem       
-                
+                        logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
+
                      
             else:
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
                 #classname='',internetEnabled=True):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       MyUtils.isLTSP(),Configs.classroomName(),1)
+                                       MyUtils.isLTSP(),Configs.RootConfigs['classroomname'],1)
                 
                 
                 

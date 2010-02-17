@@ -23,7 +23,7 @@
 ##############################################################################
 import datetime,os
 import Desktop
-from Utils import  Configs
+from Utils import  Configs, MyUtils
 
 class Classroom():
     """Classroom data management
@@ -55,7 +55,7 @@ class Classroom():
         #command,command_args      
         self.CommandStack={}
 
-        self.classname=Configs.classroomName()
+        self.classname=Configs.RootConfigs['classroomname']
         self.interval=refreshInterval
         self.oldJSON=''
 
@@ -219,7 +219,7 @@ class Classroom():
         
     def placeHostDesktop(self,key):
         '''Puts a pc in the list of Desktops, according to its position'''
-        number=Configs.getDesktopNumber(self.Hosts[key].hostname)
+        number=MyUtils.getDesktopNumber(self.Hosts[key].hostname)
         position=-1
         if number !='':
             position=int(number)            

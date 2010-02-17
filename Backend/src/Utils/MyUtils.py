@@ -24,6 +24,7 @@
 
 
 import pwd,os,subprocess 
+import NetworkUtils
 
 ipLTSP=''
 
@@ -86,4 +87,41 @@ def generateUUID(length=5):
     return original[:length]
     
     
-   
+def classroomName():
+
+    return getClassroomName(NetworkUtils.getHostName())
+
+def getClassroomName(name):
+    '''for a hostname following the classroomname-oXX criteria, returns the classroom name'''
+    
+    hostname=name.strip().split('.')[0].replace('_','-')
+    return hostname.split('-')[0]
+
+def getDesktopNumber(name):
+    '''for a hostname following the classroomname-oXX criteria, returns the "XX"'''
+    hostname=name.strip().split('.')[0].replace('_','-')
+    data=hostname.split('-')
+    if len(data)>1:
+        number=data[1]
+    else:
+        return ''
+    
+    if number.capitalize()=='PRO':
+        return ''
+    else:
+        try:
+            value=int(   number[-2:])
+            return number[-2:]
+        except:
+            return ''
+
+
+def getFaceFile():
+    homefacelocal=os.path.join(getHomeUser(),'.face')
+    homefaceglobal=os.path.join('/usr/share/pixmaps/faces',getLoginName() + '.png')
+    if   os.path.exists(homefacelocal ):
+        return homefacelocal
+    elif os.path.exists(homefaceglobal):
+        return homefaceglobal
+    else:
+        return ''   

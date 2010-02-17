@@ -22,7 +22,6 @@
 #
 ##############################################################################
 import logging
-from Utils import MyUtils
 
 class Plugins(object):
     
@@ -39,8 +38,8 @@ class Plugins(object):
                 'disableInternet':self.disableInternet,
                 'enableMouse':self.enableMouse,
                 'disableMouse':self.disableMouse,
-                'sharePrinter':self.sharePrinter,
-                'unsharePrinter':self.unsharePrinter,
+                'enableSound':self.enableSound,
+                'disableSound':self.disableSound,
                 'enableMessages':self.enableMessages,
                 'disableMessages':self.disableMessages,
                 'wakeup':self.wakeup,
@@ -49,7 +48,9 @@ class Plugins(object):
                 'sendmessage':self.sendMessage,
                 'sendfile':self.sendFile,
                 'startapplication':self.startApp,
-                'launchweb':self.launchUrl            
+                'launchweb':self.launchUrl ,
+                'disableSound':self.disableSound,
+                'enableSound':self.enableSound           
                 }  
     def existCommand(self,command):
         return self.handlers.has_key(command)  
@@ -67,25 +68,73 @@ class Plugins(object):
     def projector(self):
         pass
     def enableInternet(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                #the user must save its config:
+                self.classroom.CommandStack[key].append(('enableInternet'))
+                #the host must enable internet to this user:
+                self.classroom.CommandStack[i.mainIP].append(('enableInternet',i.login))
+                i.internet='1'
+                self.classroom.Hosts[i.mainIP].internetEnabled='1'
+                self.classroom.LoggedUsers[key].internet='1'
     def disableInternet(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                #the user must save its config:
+                self.classroom.CommandStack[key].append(('disableInternet'))
+                #the host must disable internet to this user:
+                self.classroom.CommandStack[i.mainIP].append(('disableInternet',i.login))
+                i.internet='0'
+                self.classroom.Hosts[i.mainIP].internetEnabled='0'
+                self.classroom.LoggedUsers[key].internet='0'
     def enableMouse(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('enableMouse'))
+                i.mouse='1'
+                self.classroom.LoggedUsers[key].mouse='1'
     def disableMouse(self):
-        pass
-    def sharePrinter(self):
-        pass
-    def unsharePrinter(self):
-        pass   
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('disableMouse'))
+                i.mouse='0'
+                self.classroom.LoggedUsers[key].mouse='0'
     def enableMessages(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('enableMessages'))
+                i.messages='1'
+                self.classroom.LoggedUsers[key].messages='1'
     def disableMessages(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('disableMessages'))
+                i.messages='0'
+                self.classroom.LoggedUsers[key].messages='0'
     def wakeup(self):
         pass
     def sleep(self):
         pass
+    def disableSound(self):
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('disableSound'))
+                i.sound='0'
+                self.classroom.LoggedUsers[key].sound='0'
+    def enableSound(self):
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                key=i.login + '@' + i.ip
+                self.classroom.CommandStack[key].append(('enableSound'))
+                i.sound='1'
+                self.classroom.LoggedUsers[key].sound='1'
         
     def broadcast(self, url='', isDVD=False):
         pass

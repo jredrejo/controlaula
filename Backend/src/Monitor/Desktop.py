@@ -36,6 +36,7 @@ class Desktop(object):
         self.mouse=1
         self.messages=1
         self.photo=''
+        self.mainIP=''
 
 
     def __str__(self):
@@ -50,6 +51,7 @@ class Desktop(object):
         self.hostkey=key
         self.hostname=host.hostname
         self.ip=host.ip
+        self.mainIP=host.ip
         self.ltsp=host.ltsp
         self.internet=host.internet
 
@@ -70,6 +72,8 @@ class Desktop(object):
         self.sound=user.sound
         self.messages=user.messages
         self.photo=user.photo
+        if user.ltsp:
+            self.mainIP=user.ipLTSP
 
 
     def delUser(self):
