@@ -24,7 +24,7 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
-from Plugins  import StudentHandler
+from Plugins  import StudentHandler,Actions
 import logging
 
 class Obey(object):
@@ -50,14 +50,15 @@ class Obey(object):
         from twisted.internet import reactor           
         if     self.catched !='':
             #Keep the user as an active user
-            try:
-                print "catched"
+            try:                
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
                 if order=='commands':
                     self.getCommands()
             except:
                 self.removeMyTeacher()
                 
+            if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
+                Actions.setSound('mute')
                 
         reactor.callLater(self.interval, self.listen)
         

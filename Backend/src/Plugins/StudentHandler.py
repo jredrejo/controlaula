@@ -23,6 +23,9 @@
 ##############################################################################
 import logging
 from Utils import Configs
+import Actions
+
+
 class Plugins(object):
     
     def __init__(self,myteacher):
@@ -75,8 +78,11 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('mouse','0')
     def enableSound(self):
         Configs.MonitorConfigs.SetGeneralConfig('sound','1')
+        Actions.setSound('unmute')
     def disableSound(self):
         Configs.MonitorConfigs.SetGeneralConfig('sound','0')
+        Actions.setSound('mute')
+
     def enableMessages(self):
         Configs.MonitorConfigs.SetGeneralConfig('messages','1')
     def disableMessages(self):
