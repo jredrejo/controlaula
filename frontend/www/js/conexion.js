@@ -53,6 +53,27 @@ function enviarOrdenPuestos(dir,puestos,argumentos){
 	conexion(dir,dataString,"cambiaconfig");
 }
 
+// Enviar Orden a los equipos del aula
+function enviarOrdenTodos(dir,argumentos){
+
+	dataviewON.selectRange(0,dataviewON.getNodes().length);
+
+	var seleccionados="";
+	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
+		seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
+		
+		if(i+1!=dataviewON.getSelectedRecords().length)
+			seleccionados+=",";
+	}	
+
+	var classroom = {
+		"pclist" : [seleccionados],
+		"args" : argumentos
+	}
+
+	dataString = Ext.util.JSON.encode(classroom);
+	conexion(dir,dataString,"cambiaconfig");
+}
 
 // Funcion general de conexion
 function conexion(dir,datos,accion){
