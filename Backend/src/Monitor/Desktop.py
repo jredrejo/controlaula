@@ -72,6 +72,7 @@ class Desktop(object):
         self.sound=user.sound
         self.messages=user.messages
         self.photo=user.photo
+        self.ip=user.ip
         if user.ltsp:
             self.mainIP=user.ipLTSP
 

@@ -51,6 +51,7 @@ class Obey(object):
         if     self.catched !='':
             #Keep the user as an active user
             try:
+                print "catched"
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
                 if order=='commands':
                     self.getCommands()
@@ -77,8 +78,8 @@ class Obey(object):
                 #ipLTSP='',internetEnabled=True,mouseEnabled=True,
                 #soundEnabled=True,messagesEnabled=False,photo=''):
                             
-                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, MyUtils.isLTSP(),
-                                      Configs.RootConfigs['classroomname']  ,self.myFullName,MyUtils.ipLTSP,
+                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, (MyUtils.isLTSP()!=''),
+                                      Configs.RootConfigs['classroomname']  ,self.myFullName,MyUtils.isLTSP(),
                                       Configs.MonitorConfigs.GetGeneralConfig('internet') ,
                                       Configs.MonitorConfigs.GetGeneralConfig('mouse') ,
                                       Configs.MonitorConfigs.GetGeneralConfig('sound'),

@@ -118,7 +118,8 @@ class ControlAulaProtocol(resource.Resource):
             try:
                 if len(args)>0:
                     handler.args=[args]
-                handler.targets=json.loads(recvjson)['pclist']
+                if len(json.loads(recvjson)['pclist'])>0:
+                    handler.targets=json.loads(recvjson)['pclist'][0].split(',')
                 handler.process(command)
                 respjson= json.dumps({'result':'ack'})
             except:

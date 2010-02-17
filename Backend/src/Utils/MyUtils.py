@@ -26,8 +26,6 @@
 import pwd,os,subprocess 
 import NetworkUtils
 
-ipLTSP=''
-
 def getLoginName():
     return pwd.getpwuid(os.getuid())[0]
 
@@ -44,12 +42,13 @@ def userIsTeacher(teachersGroup='teachers'):
     return (output != '')
 
 def isLTSP():
+    ipLTSP=''
     try:
         ipLTSP=os.environ["LTSP_CLIENT"]
-        return True
     except:
-        ipLTSP=''
-        return False
+        pass
+
+    return ipLTSP
 
 
 
