@@ -65,14 +65,14 @@ Ext.onReady(function() {
                iconCls: 'x-icon-configuration',
                tabTip: 'Navegación Web',
                style: 'padding: 10px;',
-               html: "Menú de Navegación Web"
-           		}, {
+               html: "<iframe name='web' style='width:100%; height:100%' src='http://www.educarex.es'></iframe>"
+           		}/*, {
             	title: 'Enviar Página',
                iconCls: 'x-icon-templates',
                tabTip: 'Enviar Página',
                style: 'padding: 10px;',
                html: "Aquí pondremos las opciones para enviar una página a los alumnos"
-               }]
+               }*/]
             },{
             expanded: true,
             items: [{
