@@ -74,8 +74,10 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('internet','0')
     def enableMouse(self):
         Configs.MonitorConfigs.SetGeneralConfig('mouse','1')
+        Actions.enableKeyboardAndMouse()
     def disableMouse(self):
         Configs.MonitorConfigs.SetGeneralConfig('mouse','0')
+        Actions.disableKeyboardAndMouse()
     def enableSound(self):
         Configs.MonitorConfigs.SetGeneralConfig('sound','1')
         Actions.setSound('unmute')
