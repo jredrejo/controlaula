@@ -52,8 +52,7 @@ class Obey(object):
             #Keep the user as an active user
             try:                
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
-                if order=='commands':
-                    self.getCommands()
+                self.sendData(order)
             except:
                 self.removeMyTeacher()
                 
@@ -71,6 +70,10 @@ class Obey(object):
         self.myIp=NetworkUtils.get_ip_inet_address(str(newteacher[0] )) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(str(newteacher[0]))
         order=self.myteacher.hostPing( self.mylogin, self.myIp )
+        self.sendData(order)
+        
+        
+    def sendData(self,order):
         if order=='new':
 
             if self.mylogin !='root':
@@ -100,6 +103,8 @@ class Obey(object):
             else:
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
                 #classname='',internetEnabled=True):
+                logging.getLogger().debug('Sending to the teacher this info: %s,%s,%s,%s,%s' % (self.myHostname,self.myIp, self.myMAC,
+                                       MyUtils.isLTSP(),Configs.RootConfigs['classroomname']))
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
                                        MyUtils.isLTSP(),Configs.RootConfigs['classroomname'],1)
                 

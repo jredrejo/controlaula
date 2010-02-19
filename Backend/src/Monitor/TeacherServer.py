@@ -64,6 +64,8 @@ class RPCServer(xmlrpc.XMLRPC):
         return True
    
     def xmlrpc_addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True):
+        if self.classroom.Hosts.has_key(hostip):
+            return False
         if NetworkUtils.get_ip_inet_address()== hostip and NetworkUtils.getHostName()==hostname:
             return False #the teacher host is not added to the list
         host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
