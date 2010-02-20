@@ -40,12 +40,9 @@
 			return;
 		}
 		
-		var seleccionados="";
+		var seleccionados = Array();
 		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-			seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
-			
-			if(i+1!=dataviewON.getSelectedRecords().length)
-				seleccionados+=",";
+			seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
 		}	
 		enviarOrdenPuestos(orden,seleccionados,"");
 	}

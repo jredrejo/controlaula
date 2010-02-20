@@ -45,7 +45,7 @@ function estadoEquipos(equipos){
 function enviarOrdenPuestos(dir,puestos,argumentos){
 
 	var classroom = {
-		"pclist" : [puestos],
+		"pclist" : puestos,
 		"args" : argumentos
 	}
 
@@ -58,16 +58,16 @@ function enviarOrdenTodos(dir,argumentos){
 
 	dataviewON.selectRange(0,dataviewON.getNodes().length);
 
-	var seleccionados="";
+	var seleccionados = Array();
 	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-		seleccionados+=dataviewON.getSelectedRecords()[i].get("pcname");
-		
+		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
+		/*
 		if(i+1!=dataviewON.getSelectedRecords().length)
-			seleccionados+=",";
+			seleccionados+=",";*/
 	}	
 
 	var classroom = {
-		"pclist" : [seleccionados],
+		"pclist" : seleccionados,
 		"args" : argumentos
 	}
 
