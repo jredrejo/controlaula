@@ -14,7 +14,7 @@
 
     var tpl = new Ext.XTemplate(
 		'<tpl for=".">',
-            '<div class="thumb-wrap" id="{name}">',
+            '<div class="thumb-wrap" id="{position}">',
             '<span class="x-editable" style="background-color:#4e78b1; color:#dfe8f0; height:17px;padding-top:3px;">{pcName}</span>',
 		    '<div class="thumb"><div style="float:right;">',
 		    '<img src="{internet}" style="width:28px; height:28px;"><br>',
@@ -39,10 +39,19 @@
 			Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
 			return;
 		}
-		
+
 		var seleccionados = Array();
 		for(i=0;i<dataviewON.getSelectedRecords().length;i++){
 			seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
+			var name = dataviewON.getSelectedRecords()[i].get("name")
+
+			if(orden=="wakeup" && name=="Apagado"){
+				var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo..."});
+				myMask.show();
+			}else if(orden=="sleep" && name!="Apagado" && name!="None"){
+				var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando..."});
+				myMask.show();
+			}
 		}	
 		enviarOrdenPuestos(orden,seleccionados,"");
 	}

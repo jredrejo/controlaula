@@ -7,20 +7,20 @@
  * 
  */
 
+dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
+
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
-
-	dataString = Ext.util.JSON.encode({"args" : "refresh"});
-
-	conexion("datosaula",dataString,"pintaaula");
+	conexion("datosaula",dataRefresh,"pintaaula");
 	setInterval('conexion("datosaula","","pintaaula")','5000');
+
+/*	conexion("datosAulaPrueba",dataRefresh,"pintaaula");
+	setInterval('conexion("datosAulaPrueba",dataRefresh,"pintaaula")','5000');*/
+
 }
 
 function estadoAulaConfig(){
-
-	dataString = Ext.util.JSON.encode({"args" : "refresh"});
-
-	conexion("datosaula",dataString,"pintaconfig");
+	conexion("datosaula",dataRefresh,"pintaconfig");
 }
 
 //Pregunta el estado de uno o varios equipos del aula
@@ -49,8 +49,8 @@ function enviarOrdenPuestos(dir,puestos,argumentos){
 		"args" : argumentos
 	}
 
-	dataString = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataString,"cambiaconfig");
+	dataStringCommand = Ext.util.JSON.encode(classroom);
+	conexion(dir,dataStringCommand,"cambiaconfig");
 }
 
 // Enviar Orden a los equipos del aula
@@ -61,9 +61,6 @@ function enviarOrdenTodos(dir,argumentos){
 	var seleccionados = Array();
 	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
 		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
-		/*
-		if(i+1!=dataviewON.getSelectedRecords().length)
-			seleccionados+=",";*/
 	}	
 
 	var classroom = {
@@ -78,13 +75,6 @@ function enviarOrdenTodos(dir,argumentos){
 // Funcion general de conexion
 function conexion(dir,datos,accion){
 
-	/*document.getElementById("contenedor").innerHTML += "Enviando peticion a la URL: <b>"+dir+"</b>";
-
-	if(datos!="")
-		document.getElementById("contenedor").innerHTML += " los datos: <b>"+datos+"</b>";
-
-	document.getElementById("contenedor").innerHTML += "<br><br>";*/
-
 	Ext.Ajax.request({
 		url : dir , 
 		params : { data : datos },
@@ -93,12 +83,10 @@ function conexion(dir,datos,accion){
 			// distintas respuestas segun la accion enviada
 			switch(accion){
 				case "pintaaula":{
-				//	document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
 					pintarDataView(result.responseText);
 					break;
 				}
 				case "pintaconfig":{
-				//	document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
 					pintarConfiguracionAula(result.responseText);
 					break;
 				}
@@ -106,11 +94,7 @@ function conexion(dir,datos,accion){
 					conexion("datosaula","","pintaaula");
 					break;
 				}
-				default:{
-					// repintarEquipos(result.responseText);
-					//document.getElementById("contenedor").innerHTML += "Ok: "+result.responseText+"<br>";
-					break;
-				}
+				default:{}
 			}
 		},
 		failure: function ( result, request) { 
@@ -156,24 +140,34 @@ function pintarDataView(equipos){
 		if(clase.classroom.pclist[i].mouseEnabled=="1") mouse="images/icon_mouse.png";
 		if(clase.classroom.pclist[i].messagesEnabled=="1") message="images/icon_messages.png";
 
-		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message}
+		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message,"position":"pos"+i}
+
+		if(dataviewON.getNodes().length!=0)
+			for(var key in alumnos.images[i]){
+				if(alumnos.images[i][key] != dataviewON.store.getAt(i).get(key))
+					dataviewON.store.getAt(i).set(key,alumnos.images[i][key]);
+			}
 	}	
 
-	var myStore = new Ext.data.JsonStore({
-		data: alumnos,
-		root: 'images',
-		fields: ['name','url','pcname','internet','mouse','message']
-	});
+	if(dataviewON.getNodes().length==0){
 
-	var sizeDataview = 130*parseInt(cols);
-	var sizePanel = 130*parseInt(cols)+30;
+		var myStore = new Ext.data.JsonStore({
+			data: alumnos,
+			root: 'images',
+			fields: ['name','url','pcname','internet','mouse','message','position']
+		});
 
-	if(parseInt(sizePanel)<470)
-		sizePanel=470;
+		var sizeDataview = 130*parseInt(cols);
+		var sizePanel = 130*parseInt(cols)+30;
 
-	dataviewON.setWidth(sizeDataview);
-	panel.setWidth(sizePanel);
-   dataviewON.setStore(myStore);
+		if(parseInt(sizePanel)<470)
+			sizePanel=470;
+
+		dataviewON.setWidth(sizeDataview);
+		panel.setWidth(sizePanel);
+		dataviewON.setStore(myStore);
+	}
+
 	dataviewON.select(seleccionados);
 }
 
