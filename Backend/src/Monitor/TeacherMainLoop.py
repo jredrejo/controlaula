@@ -119,7 +119,7 @@ class ControlAulaProtocol(resource.Resource):
                 if len(args)>0:
                     handler.args=[args]
                 if len(json.loads(recvjson)['pclist'])>0:
-                    first=handler.targets=json.loads(recvjson)['pclist'][0]
+                    first=json.loads(recvjson)['pclist'][0]
                     if ',' in first:
                         handler.targets=first.split(',')
                     else:

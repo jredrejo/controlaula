@@ -21,7 +21,7 @@
 # along with ControlAula. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import NetworkUtils, MyUtils
+import MyUtils
 
 import ConfigParser,os,shutil, logging
 
@@ -140,7 +140,7 @@ class MonitorConfig(object):
         self._ConfigFileName = configname
         
         # List of recognised sections    
-        self._AllowedSections = ['General']    
+        self._AllowedSections = ['General','MAC']    
         
 
         #List of optional items
@@ -150,6 +150,8 @@ class MonitorConfig(object):
         # Dictionary for services .
         self._ConfigDict = {}
         
+        self._GeneralConfig = {}
+        
         self._ConfigParser = ConfigParser.ConfigParser()
 
         # If we were given a file name, read in and parse the configuration.
@@ -157,14 +159,60 @@ class MonitorConfig(object):
             self._GetConfig() 
 
     def GetGeneralConfig(self,key):
-        """ Returns  a set of configuration dictionaries.
-        """
-        return str(self._ConfigDict['General'][key])
+        ''' Returns  a set of configuration dictionaries.
+        '''
+        return str(self._GeneralConfig[key])
+    
+    def GetClassroomConfig(self,classroom):
+        if not self._ConfigDict.has_key(classroom):
+            #the classroom is not in the config file, so an entry is created:
+            self._ConfigParser.add_section(classroom) 
+            self._ConfigParser.set(classroom,'rows','5')
+            self._ConfigParser.set(classroom,'cols','3')
+            self._ConfigParser.set(classroom,'structure','')
+            self.SaveConfig()
+            sectionconfig = self._GetSectionItems('classroom', self._ConfigParser)
+            self._ConfigDict[classroom] = sectionconfig
+            
+            
+        return self._ConfigDict[classroom] 
+    
+    
+    def GetMAC(self,hostname):
+        ''' Returns  the mac address of a host.
+        '''
+        mac=''
+        if not self._ConfigDict.has_key('MAC'):
+            self._ConfigParser.add_section('MAC') 
+            self.SaveConfig()
+            self._ConfigDict['MAC'] = {}                 
+        else:
+            if self._ConfigDict['MAC'].has_key(hostname):
+                mac=self._ConfigDict['MAC'][hostname]        
+        
+        return mac
+        
     
     def SetGeneralConfig(self,key,value):
-        self._ConfigDict['General'][key]=value
+        self._GeneralConfig[key]=value
         self._ConfigParser.set("General",key,value)
         self.SaveConfig()
+        
+    def SetClassroomConfig(self,classroom,valuesdict):    
+        for i in valuesdict:
+            value=valuesdict[i]
+            self._ConfigDict[classroom][i]=value
+            self._ConfigParser.set(classroom,i,value)
+            self.SaveConfig()         
+            
+    def SaveMAC(self,hostname,mac):
+        '''save the mac of a hostname in the config file'''
+        if self.GetMAC(hostname)==mac:
+            return
+        self._ConfigDict['MAC'][hostname]=mac
+        self._ConfigParser.set("MAC",hostname,mac)
+        self.SaveConfig()        
+        
         
     def GetConfig(self):
         """ Returns  a set of configuration dictionaries.
@@ -183,18 +231,24 @@ class MonitorConfig(object):
         try:
             if (filename[0] != self._ConfigFileName):
                 logging.getLogger().error('Wrong /etc/sirvecole config file. Using default values')
-                self._ConfigDict['General']=self._GetSectionItems('General',self._ConfigParser)
+                self._GeneralConfig=self._GetGeneralItems(self._ConfigParser)
         except:
             logging.getLogger().debug('Could not find an /etc/sirvecole config file. Using default values')
-            self._ConfigDict['General']=self._GetSectionItems('General',self._ConfigParser)
+            self._GeneralConfig=self._GetGeneralItems(self._ConfigParser)
             return
 
-        # Get a list of sections. Each section represents one service to configure.
+        if self._GeneralConfig=={}:
+            msgconfig = self._GetGeneralItems(self._ConfigParser)
+            if (msgconfig != None):
+                self._GeneralConfig= msgconfig
+
+        # Get a list of sections. Each section (Excepting General) represents one classroom to configure.
         sectionlist = self._ConfigParser.sections()
+                 
         
-        # Go through the list of sections one at a time.
+        # Go through the list of clasroom one at a time.
         for i in sectionlist:
-            if i in self._AllowedSections:
+            if i not  in self._AllowedSections:
                 sectionconfig = self._GetSectionItems(i, self._ConfigParser)
                 # If it was OK, add it to the overall config dictionary.
                 if (sectionconfig != None):
@@ -203,6 +257,30 @@ class MonitorConfig(object):
 
 
     def _GetSectionItems(self, sectionname, parser):
+        """ Get the list of items in a section. 
+        Parameters: sectionname (string): The name of the classroom
+        sectionitems: The list of section items.
+        Returns: A dictionary with the parameters for the classroom
+            or None if an error occured.
+        """
+        #Default values:
+        configuration={'rows':'5','cols':'3','structure':''}
+      
+
+        # Now, go through all the remaining items in the section, 
+        # and check for options
+        try:
+            itemlist = self._ConfigParser.items(sectionname)
+        except:
+            return configuration 
+        
+        for i in itemlist:
+            optionname = i[0]
+            configuration[optionname]=str(i[1]).replace('"','')
+  
+        return configuration
+
+    def _GetGeneralItems(self, parser):
         """ Get the list of items in a section. 
         Parameters: sectionname (string): The name of the section.
         sectionitems: The list of section items.
@@ -218,7 +296,7 @@ class MonitorConfig(object):
         # Now, go through all the remaining items in the section, 
         # and check for options
         try:
-            itemlist = self._ConfigParser.items(sectionname)
+            itemlist = self._ConfigParser.items('General')
         except:
             return configuration
         

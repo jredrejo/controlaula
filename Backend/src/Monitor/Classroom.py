@@ -42,12 +42,7 @@ class Classroom():
         #Information: 
         #  IP, hostname,classname,ltsp_client,position,visible,internetEnabled,printerShared
         self.Hosts={}
-        #Dictionary with the Desktop positions to send to the frontend
-        self.cols=3
-        self.rows=5
-        self.Desktops=[]
-        for i in range (0,self.cols*self.rows):
-            self.Desktops.append(Desktop.Desktop())
+
         
         #Dictionary with the commands the clients must execute 
         #Every dictionary entry contains a list with the commands such client must execute
@@ -56,6 +51,24 @@ class Classroom():
         self.CommandStack={}
 
         self.classname=Configs.RootConfigs['classroomname']
+        #Dictionary with the data of the classroom setup
+        self.classsetup=Configs.MonitorConfigs.GetClassroomConfig(self.classname)
+        
+        #Dictionary with the Desktop positions to send to the frontend
+        self.cols=int(self.classsetup['cols'])
+        self.rows=int(self.classsetup['rows'])
+        self.Desktops=[]
+        #creates the aula
+        for i in range (0,self.cols*self.rows):
+            self.Desktops.append(Desktop.Desktop())
+        #if there is a saved structure, it recovers it:        
+        if self.classsetup['structure']!='':
+                targets=self.classsetup['structure'].split(',')
+                for i in range(0,len(targets)):
+                    if targets[i]!='None':
+                        self.Desktops[i].hostname=targets[i]
+        
+                    
         self.interval=refreshInterval
         self.oldJSON=''
 
@@ -74,6 +87,8 @@ class Classroom():
             self.placeHostDesktop(host.ip)
             #intialize list of commands for this client
             self.CommandStack[host.ip]=[]
+            #save its mac address:
+            Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)
     
     
     def addUser(self,user):
@@ -219,21 +234,29 @@ class Classroom():
         
     def placeHostDesktop(self,key):
         '''Puts a pc in the list of Desktops, according to its position'''
-        number=MyUtils.getDesktopNumber(self.Hosts[key].hostname)
+        #first, check if the position is already saved in the classroom setup:
+        hostname=self.Hosts[key].hostname
         position=-1
-        if number !='':
-            position=int(number)            
-            if position >0:
-                position -=1
-            if self.Desktops[position].hostkey!='':
-                self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
-
-        else:
-            position=self.placeHostFreely()
+        for i in range(0,len(self.Desktops)):
+            if self.Desktops[i].hostname==hostname:
+                position=i
+                if self.Desktops[position].hostkey!='':
+                    self.shiftDesktop(position) #The position was busy by a host and it has to be moved  
+                break
+        if position ==-1:#if it's not in the classroom setup, let's look for somewhere to place it:            
+            number=MyUtils.getDesktopNumber(hostname)
+            if number !='':
+                position=int(number)            
+                if position >0:
+                    position -=1
+                if self.Desktops[position].hostkey!='':
+                    self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
+            else:
+                position=self.placeHostFreely()
             
         self.Desktops[position].putHost(self.Hosts[key],key)
         self.recheckUsersDesktops()
-
+        self.saveClassLayout()
 
     def placeUserDesktop(self,key):
         user=self.LoggedUsers[key]
@@ -286,7 +309,7 @@ class Classroom():
         for i in range (0,len(targets)-1):
             if targets[i]!=self.Desktops[i].hostname:
                 self.moveDesktopAt(targets[i],i)
-        
+        self.saveClassLayout()
                 
     def moveDesktopAt(self, desktop,position):
         '''Move a Destkop in the list of Desktops at a fixed position'''
@@ -298,5 +321,15 @@ class Classroom():
                 oldposition=i
                 break
         #makes the moving:    
-        self.Desktops[oldposition]=previousDesktop
+        if oldposition >-1: #there was a desktop previously on that place
+            self.Desktops[oldposition]=previousDesktop
         self.Desktops[position]=newDesktop
+
+    def saveClassLayout(self):
+        layout=''
+        for i in range (0,len(self.Desktops)):
+            layout +=',' + self.Desktops[i].hostname
+            
+        self.classsetup['structure']=layout[1:]
+        
+        Configs.MonitorConfigs.SetClassroomConfig(self.classname,self.classsetup)
