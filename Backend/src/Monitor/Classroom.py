@@ -264,7 +264,7 @@ class Classroom():
         if user.ltsp:
             validIP=user.ipLTSP
             
-        for i in range(0,len(self.Desktops)-1):
+        for i in range(0,len(self.Desktops)):
             if self.Desktops[i].ip==validIP:
                 self.Desktops[i].putUser(user,key)
                 break
@@ -283,7 +283,7 @@ class Classroom():
             
         
     def removeDesktop(self,ip):
-        for i in range(0,len(self.Desktops)-1):
+        for i in range(0,len(self.Desktops)):
             if self.Desktops[i].ip==ip:
                 self.Desktops[i]=Desktop.Desktop()
                 break
@@ -306,7 +306,7 @@ class Classroom():
         return newJSON
     
     def redistributeDesktops(self,targets):
-        for i in range (0,len(targets)-1):
+        for i in range (0,len(targets)):
             if targets[i]!=self.Desktops[i].hostname:
                 self.moveDesktopAt(targets[i],i)
         self.saveClassLayout()
@@ -315,7 +315,7 @@ class Classroom():
         '''Move a Destkop in the list of Desktops at a fixed position'''
         previousDesktop=self.Desktops[position]
         oldposition=-1
-        for i in range(0,len(self.Desktops)-1):
+        for i in range(0,len(self.Desktops)):
             if self.Desktops[i].hostname==desktop:
                 newDesktop=self.Desktops[i]
                 oldposition=i

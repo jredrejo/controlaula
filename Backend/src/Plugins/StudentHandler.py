@@ -101,7 +101,7 @@ class Plugins(object):
             except:
                 pass
             subprocess.call(['ethtool','-s','eth0','wol','g'])
-            subprocess.Popen(['poweroff','-ifp'])
+            subprocess.Popen(['poweroff','-fp'])
         
     def broadcast(self, url='', isDVD=False):
         pass
