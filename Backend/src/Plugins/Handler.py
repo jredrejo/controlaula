@@ -22,6 +22,8 @@
 #
 ##############################################################################
 import logging
+from Utils import Configs
+from Plugins import Actions
 
 class Plugins(object):
     
@@ -118,7 +120,13 @@ class Plugins(object):
                 i.messages='0'
                 self.classroom.LoggedUsers[key].messages='0'
     def wakeup(self):
-        pass
+        macs=[]
+        for i in self.targets:
+            mac=Configs.MonitorConfigs.GetMAC(i)
+            if mac !='':                
+                macs.append(mac)                
+        Actions.sendWOLBurst(macs, 2)                         
+                
     def sleep(self):
         pass
     def disableSound(self):

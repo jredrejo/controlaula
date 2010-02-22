@@ -23,7 +23,7 @@
 ##############################################################################
 
 from twisted.internet.utils import getProcessValue
-from twisted.internet.utils import getProcessOutput
+#from twisted.internet.utils import getProcessOutput
 import os,logging,subprocess
 from Utils import MyUtils
 
@@ -119,3 +119,24 @@ def removeNullModmap(exitcode):
         os.remove(os.path.join(MyUtils.getHomeUser(),'.null_modmap'))
     except:
         pass 
+    
+    
+def sendWOLBurst(macs,throttle):    
+    from twisted.internet.task import LoopingCall    
+    from twisted.internet import defer    
+    if not macs:
+        return defer.succeed(None)
+    d = defer.Deferred()
+    work = list(macs)
+    def sendNext():
+        if not work:
+            loop.stop()
+            d.callback(None)
+            return defer.succeed(None)
+        next = work.pop(0)
+        subprocess.Popen(['wakeonlan','-p','2000',next ])
+        subprocess.Popen(['wakeonlan','-i','192.168.0.255','-p','2000',next ])        
+        return None
+    loop = LoopingCall(sendNext)
+    loop.start(throttle)
+    return d
