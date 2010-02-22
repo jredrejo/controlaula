@@ -158,7 +158,7 @@ function pintarDataView(equipos){
 		});
 
 		var sizeDataview = 130*parseInt(cols);
-		var sizePanel = 130*parseInt(cols)+30;
+		var sizePanel = 130*parseInt(cols)+300;
 
 		if(parseInt(sizePanel)<470)
 			sizePanel=470;

@@ -64,7 +64,7 @@
 								overClass:'x-view-over',
 								itemSelector:'div.thumb-wrap',
 								emptyText: 'No images to display',
-
+           columnWidth: 0.6,
 								plugins: [
 									new Ext.DataView.DragSelector(),
 									//new Ext.DataView.LabelEditor({dataIndex: 'name'})
@@ -88,12 +88,7 @@
 							});
 
 
-
-//#########################################################################################################
-//####################################### Parametros de los paneles #######################################
-//#########################################################################################################
-
-    var internetON = new Ext.Action({
+   var internetON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
 			enviarOrdenSeleccionados("enableInternet");
@@ -157,16 +152,88 @@
         iconCls: 'cancel'
     });
 
+	var botonsDataview = {
+
+         columnWidth: 0.4,
+      //   xtype: 'fieldset',
+         labelWidth: 90,
+         //title:'',
+         defaults: {width: 300, border:true},    // Default config options for child items
+         defaultType: 'textfield',
+         autoHeight: true,
+         bodyStyle: Ext.isIE ? 'padding:0 0 5px 15px;' : 'padding:10px 15px;',
+         border: false,
+         style: {
+             "margin-left": "10px", // when you add custom margin in IE 6...
+             "margin-right": Ext.isIE6 ? (Ext.isStrict ? "-10px" : "-13px") : "0"  // you have to adjust for it somewhere else
+         },
+       items:[{
+           xtype: 'buttongroup',
+           columns: 2,
+           defaults: {scale: 'small', padding:5},
+			  title:'Equipos',
+			  padding:5,
+	        items:[{
+			         text: 'Selecc. Todo',
+			         iconCls: 'all',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Seleccionar todos los equipos del Aula',
+			         handler:selectAllDataView
+			     },{
+			         text: 'Encender',
+			         iconCls: 'on',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Encender los equipos seleccionados',
+			         handler:function(){enviarOrdenSeleccionados("wakeup");}
+			     },{
+			         text: 'Selecc. Ninguno',
+			         iconCls: 'none',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Deseleccionar todos los equipos del Aula',
+			         handler:selectNoneDataView
+			     },{
+			         text: 'Apagar',
+			         iconCls: 'off',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Apagar los equipos seleccionados',
+			         handler:function(){enviarOrdenSeleccionados("sleep");}
+			     }]
+		     },{
+		        xtype: 'buttongroup',
+		        columns: 2,
+		        defaults: { scale: 'small'},
+			     title:'Acciones',
+			  	  padding:5,
+			     items:[
+					 { text: 'Internet',iconAlign:'top', width:105, iconCls: 'internet', menu: [internetON,internetOFF]}
+					,{ text: 'Altavoz',iconAlign:'top', width:105, iconCls: 'sound', menu: [soundON,soundOFF] }
+					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
+					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
+				  ]
+		     }]
+		}
+
+//#########################################################################################################
+//####################################### Parametros de los paneles #######################################
+//#########################################################################################################
+
+
+
     var panel = new Ext.Panel({
         id:'images-view',
         frame:true,
         width:475,
         autoHeight:true,
-        collapsible:true,
-        layout:'fit',
+     //   collapsible:true,
+        layout:'column',
+//        layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
-        items: dataviewON,
-        tbar:[{
+        items:[dataviewON,botonsDataview]
+ /*       tbar:[{
             xtype: 'buttongroup',
             columns: 2,
             defaults: {
@@ -216,7 +283,7 @@
 	            iconCls: 'messages',
 				menu: [messagesON,messagesOFF]
 			}]
-        }]
+        }]*/
  	/*	tbar: ["->",{
             text: 'Selecc. Todo',
             iconCls: 'all',
