@@ -337,7 +337,7 @@
 	};
 
 	var optConfigurar={
-        id:'config',
+      id:'config',
 		xtype: 'portal',
 		title: 'Configurar Aula',
 		iconCls: 'x-icon-configuration',

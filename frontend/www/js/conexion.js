@@ -11,7 +11,7 @@ dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
 
 //Pregunta el estado de todos los equipos del aula
 function estadoAula(){
-	conexion("datosaula",dataRefresh,"pintaaula");
+	 conexion("datosaula",dataRefresh,"pintaaula");
 	setInterval('conexion("datosaula","","pintaaula")','5000');
 
 /*	conexion("datosAulaPrueba",dataRefresh,"pintaaula");
