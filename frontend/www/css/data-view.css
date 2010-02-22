@@ -12,15 +12,15 @@
 /*	background: #dddddd;*/
 	background: #fff;
 	border:1px solid #ccc;
-	padding: 3px;
+	padding: 2px;
 }
 #images-view .thumb img{
-	height: 90px;
-	width: 80px;
+	height: 60px;
+	width: 60px;
 }
 #images-view .thumb-wrap{
 	float: left;
-	margin: 4px;
+	margin: 1px;
 	margin-right: 0;
 	padding: 5px;
 }
@@ -32,13 +32,13 @@
 
 #images-view .x-view-over{
     border:1px solid #dddddd;
-    background: #efefef url(../../resources/images/default/grid/row-over.gif) repeat-x left top;
+    background: #efefef url('images/default/grid/row-over.gif') repeat-x left top;
 	padding: 4px;
 }
 
 #images-view .x-view-selected{
 	/*background: #eff5fb url(images/selected.gif) no-repeat right bottom;*/
-	background: #feddd8 url(images/selected.gif) no-repeat right bottom;
+	background: #ffe3c2 url(images/selected.gif) no-repeat right bottom;
 	border:1px solid #99bbe8;
 	padding: 4px;
 }
@@ -48,7 +48,7 @@
 
 #images-view .loading-indicator {
 	font-size:11px;
-	background-image:url('../../resources/images/default/grid/loading.gif');
+	background-image:url('images/default/grid/loading.gif');
 	background-repeat: no-repeat;
 	background-position: left;
 	padding-left:20px;

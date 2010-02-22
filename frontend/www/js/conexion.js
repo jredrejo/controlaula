@@ -98,7 +98,7 @@ function conexion(dir,datos,accion){
 			}
 		},
 		failure: function ( result, request) { 
-			document.getElementById("contenedor").innerHTML += "Error: "+result.responseText+"<br>";
+			//document.getElementById("contenedor").innerHTML += "Error: "+result.responseText+"<br>";
 		} 
 	});
 }
@@ -157,11 +157,11 @@ function pintarDataView(equipos){
 			fields: ['name','url','pcname','internet','mouse','message','position']
 		});
 
-		var sizeDataview = 130*parseInt(cols);
-		var sizePanel = 130*parseInt(cols)+300;
+		var sizeDataview = 98*parseInt(cols);
+		var sizePanel = 98*parseInt(cols)+300;
 
-		if(parseInt(sizePanel)<470)
-			sizePanel=470;
+/*		if(parseInt(sizePanel)<470)
+			sizePanel=470;*/
 
 		dataviewON.setWidth(sizeDataview);
 		panel.setWidth(sizePanel);
