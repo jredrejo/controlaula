@@ -128,7 +128,9 @@ class Plugins(object):
         Actions.sendWOLBurst(macs, 2)                         
                 
     def sleep(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                self.classroom.CommandStack[i.mainIP].append(('sleep'))        
     def disableSound(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':

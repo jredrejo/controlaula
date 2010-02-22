@@ -151,6 +151,7 @@ class MonitorConfig(object):
         self._ConfigDict = {}
         
         self._GeneralConfig = {}
+        self._MACS={}
         
         self._ConfigParser = ConfigParser.ConfigParser()
 
@@ -181,16 +182,10 @@ class MonitorConfig(object):
     def GetMAC(self,hostname):
         ''' Returns  the mac address of a host.
         '''
-        mac=''
-        if not self._ConfigDict.has_key('MAC'):
-            self._ConfigParser.add_section('MAC') 
-            self.SaveConfig()
-            self._ConfigDict['MAC'] = {}                 
+        if self._MACS.has_key(hostname):
+            return self._MACS[hostname]   
         else:
-            if self._ConfigDict['MAC'].has_key(hostname):
-                mac=self._ConfigDict['MAC'][hostname]        
-        
-        return mac
+            return ''     
         
     
     def SetGeneralConfig(self,key,value):
@@ -241,7 +236,16 @@ class MonitorConfig(object):
             msgconfig = self._GetGeneralItems(self._ConfigParser)
             if (msgconfig != None):
                 self._GeneralConfig= msgconfig
-
+                
+        if not self._ConfigParser.has_section('MAC'):
+            self._ConfigParser.add_section('MAC') 
+            self.SaveConfig()
+            
+        if self._MACS=={}:
+            msgconfig = self._GetSectionItems('MAC',self._ConfigParser)
+            if (msgconfig != None):
+                self._MACS= msgconfig
+                
         # Get a list of sections. Each section (Excepting General) represents one classroom to configure.
         sectionlist = self._ConfigParser.sections()
                  

@@ -21,17 +21,18 @@
 # along with ControlAula. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import logging
-from Utils import Configs
+import logging,subprocess
+from Utils import Configs,MyUtils
 import Actions
 
 
 class Plugins(object):
     
-    def __init__(self,myteacher):
+    def __init__(self,myteacher,myIP):
         self.args=[]
         self.targets=[]    
         self.myteacher=myteacher
+        self.myIP=myIP
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
@@ -43,7 +44,6 @@ class Plugins(object):
                 'disableSound':self.disableSound,
                 'enableMessages':self.enableMessages,
                 'disableMessages':self.disableMessages,
-                'wakeup':self.wakeup,
                 'sleep':self.sleep,        
                 'broadcast':self.broadcast,
                 'sendmessage':self.sendMessage,
@@ -89,11 +89,19 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('messages','1')
     def disableMessages(self):
         Configs.MonitorConfigs.SetGeneralConfig('messages','0')
-    def wakeup(self):
-        pass
-    def sleep(self):
-        pass
 
+    def sleep(self):
+        self.myteacher.removeHost( self.myIP )
+        if MyUtils.isLTSP()=='':
+            subprocess.Popen(['poweroff','-hp'])
+        else:
+            subprocess.call(['poweroff','-w'])
+            try:
+                k=subprocess.call(['/etc/init.d/nbd-client','stop'])
+            except:
+                pass
+            subprocess.call(['ethtool','-s','eth0','wol','g'])
+            subprocess.Popen(['poweroff','-ifp'])
         
     def broadcast(self, url='', isDVD=False):
         pass

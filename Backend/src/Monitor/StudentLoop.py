@@ -44,7 +44,7 @@ class Obey(object):
         self.myteacher=None
         self.catched=''
         self.myMAC=''
-        self.handler=StudentHandler.Plugins(None)
+        self.handler=StudentHandler.Plugins(None,None)
         
     def listen(self):
         from twisted.internet import reactor           
@@ -65,10 +65,12 @@ class Obey(object):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         self.myteacher=xmlrpclib.Server('http://'+str( newteacher[0]) + ':' + str(newteacher[1]) + '/RPC2')
-        self.handler.myteacher=self.myteacher
+
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(str(newteacher[0] )) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(str(newteacher[0]))
+        self.handler.myteacher=self.myteacher
+        self.handler.myIP=self.myIp
         order=self.myteacher.hostPing( self.mylogin, self.myIp )
         self.sendData(order)
         
