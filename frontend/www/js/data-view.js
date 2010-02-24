@@ -381,12 +381,12 @@
         handler: function(){
             Ext.Msg.alert('Message', 'Opciones de configuracion.');
         }
-    }/*,{
+    },{
         id:'close',
         handler: function(e, target, panel){
-            panel.ownerCt.remove(panel, true);
+//            panel.ownerCt.remove(panel, true);
         }
-    }*/];
+    }];
 
 	var structureClass = {
 		id:"sctructureClass",
@@ -404,7 +404,7 @@
 	};
 
 	var optConfigurar={
-      id:'config',
+		id:'config',
 		xtype: 'portal',
 		title: 'Configurar Aula',
 		iconCls: 'x-icon-configuration',
@@ -435,6 +435,7 @@
 				// Enviamos la nueva configuracion de los puestos al backend
 				dataString = Ext.util.JSON.encode(classroom);				
 				conexion("classroomConfig",dataString,"cambiaconfig");
-			}
+			},
+			beforeShow:function(){estadoAulaConfig();}
 		},
 	};

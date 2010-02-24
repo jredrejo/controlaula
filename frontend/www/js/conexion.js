@@ -212,6 +212,7 @@ function pintarConfiguracionAula(equipos){
 	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
 		
 		var computer={
+			id: 'pc'+i,
 	       	title: pcname,
 	        tools: tools,
 	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
