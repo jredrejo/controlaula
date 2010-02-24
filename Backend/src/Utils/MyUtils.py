@@ -43,10 +43,17 @@ def userIsTeacher(teachersGroup='teachers'):
 
 def isLTSP():
     ipLTSP=''
-    try:
-        ipLTSP=os.environ["LTSP_CLIENT"]
-    except:
-        pass
+    if getLoginName()=='root':
+        p1 = subprocess.Popen(["ps", "-AF"], stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(["grep", "ldm"], stdin=p1.stdout, stdout=subprocess.PIPE)
+        output = p2.communicate()[0]
+        if output != '':
+            ipLTSP=NetworkUtils.get_ip_inet_address()
+    else:
+        try:
+            ipLTSP=os.environ["LTSP_CLIENT"]
+        except:
+            pass
 
     return ipLTSP
 

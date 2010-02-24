@@ -91,17 +91,26 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('messages','0')
 
     def sleep(self):
-        self.myteacher.removeHost( self.myIP )
-        if MyUtils.isLTSP()=='':
+        import os
+
+        if os.path.exists('/usr/sbin/ethtool'):
+            subprocess.call(['ethtool','-s','eth0','wol','g'])
+        if MyUtils.isLTSP()=='':            
+            self.myteacher.removeHost( self.myIP )
+            subprocess.call(['killall','-9','x-session-manager'])
             subprocess.Popen(['poweroff','-hp'])
         else:
             subprocess.call(['poweroff','-w'])
             try:
-                k=subprocess.call(['/etc/init.d/nbd-client','stop'])
+                r=subprocess.Popen(['killall','-9','ldm'],shell=True)
+                os.waitpid(r.pid,0)         
+                r=subprocess.Popen(['killall','-9','ssh'],shell=True)
+                os.waitpid(r.pid,0)
+                r=subprocess.Popen(['killall','-9','Xorg'],shell=True)
+                os.waitpid(r.pid,0)       
             except:
-                pass
-            subprocess.call(['ethtool','-s','eth0','wol','g'])
-            subprocess.Popen(['poweroff','-fp'])
+                pass            
+            subprocess.Popen(['poweroff','-hp'])
         
     def broadcast(self, url='', isDVD=False):
         pass

@@ -204,7 +204,7 @@ class MonitorConfig(object):
         '''save the mac of a hostname in the config file'''
         if self.GetMAC(hostname)==mac:
             return
-        self._ConfigDict['MAC'][hostname]=mac
+        self._MACS[hostname]=mac
         self._ConfigParser.set("MAC",hostname,mac)
         self.SaveConfig()        
         

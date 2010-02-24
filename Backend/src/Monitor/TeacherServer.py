@@ -78,7 +78,15 @@ class RPCServer(xmlrpc.XMLRPC):
             return False
         self.classroom.removeHost(ip)
         return True
-    
+
+
+    def xmlrpc_removeUser(self, login,ip):
+        key=login +'@'+ ip
+        if not self.classroom.Users.has_key(key):
+            return False
+        self.classroom.removeUser(key)
+        return True
+        
     def xmlrpc_getCommands(self, login,hostip):
         """Return the list of commands to be executed by the client"""
         if login=='root':

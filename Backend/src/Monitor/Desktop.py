@@ -75,6 +75,8 @@ class Desktop(object):
         self.ip=user.ip
         if user.ltsp:
             self.mainIP=user.ipLTSP
+        else:
+            self.mainIP=user.ip
 
 
     def delUser(self):

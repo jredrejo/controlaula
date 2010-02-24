@@ -21,7 +21,7 @@
 # along with ControlAula. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import datetime,os
+import datetime,logging
 import Desktop
 from Utils import  Configs, MyUtils
 
@@ -83,6 +83,7 @@ class Classroom():
     def addHost(self, host):
         """Add a pc to the classroom"""
         if not self.Hosts.has_key(host.ip):
+            logging.getLogger().debug('The  host  %s has appeared' %   (host.ip))
             self.Hosts[host.ip]=host
             self.placeHostDesktop(host.ip)
             #intialize list of commands for this client
@@ -95,6 +96,7 @@ class Classroom():
         """Add a logged user to the classroom"""
         key=user.login+'@'+user.ip
         if not self.LoggedUsers.has_key(key):
+            logging.getLogger().debug('The  user  %s has appeared' %   (key))
             self.LoggedUsers[key]=user
             self.placeUserDesktop(key)
             #intialize list of commands for this client
@@ -182,10 +184,12 @@ class Classroom():
 
         for i in self.LoggedUsers.keys():
             if self._checkInterval(self.LoggedUsers[i],self.interval):
+                logging.getLogger().debug('The  user %s has disappeared' %   (i))
                 self.removeUser(i)
                 
         for i in self.Hosts.keys():
             if self._checkInterval(self.Hosts[i],self.interval):
+                logging.getLogger().debug('The  host  %s has disappeared' %   (i))
                 self.removeHost(i)
                 
         reactor.callLater(self.interval, self.UpdateLists)
@@ -284,8 +288,10 @@ class Classroom():
         
     def removeDesktop(self,ip):
         for i in range(0,len(self.Desktops)):
-            if self.Desktops[i].ip==ip:
-                self.Desktops[i]=Desktop.Desktop()
+            if self.Desktops[i].mainIP==ip:                
+                self.Desktops[i].hostkey=''
+                self.Desktops[i].ip=''
+                self.Desktops[i].mainIP=''
                 break
         
         
