@@ -389,7 +389,7 @@
 					panel.setTitle("");
 					panel.update('<div style="text-align:center;"><img src="images/pc_none.png" style="height:50px;"/><br><b>&nbsp;</b></div>');
 
-					dataDelete = Ext.util.JSON.encode({ pc:panel.id });	
+					dataDelete = Ext.util.JSON.encode({ pclist:panel.id });	
 					conexion("deleteComputer",dataDelete,"cambiaconfig");
 				}
 			})
