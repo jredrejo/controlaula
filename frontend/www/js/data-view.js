@@ -376,15 +376,23 @@
 //####################################### Parametros de ConfigAula ########################################
 //#########################################################################################################
 
-    var tools = [{
+    var tools = [/*{
         id:'gear',
         handler: function(){
             Ext.Msg.alert('Message', 'Opciones de configuracion.');
         }
-    },{
+    },*/{
         id:'close',
         handler: function(e, target, panel){
-//            panel.ownerCt.remove(panel, true);
+            Ext.Msg.confirm('Elminar equipo','¿Desea realmente eliminar el equipo?',function(result){
+				if(result=="yes"){
+					panel.setTitle("");
+					panel.update('<div style="text-align:center;"><img src="images/pc_none.png" style="height:50px;"/><br><b>&nbsp;</b></div>');
+
+					dataDelete = Ext.util.JSON.encode({ pc:panel.id });	
+					conexion("deleteComputer",dataDelete,"cambiaconfig");
+				}
+			})
         }
     }];
 
