@@ -34,6 +34,7 @@ class Plugins(object):
         self.myteacher=None
         self.handlers = {
                 'classroomConfig':self.classroomConfig,    
+                'deleteComputer':self.deleteComputer,
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
@@ -164,3 +165,10 @@ class Plugins(object):
         self.classroom.oldJSON=''
         self.classroom.redistributeDesktops(self.targets)
         
+    def deleteComputer(self):
+            if self.targets[:2]=='pc':
+                index=int(self.targets[2:])
+            else:
+                index=int(self.targets)
+            self.classroom.Desktops[index].hostname='none'
+            self.classroom.saveClassLayout()
