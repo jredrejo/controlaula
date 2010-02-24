@@ -126,7 +126,8 @@ function pintarDataView(equipos){
 		var internet=mouse=message="images/pc_none.png";
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
-			nombre = "None";
+			pcname = "&nbsp;";
+			nombre = "&nbsp;";
 			foto = "images/pc_none.png";			
 		}else if(clase.classroom.pclist[i].ON=="0"){
 			nombre = "Apagado";
@@ -197,7 +198,7 @@ function pintarConfiguracionAula(equipos){
 		var pcname = clase.classroom.pclist[i].PCname;
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
-			pcname = "None";
+			pcname = "&nbsp;";
 			foto = "images/pc_none.png";			
 			nombre="&nbsp;";
 		}else if(clase.classroom.pclist[i].ON=="0"){
@@ -224,4 +225,55 @@ function pintarConfiguracionAula(equipos){
 	   colTMP.add(computer);
 	   colTMP.doLayout();
 	}
+}
+
+function addColumn(){
+
+	var configClass = Ext.getCmp('config');
+	var numCol = parseInt(structureClass.cols);
+
+	if(numCol==6){
+		Ext.Msg.alert('Atención', 'Seis columnas máximo.');
+		return;
+	}
+
+	eval("var column"+numCol+"={id:'col"+numCol+"',columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
+	eval("configClass.add("+numCol+",column"+numCol+")");
+	configClass.doLayout();
+	
+	// añadimos los equipos a cada columna
+   for(i=0;i<structureClass.rows;i++){
+
+		var nombre="Apagado";
+		var foto = "images/pc_apagado.png";
+		var pcname = "None";
+			
+		var computer={
+			//id: 'pc'+i,
+	        title: pcname,
+	        tools: tools,
+	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
+	   }
+	   
+	   eval("column"+structureClass.cols+".items["+parseInt(structureClass.cols)+"] = computer;");
+		
+	   var colTMP = Ext.getCmp('col'+parseInt(numCol));
+	   colTMP.add(computer);
+	   colTMP.doLayout();
+	}
+	structureClass.cols+=1;
+}
+
+function delColumn(){
+	var configClass = Ext.getCmp('config');
+	var numCol = parseInt(structureClass.cols);
+
+	if(numCol==1){
+		Ext.Msg.alert('Atención', 'Una columna como mínimo.');
+		return;
+	}
+
+	configClass.remove('col'+(numCol-1));
+	configClass.doLayout();
+	structureClass.cols-=1;
 }

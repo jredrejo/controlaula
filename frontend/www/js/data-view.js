@@ -48,7 +48,7 @@
 			if(orden=="wakeup" && name=="Apagado"){
 				var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo"});
 				myMask.show();
-			}else if(orden=="sleep" && name!="Apagado" && name!="None"){
+			}else if(orden=="sleep" && name!="Apagado" && name!="&nbsp;"){
 				var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando"});
 				myMask.show();
 			}
@@ -419,6 +419,7 @@
 		tabTip: 'Configurar el Aula',
 		style: 'padding: 10px; ',
 		items:[],
+		html: '<div style="text-align:center;">Columnas&nbsp;<input type="button" value="-" onClick="delColumn();" style="width:25px;"/><input type="button" value="+" onClick="addColumn();" style="width:25px;"/></div>',
     	listeners:{
 			drop:function(){
 				
