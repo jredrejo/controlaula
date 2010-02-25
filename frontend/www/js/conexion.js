@@ -10,17 +10,13 @@
 dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
 
 //Pregunta el estado de todos los equipos del aula
-function estadoAula(){
-	 conexion("datosaula",dataRefresh,"pintaaula");
+function initScreens(){
+	conexion("datosaula",dataRefresh,"pintaaula");
+	conexion("datosaula",dataRefresh,"pintaconfig");
 	setInterval('conexion("datosaula","","pintaaula")','5000');
 
 /*	conexion("datosAulaPrueba",dataRefresh,"pintaaula");
 	setInterval('conexion("datosAulaPrueba",dataRefresh,"pintaaula")','5000');*/
-
-}
-
-function estadoAulaConfig(){
-	conexion("datosaula",dataRefresh,"pintaconfig");
 }
 
 //Pregunta el estado de uno o varios equipos del aula
@@ -193,9 +189,9 @@ function pintarConfiguracionAula(equipos){
 	// añadimos los equipos a cada columna
    for(i=0;i<clase.classroom.pclist.length;i++){
 		
-		var nombre = clase.classroom.pclist[i].loginname;
+		var nombre = Ext.util.Format.ellipsis(clase.classroom.pclist[i].loginname,15);
+		var pcname = Ext.util.Format.ellipsis(clase.classroom.pclist[i].PCname,15);
 		var foto = clase.classroom.pclist[i].photo;
-		var pcname = clase.classroom.pclist[i].PCname;
 		
 		if(clase.classroom.pclist[i].PCname=="none"){
 			pcname = "&nbsp;";
@@ -249,17 +245,14 @@ function addColumn(){
 		var pcname = "None";
 			
 		var computer={
-			//id: 'pc'+i,
+//			id: 'pc'+i,
 	        title: pcname,
 	        tools: tools,
 	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
 	   }
-	   
-	   eval("column"+structureClass.cols+".items["+parseInt(structureClass.cols)+"] = computer;");
-		
-	   var colTMP = Ext.getCmp('col'+parseInt(numCol));
-	   colTMP.add(computer);
-	   colTMP.doLayout();
+	   	
+	   Ext.getCmp('col'+numCol).add(computer);
+	   Ext.getCmp('col'+numCol).doLayout();
 	}
 	structureClass.cols+=1;
 	updateID();
@@ -300,9 +293,8 @@ function addRow(){
 	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
 	   }
 		
-	   var colTMP = Ext.getCmp('col'+i);
-	   colTMP.add(computer);
-	   colTMP.doLayout();
+	   Ext.getCmp('col'+i).add(computer);
+	   Ext.getCmp('col'+i).doLayout();
 	}
 	structureClass.rows+=1;
 	updateID();

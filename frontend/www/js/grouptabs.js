@@ -97,6 +97,5 @@ Ext.onReady(function() {
             }]
 			}]
     });
-	estadoAula();
-	estadoAulaConfig();
+	initScreens();
 });

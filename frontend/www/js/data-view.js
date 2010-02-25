@@ -421,7 +421,7 @@
 		items:[],
 		html: '<div style="text-align:center;">Filas&nbsp;<input type="button" value="-" onClick="delRow();" style="width:25px;"/><input type="button" value="+" onClick="addRow();" style="width:25px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Columnas&nbsp;<input type="button" value="-" onClick="delColumn();" style="width:25px;"/><input type="button" value="+" onClick="addColumn();" style="width:25px;"/></div>',
     	listeners:{
-			drop:function(){sendClassroomConfig()},
-			beforeShow:function(){estadoAulaConfig();}
+			drop:function(){updateID(); sendClassroomConfig()},
+			beforeShow:function(){conexion("datosaula",dataRefresh,"pintaconfig");}
 		},
 	};
