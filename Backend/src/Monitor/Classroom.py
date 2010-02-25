@@ -246,10 +246,16 @@ class Classroom():
             self.Desktops.pop(position)     
 
     def addDesktopsCol(self):
-        pass
+        cols=self.cols
+        self.cols +=1
+        for i in range (0,self.rows):
+            self.Desktops.insert(i*self.cols +cols, Desktop.Desktop())
         
     def removeDesktopsCol(self):
-        pass
+        cols=self.cols
+        self.cols-=1
+        for i in range (self.rows-1,-1,-1):
+            self.Desktops.pop(i*cols +self.cols)
             
             
     def placeHostDesktop(self,key):
@@ -335,6 +341,8 @@ class Classroom():
             name=targets[i]
             if name=='&nbsp;':
                 name='none'
+            if name=='None':
+                name='Unknown'                
             if name!=self.Desktops[i].hostname:
                 self.moveDesktopAt(name,i)
         self.saveClassLayout()

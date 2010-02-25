@@ -164,7 +164,7 @@ class Plugins(object):
         for i in range(0, len(self.targets)-1):
             if self.targets[i]=='Sin equipo':
                 self.targets[i]='Unknown'
-
+                
 
         if rows!=0 :
             if self.classroom.rows <rows:
@@ -176,10 +176,11 @@ class Plugins(object):
                 self.classroom.addDesktopsCol()
             elif self.classroom.cols >cols:
                 self.classroom.removeDesktopsCol()
-                 
-        self.classroom.saveClassLayout()
+                
         self.classroom.oldJSON=''                         
-        self.classroom.redistributeDesktops(self.targets)
+        self.classroom.redistributeDesktops(self.targets)                 
+        self.classroom.saveClassLayout()
+
         
     def deleteComputer(self):
             if self.targets[:2]=='pc':
