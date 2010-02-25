@@ -233,7 +233,7 @@ function addColumn(){
 	var numCol = parseInt(structureClass.cols);
 
 	if(numCol==6){
-		Ext.Msg.alert('Atención', 'Seis columnas máximo.');
+		Ext.Msg.alert('Atención', 'Seis columnas como máximo.');
 		return;
 	}
 
@@ -262,6 +262,8 @@ function addColumn(){
 	   colTMP.doLayout();
 	}
 	structureClass.cols+=1;
+	updateID();
+	sendClassroomConfig();
 }
 
 function delColumn(){
@@ -276,4 +278,97 @@ function delColumn(){
 	configClass.remove('col'+(numCol-1));
 	configClass.doLayout();
 	structureClass.cols-=1;
+	updateID();
+	sendClassroomConfig();
+}
+
+function addRow(){
+
+	var numCol = parseInt(structureClass.cols);
+
+	// añadimos los equipos a cada columna
+   for(i=0;i<numCol;i++){
+
+		var nombre="Apagado";
+		var foto = "images/pc_apagado.png";
+		var pcname = "None";
+			
+		var computer={
+			//id: 'pc'+i,
+	        title: pcname,
+	        tools: tools,
+	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
+	   }
+		
+	   var colTMP = Ext.getCmp('col'+i);
+	   colTMP.add(computer);
+	   colTMP.doLayout();
+	}
+	structureClass.rows+=1;
+	updateID();
+	sendClassroomConfig();
+}
+
+function delRow(){
+	var configClass = Ext.getCmp('config');
+	var numCol = parseInt(structureClass.cols);
+
+	if(structureClass.rows==1){
+		Ext.Msg.alert('Atención', 'Una fila como mínimo.');
+		return;
+	}
+
+	// añadimos los equipos a cada columna
+   for(i=0;i<numCol;i++){
+
+	   var colTMP = Ext.getCmp('col'+i);
+	   colTMP.remove(structureClass.rows-1);
+	   colTMP.doLayout();
+	}
+
+	structureClass.rows-=1;
+	updateID();
+	sendClassroomConfig();
+}
+
+function updateID(){
+
+	var i=0;
+	var j=0;
+	Ext.getCmp('config').items.each(function(item,index,length){
+		if(item.items.length>0){
+			this.items.each(function(){									
+				var pos = (parseInt(j)*parseInt(structureClass.cols))+parseInt(i);
+				this.id = "pc"+pos;
+                j++
+            });
+			j=0;		                
+			i++;	
+		}
+    });
+}
+
+function sendClassroomConfig(){
+
+	//Tras mover el equipo, obtenemos la nueva configuracion del aula
+	var classroom = { "pclist": [], "structure":{"cols":structureClass.cols,"rows":structureClass.rows}};
+	var i=0;
+	var j=0;
+
+	//Recorremos Columnas y filas para crear el nuevo pclist				
+	Ext.getCmp('config').items.each(function(item,index,length){
+		if(item.items.length>0){
+			this.items.each(function(){									
+				var pos = (parseInt(j)*parseInt(structureClass.cols))+parseInt(i);
+				classroom.pclist[pos]=this.title;	
+                j++
+            });
+			j=0;		                
+			i++;	
+		}
+    });
+	
+	// Enviamos la nueva configuracion de los puestos al backend
+	dataString = Ext.util.JSON.encode(classroom);				
+	conexion("classroomConfig",dataString,"cambiaconfig");
 }

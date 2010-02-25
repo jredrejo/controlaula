@@ -419,32 +419,9 @@
 		tabTip: 'Configurar el Aula',
 		style: 'padding: 10px; ',
 		items:[],
-		html: '<div style="text-align:center;">Columnas&nbsp;<input type="button" value="-" onClick="delColumn();" style="width:25px;"/><input type="button" value="+" onClick="addColumn();" style="width:25px;"/></div>',
+		html: '<div style="text-align:center;">Filas&nbsp;<input type="button" value="-" onClick="delRow();" style="width:25px;"/><input type="button" value="+" onClick="addRow();" style="width:25px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Columnas&nbsp;<input type="button" value="-" onClick="delColumn();" style="width:25px;"/><input type="button" value="+" onClick="addColumn();" style="width:25px;"/></div>',
     	listeners:{
-			drop:function(){
-				
-				//Tras mover el equipo, obtenemos la nueva configuracion del aula
-				var classroom = { "pclist": []};
-				var i=0;
-				var j=0;
-
-				//Recorremos Columnas y filas para crear el nuevo pclist				
-				this.items.each(function(item,index,length){
-					if(item.items.length>0){
-						this.items.each(function(){									
-							var pos = (parseInt(j)*parseInt(structureClass.cols))+parseInt(i);
-							classroom.pclist[pos]=this.title;	
-			                j++
-		                });
-						j=0;		                
-						i++;	
-					}
-                });
-				
-				// Enviamos la nueva configuracion de los puestos al backend
-				dataString = Ext.util.JSON.encode(classroom);				
-				conexion("classroomConfig",dataString,"cambiaconfig");
-			},
+			drop:function(){sendClassroomConfig()},
 			beforeShow:function(){estadoAulaConfig();}
 		},
 	};
