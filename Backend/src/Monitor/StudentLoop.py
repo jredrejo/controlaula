@@ -24,7 +24,7 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
-from Plugins  import StudentHandler,Actions
+from Plugins  import StudentHandler,Actions,VNC
 import logging
 
 class Obey(object):
@@ -45,6 +45,9 @@ class Obey(object):
         self.catched=''
         self.myMAC=''
         self.handler=StudentHandler.Plugins(None,None)
+        self.myVNC=VNC.VNC()
+        self.handler.myVNC=self.myVNC
+
         
     def listen(self):
         from twisted.internet import reactor           
@@ -64,12 +67,14 @@ class Obey(object):
     def newTeacher(self,name):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
-        self.myteacher=xmlrpclib.Server('http://'+str( newteacher[0]) + ':' + str(newteacher[1]) + '/RPC2')
+        teacherIP=str( newteacher[0]) 
+        self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
 
         self.catched=name
-        self.myIp=NetworkUtils.get_ip_inet_address(str(newteacher[0] )) 
-        self.myMAC=NetworkUtils.get_inet_HwAddr(str(newteacher[0]))
+        self.myIp=NetworkUtils.get_ip_inet_address(teacherIP) 
+        self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
         self.handler.myteacher=self.myteacher
+        self.handler.teacherIP=teacherIP
         self.handler.myIP=self.myIp
         order=self.myteacher.hostPing( self.mylogin, self.myIp )
         self.sendData(order)
@@ -100,6 +105,10 @@ class Obey(object):
                         self.myteacher.facepng(self.mylogin,self.myIp,f)         
                     except:
                         logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
+                        
+                vncrp,vncwp,vncport=self.myteacher.vnc()
+                self.myVNC=VNC.VNC(False,vncrp,vncwp)
+                self.handler.myVNC=self.myVNC
 
                      
             else:

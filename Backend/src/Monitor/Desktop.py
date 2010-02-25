@@ -28,13 +28,13 @@ class Desktop(object):
         self.userkey=''
         self.login=''
         self.username=''
-        self.hostname='None'
+        self.hostname='Unknown'
         self.ip=''
         self.ltsp=False
-        self.internet=1
-        self.sound=1
-        self.mouse=1
-        self.messages=1
+        self.internet=0
+        self.sound=0
+        self.mouse=0
+        self.messages=0
         self.photo=''
         self.mainIP=''
 

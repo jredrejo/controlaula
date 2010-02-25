@@ -168,6 +168,9 @@ class RPCServer(xmlrpc.XMLRPC):
         Only to be used with test purposes"""
 
         return self.classroom.getJSONFrontend()
+    
+    def xmlrpc_vnc(self):
+        return self.classroom.myVNC.getData()
         
     def xmlrpc_Commands(self):
         """Return the list of the remaining commands

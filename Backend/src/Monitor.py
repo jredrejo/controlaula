@@ -43,12 +43,14 @@ Teachers={}
     
 def SigHandler(signum, frame):
     print 'Stopping Monitor'
-    if service != None:
-        try:
-            service.unpublish()
-            reactor.stop()
-        except:
-            pass
+    #if service != None:
+    try:
+        service.unpublish()
+        reactor.stop()
+    except:
+        pass
+    if isTeacher:
+        MyClass.myVNC.stop()
     sys.exit()                                                   
 
 

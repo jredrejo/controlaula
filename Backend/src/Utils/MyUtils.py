@@ -89,7 +89,7 @@ def generateUUID(length=5):
     import uuid
     if length>32:
         length=32
-    original=str(uuid.uuid1()).replace('-','')
+    original=str(uuid.uuid4()).replace('-','')
     return original[:length]
     
     
@@ -131,3 +131,22 @@ def getFaceFile():
         return homefaceglobal
     else:
         return ''   
+
+def getLDMinfo():
+    server=''
+    socket=subprocess.Popen("ls /var/run/ldm_socket*",stdout=subprocess.PIPE,shell=True).communicate()[0]
+    if socket!='':
+        pos=  socket.rfind('_')
+        server=socket[pos+1:]
+
+    return (server.strip(),socket.strip())
+
+def getXtty():
+    display=''
+    t=subprocess.Popen("ps -A|grep Xorg",stdout=subprocess.PIPE,shell=True).communicate()[0]
+    p=t.split()
+    if p[1][:3]=='tty':
+        display='DISPLAY=:' + p[1][3:] + '.0'
+    return display
+    
+

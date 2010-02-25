@@ -68,58 +68,62 @@ class Plugins(object):
 
     def bigBrother(self):
         pass
+    
     def projector(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                self.classroom.CommandStack[i.mainIP].append(('projector'))
+                if i.userkey!='':
+                    self.KeyboardMouse(i,'0','disableMouse')
+            
+    def usersCommand(self,func,value,command):
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                func(i,value,command)
+                        
     def enableInternet(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                #the user must save its config:
-                self.classroom.CommandStack[key].append(('enableInternet'))
-                #the host must enable internet to this user:
-                self.classroom.CommandStack[i.mainIP].append(('enableInternet',i.login))
-                i.internet='1'
-                self.classroom.Hosts[i.mainIP].internetEnabled='1'
-                self.classroom.LoggedUsers[key].internet='1'
+        self.usersCommand(self.Internet,'1','enableInternet')
+                
     def disableInternet(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                #the user must save its config:
-                self.classroom.CommandStack[key].append(('disableInternet'))
-                #the host must disable internet to this user:
-                self.classroom.CommandStack[i.mainIP].append(('disableInternet',i.login))
-                i.internet='0'
-                self.classroom.Hosts[i.mainIP].internetEnabled='0'
-                self.classroom.LoggedUsers[key].internet='0'
+        self.usersCommand(self.Internet,'0','disableInternet')
+                
+    def Internet(self,desktop,value,command):
+        self.classroom.CommandStack[desktop.userkey].append((command))
+        #the host must disable internet to this user:
+        self.classroom.CommandStack[desktop.mainIP].append((command,desktop.login))
+        desktop.internet=value
+        self.classroom.Hosts[desktop.mainIP].internetEnabled=value
+        self.classroom.LoggedUsers[desktop.userkey].internet=value
+                
     def enableMouse(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('enableMouse'))
-                i.mouse='1'
-                self.classroom.LoggedUsers[key].mouse='1'
+        self.usersCommand(self.KeyboardMouse,'1','enableMouse')
+                
     def disableMouse(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('disableMouse'))
-                i.mouse='0'
-                self.classroom.LoggedUsers[key].mouse='0'
+        self.usersCommand(self.KeyboardMouse,'0','disableMouse')
+
+    def KeyboardMouse(self,desktop,value,command):
+        self.classroom.CommandStack[desktop.userkey].append((command))
+        desktop.mouse=value
+        self.classroom.LoggedUsers[desktop.userkey].mouse=value
+            
+                        
     def enableMessages(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('enableMessages'))
-                i.messages='1'
-                self.classroom.LoggedUsers[key].messages='1'
+                self.Messages(i, '0', 'enableMessages')
+                
     def disableMessages(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('disableMessages'))
-                i.messages='0'
-                self.classroom.LoggedUsers[key].messages='0'
+                self.Messages(i, '0', 'disableMessages')
+
+                
+    def Messages(self,desktop,value,command):
+        self.classroom.CommandStack[desktop.userkey].append((command))
+        desktop.messages=value
+        self.classroom.LoggedUsers[desktop.userkey].messages=value       
+        
+        
     def wakeup(self):
         macs=[]
         for i in self.targets:
@@ -131,22 +135,19 @@ class Plugins(object):
     def sleep(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
-                self.classroom.CommandStack[i.mainIP].append(('sleep'))        
+                self.classroom.CommandStack[i.mainIP].append(('sleep'))  
+                      
     def disableSound(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('disableSound'))
-                i.sound='0'
-                self.classroom.LoggedUsers[key].sound='0'
+        self.usersCommand(self.Sound,'0','disableSound')
+                
     def enableSound(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                key=i.login + '@' + i.ip
-                self.classroom.CommandStack[key].append(('enableSound'))
-                i.sound='1'
-                self.classroom.LoggedUsers[key].sound='1'
-        
+        self.usersCommand(self.Sound,'1','enableSound')
+                     
+    def Sound(self,desktop,value,command):
+        self.classroom.CommandStack[desktop.userkey].append((command))
+        desktop.sound=value
+        self.classroom.LoggedUsers[desktop.userkey].sound=value
+                        
     def broadcast(self, url='', isDVD=False):
         pass
     def sendMessage(self, text):
@@ -161,7 +162,7 @@ class Plugins(object):
     def classroomConfig(self):
         for i in range(0, len(self.targets)-1):
             if self.targets[i]=='Sin equipo':
-                self.targets[i]='None'
+                self.targets[i]='Unknown'
         self.classroom.oldJSON=''
         self.classroom.redistributeDesktops(self.targets)
         

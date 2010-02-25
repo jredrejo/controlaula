@@ -23,7 +23,7 @@
 ##############################################################################
 import logging,subprocess
 from Utils import Configs,MyUtils
-import Actions
+import Actions,VNC
 
 
 class Plugins(object):
@@ -33,6 +33,8 @@ class Plugins(object):
         self.targets=[]    
         self.myteacher=myteacher
         self.myIP=myIP
+        self.myVNC=None
+        self.teacherIP=''
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
@@ -67,7 +69,7 @@ class Plugins(object):
     def bigBrother(self):
         pass
     def projector(self):
-        pass
+        self.myVNC.startROViewer(self.teacherIP)
     def enableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','1')
     def disableInternet(self):
@@ -92,26 +94,32 @@ class Plugins(object):
 
     def sleep(self):
         import os
-
+        from twisted.internet import reactor
         if os.path.exists('/usr/sbin/ethtool'):
             subprocess.call(['ethtool','-s','eth0','wol','g'])
-        if MyUtils.isLTSP()=='':            
-            self.myteacher.removeHost( self.myIP )
-            subprocess.call(['killall','-9','x-session-manager'])
-            subprocess.Popen(['poweroff','-hp'])
+            
+                    
+        if MyUtils.isLTSP()=='':                      
+            subprocess.Popen(['killall','-9','x-session-manager']).wait()            
         else:
             subprocess.call(['poweroff','-w'])
             try:
-                r=subprocess.Popen(['killall','-9','ldm'],shell=True)
-                os.waitpid(r.pid,0)         
-                r=subprocess.Popen(['killall','-9','ssh'],shell=True)
-                os.waitpid(r.pid,0)
-                r=subprocess.Popen(['killall','-9','Xorg'],shell=True)
-                os.waitpid(r.pid,0)       
+                server,socket = MyUtils.getLDMinfo()
+                if server!='':
+                    subprocess.Popen(['ssh','-O','exit','-S',socket,server]).wait()           
             except:
                 pass            
+           
+            
+        self.myteacher.removeHost( self.myIP )
+        reactor.callLater(1,self.switchoff)
+         
+    def switchoff(self):
+        if MyUtils.isLTSP()=='':
             subprocess.Popen(['poweroff','-hp'])
-        
+        else:
+            subprocess.Popen(['poweroff','-fp'])
+            
     def broadcast(self, url='', isDVD=False):
         pass
     def sendMessage(self, text):
