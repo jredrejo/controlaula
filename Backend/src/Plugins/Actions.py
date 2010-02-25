@@ -135,7 +135,7 @@ def sendWOLBurst(macs,throttle):
             return defer.succeed(None)
         next = work.pop(0)
         subprocess.Popen(['wakeonlan','-p','2000',next ])
-        subprocess.Popen(['wakeonlan','-i','192.168.0.255','-p','2000',next ])        
+        subprocess.Popen(['wakeonlan','-i','192.168.0.255',next ])        
         return None
     loop = LoopingCall(sendNext)
     loop.start(throttle)
