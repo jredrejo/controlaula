@@ -70,6 +70,7 @@ class Plugins(object):
         pass
     
     def projector(self):
+        self.classroom.myVNC.startServer()
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
                 self.classroom.CommandStack[i.mainIP].append(('projector'))
@@ -159,11 +160,25 @@ class Plugins(object):
     def launchUrl(self,url):
         pass
           
-    def classroomConfig(self):
+    def classroomConfig(self,rows=0,cols=0):
         for i in range(0, len(self.targets)-1):
             if self.targets[i]=='Sin equipo':
                 self.targets[i]='Unknown'
-        self.classroom.oldJSON=''
+
+
+        if rows!=0 :
+            if self.classroom.rows <rows:
+                self.classroom.addDesktopsRow()
+            elif self.classroom.rows >rows:
+                self.classroom.removeDesktopsRow()
+        if cols!=0 :
+            if self.classroom.cols <cols:
+                self.classroom.addDesktopsCol()
+            elif self.classroom.cols >cols:
+                self.classroom.removeDesktopsCol()
+                 
+        self.classroom.saveClassLayout()
+        self.classroom.oldJSON=''                         
         self.classroom.redistributeDesktops(self.targets)
         
     def deleteComputer(self):

@@ -74,7 +74,6 @@ class Classroom():
         self.oldJSON=''
 
         self.myVNC=VNC.VNC()
-        self.myVNC.startServer()
 
     def existUser(self,key):
         """Check if a logged user has already been added to the classroom"""
@@ -237,9 +236,22 @@ class Classroom():
         newPosition=self.cols*self.rows
         self.rows+=1
         for i in range(0,self.cols):
-            self.Desktops.append(Desktop.Desktop())       
+            self.Desktops.append(Desktop.Desktop())     
         return newPosition
         
+    def removeDesktopsRow(self):
+        self.rows-=1
+        position=self.cols*self.rows 
+        for i in range(0,self.cols):
+            self.Desktops.pop(position)     
+
+    def addDesktopsCol(self):
+        pass
+        
+    def removeDesktopsCol(self):
+        pass
+            
+            
     def placeHostDesktop(self,key):
         '''Puts a pc in the list of Desktops, according to its position'''
         #first, check if the position is already saved in the classroom setup:
@@ -308,17 +320,23 @@ class Classroom():
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
+
         if newJSON!=self.oldJSON:
             self.oldJSON=newJSON
         else:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
+            
         return newJSON
     
     def redistributeDesktops(self,targets):
-        for i in range (0,len(targets)):
-            if targets[i]!=self.Desktops[i].hostname:
-                self.moveDesktopAt(targets[i],i)
+        total=min(len(targets),len(self.Desktops))
+        for i in range (0,total):
+            name=targets[i]
+            if name=='&nbsp;':
+                name='none'
+            if name!=self.Desktops[i].hostname:
+                self.moveDesktopAt(name,i)
         self.saveClassLayout()
                 
     def moveDesktopAt(self, desktop,position):
@@ -341,5 +359,7 @@ class Classroom():
             layout +=',' + self.Desktops[i].hostname
             
         self.classsetup['structure']=layout[1:]
+        self.classsetup['rows']=str(self.rows)
+        self.classsetup['cols']=str(self.cols)
         
         Configs.MonitorConfigs.SetClassroomConfig(self.classname,self.classsetup)

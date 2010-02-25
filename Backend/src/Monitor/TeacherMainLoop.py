@@ -124,6 +124,9 @@ class ControlAulaProtocol(resource.Resource):
                         handler.targets=first.split(',')
                     else:
                         handler.targets=json.loads(recvjson)['pclist']
+                if json.loads(recvjson).has_key('structure'):
+                    structure=json.loads(recvjson)['structure']
+                    handler.args=[structure['rows'],structure['cols']]
                 handler.process(command)
                 respjson= json.dumps({'result':'ack'})
             except:

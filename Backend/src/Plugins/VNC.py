@@ -23,7 +23,7 @@
 # 
 ##############################################################################
 
-import subprocess,os,signal
+import subprocess,os,signal,logging
 from Utils import MyUtils,NetworkUtils
 
 class VNC(object):
@@ -66,8 +66,11 @@ class VNC(object):
             
     def startServer(self):
         if self.readonly:
-            self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
-
+            try:
+                self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
+            except:
+                logging.getLogger().error('x11vnc is not working in this system')
+                
     def startROViewer(self,target):
         display=MyUtils.getXtty()
         passwd=''
