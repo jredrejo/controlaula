@@ -166,19 +166,19 @@ class Plugins(object):
                 self.targets[i]='Unknown'
                 
 
-        if rows!=0 :
+        if rows!=0 or cols!=0:
             if self.classroom.rows <rows:
                 self.classroom.addDesktopsRow()
             elif self.classroom.rows >rows:
                 self.classroom.removeDesktopsRow()
-        if cols!=0 :
             if self.classroom.cols <cols:
                 self.classroom.addDesktopsCol()
             elif self.classroom.cols >cols:
                 self.classroom.removeDesktopsCol()
-                
-        self.classroom.oldJSON=''                         
-        self.classroom.redistributeDesktops(self.targets)                 
+        else:
+            self.classroom.redistributeDesktops(self.targets) 
+        
+        self.classroom.oldJSON=''                                 
         self.classroom.saveClassLayout()
 
         
