@@ -1,10 +1,8 @@
-/*
- * Portlet.js
- *
- * Copyright (c) 2009-2010 Manu Mora Gordillo <manuito @nospam@ gmail.com>
- * Licensed under the GPL (GPL-LICENSE.txt) license.
- *
- * 
+/*!
+ * Ext JS Library 3.1.0
+ * Copyright(c) 2006-2009 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
  */
 Ext.ux.Portlet = Ext.extend(Ext.Panel, {
     anchor : '100%',
