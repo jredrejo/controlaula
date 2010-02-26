@@ -34,7 +34,7 @@
 								overClass:'x-view-over',
 								itemSelector:'div.thumb-wrap',
 								emptyText: 'No images to display',
-           columnWidth: 0.6,
+           					//columnWidth: 0.6,
 								plugins: [
 									new Ext.DataView.DragSelector(),
 									//new Ext.DataView.LabelEditor({dataIndex: 'name'})
@@ -124,7 +124,7 @@
 
 	var botonsDataview = {
 
-         columnWidth: 0.4,
+        // columnWidth: 500,
       //   xtype: 'fieldset',
          labelWidth: 90,
          //title:'',

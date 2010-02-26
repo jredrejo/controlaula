@@ -44,31 +44,34 @@ function pintarDataView(equipos){
 
 		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message,"position":"pos"+i}
 
-		if(dataviewON.getNodes().length!=0)
+/*		if(dataviewON.getNodes().length!=0)
 			for(var key in alumnos.images[i]){
-				if(alumnos.images[i][key] != dataviewON.store.getAt(i).get(key))
-					dataviewON.store.getAt(i).set(key,alumnos.images[i][key]);
-			}
+				try{
+					if(alumnos.images[i][key] != dataviewON.store.getAt(i).get(key))
+						dataviewON.store.getAt(i).set(key,alumnos.images[i][key]);
+				}catch(error){
+					MyRecordType = Ext.data.Record.create(['name','url','pcname','internet','mouse','message','position']);
+					myrec = new MyRecordType(alumnos.images[i]);
+					//ds.PartnersCombo.add(myrec);
+					dataviewON.store.add(myrec);
+				}
+			}*/
 	}	
 
-	if(dataviewON.getNodes().length==0){
+//	if(dataviewON.getNodes().length==0){
 
 		var myStore = new Ext.data.JsonStore({
 			data: alumnos,
 			root: 'images',
 			fields: ['name','url','pcname','internet','mouse','message','position']
 		});
-
-		var sizeDataview = 98*parseInt(cols);
-		var sizePanel = 98*parseInt(cols)+300;
-
-/*		if(parseInt(sizePanel)<470)
-			sizePanel=470;*/
-
-		dataviewON.setWidth(sizeDataview);
-		panel.setWidth(sizePanel);
 		dataviewON.setStore(myStore);
-	}
+//	}
+
+	var sizeDataview = 100*parseInt(cols);
+	var sizePanel = 100*parseInt(cols)+350;
+	dataviewON.setWidth(sizeDataview);
+	panel.setWidth(sizePanel);
 
 	dataviewON.select(seleccionados);
 }
