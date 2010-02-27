@@ -122,6 +122,22 @@
         iconCls: 'cancel'
     });
 
+    var projector = new Ext.Action({
+        text: 'Proyector',
+        handler: function(){
+			enviarOrdenSeleccionados("projector");
+        },
+        iconCls: 'done'
+    });
+
+    var broadcast = new Ext.Action({
+        text: 'Broadcast',
+        handler: function(){
+			enviarOrdenSeleccionados("broadcast");
+        },
+        iconCls: 'done'
+    });
+
 	var botonsDataview = {
 
         // columnWidth: 500,
@@ -183,8 +199,26 @@
 					,{ text: 'Altavoz',iconAlign:'top', width:105, iconCls: 'sound', menu: [soundON,soundOFF] }
 					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
+
+					,{
+			         text: 'Proyector',
+			         iconCls: 'on',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Proyector',
+			         handler:function(){enviarOrdenSeleccionados("projector");}
+			     },{
+			         text: 'Broadcast',
+			         iconCls: 'on',
+						width:105,
+						iconAlign:'top',
+						tooltip:'Broadcast',
+			         handler:function(){enviarOrdenSeleccionados("broadcast","file://tmp/mivideo.avi");}
+			     }
+
+
 				  ]
-		     }]
+		     },]
 		}
 
 //#########################################################################################################

@@ -256,26 +256,3 @@ function selectAllDataView(){
 function selectNoneDataView(){
 	dataviewON.selectRange(-1,-1);
 }
-	
-function enviarOrdenSeleccionados(orden){
-	if(dataviewON.getSelectedRecords().length=="0"){
-		Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
-		return;
-	}
-
-	var seleccionados = Array();
-	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
-		var name = dataviewON.getSelectedRecords()[i].get("name")
-
-		if(orden=="wakeup" && name=="Apagado"){
-			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo"});
-			myMask.show();
-		}else if(orden=="sleep" && name!="Apagado" && name!="&nbsp;"){
-			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando"});
-			myMask.show();
-		}
-	}	
-	enviarOrdenPuestos(orden,seleccionados,"");
-}
-
