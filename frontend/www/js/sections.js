@@ -20,7 +20,7 @@
 		    '<img src="{internet}" style="width:20px; height:20px;"><br>',
 		    '<img src="{mouse}" style="padding-top:3px; width:20px; height:20px;"><br>',
 		    '<img src="{message}" style="padding-top:0px; width:20px; height:20px;">',
-		    '</div><img src="{url}" title="{name}"></div>',
+		    '</div><div style="float:left; position:absolute;"><img src="images/icon_video.png" style="width:18px; height:18px;"></div><img src="{url}" title="{name}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
@@ -124,18 +124,22 @@
 
     var projector = new Ext.Action({
         text: 'Proyector',
+        iconCls: 'projector',
+		width:105,
+		iconAlign:'top',
         handler: function(){
 			enviarOrdenSeleccionados("projector");
         },
-        iconCls: 'done'
     });
 
-    var broadcast = new Ext.Action({
-        text: 'Broadcast',
+    var video = new Ext.Action({
+        text: 'Video',
+        iconCls: 'video',
+		width:105,
+		iconAlign:'top',
         handler: function(){
-			enviarOrdenSeleccionados("broadcast");
+			enviarOrdenSeleccionados("broadcast","file://tmp/mivideo.avi");
         },
-        iconCls: 'done'
     });
 
 	var botonsDataview = {
@@ -157,36 +161,36 @@
            xtype: 'buttongroup',
            columns: 2,
            defaults: {scale: 'small', padding:5},
-			  title:'Equipos',
-			  padding:5,
+		  title:'Equipos',
+		  padding:5,
 	        items:[{
-			         text: 'Selecc. Todo',
-			         iconCls: 'all',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Seleccionar todos los equipos del Aula',
-			         handler:selectAllDataView
+			        text: 'Selecc. Todo',
+			        iconCls: 'all',
+					width:105,
+					iconAlign:'top',
+					tooltip:'Seleccionar todos los equipos del Aula',
+			        handler:selectAllDataView
 			     },{
-			         text: 'Encender',
-			         iconCls: 'on',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Encender los equipos seleccionados',
-			         handler:function(){enviarOrdenSeleccionados("wakeup");}
+					text: 'Encender',
+			        iconCls: 'on',
+					width:105,
+					iconAlign:'top',
+					tooltip:'Encender los equipos seleccionados',
+			        handler:function(){enviarOrdenSeleccionados("wakeup");}
 			     },{
-			         text: 'Selecc. Ninguno',
-			         iconCls: 'none',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Deseleccionar todos los equipos del Aula',
-			         handler:selectNoneDataView
+			        text: 'Selecc. Ninguno',
+			        iconCls: 'none',
+					width:105,
+					iconAlign:'top',
+					tooltip:'Deseleccionar todos los equipos del Aula',
+			        handler:selectNoneDataView
 			     },{
-			         text: 'Apagar',
-			         iconCls: 'off',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Apagar los equipos seleccionados',
-			         handler:function(){enviarOrdenSeleccionados("sleep");}
+			        text: 'Apagar',
+			        iconCls: 'off',
+					width:105,
+					iconAlign:'top',
+					tooltip:'Apagar los equipos seleccionados',
+			        handler:function(){enviarOrdenSeleccionados("sleep");}
 			     }]
 		     },{
 		        xtype: 'buttongroup',
@@ -199,26 +203,9 @@
 					,{ text: 'Altavoz',iconAlign:'top', width:105, iconCls: 'sound', menu: [soundON,soundOFF] }
 					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
-
-					,{
-			         text: 'Proyector',
-			         iconCls: 'on',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Proyector',
-			         handler:function(){enviarOrdenSeleccionados("projector");}
-			     },{
-			         text: 'Broadcast',
-			         iconCls: 'on',
-						width:105,
-						iconAlign:'top',
-						tooltip:'Broadcast',
-			         handler:function(){enviarOrdenSeleccionados("broadcast","file://tmp/mivideo.avi");}
-			     }
-
-
-				  ]
-		     },]
+					,projector
+					,video]
+		     }]
 		}
 
 //#########################################################################################################
