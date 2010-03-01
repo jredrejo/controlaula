@@ -58,6 +58,89 @@
 							});
 
 
+
+
+
+/*	function inputFileOnChange() {
+		var v_console = '';
+		v_console += 'value: ' + document.getElementById('selectFileVideo').value;
+		v_console += '<br \/>';
+	
+		if(document.getElementById('selectFileVideo').files) {
+			// Support: nsIDOMFile, nsIDOMFileList
+			v_console += 'files.length: ' + document.getElementById('selectFileVideo').files.length;
+			v_console += '<br \/>';
+		
+			v_console += 'fileName: ' + document.getElementById('selectFileVideo').files.item(0).fileName;
+			v_console += '<br \/>';
+		
+			v_console += 'fileSize: ' + document.getElementById('selectFileVideo').files.item(0).fileSize;
+			v_console += '<br \/>';
+		
+			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsDataURL();
+			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsBinary();
+			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsText();
+			v_console += '<br \/>';
+		};
+	
+		alert(v_console);
+	};*/
+
+
+
+
+
+    var broadcastOptions = new Ext.Panel({
+        id:'main-panel',
+        baseCls:'x-plain',
+        layout:'table',
+        layoutConfig: {columns:2},
+        // applied to child components
+        defaults: {frame:true, width:242, height: 285},
+        items:[{
+            title:'DVD',
+			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><a href="javascript:enviarOrdenSeleccionados(\'broadcast\',\'DVD\');"><img src="images/icon_dvd.png" style="border:0px;"><br><span style="font-weight:bold; color:black; text-decoration:none;">Emitir DVD</span></a></div>',
+        },{
+            title:'Fichero',
+			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><a href="javascript:broadcastFileVideo();"><img src="images/icon_movie.png" style="border:0px;"><br><span style="font-weight:bold; color:black; text-decoration:none;">Emitir Vídeo</span></a></div>',
+        }]
+    });
+
+    var win;
+
+	function broadcastFileVideo(){
+		if(document.getElementById("selectFileVideo").value.trim()==""){
+			Ext.Msg.alert('Atención', 'Debe seleccionar un archivo de vídeo.');
+			return;
+		}
+		enviarOrdenSeleccionados('broadcast',document.getElementById("selectFileVideo").value);
+	}
+
+	function broadcastWindow(){
+
+		if(!win){
+            win = new Ext.Window({
+                applyTo:'selectBroadcast',
+                layout:'fit',
+                width:500,
+                height:300,
+                closeAction:'hide',
+                plain: true,
+
+				items:[broadcastOptions],
+
+                buttons: [{
+                    text: 'Cerrar',
+                    handler: function(){
+                        win.hide();
+                    }
+                }]
+            });
+        }
+        win.show(this);
+	}
+
+
    var internetON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
@@ -138,7 +221,7 @@
 		width:105,
 		iconAlign:'top',
         handler: function(){
-			enviarOrdenSeleccionados("broadcast","file://tmp/mivideo.avi");
+			broadcastWindow();
         },
     });
 
