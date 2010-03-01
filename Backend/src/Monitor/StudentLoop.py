@@ -45,8 +45,8 @@ class Obey(object):
         self.catched=''
         self.myMAC=''
         self.handler=StudentHandler.Plugins(None,None)
-        self.myVNC=VNC.VNC()
-        self.handler.myVNC=self.myVNC
+        #self.myVNC=VNC.VNC()
+        #self.handler.myVNC=self.myVNC
 
         
     def listen(self):
@@ -106,9 +106,7 @@ class Obey(object):
                     except:
                         logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
                         
-                vncrp,vncwp,vncport=self.myteacher.vnc()
-                self.myVNC=VNC.VNC(False,vncrp,vncwp)
-                self.handler.myVNC=self.myVNC
+
 
                      
             else:
@@ -119,7 +117,9 @@ class Obey(object):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
                                        MyUtils.isLTSP(),Configs.RootConfigs['classroomname'],1)
                 
-                
+            vncrp,vncwp,vncport=self.myteacher.vnc()
+            self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)
+            self.handler.myVNC=self.myVNC                
                 
         elif order == 'commands':
             self.getCommands()

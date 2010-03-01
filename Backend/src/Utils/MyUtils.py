@@ -46,7 +46,8 @@ def isLTSP():
     if getLoginName()=='root':
         p1 = subprocess.Popen(["ps", "-AF"], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", "ldm"], stdin=p1.stdout, stdout=subprocess.PIPE)
-        output = p2.communicate()[0]
+        p3 = subprocess.Popen(["grep","-v", "grep"], stdin=p2.stdout, stdout=subprocess.PIPE)
+        output = p3.communicate()[0]
         if output != '':
             ipLTSP=NetworkUtils.get_ip_inet_address()
     else:
@@ -56,31 +57,6 @@ def isLTSP():
             pass
 
     return ipLTSP
-
-
-
-
-
-def createVNCPassword( passwd,file):
-    """
-    createVNCPassword("micasa","/tmp/vnc")
-    """
-    import crippled_des
-    #
-    # We use a fixed key to store passwords, since we assume that our local
-    # file system is secure but nonetheless don't want to store passwords
-    # as plaintext.
-    #
-    
-    fixedKey = "\x17Rk\x06#NX\x07"    
-
-    pw = (passwd + '\0' * 8)[:8]        #make sure its 8 chars long, zero padded
-    des = crippled_des.DesCipher(fixedKey)
-    response = des.encrypt(pw)
-
-    f = open(file, "w")
-    f.write(response)
-    f.close
 
 
 def generateUUID(length=5):
@@ -142,11 +118,33 @@ def getLDMinfo():
     return (server.strip(),socket.strip())
 
 def getXtty():
+    from tempfile import mkstemp
+    from shutil import copyfile
+    xauth=''
     display=''
-    t=subprocess.Popen("ps -A|grep Xorg",stdout=subprocess.PIPE,shell=True).communicate()[0]
-    p=t.split()
-    if p[1][:3]=='tty':
-        display='DISPLAY=:' + p[1][3:] + '.0'
-    return display
+    if isLTSP()=='':
+        command='COLUMNS=300  ps aux|grep -v grep|grep "\-auth"'
+    else:
+        command='COLUMNS=300  ps aux|grep -v grep|grep ldm'
+        
+    t=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True).communicate()[0]
+    p=t.strip().split()       
+    for i in range(0,len(p)):
+        if p[i][:1]==':':
+            display=p[i]
+        if p[i]=='-auth':
+            xauth=p[i+1]
+            break
+        
+    if display!='':
+        display='DISPLAY=' + display + '.0'
+        
+    if xauth!='':
+        xfile=mkstemp()[1]
+        copyfile(xauth,xfile)
+        os.chown(xfile,65534,0)
+        xauth='XAUTHORITY='+xfile
+        
+    return (display,xauth)
     
 

@@ -75,7 +75,8 @@ class Plugins(object):
             if i.hostname in self.targets:
                 self.classroom.CommandStack[i.mainIP].append(('projector'))
                 if i.userkey!='':
-                    self.KeyboardMouse(i,'0','disableMouse')
+                    #self.KeyboardMouse(i,'0','disableMouse')
+                    pass
             
     def usersCommand(self,func,value,command):
         for i in self.classroom.Desktops:
@@ -158,7 +159,9 @@ class Plugins(object):
     def startApp(self,command):
         pass
     def launchUrl(self,url):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                self.classroom.CommandStack[i.userkey].append(('launchweb',self.args[0]))      
           
     def classroomConfig(self,rows=0,cols=0):
         for i in range(0, len(self.targets)-1):

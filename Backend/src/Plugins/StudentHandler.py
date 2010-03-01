@@ -55,8 +55,12 @@ class Plugins(object):
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound           
                 }  
+        self.currentProcess=None
     def existCommand(self,command):
-        return self.handlers.has_key(command)  
+        if command.__class__.__name__=='list':
+            return self.handlers.has_key(command[0])
+        else:
+            return self.handlers.has_key(command)  
     
     def process(self,command):        
         if self.handlers.has_key(command):            
@@ -129,6 +133,18 @@ class Plugins(object):
     def startApp(self,command):
         pass
     def launchUrl(self,url):
-        pass
+        self.destroyProcess()
+        self.currentProcess=subprocess.Popen(['x-www-browser',self.args[0]])
+        
+    def destroyProcess(self):
+        from signal import  SIGTERM
+        from os import kill
+        if self.currentProcess!=None:
+            try:
+            #self.procServer.terminate(): not available in python 2.5
+                pid=self.currentProcess.pid
+                kill(pid, SIGTERM)
+            except:
+                pass     
           
         

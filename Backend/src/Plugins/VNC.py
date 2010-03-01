@@ -23,8 +23,8 @@
 # 
 ##############################################################################
 
-import subprocess,os,signal,logging
-from Utils import MyUtils,NetworkUtils
+import subprocess,os,signal,logging,tempfile
+from Utils import MyUtils,NetworkUtils,crippled_des
 
 class VNC(object):
     '''
@@ -33,7 +33,7 @@ class VNC(object):
 
     
 
-    def __init__(self,readonly=True,readpasswd='',writepasswd=''):
+    def __init__(self,readonly=True,readpasswd='',writepasswd='',clientport=5900):
         '''
         Parameters:
         readonly=True if the server won't allow keyboard and mouse control
@@ -53,12 +53,16 @@ class VNC(object):
         if MyUtils.isLTSP()=='':
             self.port=str(NetworkUtils.getUsableTCPPort('127.0.0.1',5900))
         else:
-            add=MyUtils.isLTSP().split('.')[3]
-            self.port=str(5900 + int(add))
+            s=MyUtils.isLTSP()
+            d=s.split('.')
+            if len(d)<4: #sometimes, it needs two tries :(
+                d=MyUtils.isLTSP().split('.')
+            self.port=str(5900 + int(d[3]))
             
         self.readonly=readonly
         
         self.procServer=None
+        self.clientport=clientport
     
     
     def __del__(self):
@@ -67,16 +71,19 @@ class VNC(object):
     def startServer(self):
         if self.readonly:
             try:
-                self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
+                if self.procServer==None:
+                    self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
             except:
                 logging.getLogger().error('x11vnc is not working in this system')
                 
     def startROViewer(self,target):
-        display=MyUtils.getXtty()
-        passwd=''
-        command='su -c \"' + display + ' xvncviewer -UseLocalCursor=0 -LowColourLevel=1 -ViewOnly -MenuKey Super_R  -Shared  -Fullscreen -passwd '
+        display,xauth=MyUtils.getXtty()
+        passwd=tempfile.mkstemp()[1]
+        self.createVNCPassword(self.readPasswd, passwd)
+        command='su -c \"' + xauth + ' ' + display + ' xvncviewer -UseLocalCursor=0 -LowColourLevel=1 -ViewOnly -MenuKey Super_R  -Shared  -Fullscreen -passwd '
         command += passwd 
-        command += ' ' + target + '\" nobody'
+        command += ' ' + target +':' + self.clientport + '\" nobody'
+        logging.getLogger().debug(command)
         self.procViewer=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
             
     def stop(self):
@@ -93,7 +100,27 @@ class VNC(object):
  
     
     
+    def createVNCPassword(self, passwd,file):
+        """
+        createVNCPassword("micasa","/tmp/vnc")
+        """
+        
+        #
+        # We use a fixed key to store passwords, since we assume that our local
+        # file system is secure but nonetheless don't want to store passwords
+        # as plaintext.
+        #
+        
+        fixedKey = "\x17Rk\x06#NX\x07"    
     
+        pw = (passwd + '\0' * 8)[:8]        #make sure its 8 chars long, zero padded
+        des = crippled_des.DesCipher(fixedKey)
+        response = des.encrypt(pw)
+    
+        f = open(file, "w")
+        f.write(response)
+        f.close    
+        os.chown(file,65534,0)
     
     
     
