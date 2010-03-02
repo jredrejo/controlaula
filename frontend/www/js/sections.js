@@ -20,7 +20,9 @@
 		    '<img src="{internet}" style="width:20px; height:20px;"><br>',
 		    '<img src="{mouse}" style="padding-top:3px; width:20px; height:20px;"><br>',
 		    '<img src="{message}" style="padding-top:0px; width:20px; height:20px;">',
-		    '</div><div style="float:left; position:absolute;"><img src="images/icon_video.png" style="width:18px; height:18px;"></div><img src="{url}" title="{name}"></div>',
+		    '</div>',
+			 //'<div style="float:left; position:absolute;"><img src="images/icon_video.png" style="width:18px; height:18px;"></div>',
+			 '<img src="{url}" title="{name}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
@@ -96,24 +98,28 @@
         layout:'table',
         layoutConfig: {columns:2},
         // applied to child components
-        defaults: {frame:true, width:242, height: 285},
+        defaults: {frame:true, width:296, height: 285},
         items:[{
             title:'DVD',
-			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><a href="javascript:enviarOrdenSeleccionados(\'broadcast\',\'DVD\');"><img src="images/icon_dvd.png" style="border:0px;"><br><span style="font-weight:bold; color:black; text-decoration:none;">Emitir DVD</span></a></div>',
+			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><img src="images/icon_dvd.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="enviarOrdenSeleccionados(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="enviarOrdenTodos(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
         },{
             title:'Fichero',
-			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><a href="javascript:broadcastFileVideo();"><img src="images/icon_movie.png" style="border:0px;"><br><span style="font-weight:bold; color:black; text-decoration:none;">Emitir Vídeo</span></a></div>',
+			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
         }]
     });
 
     var win;
 
-	function broadcastFileVideo(){
+	function broadcastFileVideo(who){
 		if(document.getElementById("selectFileVideo").value.trim()==""){
 			Ext.Msg.alert('Atención', 'Debe seleccionar un archivo de vídeo.');
 			return;
 		}
-		enviarOrdenSeleccionados('broadcast',document.getElementById("selectFileVideo").value);
+		
+		if(who=="all")
+			enviarOrdenTodos('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
+		else
+			enviarOrdenSeleccionados('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
 	}
 
 	function broadcastWindow(){
@@ -122,7 +128,7 @@
             win = new Ext.Window({
                 applyTo:'selectBroadcast',
                 layout:'fit',
-                width:500,
+                width:609,
                 height:300,
                 closeAction:'hide',
                 plain: true,
@@ -144,7 +150,7 @@
    var internetON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableInternet");
+			enviarOrdenSeleccionados("enableInternet","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -152,7 +158,7 @@
     var internetOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableInternet");
+			enviarOrdenSeleccionados("disableInternet","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -160,7 +166,7 @@
     var mouseON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableMouse");
+			enviarOrdenSeleccionados("enableMouse","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -168,7 +174,7 @@
     var mouseOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableMouse");
+			enviarOrdenSeleccionados("disableMouse","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -176,7 +182,7 @@
     var messagesON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableMessages");
+			enviarOrdenSeleccionados("enableMessages","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -184,7 +190,7 @@
     var messagesOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableMessages");
+			enviarOrdenSeleccionados("disableMessages","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -192,7 +198,7 @@
     var soundON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableSound");
+			enviarOrdenSeleccionados("enableSound","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -200,7 +206,7 @@
     var soundOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableSound");
+			enviarOrdenSeleccionados("disableSound","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -211,7 +217,7 @@
 		width:105,
 		iconAlign:'top',
         handler: function(){
-			enviarOrdenSeleccionados("projector");
+			enviarOrdenSeleccionados("projector","","cambiaconfig");
         },
     });
 
@@ -259,7 +265,7 @@
 					width:105,
 					iconAlign:'top',
 					tooltip:'Encender los equipos seleccionados',
-			        handler:function(){enviarOrdenSeleccionados("wakeup");}
+			        handler:function(){enviarOrdenSeleccionados("wakeup","","cambiaconfig");}
 			     },{
 			        text: 'Selecc. Ninguno',
 			        iconCls: 'none',
@@ -273,7 +279,7 @@
 					width:105,
 					iconAlign:'top',
 					tooltip:'Apagar los equipos seleccionados',
-			        handler:function(){enviarOrdenSeleccionados("sleep");}
+			        handler:function(){enviarOrdenSeleccionados("sleep","","cambiaconfig");}
 			     }]
 		     },{
 		        xtype: 'buttongroup',
@@ -307,142 +313,6 @@
 //        layout:'fit',
         title:'Encender/Apagar Equipos Aula (0 alumnos seleccionados)',
         items:[dataviewON,botonsDataview]
- /*       tbar:[{
-            xtype: 'buttongroup',
-            columns: 2,
-            defaults: {
-                scale: 'small'
-            },
-	        items:[{
-	            text: 'Selecc. Todo',
-	            iconCls: 'all',
-	            handler:selectAllDataView
-	        },{
-	            text: 'Encender',
-	            iconCls: 'on',
-	            handler:function(){
-					enviarOrdenSeleccionados("wakeup");
-	    	    },
-	        },{
-	            text: 'Selecc. Ninguno',
-	            iconCls: 'none',
-	            handler:selectNoneDataView
-	        },{
-	            text: 'Apagar',
-	            iconCls: 'off',
-	            handler:function(){
-					enviarOrdenSeleccionados("sleep");
-	    	    },
-	        }]
-        },{
-            xtype: 'buttongroup',
-            columns: 2,
-            defaults: {
-                scale: 'small'
-            },
-	        items:[{
-				text: 'Internet',
-	            iconCls: 'internet',
-				menu: [internetON,internetOFF]
-			},{
-	            text: 'Altavoz',
-	            iconCls: 'sound',
-				menu: [soundON,soundOFF]
-	        },{
-				text: 'Ratón/Teclado',
-	            iconCls: 'mouse',
-				menu: [mouseON,mouseOFF]
-			},{
-				text: 'Mensajes',
-	            iconCls: 'messages',
-				menu: [messagesON,messagesOFF]
-			}]
-        }]*/
- 	/*	tbar: ["->",{
-            text: 'Selecc. Todo',
-            iconCls: 'all',
-            handler:selectAllDataView
-        },'-',{
-            xtype: 'buttongroup',
-            title: 'Equipos',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-		        text: 'Encender',
-		        iconCls: 'on',
-		        handler:function(){
-					enviarOrdenSeleccionados("wakeup");
-			    },
-            },{
-		        text: 'Apagar',
-		        iconCls: 'off',
-		        handler:function(){
-					enviarOrdenSeleccionados("sleep");
-			    },
-            }]
-        },"-",{
-            xtype: 'buttongroup',
-            title: 'Internet',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-				text: 'Habilitar',
-		        iconCls: 'done',
-		        handler:function(){
-					enviarOrdenSeleccionados("enableInternet");
-			    },
-            },{
-				text: 'Deshabilitar',
-		        iconCls: 'cancel',
-		        handler:function(){
-					enviarOrdenSeleccionados("disableInternet");
-			    },
-            }]
-        },"-",{
-            xtype: 'buttongroup',
-            title: 'Ratón/Teclado',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-				text: 'Habilitar',
-		        iconCls: 'done',
-		        handler:function(){
-					enviarOrdenSeleccionados("endabledMouse");
-			    },
-            },{
-				text: 'Deshabilitar',
-		        iconCls: 'cancel',
-		        handler:function(){
-					enviarOrdenSeleccionados("disableMouse");
-			    },
-            }]
-		},"-",{
-            xtype: 'buttongroup',
-            title: 'Mensajes',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-				text: 'Habilitar',
-		        iconCls: 'done',
-		        handler:function(){
-					enviarOrdenSeleccionados("enableMessages");
-			    },
-            },{
-				text: 'Deshabilitar',
-		        iconCls: 'cancel',
-		        handler:function(){
-					enviarOrdenSeleccionados("disableMessages");
-			    },
-            }]
-		}]*/
     });    
 
 

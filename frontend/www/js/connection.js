@@ -38,19 +38,38 @@ function estadoEquipos(equipos){
 }
 
 // Enviar Orden a los equipos del aula
-function enviarOrdenPuestos(dir,puestos,argumentos){
+function enviarOrdenSeleccionados(dir,argumentos,action){
+
+	if(dataviewON.getSelectedRecords().length=="0"){
+		Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
+		return;
+	}
+
+	var seleccionados = Array();
+	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
+		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
+		var name = dataviewON.getSelectedRecords()[i].get("name")
+
+		if(dir=="wakeup" && name=="Apagado"){
+			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo"});
+			myMask.show();
+		}else if(dir=="sleep" && name!="Apagado" && name!="&nbsp;"){
+			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando"});
+			myMask.show();
+		}
+	}	
 
 	var classroom = {
-		"pclist" : puestos,
+		"pclist" : seleccionados,
 		"args" : argumentos
 	}
 
 	dataStringCommand = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataStringCommand,"cambiaconfig");
+	conexion(dir,dataStringCommand,action);
 }
 
 // Enviar Orden a los equipos del aula
-function enviarOrdenTodos(dir,argumentos){
+function enviarOrdenTodos(dir,argumentos,action){
 
 	dataviewON.selectRange(0,dataviewON.getNodes().length);
 
@@ -65,29 +84,7 @@ function enviarOrdenTodos(dir,argumentos){
 	}
 
 	dataString = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataString,"cambiaconfig");
-}
-
-function enviarOrdenSeleccionados(orden,args){
-	if(dataviewON.getSelectedRecords().length=="0"){
-		Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
-		return;
-	}
-
-	var seleccionados = Array();
-	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
-		var name = dataviewON.getSelectedRecords()[i].get("name")
-
-		if(orden=="wakeup" && name=="Apagado"){
-			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo"});
-			myMask.show();
-		}else if(orden=="sleep" && name!="Apagado" && name!="&nbsp;"){
-			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando"});
-			myMask.show();
-		}
-	}	
-	enviarOrdenPuestos(orden,seleccionados,args);
+	conexion(dir,dataString,action);
 }
 
 function sendClassroomConfig(){
@@ -117,12 +114,11 @@ function sendClassroomConfig(){
 
 // Funcion general de conexion
 function conexion(dir,datos,accion){
-
 	Ext.Ajax.request({
 		url : dir , 
 		params : { data : datos },
 		method: 'POST',
-		success: function ( result, request) { 
+		success: function (result, request) { 
 			// distintas respuestas segun la accion enviada
 			switch(accion){
 				case "pintaaula":{
@@ -135,6 +131,11 @@ function conexion(dir,datos,accion){
 				}
 				case "cambiaconfig":{
 					conexion("datosaula","","pintaaula");
+					break;
+				}
+				case "broadcastVideo":{
+					alert("pintaico");
+					//conexion("datosaula","","pintaaula");
 					break;
 				}
 				default:{}
