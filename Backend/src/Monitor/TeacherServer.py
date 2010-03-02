@@ -93,8 +93,8 @@ class RPCServer(xmlrpc.XMLRPC):
             key=hostip
         else:
             key =login+'@'+hostip    
-            
-        return self.classroom.getCommands(key)
+        commands=self.classroom.getCommands(key)    
+        return commands
     
     def xmlrpc_facepng(self,login,hostip, file):
         key =login+'@'+hostip
@@ -169,8 +169,8 @@ class RPCServer(xmlrpc.XMLRPC):
 
         return self.classroom.getJSONFrontend()
     
-    def xmlrpc_vnc(self):
-        return self.classroom.myVNC.getData()
+    def xmlrpc_connData(self):
+        return self.classroom.myVNC.getData() + (self.classroom.broadcast.getData(),)
         
     def xmlrpc_Commands(self):
         """Return the list of the remaining commands

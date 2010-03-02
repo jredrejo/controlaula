@@ -24,7 +24,7 @@
 import datetime,logging
 import Desktop
 from Utils import  Configs, MyUtils
-from Plugins import VNC
+from Plugins import VNC,Broadcast
 
 class Classroom():
     """Classroom data management
@@ -74,6 +74,7 @@ class Classroom():
         self.oldJSON=''
 
         self.myVNC=VNC.VNC()
+        self.broadcast=Broadcast.Vlc()
 
     def existUser(self,key):
         """Check if a logged user has already been added to the classroom"""

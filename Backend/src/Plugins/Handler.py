@@ -73,7 +73,7 @@ class Plugins(object):
         self.classroom.myVNC.startServer()
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
-                self.classroom.CommandStack[i.mainIP].append(('projector'))
+                self.classroom.CommandStack[i.mainIP].append(['projector'])
                 if i.userkey!='':
                     #self.KeyboardMouse(i,'0','disableMouse')
                     pass
@@ -90,9 +90,9 @@ class Plugins(object):
         self.usersCommand(self.Internet,'0','disableInternet')
                 
     def Internet(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append((command))
+        self.classroom.CommandStack[desktop.userkey].append([command])
         #the host must disable internet to this user:
-        self.classroom.CommandStack[desktop.mainIP].append((command,desktop.login))
+        self.classroom.CommandStack[desktop.mainIP].append([command,desktop.login])
         desktop.internet=value
         self.classroom.Hosts[desktop.mainIP].internetEnabled=value
         self.classroom.LoggedUsers[desktop.userkey].internet=value
@@ -104,7 +104,7 @@ class Plugins(object):
         self.usersCommand(self.KeyboardMouse,'0','disableMouse')
 
     def KeyboardMouse(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append((command))
+        self.classroom.CommandStack[desktop.userkey].append([command])
         desktop.mouse=value
         self.classroom.LoggedUsers[desktop.userkey].mouse=value
             
@@ -121,7 +121,7 @@ class Plugins(object):
 
                 
     def Messages(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append((command))
+        self.classroom.CommandStack[desktop.userkey].append([command])
         desktop.messages=value
         self.classroom.LoggedUsers[desktop.userkey].messages=value       
         
@@ -137,7 +137,7 @@ class Plugins(object):
     def sleep(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
-                self.classroom.CommandStack[i.mainIP].append(('sleep'))  
+                self.classroom.CommandStack[i.mainIP].append(['sleep'])  
                       
     def disableSound(self):
         self.usersCommand(self.Sound,'0','disableSound')
@@ -146,12 +146,16 @@ class Plugins(object):
         self.usersCommand(self.Sound,'1','enableSound')
                      
     def Sound(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append((command))
+        self.classroom.CommandStack[desktop.userkey].append([command])
         desktop.sound=value
         self.classroom.LoggedUsers[desktop.userkey].sound=value
                         
     def broadcast(self, url='', isDVD=False):
-        pass
+        self.classroom.broadcast.transmit(url,isDVD)
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])  
+                
     def sendMessage(self, text):
         pass
     def sendFile(self,url):
@@ -161,7 +165,7 @@ class Plugins(object):
     def launchUrl(self,url):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(('launchweb',self.args[0]))      
+                self.classroom.CommandStack[i.userkey].append(['launchweb',url])      
           
     def classroomConfig(self,rows=0,cols=0):
         for i in range(0, len(self.targets)-1):

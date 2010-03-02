@@ -24,7 +24,7 @@
 
 import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
-from Plugins  import StudentHandler,Actions,VNC
+from Plugins  import StudentHandler,Actions,VNC, Broadcast
 import logging
 
 class Obey(object):
@@ -45,6 +45,9 @@ class Obey(object):
         self.catched=''
         self.myMAC=''
         self.handler=StudentHandler.Plugins(None,None)
+        self.myVNC=None
+        self.broadcast=None
+
         #self.myVNC=VNC.VNC()
         #self.handler.myVNC=self.myVNC
 
@@ -117,9 +120,11 @@ class Obey(object):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
                                        MyUtils.isLTSP(),Configs.RootConfigs['classroomname'],1)
                 
-            vncrp,vncwp,vncport=self.myteacher.vnc()
+            vncrp,vncwp,vncport,bcastport=self.myteacher.connData()
             self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)
-            self.handler.myVNC=self.myVNC                
+            self.broadcast=Broadcast.Vlc(bcastport)
+            self.handler.myVNC=self.myVNC
+            self.handler.myBcast=self.broadcast                
                 
         elif order == 'commands':
             self.getCommands()
@@ -133,7 +138,8 @@ class Obey(object):
     def getCommands(self):
         commands=self.myteacher.getCommands( self.mylogin, self.myIp )
         for i in commands:
-            if self.handler.existCommand(i):
-                self.handler.process(i)
+            if self.handler.existCommand(i[0]):
+                self.handler.args=i[1:]
+                self.handler.process(i[0])
         
         

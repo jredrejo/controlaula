@@ -23,12 +23,13 @@
 # 
 ##############################################################################
 
-import subprocess,os,signal,logging,tempfile
+import subprocess,os,logging,tempfile
 from Utils import MyUtils,NetworkUtils,crippled_des
+from signal import  SIGTERM
 
 class VNC(object):
     '''
-    It needs x11vnc to work on Linux
+    It needs x11vnc and xvnc4viewer to work on Linux
     '''
 
     
@@ -39,6 +40,7 @@ class VNC(object):
         readonly=True if the server won't allow keyboard and mouse control
         readpasswd= passwd to use when not controlling keyboard and mouse
         writepasswd= passwd to use when controlling keyboard and mouse
+        clientport=the port the client has to use to connect to a VNC server
         '''
         if readpasswd=='':
             self.readPasswd=MyUtils.generateUUID()
@@ -91,7 +93,7 @@ class VNC(object):
         try:
             #self.procServer.terminate(): not available in python 2.5
             pid=self.procServer.pid
-            os.kill(pid, signal.SIGTERM)
+            os.kill(pid, SIGTERM)
         except:
             pass        
     def getData(self):

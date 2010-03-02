@@ -118,6 +118,7 @@ class ControlAulaProtocol(resource.Resource):
             try:
                 if len(args)>0:
                     handler.args=[args]
+                    #handler.args=['/opt/'+args]
                 if len(json.loads(recvjson)['pclist'])>0:
                     first=json.loads(recvjson)['pclist'][0]
                     if ',' in first:

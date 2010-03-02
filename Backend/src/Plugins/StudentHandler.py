@@ -34,6 +34,7 @@ class Plugins(object):
         self.myteacher=myteacher
         self.myIP=myIP
         self.myVNC=None
+        self.myBcast=None
         self.teacherIP=''
         self.handlers = { 
                 'bigbrother':self.bigBrother,
@@ -57,10 +58,7 @@ class Plugins(object):
                 }  
         self.currentProcess=None
     def existCommand(self,command):
-        if command.__class__.__name__=='list':
-            return self.handlers.has_key(command[0])
-        else:
-            return self.handlers.has_key(command)  
+        return self.handlers.has_key(command)
     
     def process(self,command):        
         if self.handlers.has_key(command):            
@@ -125,9 +123,10 @@ class Plugins(object):
             subprocess.Popen(['poweroff','-fp'])
             
     def broadcast(self, url='', isDVD=False):
-        pass
+        self.myBcast.receive()
+        
     def sendMessage(self, text):
-        pass
+        self.destroyProcess()
     def sendFile(self,url):
         pass
     def startApp(self,command):
