@@ -89,6 +89,7 @@
 	};*/
 
     var Tree = Ext.tree;
+	var fileSelected;
 
    var tree = new Tree.TreePanel({
        animate:true,
@@ -99,10 +100,9 @@
        height: 300,
        width: 300,
 		 listeners: {
-		     click: {
+	      	click: {
 		         fn:function (node,event){
-						alert(tree.getSelectionModel().getSelectedNode());
-						//alert(node+" "+event);
+						fileSelected = tree.getSelectionModel().getSelectedNode();
 					}
 		     }
 		 }
@@ -170,12 +170,12 @@
 
 						    buttons: [{
 						        text: 'Emitir a seleccionados',
-										width:130,
-						        handler: function(){ alert(tree.getSelectionModel().getSelectedNode())}//enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode(),"broadcastVideo")}
+								width:130,
+						        handler: function(){ enviarOrdenSeleccionados('broadcast',fileSelected,"broadcastVideo");}
 						    },{
 						        text: 'Emitir a todos',
-										width:130,
-						        handler: function(){ alert(tree.getSelectionModel().getSelectedNode());}// enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode(),"broadcastVideo")}
+								width:130,
+						        handler: function(){ enviarOrdenTodos('broadcast',fileSelected,"broadcastVideo");}
 						    },{
 						        text: 'Cerrar',
 						        handler: function(){ win.hide();}
