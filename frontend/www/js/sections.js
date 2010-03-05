@@ -88,8 +88,37 @@
 		alert(v_console);
 	};*/
 
+    var Tree = Ext.tree;
+
+   var tree = new Tree.TreePanel({
+       animate:true,
+       autoScroll:true,
+       loader: new Tree.TreeLoader({dataUrl:'getNodes'}),
+       containerScroll: true,
+       border: false,
+       height: 300,
+       width: 300,
+		 listeners: {
+		     click: {
+		         fn:function (node,event){
+						alert(tree.getSelectionModel().getSelectedNode());
+						//alert(node+" "+event);
+					}
+		     }
+		 }
+
+   });
 
 
+      // add a tree sorter in folder mode
+      new Tree.TreeSorter(tree, {folderSort:true});
+
+      // set the root node
+      var root = new Tree.AsyncTreeNode({
+          text: 'Directorio Personal',
+          draggable:false, // disable root node dragging
+          id:'home'
+      });
 
 
     var broadcastOptions = new Ext.Panel({
@@ -99,13 +128,14 @@
         layoutConfig: {columns:2},
         // applied to child components
         defaults: {frame:true, width:296, height: 285},
-        items:[{
+        items:[/*{
             title:'DVD',
 			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><img src="images/icon_dvd.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="enviarOrdenSeleccionados(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="enviarOrdenTodos(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
         },{
             title:'Fichero',
-			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
-        }]
+				items:[]
+			//html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
+        }*/tree]
     });
 
     var win;
@@ -123,7 +153,6 @@
 	}
 
 	function broadcastWindow(){
-
 		if(!win){
             win = new Ext.Window({
                 applyTo:'selectBroadcast',
@@ -133,13 +162,19 @@
                 closeAction:'hide',
                 plain: true,
 
-				items:[broadcastOptions],
+				items:[tree],
 
                 buttons: [{
+                    text: 'Emitir a seleccionados',
+							width:130,
+                    handler: function(){ alert("En desarrollo")}
+                },{
+                    text: 'Emitir a todos',
+							width:130,
+                    handler: function(){ alert("En desarrollo")}
+                },{
                     text: 'Cerrar',
-                    handler: function(){
-                        win.hide();
-                    }
+                    handler: function(){ win.hide();}
                 }]
             });
         }

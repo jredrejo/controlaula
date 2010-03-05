@@ -10,4 +10,14 @@
 Ext.onReady(function() {
 	Ext.QuickTips.init();	
 	initScreens();
+
+
+      tree.setRootNode(root);
+
+      // render the tree
+      tree.render('tree');
+      root.expand(false,false);
+      tree.bodyFocus.fi.setFrameEl(tree.el);
+      tree.getSelectionModel().select(tree.getRootNode());
+      tree.enter.defer(100, tree);
 });
