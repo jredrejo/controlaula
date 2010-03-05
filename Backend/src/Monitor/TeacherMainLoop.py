@@ -111,7 +111,12 @@ class ControlAulaProtocol(resource.Resource):
             if json.loads(recvjson).has_key('args'):
                 args=json.loads(recvjson)['args']
         except:
-            pass
+            try:
+                args=request.args['node']
+                recvjson='{}'
+            except:
+                pass
+                
          
         if handler.existCommand(command):
             #if it's a petition to execute some command
@@ -119,17 +124,19 @@ class ControlAulaProtocol(resource.Resource):
                 if len(args)>0:
                     handler.args=[args]
                     #handler.args=['/opt/'+args]
-                if len(json.loads(recvjson)['pclist'])>0:
+                if json.loads(recvjson).has_key('pclist'):
                     first=json.loads(recvjson)['pclist'][0]
                     if ',' in first:
                         handler.targets=first.split(',')
                     else:
                         handler.targets=json.loads(recvjson)['pclist']
+                
                 if json.loads(recvjson).has_key('structure'):
                     structure=json.loads(recvjson)['structure']
                     handler.args=[structure['rows'],structure['cols']]
-                handler.process(command)
-                respjson= json.dumps({'result':'ack'})
+                result=handler.process(command)
+                #respjson= json.dumps({'result':'ack'})
+                respjson=json.dumps(result)
             except:
                 pass
                 

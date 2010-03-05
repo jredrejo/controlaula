@@ -22,7 +22,7 @@
 #
 ##############################################################################
 import logging
-from Utils import Configs
+from Utils import Configs,MyUtils
 from Plugins import Actions
 
 class Plugins(object):
@@ -53,7 +53,8 @@ class Plugins(object):
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
-                'enableSound':self.enableSound           
+                'enableSound':self.enableSound,
+                'getNodes':self.fileBrowser  
                 }  
     def existCommand(self,command):
         return self.handlers.has_key(command)  
@@ -61,9 +62,12 @@ class Plugins(object):
     def process(self,command):        
         if self.handlers.has_key(command):            
             handler=self.handlers[command]
-            
-            handler(*self.args)
             logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
+            s=handler(*self.args)
+            if s==None:
+                s={'result':'ack'}
+            return s
+            
 
 
     def bigBrother(self):
@@ -196,3 +200,21 @@ class Plugins(object):
                 index=int(self.targets)
             self.classroom.Desktops[index].hostname='none'
             self.classroom.saveClassLayout()
+            
+    def fileBrowser(self,node):
+        import os
+        path=node[0]
+        result=[]
+        if path=='home':
+            path=MyUtils.getHomeUser()
+        for f in os.listdir(path):
+            ff=os.path.join(path,f)
+            item={'text':f,'id':ff,'cls':'folder'}
+            if not os.path.isdir(ff):
+                item['cls']='file'
+                item['leaf']=True
+            result.append(item)
+          
+        return result
+       
+            
