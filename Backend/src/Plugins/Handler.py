@@ -202,15 +202,23 @@ class Plugins(object):
             self.classroom.saveClassLayout()
             
     def fileBrowser(self,node):
-        import os
+        import os,mimetypes
         path=node[0]
         result=[]
         if path=='home':
             path=MyUtils.getHomeUser()
         for f in os.listdir(path):
+            if f[:1]=='.':
+                continue
             ff=os.path.join(path,f)
             item={'text':f,'id':ff,'cls':'folder'}
             if not os.path.isdir(ff):
+                mtype=mimetypes.guess_type(f,True)[0]
+                type=''
+                if mtype!=None:
+                    type=mtype[:5] 
+                if type not in ['audio','video']:
+                    continue
                 item['cls']='file'
                 item['leaf']=True
             result.append(item)
