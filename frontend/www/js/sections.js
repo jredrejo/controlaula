@@ -120,7 +120,7 @@
           id:'home'
       });
 
-
+/*
     var broadcastOptions = new Ext.Panel({
         id:'main-panel',
         baseCls:'x-plain',
@@ -128,57 +128,92 @@
         layoutConfig: {columns:2},
         // applied to child components
         defaults: {frame:true, width:296, height: 285},
-        items:[/*{
+        items:[{
             title:'DVD',
 			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><img src="images/icon_dvd.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="enviarOrdenSeleccionados(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="enviarOrdenTodos(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
         },{
             title:'Fichero',
-				items:[]
-			//html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
-        }*/tree]
-    });
+			items:[]
+			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
+        }]
+    });*/
 
-    var win;
+    var win, win2;
 
-	function broadcastFileVideo(who){
+/*	function broadcastFileVideo(who){
 		if(document.getElementById("selectFileVideo").value.trim()==""){
 			Ext.Msg.alert('Atención', 'Debe seleccionar un archivo de vídeo.');
 			return;
 		}
 		
+		alert(tree.getSelectionModel().getSelectedNode());
+
 		if(who=="all")
 			enviarOrdenTodos('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
 		else
 			enviarOrdenSeleccionados('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
-	}
+	}*/
 
-	function broadcastWindow(){
-		if(!win){
-            win = new Ext.Window({
-                applyTo:'selectBroadcast',
-                layout:'fit',
-                width:609,
-                height:300,
-                closeAction:'hide',
-                plain: true,
+	function broadcastWindow(type){
+			switch(type){
+				case 'file':{
+					if(!win){
+						win = new Ext.Window({
+						    applyTo:'broadcastFile',
+						    layout:'fit',
+						    width:609,
+						    height:300,
+						    closeAction:'hide',
+						    plain: true,
 
-				items:[tree],
+							items:[tree],
 
-                buttons: [{
-                    text: 'Emitir a seleccionados',
-							width:130,
-                    handler: function(){ alert("En desarrollo")}
-                },{
-                    text: 'Emitir a todos',
-							width:130,
-                    handler: function(){ alert("En desarrollo")}
-                },{
-                    text: 'Cerrar',
-                    handler: function(){ win.hide();}
-                }]
-            });
-        }
-        win.show(this);
+						    buttons: [{
+						        text: 'Emitir a seleccionados',
+										width:130,
+						        handler: function(){ alert(tree.getSelectionModel().getSelectedNode())}//enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode(),"broadcastVideo")}
+						    },{
+						        text: 'Emitir a todos',
+										width:130,
+						        handler: function(){ alert(tree.getSelectionModel().getSelectedNode());}// enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode(),"broadcastVideo")}
+						    },{
+						        text: 'Cerrar',
+						        handler: function(){ win.hide();}
+						    }]
+						});
+					}
+			        win.show(this);
+					break;
+				}
+				case 'dvd':{
+					if(!win2){
+						win2 = new Ext.Window({
+						    applyTo:'broadcastDVD',
+						    layout:'fit',
+						    width:609,
+						    height:300,
+						    closeAction:'hide',
+						    plain: true,
+							html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir.<br><br><img src="images/icon_dvd_128.png" style="border:0px;"></div>',
+
+						    buttons: [{
+						        text: 'Emitir a seleccionados',
+								width:130,
+						        handler: function(){ enviarOrdenSeleccionados('broadcast','DVD','broadcastVideo'); }
+						    },{
+						        text: 'Emitir a todos',
+								width:130,
+						        handler: function(){ enviarOrdenTodos('broadcast','DVD','broadcastVideo'); }
+						    },{
+						        text: 'Cerrar',
+						        handler: function(){ win2.hide();}
+						    }]
+						});
+					}
+			        win2.show(this);
+					break;
+				}
+			}
 	}
 
 
@@ -266,6 +301,22 @@
         },
     });
 
+    var videoDVD = new Ext.Action({
+        text: 'Emitir DVD',
+        handler: function(){
+			broadcastWindow("dvd")
+        },
+        iconCls: 'dvd'
+    });
+
+    var videoFile = new Ext.Action({
+        text: 'Emitir Archivo',
+        handler: function(){
+			broadcastWindow("file")
+        },
+        iconCls: 'movie'
+    });
+
 	var botonsDataview = {
 
         // columnWidth: 500,
@@ -328,7 +379,7 @@
 					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
 					,projector
-					,video]
+					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}]
 		     }]
 		}
 
