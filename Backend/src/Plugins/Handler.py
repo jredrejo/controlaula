@@ -102,15 +102,21 @@ class Plugins(object):
         self.classroom.LoggedUsers[desktop.userkey].internet=value
                 
     def enableMouse(self):
-        self.usersCommand(self.KeyboardMouse,'1','enableMouse')
-                
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                self.KeyboardMouse(i,'1','enableMouse')
+               
     def disableMouse(self):
-        self.usersCommand(self.KeyboardMouse,'0','disableMouse')
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                self.KeyboardMouse(i,'0','disableMouse')        
 
     def KeyboardMouse(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append([command])
+        self.classroom.CommandStack[desktop.mainIP].append([command])       
         desktop.mouse=value
-        self.classroom.LoggedUsers[desktop.userkey].mouse=value
+        if desktop.userkey!='':
+            self.classroom.CommandStack[desktop.userkey].append([command])
+            self.classroom.LoggedUsers[desktop.userkey].mouse=value
             
                         
     def enableMessages(self):
@@ -155,7 +161,15 @@ class Plugins(object):
         self.classroom.LoggedUsers[desktop.userkey].sound=value
                         
     def broadcast(self, url='', isDVD=False):
-        self.classroom.broadcast.transmit(url,isDVD)
+        from os.path import isfile
+        if url=='DVD':
+            isDVD=True
+            url=''
+        if not isDVD:
+            if not isfile(url):
+                return {'result':'Bad file'}
+        if not self.classroom.broadcast.transmit(url,isDVD):
+            return {'result':'Bad DVD'}
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
                 self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])  
@@ -208,7 +222,7 @@ class Plugins(object):
         if path=='home':
             path=MyUtils.getHomeUser()
         for f in os.listdir(path):
-            if f[:1]=='.':
+            if f[:1]=='.':#skip hidden files and dirs
                 continue
             ff=os.path.join(path,f)
             item={'text':f,'id':ff,'cls':'folder'}
@@ -217,7 +231,7 @@ class Plugins(object):
                 type=''
                 if mtype!=None:
                     type=mtype[:5] 
-                if type not in ['audio','video']:
+                if type not in ['audio','video']:#skip non-multimedia files
                     continue
                 item['cls']='file'
                 item['leaf']=True

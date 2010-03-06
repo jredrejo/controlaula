@@ -23,7 +23,7 @@
 ##############################################################################
 
 
-import pwd,os,subprocess 
+import pwd,os,subprocess,logging
 import NetworkUtils
 
 def getLoginName():
@@ -119,7 +119,21 @@ def getLDMinfo():
 
 def getXtty():
     from tempfile import mkstemp
-    from shutil import copyfile
+    from shutil import copyfile    
+    disp,auth=getXttyAuth()
+        
+    if disp!='':
+        display='DISPLAY=' + disp
+        
+    if auth!='':
+        xfile=mkstemp()[1]
+        copyfile(auth,xfile)
+        os.chown(xfile,65534,0)
+        xauth='XAUTHORITY='+xfile
+        
+    return (display,xauth)
+    
+def getXttyAuth():
     xauth=''
     display=''
     if isLTSP()=='':
@@ -136,15 +150,21 @@ def getXtty():
             xauth=p[i+1]
             break
         
+    if xauth!='' and getLoginName()=='root':       
+        command='xauth -f ' + xauth + ' add `hostname -s`/unix' + display + ' . ' + generateUUID(24)
+        subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
+        os.environ['XAUTHORITY']=xauth
+               
     if display!='':
-        display='DISPLAY=' + display + '.0'
-        
-    if xauth!='':
-        xfile=mkstemp()[1]
-        copyfile(xauth,xfile)
-        os.chown(xfile,65534,0)
-        xauth='XAUTHORITY='+xfile
-        
+        display=display + '.0'
+                                
     return (display,xauth)
     
-
+def launchAsNobody(command):
+        display,xauth=getXtty()
+        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
+        logging.getLogger().debug(finalcommand)
+        proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
+        return proc    
+        
+            

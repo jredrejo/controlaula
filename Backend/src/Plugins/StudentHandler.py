@@ -23,8 +23,7 @@
 ##############################################################################
 import logging,subprocess
 from Utils import Configs,MyUtils
-import Actions,VNC
-
+import Actions
 
 class Plugins(object):
     
@@ -36,6 +35,7 @@ class Plugins(object):
         self.myVNC=None
         self.myBcast=None
         self.teacherIP=''
+        self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
@@ -77,11 +77,15 @@ class Plugins(object):
     def disableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','0')
     def enableMouse(self):
-        Configs.MonitorConfigs.SetGeneralConfig('mouse','1')
-        Actions.enableKeyboardAndMouse()
+        if MyUtils.getLoginName()=='root':
+            Actions.enableKeyboardAndMouse(self.display)
+        else:
+            Configs.MonitorConfigs.SetGeneralConfig('mouse','1')       
     def disableMouse(self):
-        Configs.MonitorConfigs.SetGeneralConfig('mouse','0')
-        Actions.disableKeyboardAndMouse()
+        if MyUtils.getLoginName()=='root':
+            Actions.disableKeyboardAndMouse(self.display)
+        else:
+            Configs.MonitorConfigs.SetGeneralConfig('mouse','0')    
     def enableSound(self):
         Configs.MonitorConfigs.SetGeneralConfig('sound','1')
         Actions.setSound('unmute')

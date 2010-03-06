@@ -23,104 +23,27 @@
 ##############################################################################
 
 from twisted.internet.utils import getProcessValue
-#from twisted.internet.utils import getProcessOutput
-import os,logging,subprocess
-from Utils import MyUtils
+import subprocess
+from Xlib import X
 
 def setSound(value):
     '''value must be mute or unmute'''
     d=getProcessValue('amixer', ['-c','0','--','sset','Master',value])
     #'amixer -c 0 -- sset Master ' + value
     
+def disableKeyboardAndMouse(display): 
+
+    root = display.screen().root
+    root.grab_pointer(1, X.PointerMotionMask|X.ButtonReleaseMask|X.ButtonPressMask,  
+                X.GrabModeAsync, X.GrabModeAsync, X.NONE, X.NONE, X.CurrentTime) 
+    root.grab_keyboard(1,X.GrabModeAsync, X.GrabModeAsync,X.CurrentTime)
     
-def disableKeyboardAndMouse():    
-    modmap=''
-    for n in range(8,256):
-        modmap =modmap + 'keycode ' + str(n) + ' = NoSymbol\n'
         
-
-
-    modmap= modmap + clearKeys()
-    mapfile=open(os.path.join(MyUtils.getHomeUser(),'.null_modmap'),'wb'   )
-    mapfile.write(modmap)
-    mapfile.close()
-
-    try:
-        os.remove(os.path.join(MyUtils.getHomeUser(),'.current_modmap'))
-    except:
-        pass
-
-    #d=getProcessOutput('xmodmap',['-pke',MyUtils.getHomeUser()])
-    #d.addCallbacks(disablingkeyboard,error_back)
-    #return d
-    current= subprocess.Popen(['xmodmap', '-pke',MyUtils.getHomeUser()], stdout=subprocess.PIPE).communicate()[0]
-    disablingkeyboard( current)
-
-def error_back(result):
-    logging.getLogger().error('Error loading modmap: %s' % (result.getErrorMessage()))
-    return 
-    
-
-def clearKeys():
-    clearKeys= 'clear Shift\n'
-    clearKeys += 'clear Lock\n'
-    clearKeys += 'clear Control\n'
-    clearKeys += 'clear Mod1\n'
-    clearKeys += 'clear Mod2\n'
-    clearKeys += 'clear Mod3\n'
-    clearKeys += 'clear Mod4\n'                
-    clearKeys += 'clear Mod5\n'
-    return clearKeys    
-    
-def disablingkeyboard( result):
-    modmap=result + clearKeys()
-    modmap +='add    Shift   = Shift_L Shift_R\n'
-    modmap +='add    Lock    = Caps_Lock\n'
-    modmap +='add    Control = Control_L Control_R\n'
-    modmap +='add    Mod1    = Alt_L 0x007D 0x009C\n'
-    modmap +='add    Mod2    = Num_Lock\n'
-    modmap +='add    Mod4    = 0x007F 0x0080\n'
-    modmap +='add    Mod5    = Mode_switch ISO_Level3_Shift ISO_Level3_Shift\n'
-    
-    mapfile=open(os.path.join(MyUtils.getHomeUser(),'.current_modmap'),'wb'   )
-    mapfile.write(modmap)
-    mapfile.close()
-    
-    #d=getProcessValue('xmodmap', [os.path.join(MyUtils.getHomeUser(), 'null_modmap')     ])
-    #d.addCallback(removeNullModmap)
-    #e=getProcessValue('xmodmap',['-e','"pointer = 9 8 7 6 5 4 3 2 1 "']   )
-    
-    subprocess.Popen(['xmodmap', os.path.join(MyUtils.getHomeUser(), '.null_modmap') ], stdout=subprocess.PIPE)
-    subprocess.Popen(['xmodmap', '-e','pointer = 9 8 7 6 5 4 3 2 1 ' ], stdout=subprocess.PIPE)
-    
-    try:
-        os.remove(os.path.join(MyUtils.getHomeUser(),'.null_modmap'))
-    except:
-        pass    
-    
-    
-def enableKeyboardAndMouse():        
-
-    try:
-        os.remove(os.path.join(MyUtils.getHomeUser(),'.null_modmap'))
-    except:
-        pass    
-    subprocess.Popen(['xmodmap', '-e','pointer = default ' ], stdout=subprocess.PIPE)
-    current=os.path.join(MyUtils.getHomeUser(),'.current_modmap')
-    if os.path.exists( current    ):
-        subprocess.Popen(['xmodmap', current ], stdout=subprocess.PIPE)
-
-    
-    
-def removeNullModmap(exitcode):
-    if exitcode==1:
-        return
-    try:
-        os.remove(os.path.join(MyUtils.getHomeUser(),'.null_modmap'))
-    except:
-        pass 
-    
-    
+def enableKeyboardAndMouse(display):
+    display.ungrab_keyboard(X.CurrentTime)
+    display.ungrab_pointer(X.CurrentTime)
+    display.flush()       
+  
 def sendWOLBurst(macs,throttle):    
     from twisted.internet.task import LoopingCall    
     from twisted.internet import defer    

@@ -26,6 +26,7 @@ import xmlrpclib
 from Utils import NetworkUtils, MyUtils,Configs
 from Plugins  import StudentHandler,Actions,VNC, Broadcast
 import logging
+from Xlib.display import Display
 
 class Obey(object):
     '''
@@ -41,16 +42,21 @@ class Obey(object):
         self.mylogin=MyUtils.getLoginName()
         self.myFullName=MyUtils.getFullUserName()
         self.myHostname=NetworkUtils.getHostName()
+        self.myHome=MyUtils.getHomeUser()
         self.myteacher=None
         self.catched=''
         self.myMAC=''
         self.handler=StudentHandler.Plugins(None,None)
         self.myVNC=None
         self.broadcast=None
-
-        #self.myVNC=VNC.VNC()
-        #self.handler.myVNC=self.myVNC
-
+        self.myDisp=None
+        if self.mylogin=='root':
+            disp=MyUtils.getXttyAuth()[0]
+            if disp!='':
+                try:
+                    self.myDisp=Display(disp)
+                except:
+                    pass
         
     def listen(self):
         from twisted.internet import reactor           
@@ -79,8 +85,11 @@ class Obey(object):
         self.handler.myteacher=self.myteacher
         self.handler.teacherIP=teacherIP
         self.handler.myIP=self.myIp
-        order=self.myteacher.hostPing( self.mylogin, self.myIp )
-        self.sendData(order)
+        try:                
+            order=self.myteacher.hostPing( self.mylogin, self.myIp )
+            self.sendData(order)
+        except:
+            self.removeMyTeacher()
         
         
     def sendData(self,order):
@@ -124,7 +133,9 @@ class Obey(object):
             self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)
             self.broadcast=Broadcast.Vlc(bcastport)
             self.handler.myVNC=self.myVNC
-            self.handler.myBcast=self.broadcast                
+            self.handler.myBcast=self.broadcast
+            if self.myDisp!=None:
+                self.handler.display=self.myDisp                
                 
         elif order == 'commands':
             self.getCommands()

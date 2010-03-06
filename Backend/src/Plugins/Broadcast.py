@@ -52,9 +52,12 @@ class Vlc(object):
         self.stop()
             
     def transmit(self,url,dvd=False):
+        from time import sleep
+        from tempfile import mkstemp
         self.stop()
         
-        command='vlc --no-ipv6 '
+        tmpfile=mkstemp()[1]
+        command='vlc --no-ipv6 --file-logging --logfile=' + tmpfile + ' '
         if dvd:
             command += 'dvdsimple:///dev/dvd'   
         else:
@@ -63,27 +66,32 @@ class Vlc(object):
         command +=" --sout-keep --sout '#standard{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}'"
         command +=" --ttl 5 --sout-all --audio-desync 1100 --volume 1024"
 
+
         try:
             self.procTx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
+            sleep(1.5)
+            vlcerrors = open(tmpfile, 'r').read()
+            
+            if  vlcerrors.find('main: nothing to play')>-1:
+                self.destroyProcess(self.procTx)
+                return False
             self.procRx=subprocess.Popen(['vlc','udp://@239.255.255.0:'+ self.port])  
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
+            
+        return True
                 
     def receive(self):
-        self.destroyProcess(self.procRx)        
-        display,xauth=MyUtils.getXtty()
-        
+        self.destroyProcess(self.procRx)                
         ltspaudio=' '
         if MyUtils.isLTSP()!='':
             ltspaudio=' PULSE_SERVER=127.0.0.1:4713 ESPEAKER=127.0.0.1:16001 '
                   
-        command='su -c \"' + xauth + ' ' + display + ltspaudio 
+        command=ltspaudio 
         command +=  'vlc --video-on-top --skip-frames  -f  udp://@239.255.255.0:'
-        command += self.port + '\" nobody'
-        
-        logging.getLogger().debug(command)
-        self.procRx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
+        command += self.port 
+        self.procRx=MyUtils.launchAsNobody(command)
             
     def stop(self):
         self.destroyProcess(self.procRx)

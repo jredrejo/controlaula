@@ -79,14 +79,13 @@ class VNC(object):
                 logging.getLogger().error('x11vnc is not working in this system')
                 
     def startROViewer(self,target):
-        display,xauth=MyUtils.getXtty()
+
         passwd=tempfile.mkstemp()[1]
         self.createVNCPassword(self.readPasswd, passwd)
-        command='su -c \"' + xauth + ' ' + display + ' xvncviewer -UseLocalCursor=0 -LowColourLevel=1 -ViewOnly -MenuKey Super_R  -Shared  -Fullscreen -passwd '
+        command='xvncviewer -UseLocalCursor=0 -LowColourLevel=1 -ViewOnly -MenuKey Super_R  -Shared  -Fullscreen -passwd '
         command += passwd 
-        command += ' ' + target +':' + self.clientport + '\" nobody'
-        logging.getLogger().debug(command)
-        self.procViewer=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
+        command += ' ' + target +':' + self.clientport
+        self.procViewer=MyUtils.launchAsNobody(command)
             
     def stop(self):
 
