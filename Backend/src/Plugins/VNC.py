@@ -21,6 +21,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
+# This modules needs x11vnc, xvncviewer and scrot to work
 ##############################################################################
 
 import subprocess,os,logging,tempfile
@@ -65,18 +66,42 @@ class VNC(object):
         
         self.procServer=None
         self.clientport=clientport
+        self.myteacher=None
+        self.mylogin=MyUtils.getLoginName()
+        self.myIP=''
+        
     
     
     def __del__(self):
         self.stop()
             
-    def startServer(self):
-        if self.readonly:
-            try:
-                if self.procServer==None:
+    def startServer(self):      
+        try:
+            if self.procServer==None:
+                if self.readonly:
                     self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
-            except:
-                logging.getLogger().error('x11vnc is not working in this system')
+                else:
+                    if MyUtils.isLTSP()=='':
+                        self.procServer=subprocess.Popen(['x11vnc', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
+                    else:
+                        self.procServer=subprocess.Popen(['x11vnc', '-ncache','10', '-passwd',  self.writePasswd])
+        except:
+            logging.getLogger().error('x11vnc is not working in this system')
+            
+        if not self.readonly:
+            self.screenshot()
+ 
+    def screenshot(self):
+        from twisted.internet import reactor
+        import xmlrpclib
+        screenshot=os.path.join( MyUtils.getHomeUser(),'.controlaula/vnc.png')
+        subprocess.Popen(['scrot','-t','15',screenshot])
+        try:
+            f = xmlrpclib.Binary(open(screenshot, 'rb').read())
+            self.myteacher.facepng(self.mylogin,self.myIP,f)         
+        except:
+            logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))        
+        reactor.callLater(5, self.screenshot)
                 
     def startROViewer(self,target):
 

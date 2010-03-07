@@ -69,7 +69,10 @@ class Plugins(object):
 
 
     def bigBrother(self):
-        pass
+        self.myVNC.myteacher=self.myteacher
+        self.myVNC.myIP=self.myIP
+        self.myVNC.startServer()        
+        
     def projector(self):
         self.myVNC.startROViewer(self.teacherIP)
     def enableInternet(self):

@@ -71,7 +71,9 @@ class Plugins(object):
 
 
     def bigBrother(self):
-        pass
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                self.classroom.CommandStack[i.userkey].append(['bigBrother'])
     
     def projector(self):
         self.classroom.myVNC.startServer()
@@ -81,7 +83,10 @@ class Plugins(object):
                 if i.userkey!='':
                     #self.KeyboardMouse(i,'0','disableMouse')
                     pass
-            
+
+    def sendBB(self,desktop,value,command):
+        self.classroom.CommandStack[desktop.userkey].append([command])
+                    
     def usersCommand(self,func,value,command):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
