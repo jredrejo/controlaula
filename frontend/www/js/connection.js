@@ -134,8 +134,13 @@ function conexion(dir,datos,accion){
 					break;
 				}
 				case "broadcastVideo":{
-					alert("pintaico");
-					//conexion("datosaula","","pintaaula");
+					resultJSON = Ext.util.JSON.decode(result.responseText);
+
+					switch(resultJSON.result){
+						case "Bad file":{ Ext.Msg.alert('Atención', 'Archivo de video incorrecto.'); break; }
+						case "Bad DVD":{ Ext.Msg.alert('Atención', 'DVD incorrecto.'); break; }
+					}
+
 					break;
 				}
 				default:{}

@@ -59,66 +59,30 @@
 								}
 							});
 
-
-
-
-
-/*	function inputFileOnChange() {
-		var v_console = '';
-		v_console += 'value: ' + document.getElementById('selectFileVideo').value;
-		v_console += '<br \/>';
-	
-		if(document.getElementById('selectFileVideo').files) {
-			// Support: nsIDOMFile, nsIDOMFileList
-			v_console += 'files.length: ' + document.getElementById('selectFileVideo').files.length;
-			v_console += '<br \/>';
-		
-			v_console += 'fileName: ' + document.getElementById('selectFileVideo').files.item(0).fileName;
-			v_console += '<br \/>';
-		
-			v_console += 'fileSize: ' + document.getElementById('selectFileVideo').files.item(0).fileSize;
-			v_console += '<br \/>';
-		
-			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsDataURL();
-			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsBinary();
-			v_console += 'data: ' + document.getElementById('selectFileVideo').files.item(0).getAsText();
-			v_console += '<br \/>';
-		};
-	
-		alert(v_console);
-	};*/
-
-    var Tree = Ext.tree;
-	var fileSelected;
+   var Tree = Ext.tree;
 
    var tree = new Tree.TreePanel({
-       animate:true,
-       autoScroll:true,
-       loader: new Tree.TreeLoader({dataUrl:'getNodes'}),
-       containerScroll: true,
-       border: false,
-       height: 300,
-       width: 300,
-		 listeners: {
-	      	click: {
-		         fn:function (node,event){
-						fileSelected = tree.getSelectionModel().getSelectedNode();
-					}
-		     }
-		 }
-
-   });
+		    animate:true,
+		    autoScroll:true,
+		    loader: new Tree.TreeLoader({dataUrl:'getNodes'}),
+		    containerScroll: true,
+		    border: false,
+		    height: 300,
+		    width: 300,
+			 listeners: {
+					render: function(){ this.getRootNode().expand(); }
+			 },
+			root:{ text: 'Directorio Personal',
+					 draggable:false, // disable root node dragging
+					 id:'home'
+			}
+		});
 
 
       // add a tree sorter in folder mode
       new Tree.TreeSorter(tree, {folderSort:true});
 
-      // set the root node
-      var root = new Tree.AsyncTreeNode({
-          text: 'Directorio Personal',
-          draggable:false, // disable root node dragging
-          id:'home'
-      });
+
 
 /*
     var broadcastOptions = new Ext.Panel({
@@ -155,6 +119,11 @@
 	}*/
 
 	function broadcastWindow(type){
+			tree.render('tree');
+			tree.bodyFocus.fi.setFrameEl(tree.el);
+         tree.getSelectionModel().select(tree.getRootNode());
+         tree.enter.defer(100, tree);
+
 			switch(type){
 				case 'file':{
 					if(!win){
@@ -171,11 +140,11 @@
 						    buttons: [{
 						        text: 'Emitir a seleccionados',
 								width:130,
-						        handler: function(){ enviarOrdenSeleccionados('broadcast',fileSelected,"broadcastVideo");}
+						        handler: function(){ enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
 						    },{
 						        text: 'Emitir a todos',
 								width:130,
-						        handler: function(){ enviarOrdenTodos('broadcast',fileSelected,"broadcastVideo");}
+						        handler: function(){ enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
 						    },{
 						        text: 'Cerrar',
 						        handler: function(){ win.hide();}
