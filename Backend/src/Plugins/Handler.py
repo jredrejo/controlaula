@@ -54,7 +54,8 @@ class Plugins(object):
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound,
-                'getNodes':self.fileBrowser  
+                'getVideoNodes':self.fileBrowserVideo,
+                'getAllNodes':self.fileBrowserAll
                 }  
     def existCommand(self,command):
         return self.handlers.has_key(command)  
@@ -220,7 +221,7 @@ class Plugins(object):
             self.classroom.Desktops[index].hostname='none'
             self.classroom.saveClassLayout()
             
-    def fileBrowser(self,node):
+    def fileBrowserVideo(self,node):
         import os,mimetypes
         path=node[0]
         result=[]
@@ -244,4 +245,20 @@ class Plugins(object):
           
         return result
        
-            
+    def fileBrowserAll(self,node):
+        import os
+        path=node[0]
+        result=[]
+        if path=='home':
+            path=MyUtils.getHomeUser()
+        for f in os.listdir(path):
+            if f[:1]=='.':#skip hidden files and dirs
+                continue
+            ff=os.path.join(path,f)
+            item={'text':f,'id':ff,'cls':'folder'}
+            if not os.path.isdir(ff):
+                item['cls']='file'
+                item['leaf']=True
+            result.append(item)
+          
+        return result     

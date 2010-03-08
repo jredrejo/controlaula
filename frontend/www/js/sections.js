@@ -60,11 +60,10 @@
 							});
 
    var Tree = Ext.tree;
-
    var tree = new Tree.TreePanel({
 		    animate:true,
 		    autoScroll:true,
-		    loader: new Tree.TreeLoader({dataUrl:'getNodes'}),
+		    loader: new Tree.TreeLoader({dataUrl:'getVideoNodes'}),
 		    containerScroll: true,
 		    border: false,
 		    height: 300,
@@ -77,56 +76,38 @@
 					 id:'home'
 			}
 		});
+   new Tree.TreeSorter(tree, {folderSort:true});
 
+   var treeSendFile = new Tree.TreePanel({
+		    animate:true,
+		    autoScroll:true,
+		    loader: new Tree.TreeLoader({dataUrl:'getAllNodes'}),
+		    containerScroll: true,
+		    border: false,
+		    height: 300,
+		    width: 300,
+			 listeners: {
+					render: function(){ this.getRootNode().expand(); }
+			 },
+			root:{ text: 'Directorio Personal',
+					 draggable:false, // disable root node dragging
+					 id:'home'
+			}
+		});
+   new Tree.TreeSorter(treeSendFile, {folderSort:true});
 
-      // add a tree sorter in folder mode
-      new Tree.TreeSorter(tree, {folderSort:true});
+   var win, win2, win3;
 
-
-
-/*
-    var broadcastOptions = new Ext.Panel({
-        id:'main-panel',
-        baseCls:'x-plain',
-        layout:'table',
-        layoutConfig: {columns:2},
-        // applied to child components
-        defaults: {frame:true, width:296, height: 285},
-        items:[{
-            title:'DVD',
-			html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir DVD.<br><br><img src="images/icon_dvd.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="enviarOrdenSeleccionados(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="enviarOrdenTodos(\'broadcast\',\'DVD\',\'broadcastVideo\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
-        },{
-            title:'Fichero',
-			items:[]
-			html:'<div style="text-align:center; ">Seleccione el fichero y pulser Emitir Vídeo.<br><br><input type="file" id="selectFileVideo" size="10" class="x-form-text x-form-field"><br><br><img src="images/icon_movie.png" style="border:0px;"><br><br><input type="button" value="Emitir Seleccionados" onClick="broadcastFileVideo(\'selected\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;">&nbsp;<input type="button" value="Emitir a Todos" onClick="broadcastFileVideo(\'all\');" style="border:1px solid; font-family:Verdana; font-size:11px; width:130px;"></div>',
-        }]
-    });*/
-
-    var win, win2;
-
-/*	function broadcastFileVideo(who){
-		if(document.getElementById("selectFileVideo").value.trim()==""){
-			Ext.Msg.alert('Atención', 'Debe seleccionar un archivo de vídeo.');
-			return;
-		}
-		
-		alert(tree.getSelectionModel().getSelectedNode());
-
-		if(who=="all")
-			enviarOrdenTodos('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
-		else
-			enviarOrdenSeleccionados('broadcast',document.getElementById("selectFileVideo").value,"broadcastVideo");
-	}*/
-
-	function broadcastWindow(type){
-			tree.render('tree');
-			tree.bodyFocus.fi.setFrameEl(tree.el);
-         tree.getSelectionModel().select(tree.getRootNode());
-         tree.enter.defer(100, tree);
+	function openWindow(type){
 
 			switch(type){
-				case 'file':{
+				case 'fileBrowserVideo':{
 					if(!win){
+						tree.render('tree');
+						tree.bodyFocus.fi.setFrameEl(tree.el);
+						tree.getSelectionModel().select(tree.getRootNode());
+						tree.enter.defer(100, tree);
+
 						win = new Ext.Window({
 						    applyTo:'broadcastFile',
 						    layout:'fit',
@@ -151,7 +132,7 @@
 						    }]
 						});
 					}
-			        win.show(this);
+			      win.show(this);
 					break;
 				}
 				case 'dvd':{
@@ -179,12 +160,45 @@
 						    }]
 						});
 					}
-			        win2.show(this);
+			      win2.show(this);
+					break;
+				}
+				case 'fileBrowserAll':{
+					treeSendFile.render('treeSendFile');
+					treeSendFile.bodyFocus.fi.setFrameEl(treeSendFile.el);
+				   treeSendFile.getSelectionModel().select(treeSendFile.getRootNode());
+				   treeSendFile.enter.defer(100, treeSendFile);
+
+					if(!win3){
+						win3 = new Ext.Window({
+									 applyTo:'windowSendFile',
+									 layout:'fit',
+									 width:609,
+									 height:300,
+									 closeAction:'hide',
+									 plain: true,
+
+									items:[treeSendFile],
+
+									 buttons: [{
+										  text: 'Enviar a seleccionados',
+										width:130,
+										  handler: function(){ enviarOrdenSeleccionados('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+									 },{
+										  text: 'Enviar a todos',
+										width:130,
+										  handler: function(){ enviarOrdenTodos('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+									 },{
+										  text: 'Cerrar',
+										  handler: function(){ win3.hide();}
+									 }]
+								});
+					}
+					win3.show(this);
 					break;
 				}
 			}
 	}
-
 
    var internetON = new Ext.Action({
         text: 'Habilitar',
@@ -253,8 +267,8 @@
     var projector = new Ext.Action({
         text: 'Proyector',
         iconCls: 'projector',
-		width:105,
-		iconAlign:'top',
+		  width:105,
+		  iconAlign:'top',
         handler: function(){
 			enviarOrdenSeleccionados("projector","","cambiaconfig");
         },
@@ -263,8 +277,8 @@
     var video = new Ext.Action({
         text: 'Video',
         iconCls: 'video',
-		width:105,
-		iconAlign:'top',
+		  width:105,
+		  iconAlign:'top',
         handler: function(){
 			broadcastWindow();
         },
@@ -273,7 +287,7 @@
     var videoDVD = new Ext.Action({
         text: 'Emitir DVD',
         handler: function(){
-			broadcastWindow("dvd")
+			openWindow("dvd")
         },
         iconCls: 'dvd'
     });
@@ -281,9 +295,29 @@
     var videoFile = new Ext.Action({
         text: 'Emitir Archivo',
         handler: function(){
-			broadcastWindow("file")
+			openWindow("fileBrowserVideo")
         },
         iconCls: 'movie'
+    });
+
+    var sendMessage = new Ext.Action({
+        text: 'Enviar Mensaje',
+        iconCls: 'message',
+		  width:105,
+		  iconAlign:'top',
+        handler: function(){
+			sendMessageWindow();
+        },
+    });
+
+    var sendFile = new Ext.Action({
+        text: 'Enviar Fichero',
+        iconCls: 'sendFile',
+		  width:105,
+		  iconAlign:'top',
+        handler: function(){
+			openWindow("fileBrowserAll");
+        },
     });
 
 	var botonsDataview = {
@@ -305,8 +339,8 @@
            xtype: 'buttongroup',
            columns: 2,
            defaults: {scale: 'small', padding:5},
-		  title:'Equipos',
-		  padding:5,
+			  title:'Equipos',
+			  padding:5,
 	        items:[{
 			        text: 'Selecc. Todo',
 			        iconCls: 'all',
@@ -348,7 +382,9 @@
 					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
 					,projector
-					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}]
+					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}
+					,sendMessage
+					,sendFile]
 		     }]
 		}
 

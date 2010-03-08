@@ -35,7 +35,7 @@ from twisted.internet.error import CannotListenError
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
-PAGES='/var/www'
+PAGES='/var/www/controlaula'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
 
