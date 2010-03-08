@@ -79,7 +79,7 @@ class Plugins(object):
     def projector(self):
         self.classroom.myVNC.startServer()
         for i in self.classroom.Desktops:
-            if i.hostname in self.targets:
+            if i.hostname in self.targets and i.hostkey!='':
                 self.classroom.CommandStack[i.mainIP].append(['projector'])
                 if i.userkey!='':
                     #self.KeyboardMouse(i,'0','disableMouse')
@@ -114,7 +114,7 @@ class Plugins(object):
                
     def disableMouse(self):
         for i in self.classroom.Desktops:
-            if i.hostname in self.targets:
+            if i.hostname in self.targets and i.hostkey!='':
                 self.KeyboardMouse(i,'0','disableMouse')        
 
     def KeyboardMouse(self,desktop,value,command):
@@ -152,7 +152,7 @@ class Plugins(object):
                 
     def sleep(self):
         for i in self.classroom.Desktops:
-            if i.hostname in self.targets:
+            if i.hostname in self.targets and i.hostkey!='':
                 self.classroom.CommandStack[i.mainIP].append(['sleep'])  
                       
     def disableSound(self):
@@ -175,9 +175,9 @@ class Plugins(object):
             if not isfile(url):
                 return {'result':'Bad file'}
         if not self.classroom.broadcast.transmit(url,isDVD):
-            return {'result':'Bad DVD'}
+            return {'result':'Bad DVD or file'}
         for i in self.classroom.Desktops:
-            if i.hostname in self.targets:
+            if i.hostname in self.targets and i.hostkey!='':
                 self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])  
                 
     def sendMessage(self, text):
