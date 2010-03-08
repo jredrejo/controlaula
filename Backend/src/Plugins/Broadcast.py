@@ -63,9 +63,11 @@ class Vlc(object):
         else:
             command +='\"' + url + '\"'
         
-        command +=" --sout-keep --sout '#standard{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}'"
-        command +=" --ttl 5 --sout-all --audio-desync 1100 --volume 1024"
-
+        #command +=" --sout-keep --sout '#standard{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}'"
+        #command +=" --ttl 5 --sout-all --audio-desync 1100 --volume 1024"
+        command +=" --sout '#transcode{vcodec=WMV2,vb=1024,scale=1,acodec=mpga,ab=32,channels=1}:"
+        command += "duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"
+        command +=" --ttl 5 --audio-desync 1100 --volume 1024"        
 
         try:
             self.procTx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
@@ -75,7 +77,7 @@ class Vlc(object):
             if  vlcerrors.find('main: nothing to play')>-1:
                 self.destroyProcess(self.procTx)
                 return False
-            self.procRx=subprocess.Popen(['vlc','udp://@239.255.255.0:'+ self.port])  
+            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port])  
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
@@ -89,7 +91,11 @@ class Vlc(object):
             ltspaudio=' PULSE_SERVER=127.0.0.1:4713 ESPEAKER=127.0.0.1:16001 '
                   
         command=ltspaudio 
-        command +=  'vlc --video-on-top --skip-frames  -f  udp://@239.255.255.0:'
+        if os.path.isfile('/usr/bin/cvlc'):
+            command +=  '/usr/bin/cvlc '
+        else:
+            command +='vlc ' 
+        command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  udp://@239.255.255.0:'
         command += self.port 
         self.procRx=MyUtils.launchAsNobody(command)
             
