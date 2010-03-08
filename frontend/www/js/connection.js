@@ -134,13 +134,42 @@ function conexion(dir,datos,accion){
 					break;
 				}
 				case "broadcastVideo":{
+					maskWindow.hide();
+
 					resultJSON = Ext.util.JSON.decode(result.responseText);
-
-					switch(resultJSON.result){
-						case "Bad file":{ Ext.Msg.alert('Atención', 'Archivo de video incorrecto.'); break; }
-						case "Bad DVD":{ Ext.Msg.alert('Atención', 'DVD incorrecto.'); break; }
+					if(resultJSON.result=="Bad file"){
+						Ext.Msg.alert('Atención', 'Archivo de video incorrecto.');
+						return;
+					}else if(resultJSON.result=="ack"){
+						winSendVideo.hide();
+					    Ext.example.msg('Emitir Vídeo','Comienza la emisión del vídeo.');
 					}
+					break;
+				}
+				case "broadcastDVD":{
+					maskWindow.hide();
 
+					resultJSON = Ext.util.JSON.decode(result.responseText);
+					if(resultJSON.result=="Bad DVD"){
+						Ext.Msg.alert('Atención', 'DVD incorrecto.');
+						return;
+					}else if(resultJSON.result=="ack"){
+						winDVD.hide();
+					    Ext.example.msg('Emitir DVD','Comienza la emisión del DVD.');
+					}
+					break;
+				}
+				case "sendFile":{
+					maskWindow.hide();
+
+					resultJSON = Ext.util.JSON.decode(result.responseText);
+					if(resultJSON.result=="Bad send"){
+						Ext.Msg.alert('Atención', 'Ocurrió un error.');
+						return;
+					}else if(resultJSON.result=="ack"){
+						winSendFile.hide();
+					    Ext.example.msg('Envíar Archivo','El envío se ha realizado correctamente.');
+					}
 					break;
 				}
 				default:{}

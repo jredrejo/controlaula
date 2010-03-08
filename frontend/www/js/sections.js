@@ -61,6 +61,7 @@
 
    var Tree = Ext.tree;
    var tree = new Tree.TreePanel({
+			id:"treeVideo",
 		    animate:true,
 		    autoScroll:true,
 		    loader: new Tree.TreeLoader({dataUrl:'getVideoNodes'}),
@@ -79,6 +80,7 @@
    new Tree.TreeSorter(tree, {folderSort:true});
 
    var treeSendFile = new Tree.TreePanel({
+			id:"treeFile",
 		    animate:true,
 		    autoScroll:true,
 		    loader: new Tree.TreeLoader({dataUrl:'getAllNodes'}),
@@ -96,19 +98,20 @@
 		});
    new Tree.TreeSorter(treeSendFile, {folderSort:true});
 
-   var win, win2, win3;
+   var maskWindow;
+   var winSendVideo, winDVD, winSendFile;
 
 	function openWindow(type){
 
 			switch(type){
 				case 'fileBrowserVideo':{
-					if(!win){
+					if(!winSendVideo){
 						tree.render('tree');
 						tree.bodyFocus.fi.setFrameEl(tree.el);
 						tree.getSelectionModel().select(tree.getRootNode());
 						tree.enter.defer(100, tree);
 
-						win = new Ext.Window({
+						winSendVideo = new Ext.Window({
 						    applyTo:'broadcastFile',
 						    layout:'fit',
 						    width:609,
@@ -121,56 +124,75 @@
 						    buttons: [{
 						        text: 'Emitir a seleccionados',
 								width:130,
-						        handler: function(){ enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+						        handler: function(){
+							   		maskWindow = new Ext.LoadMask("treeVideo", {msg:"Emitiendo vídeo"});
+									maskWindow.show();
+
+									enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
+								}
 						    },{
 						        text: 'Emitir a todos',
 								width:130,
-						        handler: function(){ enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+						        handler: function(){
+									maskWindow = new Ext.LoadMask("treeVideo", {msg:"Emitiendo vídeo"});
+									maskWindow.show();
+
+									enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
+								}
 						    },{
 						        text: 'Cerrar',
-						        handler: function(){ win.hide();}
+						        handler: function(){ winSendVideo.hide();}
 						    }]
 						});
 					}
-			      win.show(this);
-					break;
+			      winSendVideo.show(this);
+				  break;
 				}
 				case 'dvd':{
-					if(!win2){
-						win2 = new Ext.Window({
+					if(!winDVD){
+						winDVD = new Ext.Window({
+							id:'winDVD',
 						    applyTo:'broadcastDVD',
 						    layout:'fit',
 						    width:609,
 						    height:300,
 						    closeAction:'hide',
 						    plain: true,
-							html:'<div style="text-align:center;"><br><br>Introduzca su DVD y pulse Emitir.<br><br><img src="images/icon_dvd_128.png" style="border:0px;"></div>',
+							html:'<div style="text-align:center; height:100%;" id="idDVD"><br><br>Introduzca su DVD y pulse Emitir.<br><br><img src="images/icon_dvd_128.png" style="border:0px;"></div>',
 
 						    buttons: [{
 						        text: 'Emitir a seleccionados',
 								width:130,
-						        handler: function(){ enviarOrdenSeleccionados('broadcast','DVD','broadcastVideo'); }
+						        handler: function(){
+									maskWindow = new Ext.LoadMask("idDVD", {msg:"Emitiendo DVD"});
+									maskWindow.show();
+									enviarOrdenSeleccionados('broadcast','DVD','broadcastDVD'); 
+								}
 						    },{
 						        text: 'Emitir a todos',
 								width:130,
-						        handler: function(){ enviarOrdenTodos('broadcast','DVD','broadcastVideo'); }
+						        handler: function(){
+									maskWindow = new Ext.LoadMask("idDVD", {msg:"Emitiendo DVD"});
+									maskWindow.show();
+									enviarOrdenTodos('broadcast','DVD','broadcastDVD'); 
+								}
 						    },{
 						        text: 'Cerrar',
-						        handler: function(){ win2.hide();}
+						        handler: function(){ winDVD.hide();}
 						    }]
 						});
 					}
-			      win2.show(this);
-					break;
+			      winDVD.show(this);
+				  break;
 				}
 				case 'fileBrowserAll':{
-					treeSendFile.render('treeSendFile');
-					treeSendFile.bodyFocus.fi.setFrameEl(treeSendFile.el);
+				   treeSendFile.render('treeSendFile');
+				   treeSendFile.bodyFocus.fi.setFrameEl(treeSendFile.el);
 				   treeSendFile.getSelectionModel().select(treeSendFile.getRootNode());
 				   treeSendFile.enter.defer(100, treeSendFile);
 
-					if(!win3){
-						win3 = new Ext.Window({
+					if(!winSendFile){
+						winSendFile = new Ext.Window({
 									 applyTo:'windowSendFile',
 									 layout:'fit',
 									 width:609,
@@ -181,20 +203,28 @@
 									items:[treeSendFile],
 
 									 buttons: [{
-										  text: 'Enviar a seleccionados',
+										text: 'Enviar a seleccionados',
 										width:130,
-										  handler: function(){ enviarOrdenSeleccionados('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+										handler: function(){
+											maskWindow = new Ext.LoadMask("treeFile", {msg:"Enviando archivo"});
+											maskWindow.show();
+											enviarOrdenSeleccionados('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
+										}
 									 },{
-										  text: 'Enviar a todos',
+										text: 'Enviar a todos',
 										width:130,
-										  handler: function(){ enviarOrdenTodos('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"broadcastVideo");}
+										handler: function(){
+											maskWindow = new Ext.LoadMask("treeFile", {msg:"Enviando archivo"});
+											maskWindow.show();
+											enviarOrdenTodos('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
+										}
 									 },{
 										  text: 'Cerrar',
-										  handler: function(){ win3.hide();}
+										  handler: function(){ winSendFile.hide();}
 									 }]
 								});
 					}
-					win3.show(this);
+					winSendFile.show(this);
 					break;
 				}
 			}
