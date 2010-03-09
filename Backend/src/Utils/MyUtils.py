@@ -130,6 +130,8 @@ def getXtty():
         copyfile(auth,xfile)
         os.chown(xfile,65534,0)
         xauth='XAUTHORITY='+xfile
+    else:
+        xauth=''
         
     return (display,xauth)
     

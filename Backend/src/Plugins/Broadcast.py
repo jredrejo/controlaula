@@ -71,11 +71,11 @@ class Vlc(object):
 
         try:
             self.procTx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
-            sleep(1.5)
+            sleep(1.0)
             vlcerrors = open(tmpfile, 'r').read()
-            
-            if  vlcerrors.find('main: nothing to play')>-1:
-                self.destroyProcess(self.procTx)
+
+            if  vlcerrors.find('main: nothing to play')>-1 or vlcerrors.find('cannot open source:')>-1:
+                self.destroyProcess(self.procTx,True)
                 return False
             self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port])  
             logging.getLogger().debug(str(command))
@@ -101,18 +101,20 @@ class Vlc(object):
             
     def stop(self):
         self.destroyProcess(self.procRx)
-        self.destroyProcess(self.procTx)
+        self.destroyProcess(self.procTx,True)
            
     def getData(self):
         return self.port
     
-    def destroyProcess(self,proc):
-
-        if proc!=None:
+    def destroyProcess(self,proc,shell=False):
+        #pdb.set_trace()
+        if proc != None:
             try:
-            #proc.terminate(): not available in python 2.5
+            #proc.terminate(): not available in python 2.5               
                 pid=proc.pid
                 kill(pid, SIGTERM)
+                if shell:
+                    kill(pid+1, SIGTERM)
             except:
                 pass  
     
