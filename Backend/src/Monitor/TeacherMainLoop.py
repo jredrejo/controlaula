@@ -117,7 +117,7 @@ class ControlAulaProtocol(resource.Resource):
             except:
                 pass
                 
-         
+
         if handler.existCommand(command):
             #if it's a petition to execute some command
             try:

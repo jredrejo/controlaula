@@ -294,14 +294,20 @@
         iconCls: 'cancel'
     });
 
-    var projector = new Ext.Action({
-        text: 'Proyector',
-        iconCls: 'projector',
-		  width:105,
-		  iconAlign:'top',
+    var projectorON = new Ext.Action({
+        text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("projector","","cambiaconfig");
+			enviarOrdenSeleccionados("enableProjector","","cambiaconfig");
         },
+        iconCls: 'done'
+    });
+
+    var projectorOFF = new Ext.Action({
+        text: 'Deshabilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("disableProjector","","cambiaconfig");
+        },
+        iconCls: 'cancel'
     });
 
     var video = new Ext.Action({
@@ -411,7 +417,7 @@
 					,{ text: 'Altavoz',iconAlign:'top', width:105, iconCls: 'sound', menu: [soundON,soundOFF] }
 					,{ text: 'Ratón/Teclado',iconAlign:'top', width:105, iconCls: 'mouse', menu: [mouseON,mouseOFF]}
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
-					,projector
+					,{ text: 'Proyector',iconAlign:'top', width:105, iconCls: 'projector', menu: [projectorON,projectorOFF]}
 					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}
 					,sendMessage
 					,sendFile]

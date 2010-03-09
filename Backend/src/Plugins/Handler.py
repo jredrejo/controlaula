@@ -36,7 +36,8 @@ class Plugins(object):
                 'classroomConfig':self.classroomConfig,    
                 'deleteComputer':self.deleteComputer,
                 'bigbrother':self.bigBrother,
-                'projector':self.projector,
+                'enableProjector':self.enableProjector,
+                'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
                 'enableMouse':self.enableMouse,
@@ -76,7 +77,7 @@ class Plugins(object):
             if i.hostname in self.targets and i.login!='':
                 self.classroom.CommandStack[i.userkey].append(['bigBrother'])
     
-    def projector(self):
+    def enableProjector(self):
         self.classroom.myVNC.startServer()
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.hostkey!='':
@@ -84,6 +85,9 @@ class Plugins(object):
                 if i.userkey!='':
                     #self.KeyboardMouse(i,'0','disableMouse')
                     pass
+
+    def disableProjector(self):
+		pass
 
     def sendBB(self,desktop,value,command):
         self.classroom.CommandStack[desktop.userkey].append([command])
