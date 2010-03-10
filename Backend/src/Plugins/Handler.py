@@ -198,12 +198,18 @@ class Plugins(object):
                 self.classroom.CommandStack[i.mainIP].append(['stopBroadcast'])        
         self.enableMouse()    
                 
-    def sendMessage(self, text):
-        pass
+   
     def sendFile(self,url):
-        pass
-    def startApp(self,command):
-        pass
+        import os.path
+        from os import link
+        filename=os.path.basename(url)
+        filepath=os.path.join(Configs.FILES_DIR,filename)
+        if not os.path.exists(filepath):
+            link(url,filepath)   
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                self.classroom.CommandStack[i.userkey].append(['receiveFile',filename])  
+                
     def launchUrl(self,url):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
@@ -280,3 +286,8 @@ class Plugins(object):
             result.append(item)
           
         return result     
+    
+    def sendMessage(self, text):
+        pass
+    def startApp(self,command):
+        pass 

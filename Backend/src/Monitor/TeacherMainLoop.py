@@ -54,7 +54,7 @@ class ControlAulaProtocol(resource.Resource):
     def render_GET(self, request):
 
         # Check if requested file exists.    
-        if request.path[:13]=='/loginimages/':
+        if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
             requestedfile=os.path.join(Configs.APP_DIR , request.path[1:])
         else:    
             requestedfile = os.path.join(self.PageDir, request.path[1:])

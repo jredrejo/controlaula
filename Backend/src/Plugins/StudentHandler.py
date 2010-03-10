@@ -23,6 +23,7 @@
 ##############################################################################
 import logging,subprocess
 from Utils import Configs,MyUtils
+from Plugins import DownloadFiles
 import Actions
 
 class Plugins(object):
@@ -39,7 +40,6 @@ class Plugins(object):
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
-                'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
                 'enableMouse':self.enableMouse,
@@ -52,13 +52,14 @@ class Plugins(object):
                 'broadcast':self.broadcast,
                 'stopBroadcast':self.stopBroadcast,
                 'sendmessage':self.sendMessage,
-                'sendfile':self.sendFile,
+                'receiveFile':self.receiveFile,
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound           
                 }  
         self.currentProcess=None
+        self.filesQueue=DownloadFiles.DownloadQueue()
     def existCommand(self,command):
         return self.handlers.has_key(command)
     
@@ -141,8 +142,29 @@ class Plugins(object):
     def sendMessage(self, text):
         self.destroyProcess()
         
-    def sendFile(self,url):
-        pass
+    def receiveFile(self,url):
+        from os.path import join
+        file=join(Configs.FILES_DIR,url)        
+        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + url
+        self.filesQueue.addRequest( url, file,self.got_file)
+        
+
+    def got_file(self,dloader,file):
+        from os import environ
+        import os.path
+        session=environ["DESKTOP_SESSION"]
+        if session=='gnome':
+            command='nautilus'
+        elif session=='kde':
+            command='konqueror'
+        elif session=='default':
+            if os.path.exists("/usr/bin/nautilus"):
+                command='nautilus'
+        elif os.path.exists("/usr/bin/thunar"):
+            command='thunar'
+        if command !='':
+            subprocess.Popen([command,os.path.dirname(file)])
+        
     def startApp(self,command):
         pass
     def launchUrl(self,url):

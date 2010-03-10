@@ -325,6 +325,11 @@ if not os.path.isdir(APP_DIR):
 IMAGES_DIR=os.path.join(APP_DIR,'loginimages')
 if not os.path.isdir(IMAGES_DIR):
         os.mkdir(IMAGES_DIR)
+        
+FILES_DIR=os.path.join(APP_DIR,'sendfile')
+if not os.path.isdir(FILES_DIR):
+        os.mkdir(FILES_DIR)
+                
 NOBODY_IMG=os.path.join(IMAGES_DIR,'nobody.png')
 if not os.path.exists(NOBODY_IMG):
     shutil.copy2(os.path.join(os.getcwd(),'Monitor/nobody.png'),NOBODY_IMG)

@@ -169,4 +169,13 @@ def launchAsNobody(command):
         proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
         return proc    
         
+def parse(url):
+    import urlparse
+    parsed = urlparse.urlparse(url)
+    url = urlparse.urlunparse(('','')+parsed[2:])
+    host, port = parsed[1], 80
+    if ':' in host:
+        host, port = host.split(':')
+        port = int(port)
+    return host, port, url            
             
