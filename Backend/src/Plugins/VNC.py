@@ -69,6 +69,7 @@ class VNC(object):
         self.myteacher=None
         self.mylogin=MyUtils.getLoginName()
         self.myIP=''
+        self.activeBB=False
         
     
     
@@ -100,8 +101,9 @@ class VNC(object):
             f = xmlrpclib.Binary(open(screenshot, 'rb').read())
             self.myteacher.facepng(self.mylogin,self.myIP,f)         
         except:
-            logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))        
-        reactor.callLater(5, self.screenshot)
+            logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
+        if self.activeBB:     
+            reactor.callLater(5, self.screenshot)
                 
     def startROViewer(self,target):
 

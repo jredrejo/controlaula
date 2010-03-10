@@ -13,7 +13,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# HMIServer is distributed in the hope that it will be useful,
+# ControlAula is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
@@ -335,13 +335,15 @@ class Classroom():
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
-
+        if self.myVNC.activeBB:
+            self.oldJSON=''
+            
         if newJSON!=self.oldJSON:
             self.oldJSON=newJSON
         else:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
-            
+        print newJSON    
         return newJSON
     
     def redistributeDesktops(self,targets):

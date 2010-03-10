@@ -13,7 +13,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# HMIServer is distributed in the hope that it will be useful,
+# ControlAula is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
@@ -193,4 +193,13 @@ def guessDesktop():
             desktop='gnome'
       
     return desktop
-                        
+
+def backupDir(src,dst):
+    import shutil     
+    if os.path.exists(dst):
+        shutil.rmtree(dst, True)
+    shutil.copytree(src,dst)
+        
+def restoreDir(src,dst):
+    if os.path.exists(src):
+        backupDir(src,dst)

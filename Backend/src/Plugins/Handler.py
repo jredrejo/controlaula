@@ -13,7 +13,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# HMIServer is distributed in the hope that it will be useful,
+# ControlAula is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
@@ -21,7 +21,7 @@
 # along with ControlAula. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import logging
+import logging,os
 from Utils import Configs,MyUtils
 from Plugins import Actions
 
@@ -36,6 +36,7 @@ class Plugins(object):
                 'classroomConfig':self.classroomConfig,    
                 'deleteComputer':self.deleteComputer,
                 'bigbrother':self.bigBrother,
+                'disableBigbrother':self.disableBigBrother,
                 'enableProjector':self.enableProjector,
                 'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
@@ -76,8 +77,17 @@ class Plugins(object):
     def bigBrother(self):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(['bigBrother'])
-    
+                self.classroom.CommandStack[i.userkey].append(['bigbrother'])
+        MyUtils.backupDir (Configs.IMAGES_DIR,Configs.IMAGES_DIR + '_bb')               
+        self.classroom.myVNC.activeBB=True
+        
+    def disableBigBrother(self):
+        self.classroom.myVNC.activeBB=False
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets and i.login!='':
+                self.classroom.CommandStack[i.userkey].append(['disablebigbrother'])
+        MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
+                        
     def enableProjector(self):
         self.classroom.myVNC.startServer()
         for i in self.classroom.Desktops:
@@ -262,7 +272,7 @@ class Plugins(object):
             self.classroom.saveClassLayout()
             
     def fileBrowserVideo(self,node):
-        import os,mimetypes
+        import mimetypes
         path=node[0]
         result=[]
         if path=='home':
@@ -286,7 +296,6 @@ class Plugins(object):
         return result
        
     def fileBrowserAll(self,node):
-        import os
         path=node[0]
         result=[]
         if path=='home':

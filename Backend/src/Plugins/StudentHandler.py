@@ -13,7 +13,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# HMIServer is distributed in the hope that it will be useful,
+# ControlAula is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
@@ -39,6 +39,7 @@ class Plugins(object):
         self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,
+                'disablebigbrother':self.disableBigBrother,
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
@@ -61,6 +62,7 @@ class Plugins(object):
                 }  
         self.currentProcess=None
         self.filesQueue=DownloadFiles.DownloadQueue()
+        
     def existCommand(self,command):
         return self.handlers.has_key(command)
     
@@ -75,8 +77,13 @@ class Plugins(object):
     def bigBrother(self):
         self.myVNC.myteacher=self.myteacher
         self.myVNC.myIP=self.myIP
-        self.myVNC.startServer()        
+        self.myVNC.activeBB=True  
+        self.myVNC.startServer()    
         
+    def disableBigBrother(self):
+        self.myVNC.activeBB=False        
+        self.myVNC.stop() 
+                
     def projector(self):
         self.myVNC.startROViewer(self.teacherIP)
          
