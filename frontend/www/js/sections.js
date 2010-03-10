@@ -342,7 +342,8 @@
 		  width:105,
 		  iconAlign:'top',
         handler: function(){
-			sendMessageWindow();
+			//sendMessageWindow();
+            enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
         },
     });
 
