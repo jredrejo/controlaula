@@ -58,6 +58,7 @@ class Plugins(object):
                 'getVideoNodes':self.fileBrowserVideo,
                 'getAllNodes':self.fileBrowserAll
                 }  
+        
     def existCommand(self,command):
         return self.handlers.has_key(command)  
     
@@ -85,9 +86,11 @@ class Plugins(object):
                 if i.userkey!='':
                     #self.KeyboardMouse(i,'0','disableMouse')
                     pass
-
+        self.disableMouse()
+        
     def disableProjector(self):
-		pass
+        self.classroom.myVNC.stop()
+        self.enableMouse()
 
     def sendBB(self,desktop,value,command):
         self.classroom.CommandStack[desktop.userkey].append([command])
@@ -177,12 +180,23 @@ class Plugins(object):
             url=''
         if not isDVD:
             if not isfile(url):
-                return {'result':'Bad file'}
-        if not self.classroom.broadcast.transmit(url,isDVD):
-            return {'result':'Bad DVD or file'}
+                return {'result':'Bad file'}          
+
+        self.classroom.broadcast.add_callback('started',self.startbcast)
+        self.classroom.broadcast.add_callback('ended',self.stopbcast)
+        self.classroom.broadcast.transmit(url,isDVD)
+
+    def startbcast(self,url,isDVD):      
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.hostkey!='':
-                self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])  
+                self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])
+        self.disableMouse()
+
+    def stopbcast(self):
+        for i in self.classroom.Desktops:
+            if i.hostkey!='':
+                self.classroom.CommandStack[i.mainIP].append(['stopBroadcast'])        
+        self.enableMouse()    
                 
     def sendMessage(self, text):
         pass

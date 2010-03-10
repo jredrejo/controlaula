@@ -187,19 +187,27 @@ class Classroom():
         the (seconds) interval"""
 
         for i in self.LoggedUsers.keys():
-            if self._checkInterval(self.LoggedUsers[i],self.interval):
-                logging.getLogger().debug('The  user %s has disappeared' %   (i))
-                self.removeUser(i)
+            if self.broadcast.broadcasting:
+                self.updateUserTimeStamp(self.LoggedUsers[i].key)
+            else:            
+                if self._checkInterval(self.LoggedUsers[i],self.interval):
+                    logging.getLogger().debug('The  user %s has disappeared' %   (i))
+                    self.removeUser(i)
                 
         for i in self.Hosts.keys():
-            if self._checkInterval(self.Hosts[i],self.interval):
-                logging.getLogger().debug('The  host  %s has disappeared' %   (i))
-                self.removeHost(i)
+            if self.broadcast.broadcasting:
+                self.updateHostTimeStamp(self.Hosts[i].ip)
+            else:
+                if self._checkInterval(self.Hosts[i],self.interval):
+                    logging.getLogger().debug('The  host  %s has disappeared' %   (i))
+                    self.removeHost(i)
                 
         reactor.callLater(self.interval, self.UpdateLists)
 
                 
     def _checkInterval(self,data,interval):
+        if self.broadcast.broadcasting:
+            return False
         """check if current time has passed data timestamp + 1+ interval (in seconds)"""         
         return (datetime.datetime.now()>data.timestamp+ datetime.timedelta(seconds=(1+interval)))
 

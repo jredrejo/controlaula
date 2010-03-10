@@ -110,8 +110,8 @@ class VNC(object):
         command='xvncviewer -UseLocalCursor=0 -LowColourLevel=1 -ViewOnly -MenuKey Super_R  -Shared  -Fullscreen -passwd '
         command += passwd 
         command += ' ' + target +':' + self.clientport
-        self.procViewer=MyUtils.launchAsNobody(command)
-            
+        self.procViewer=MyUtils.launchAsNobody(command)      
+                  
     def stop(self):
 
         try:

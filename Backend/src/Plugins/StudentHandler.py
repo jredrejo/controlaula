@@ -39,6 +39,7 @@ class Plugins(object):
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'projector':self.projector,
+                'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
                 'enableMouse':self.enableMouse,
@@ -49,6 +50,7 @@ class Plugins(object):
                 'disableMessages':self.disableMessages,
                 'sleep':self.sleep,        
                 'broadcast':self.broadcast,
+                'stopBroadcast':self.stopBroadcast,
                 'sendmessage':self.sendMessage,
                 'sendfile':self.sendFile,
                 'startapplication':self.startApp,
@@ -75,6 +77,7 @@ class Plugins(object):
         
     def projector(self):
         self.myVNC.startROViewer(self.teacherIP)
+         
     def enableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','1')
     def disableInternet(self):
@@ -132,8 +135,12 @@ class Plugins(object):
     def broadcast(self, url='', isDVD=False):
         self.myBcast.receive()
         
+    def stopBroadcast(self):
+        self.myBcast.stop()      
+         
     def sendMessage(self, text):
         self.destroyProcess()
+        
     def sendFile(self,url):
         pass
     def startApp(self,command):

@@ -28,6 +28,7 @@ class User(object):
         self.login=login
         self.hostname=hostname
         self.ip=hostip
+        self.key=login+'@'+hostip
         self.ltsp=ltsp
         self.classname=classname
         self.username=username

@@ -112,6 +112,8 @@ if __name__ == '__main__':
         logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
         sys.exit()
     
+    #PENDING: SI NO EXISTE /nonexistent/.vlc/cache hay que crearlo
+    
     MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
     reactor.callWhenRunning(MyStudent.listen)
         

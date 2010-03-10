@@ -25,8 +25,9 @@
 
 import subprocess,os,logging
 from Utils import MyUtils
-from signal import  SIGTERM
-from os import kill
+from signal import  SIGKILL
+from twisted.internet import protocol
+from twisted.internet import reactor
 
 class Vlc(object):
     '''
@@ -47,43 +48,50 @@ class Vlc(object):
            
         self.procTx=None
         self.procRx=None
-
+        self.handler=None
+        self._callbacks = {'started':[],  'ended':[]}
+        self.url=''
+        self.dvd=False
+        self.broadcasting=False
+        
     def __del__(self):
         self.stop()
             
     def transmit(self,url,dvd=False):
-        from time import sleep
-        from tempfile import mkstemp
         self.stop()
-        
-        tmpfile=mkstemp()[1]
-        command='vlc --no-ipv6 --file-logging --logfile=' + tmpfile + ' '
+        self.url=url
+        self.dvd=dvd
+        command=["vlc","--no-ipv6"]      
         if dvd:
-            command += 'dvdsimple:///dev/dvd'   
+            command+=["dvdsimple:///dev/dvd"]
         else:
-            command +='\"' + url + '\"'
-        
-        #command +=" --sout-keep --sout '#standard{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}'"
-        #command +=" --ttl 5 --sout-all --audio-desync 1100 --volume 1024"
-        command +=" --sout '#transcode{vcodec=WMV2,vb=1024,scale=1,acodec=mpga,ab=32,channels=1}:"
-        command += "duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"
-        command +=" --ttl 5 --audio-desync 1100 --volume 1024"        
+            command+=[url]
+        command +=["--sout"]
+        command +=["#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}"]
+        command +=["--ttl","5","--audio-desync","1100","--volume", "1024" ]
 
         try:
-            self.procTx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
-            sleep(1.0)
-            vlcerrors = open(tmpfile, 'r').read()
-
-            if  vlcerrors.find('main: nothing to play')>-1 or vlcerrors.find('cannot open source:')>-1:
-                self.destroyProcess(self.procTx,True)
-                return False
+            self.procTx = MyPP(self.stop,self.started,self.ended)
+            reactor.spawnProcess(self.procTx , "vlc",command,env=os.environ)
             self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port])  
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
             
         return True
-                
+    
+    def started(self):
+        if not self.broadcasting:
+            self.broadcasting=True
+            for cb in self._callbacks['started']:            
+                cb(self.url,self.dvd)
+            
+    def ended(self):
+        self.stop()
+        for cb in self._callbacks['ended']:            
+            cb()     
+        self.broadcasting=False    
+            
     def receive(self):
         self.destroyProcess(self.procRx)                
         ltspaudio=' '
@@ -102,7 +110,8 @@ class Vlc(object):
     def stop(self):
         self.destroyProcess(self.procRx)
         self.destroyProcess(self.procTx,True)
-           
+        subprocess.Popen(['killall','vlc'])  
+                  
     def getData(self):
         return self.port
     
@@ -110,14 +119,39 @@ class Vlc(object):
         #pdb.set_trace()
         if proc != None:
             try:
-            #proc.terminate(): not available in python 2.5               
-                pid=proc.pid
-                kill(pid, SIGTERM)
+            #proc.terminate(): not available in python 2.5    
                 if shell:
-                    kill(pid+1, SIGTERM)
+                    pid=proc.transport.pid
+                else:           
+                    pid=proc.pid
+                
+                os.kill(pid, SIGKILL)
+
             except:
                 pass  
     
+    def add_callback(self, sig_name, callback):
+        self._callbacks[sig_name].append(callback)
+ 
     
-    
+class MyPP(protocol.ProcessProtocol):
+    def __init__(self,stop,start,end):
+        self.data = ""
+        self.stop=stop
+        self.start=start
+        self.end=end
         
+    def errReceived(self, data):
+        if  data.find('nothing to play')>-1 or data.find('cannot open source:')>-1:
+            self.stop()
+            return False        
+        else:
+            if data.find('VLC media player')>-1:
+                self.start()
+        
+    def processExited(self, reason):
+        self.end()
+        
+    def processEnded(self, reason):
+        self.end()
+    
