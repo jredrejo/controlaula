@@ -179,3 +179,18 @@ def parse(url):
         port = int(port)
     return host, port, url            
             
+def guessDesktop():
+    from os import environ
+    desktop='default'
+    
+    if environ.has_key('DESKTOP_SESSION'):
+        desktop=environ["DESKTOP_SESSION"]
+        
+    if desktop=='default':
+        if environ.has_key('KDE_FULL_SESSION'):
+            desktop='kde'
+        elif environ.has_key('GNOME_DESKTOP_SESSION_ID'):
+            desktop='gnome'
+      
+    return desktop
+                        

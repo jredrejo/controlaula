@@ -201,14 +201,30 @@ class Plugins(object):
    
     def sendFile(self,url):
         import os.path
-        from os import link
+        from os import symlink
         filename=os.path.basename(url)
         filepath=os.path.join(Configs.FILES_DIR,filename)
         if not os.path.exists(filepath):
-            link(url,filepath)   
+            symlink(url,filepath)   
+        if os.path.isdir(url):
+            command='receiveDir'
+            filelist=''
+            for f in os.listdir(url):
+                if f[:1]=='.':#skip hidden files and dirs
+                    continue
+                ff=os.path.join(filepath,f)
+                if os.path.isdir(ff):#skip inner dirs to avoid recursion
+                    continue
+                filelist+=f +'\n'
+            thelist = open(os.path.join(Configs.FILES_DIR,'_dirlist_' +filename), "w")
+            thelist.write(filelist)
+            thelist.close()           
+        else:
+            command='receiveFile'
+                
         for i in self.classroom.Desktops:
             if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(['receiveFile',filename])  
+                self.classroom.CommandStack[i.userkey].append([command,filename])  
                 
     def launchUrl(self,url):
         for i in self.classroom.Desktops:

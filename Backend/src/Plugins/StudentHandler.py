@@ -53,6 +53,7 @@ class Plugins(object):
                 'stopBroadcast':self.stopBroadcast,
                 'sendmessage':self.sendMessage,
                 'receiveFile':self.receiveFile,
+                'receiveDir':self.receiveDir,                
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
@@ -147,23 +148,49 @@ class Plugins(object):
         file=join(Configs.FILES_DIR,url)        
         url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + url
         self.filesQueue.addRequest( url, file,self.got_file)
-        
 
-    def got_file(self,dloader,file):
-        from os import environ
+    def receiveDir(self,url):
+        from os.path import join
+        file=join(Configs.FILES_DIR, '_dirlist_' + url)        
+        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/_dirlist_' + url
+        self.filesQueue.addRequest( url,file,self.got_list)
+
+    def got_list(self,dloader,file):  
+        import os
+        dirname=os.path.basename( file)[9:]
+        dirpath=os.path.join(Configs.FILES_DIR,dirname)
+        try:
+            os.mkdir(dirpath)
+        except:
+            pass
+        
+        filelist=open(file, "r").read().strip().split()
+        try:
+            os.remove(file)
+        except:
+            pass
+
+        for i in filelist:
+            url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + dirname + '/' + i
+            newfile=os.path.join(dirpath,i)
+            self.filesQueue.addRequest( url, newfile,lambda x:x)
+        
+        self.got_file(None,dirpath + os.sep)
+        
+    def got_file(self,dloader,file):        
         import os.path
-        session=environ["DESKTOP_SESSION"]
-        if session=='gnome':
-            command='nautilus'
-        elif session=='kde':
-            command='konqueror'
-        elif session=='default':
-            if os.path.exists("/usr/bin/nautilus"):
-                command='nautilus'
-        elif os.path.exists("/usr/bin/thunar"):
+        commands={'gnome':'nautilus','kde':'konqueror','xfce':'thunar','lxde':'pcmanfm'}
+
+        desktop=MyUtils.guessDesktop()            
+        if desktop in commands:
+            command=commands[desktop]
+        else:
             command='thunar'
-        if command !='':
+            
+        try:
             subprocess.Popen([command,os.path.dirname(file)])
+        except:
+            pass #not recognized file browser
         
     def startApp(self,command):
         pass
