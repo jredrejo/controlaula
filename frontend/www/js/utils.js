@@ -79,7 +79,7 @@ function pintarDataView(equipos){
 		if(alumnos.images[i].url!="images/pc_no_logueado.png" && alumnos.images[i].url!="images/pc_apagado.png" && alumnos.images[i].url!="images/pc_none.png"){
 			new Ext.ToolTip({
 				target: 'img-pos'+i,
-				title: 'Gran Hermano',
+				title: 'Gran Hermano - '+alumnos.images[i].pcname+' ('+alumnos.images[i].name+')',
 				width:500,
 				html: '<img src="'+alumnos.images[i].url+'" style="width:490px;">',
 				trackMouse:true
