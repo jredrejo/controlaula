@@ -16,6 +16,5 @@ Ext.onReady(function() {
             remove:true,
         });
     }
-
     hideMask.defer(250);
 });

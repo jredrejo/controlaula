@@ -22,7 +22,7 @@
 		    '<img src="{message}" style="padding-top:0px; width:20px; height:20px;">',
 		    '</div>',
 			 //'<div style="float:left; position:absolute;"><img src="images/icon_video.png" style="width:18px; height:18px;"></div>',
-			 '<img src="{url}" title="{name}"></div>',
+			 '<img src="{url}" title="{name}" id="img-{position}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
@@ -357,6 +357,22 @@
         },
     });
 
+    var bigBrotherON = new Ext.Action({
+        text: 'Habilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
+        },
+        iconCls: 'done'
+    });
+
+    var bigBrotherOFF = new Ext.Action({
+        text: 'Deshabilitar',
+        handler: function(){
+			enviarOrdenSeleccionados("disableBigbrother","","cambiaconfig");
+        },
+        iconCls: 'cancel'
+    });
+
 	var botonsDataview = {
 
         // columnWidth: 500,
@@ -420,7 +436,8 @@
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
 					,{ text: 'Proyector',iconAlign:'top', width:105, iconCls: 'projector', menu: [projectorON,projectorOFF]}
 					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}
-					,sendMessage
+//					,sendMessage
+					,{ text: 'Gran Hermano',iconAlign:'top', width:105, iconCls: 'eye', menu: [bigBrotherON,bigBrotherOFF]}
 					,sendFile]
 		     }]
 		}

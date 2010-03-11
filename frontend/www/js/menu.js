@@ -18,7 +18,7 @@ Ext.onReady(function() {
 	    		items: [{
     				mainItem: 0,
     				items: [optEncender,optConfigurar]
-            },{
+            	},{
 		         expanded: true,
 		         items: [{
 		         	title: 'Opciones',
@@ -33,24 +33,12 @@ Ext.onReady(function() {
 		            style: 'padding: 10px;',
 		            html: "Aquí pondremos las opciones de Gran Hermano"
 		            }, {
-		            title: 'Enviar Fichero',
-		            iconCls: 'x-icon-templates',
-		            tabTip: 'Enviar Fichero',
-		            style: 'padding: 10px;',
-		            html: "Aquí pondremos las opciones de Enviar Fichero"
-		            }, {
-		            title: 'Enviar Mensaje',
-		            iconCls: 'x-icon-templates',
-		            tabTip: 'Enviar Mensaje',
-		            style: 'padding: 10px;',
-		            html: "Aquí pondremos las opciones de Enviar Mensaje"
-		            }, {
 		         	title: 'Navegación Web',
 		            iconCls: 'x-icon-templates',
 		            tabTip: 'Navegación Web',
 		            style: 'padding: 10px;',
 		            html: "<div>http://<input type='text' id='url' size='55' value='www.educarex.es'><input type='button' value='Ir' onClick='document.getElementById(\"frameweb\").src=\"http://\"+document.getElementById(\"url\").value;'>&nbsp;&nbsp;<input type='button' value='Enviar a los Alumnos' onClick='enviarOrdenTodos(\"launchweb\",document.getElementById(\"url\").value,\"\");'></div><iframe id='frameweb' style='width:100%; height:100%' src='http://www.educarex.es'></iframe>"
-		        		}]
+		        }]
             }]
-			}]
+		}]
     });});

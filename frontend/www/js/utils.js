@@ -19,7 +19,7 @@ function pintarDataView(equipos){
 	if(clase.classroom.pclist.length==0)
 		return;
 
-	for(i=0;i<clase.classroom.pclist.length;i++){
+	for(var i=0;i<clase.classroom.pclist.length;i++){
 
 		var nombre = clase.classroom.pclist[i].loginname;
 		var foto = clase.classroom.pclist[i].photo;
@@ -74,6 +74,18 @@ function pintarDataView(equipos){
 	panel.setWidth(sizePanel);
 
 	dataviewON.select(seleccionados);
+
+	for(var i=0;i<clase.classroom.pclist.length;i++){
+		if(alumnos.images[i].url!="images/pc_no_logueado.png" && alumnos.images[i].url!="images/pc_apagado.png" && alumnos.images[i].url!="images/pc_none.png"){
+			new Ext.ToolTip({
+				target: 'img-pos'+i,
+				title: 'Gran Hermano',
+				width:500,
+				html: '<img src="'+alumnos.images[i].url+'" style="width:490px;">',
+				trackMouse:true
+			});
+		}
+	}
 }
 
 // pintar pantalla de configuracion
