@@ -57,7 +57,8 @@ class Plugins(object):
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound,
                 'getVideoNodes':self.fileBrowserVideo,
-                'getAllNodes':self.fileBrowserAll
+                'getAllNodes':self.fileBrowserAll,
+                'getCaptures':self.getCaptures,
                 }  
         
     def existCommand(self,command):
@@ -316,3 +317,5 @@ class Plugins(object):
         pass
     def startApp(self,command):
         pass 
+    def getCaptures(self,command):
+		return {"images":[{"pcname":"a25-o01","username":"aperez","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o02","username":"aperez2","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o03","username":"aperez3","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o04","username":"aperez4","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"},{"pcname":"a25-o05","username":"aperez5","lastmod":1265667056000,"url":"capturas\/Pantallazo-5.png"},{"pcname":"a25-o06","username":"aperez6","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o07","username":"aperez7","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o08","username":"aperez8","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o09","username":"aperez9","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o10","username":"aperez0","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"}]}
