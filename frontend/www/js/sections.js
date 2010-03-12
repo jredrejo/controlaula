@@ -98,6 +98,31 @@
 		});
    new Tree.TreeSorter(treeSendFile, {folderSort:true});
 
+
+
+    var chooser, btn;
+
+    function insertImage(data){
+		alert(data);
+    	Ext.DomHelper.append('images', {
+    		tag: 'img', src: data.url, style:'margin:10px;visibility:hidden;'
+    	}, true).show(true).frame();
+    	btn.focus();
+    };
+
+    function choose(){
+    	if(!chooser){
+    		chooser = new ImageChooser({
+    			url:'getCaptures',
+    			width:515,
+    			height:350
+    		});
+    	}
+    	chooser.show(document.getElementById("buttons"), insertImage);
+    };
+
+
+
    var maskWindow;
    var winSendVideo, winDVD, winSendFile;
 
@@ -360,7 +385,8 @@
     var bigBrotherON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
+			choose();
+//			enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
         },
         iconCls: 'done'
     });

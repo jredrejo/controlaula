@@ -38,6 +38,17 @@ function estadoEquipos(equipos){
 }
 
 // Enviar Orden a los equipos del aula
+function enviarOrdenPuesto(dir,puesto,action){
+
+	var classroom = {
+		"pclist" : [puesto]
+	}
+
+	dataStringCommand = Ext.util.JSON.encode(classroom);
+	conexion(dir,dataStringCommand,action);
+}
+
+// Enviar Orden a los equipos del aula
 function enviarOrdenSeleccionados(dir,argumentos,action){
 
 	if(dataviewON.getSelectedRecords().length=="0"){

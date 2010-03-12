@@ -81,8 +81,11 @@ function pintarDataView(equipos){
 				target: 'img-pos'+i,
 				title: 'Gran Hermano - '+alumnos.images[i].pcname+' ('+alumnos.images[i].name+')',
 				width:500,
-				html: '<img src="'+alumnos.images[i].url+'" style="width:490px;">',
-				trackMouse:true
+				html: '<div style="text-align:center;"><img src="'+alumnos.images[i].url+'" style="width:490px;"><br><br><input type="button" value="Visualizar puesto '+alumnos.images[i].pcname+'" onClick="javascript:enviarOrdenPuesto(\'openVNC\',\''+alumnos.images[i].pcname+'\',\'\')"></div>',
+				trackMouse:true,
+		        autoHide: false,
+		        closable: true,
+				dismissDelay: 5000
 			});
 		}
 	}

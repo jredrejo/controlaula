@@ -31,7 +31,7 @@ Ext.onReady(function() {
 		            iconCls: 'x-icon-templates',
 		            tabTip: 'Gran Hermano',
 		            style: 'padding: 10px;',
-		            html: "Aquí pondremos las opciones de Gran Hermano"
+		            html: "<div></div>"
 		            }, {
 		         	title: 'Navegación Web',
 		            iconCls: 'x-icon-templates',
