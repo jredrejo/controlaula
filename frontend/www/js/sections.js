@@ -100,10 +100,9 @@
 
 
 
-    var chooser, btn;
+    var chooser, btn, varInterval;
 
     function insertImage(data){
-		alert(data);
     	Ext.DomHelper.append('images', {
     		tag: 'img', src: data.url, style:'margin:10px;visibility:hidden;'
     	}, true).show(true).frame();
@@ -114,14 +113,13 @@
     	if(!chooser){
     		chooser = new ImageChooser({
     			url:'getCaptures',
-    			width:515,
-    			height:350
+    			width:700,
+    			height:500
     		});
     	}
     	chooser.show(document.getElementById("buttons"), insertImage);
+		varInterval = setInterval("chooser.store.load()","5000");
     };
-
-
 
    var maskWindow;
    var winSendVideo, winDVD, winSendFile;

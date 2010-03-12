@@ -13,7 +13,7 @@ ImageChooser.prototype = {
     lookup : {},
 
 	show : function(el, callback){
-		if(!this.win){
+//		if(!this.win){
 			this.initTemplates();
 
 			this.store = new Ext.data.JsonStore({
@@ -23,14 +23,14 @@ ImageChooser.prototype = {
 				}),
 			    root: 'images',
 			    fields: [
-			        'name', 'url',
-			        {name:'size', type: 'float'},
+			        'pcname', 'username', 'url',
 			        {name:'lastmod', type:'date', dateFormat:'timestamp'}
 			    ],
 			    listeners: {
 			    	'load': {fn:function(){ this.view.select(0); }, scope:this, single:true}
 			    }
 			});
+
 			this.store.load();
 
 			var formatSize = function(data){
@@ -42,10 +42,10 @@ ImageChooser.prototype = {
 		    };
 
 			var formatData = function(data){
-		    	data.shortName = data.name.ellipse(15);
+		    	data.shortName = data.username.ellipse(15);
 		    	data.sizeString = formatSize(data);
 		    	data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
-		    	this.lookup[data.name] = data;
+		    	this.lookup[data.username] = data;
 		    	return data;
 		    };
 
@@ -126,24 +126,19 @@ ImageChooser.prototype = {
 					maxWidth: 250
 				}],
 				buttons: [{
-					id: 'ok-btn',
-					text: 'OK',
-					handler: this.doCallback,
-					scope: this
-				},{
-					text: 'Cancel',
-					handler: function(){ this.win.hide(); },
+					text: 'Cerrar',
+					handler: function(){ clearInterval(varInterval); this.win.hide(); },
 					scope: this
 				}],
 				keys: {
 					key: 27, // Esc key
-					handler: function(){ this.win.hide(); },
+					handler: function(){ clearInterval(varInterval); this.win.hide(); },
 					scope: this
 				}
 			};
 			Ext.apply(cfg, this.config);
 		    this.win = new Ext.Window(cfg);
-		}
+//		}
 
 	//	this.reset();
 	    this.win.show(el);
@@ -154,8 +149,8 @@ ImageChooser.prototype = {
 	initTemplates : function(){
 		this.thumbTemplate = new Ext.XTemplate(
 			'<tpl for=".">',
-				'<div class="thumb-wrap" id="{name}">',
-				'<div class="thumb"><img src="{url}" title="{name}"></div>',
+				'<div class="thumb-wrap" id="{pcname}">',
+				'<div class="thumb"><img src="{url}" title="{pcname}"></div>',
 				'<span>{shortName}</span></div>',
 			'</tpl>'
 		);
@@ -165,12 +160,13 @@ ImageChooser.prototype = {
 			'<div class="details">',
 				'<tpl for=".">',
 					'<img src="{url}"><div class="details-info">',
-					'<b>Image Name:</b>',
-					'<span>{name}</span>',
-					'<b>Size:</b>',
-					'<span>{sizeString}</span>',
-					'<b>Last Modified:</b>',
+					'<b>Equipo:</b>',
+					'<span>{pcname}</span>',
+					'<b>Usuario:</b>',
+					'<span>{username}</span>',
+					'<b>Último refresco:</b>',
 					'<span>{dateString}</span></div>',
+					'<div style="text-align:center;"><input type="button" onClick="conexion(\"openVNC\",\"{\'args\':{pcname}}\",\"\")" value="Abrir puesto {pcname}"></div>',
 				'</tpl>',
 			'</div>'
 		);
