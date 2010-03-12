@@ -4,6 +4,11 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+/*
+* Modified by Manu Mora Gordillo <manuito @nospam@ gmail.com>
+*/
+
 var ImageChooser = function(config){
 	this.config = config;
 }
@@ -74,8 +79,12 @@ ImageChooser.prototype = {
 				minWidth: 500,
 				minHeight: 300,
 				modal: true,
-				closeAction: 'hide',
+//				closeAction: 'hide',
+				closable : false,
 				border: false,
+				listeners:{
+					beforehide:function(){ clearInterval(varInterval); }
+				},
 				items:[{
 					id: 'img-chooser-view',
 					region: 'center',
@@ -127,12 +136,12 @@ ImageChooser.prototype = {
 				}],
 				buttons: [{
 					text: 'Cerrar',
-					handler: function(){ clearInterval(varInterval); this.win.hide(); },
+					handler: function(){ this.win.hide(); },
 					scope: this
 				}],
 				keys: {
 					key: 27, // Esc key
-					handler: function(){ clearInterval(varInterval); this.win.hide(); },
+					handler: function(){ this.win.hide(); },
 					scope: this
 				}
 			};
@@ -178,13 +187,11 @@ ImageChooser.prototype = {
 	    var detailEl = Ext.getCmp('img-detail-panel').body;
 		if(selNode && selNode.length > 0){
 			selNode = selNode[0];
-			Ext.getCmp('ok-btn').enable();
 		    var data = this.lookup[selNode.id];
             detailEl.hide();
             this.detailsTemplate.overwrite(detailEl, data);
             detailEl.slideIn('l', {stopFx:true,duration:.2});
 		}else{
-		    Ext.getCmp('ok-btn').disable();
 		    detailEl.update('');
 		}
 	},
