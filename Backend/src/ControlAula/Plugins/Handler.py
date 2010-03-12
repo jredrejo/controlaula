@@ -22,8 +22,9 @@
 #
 ##############################################################################
 import logging,os
-from Utils import Configs,MyUtils
-from Plugins import Actions
+from ControlAula.Utils import Configs,MyUtils
+from ControlAula.Plugins import Actions
+from ControlAula.Desktop import Desktop
 
 class Plugins(object):
     
@@ -58,7 +59,7 @@ class Plugins(object):
                 'enableSound':self.enableSound,
                 'getVideoNodes':self.fileBrowserVideo,
                 'getAllNodes':self.fileBrowserAll,
-                'getCaptures':self.getCaptures,
+                'getCaptures':self.getCaptures
                 }  
         
     def existCommand(self,command):
@@ -73,91 +74,57 @@ class Plugins(object):
                 s={'result':'ack'}
             return s
             
+    def usersCommand(self,func,args=[]):
+        for i in self.classroom.Desktops:
+            if i.hostname in self.targets:
+                func(i,*args)
+                        
+    def enableInternet(self):
+        self.usersCommand(Desktop.enableInternet)
+                
+    def disableInternet(self):
+        self.usersCommand(Desktop.disableInternet)
+                
+                
+    def enableMouse(self):
+        self.usersCommand(Desktop.enableKeyboardMouse)
+              
+    def disableMouse(self):
+        self.usersCommand(Desktop.disableKeyboardMouse)      
 
+                                    
+    def enableMessages(self):
+        self.usersCommand(Desktop.enableMessages)
+                
+    def disableMessages(self):
+        self.usersCommand(Desktop.disableMessages)
+   
 
     def bigBrother(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(['bigbrother'])
+        self.usersCommand(Desktop.setBigBrother)
         MyUtils.backupDir (Configs.IMAGES_DIR,Configs.IMAGES_DIR + '_bb')               
         self.classroom.myVNC.activeBB=True
         
     def disableBigBrother(self):
         self.classroom.myVNC.activeBB=False
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(['disablebigbrother'])
+        self.usersCommand(Desktop.resetBigBrother)        
         MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
+        
                         
     def enableProjector(self):
         self.classroom.myVNC.startServer()
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.hostkey!='':
-                self.classroom.CommandStack[i.mainIP].append(['projector'])
-                if i.userkey!='':
-                    #self.KeyboardMouse(i,'0','disableMouse')
-                    pass
-        self.disableMouse()
+        self.usersCommand(Desktop.setProjector)            
         
     def disableProjector(self):
         self.classroom.myVNC.stop()
-        self.enableMouse()
+        self.usersCommand(Desktop.resetProjector)  
 
-    def sendBB(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append([command])
-                    
-    def usersCommand(self,func,value,command):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                func(i,value,command)
-                        
-    def enableInternet(self):
-        self.usersCommand(self.Internet,'1','enableInternet')
-                
-    def disableInternet(self):
-        self.usersCommand(self.Internet,'0','disableInternet')
-                
-    def Internet(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append([command])
-        #the host must disable internet to this user:
-        self.classroom.CommandStack[desktop.mainIP].append([command,desktop.login])
-        desktop.internet=value
-        self.classroom.Hosts[desktop.mainIP].internetEnabled=value
-        self.classroom.LoggedUsers[desktop.userkey].internet=value
-                
-    def enableMouse(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets:
-                self.KeyboardMouse(i,'1','enableMouse')
-               
-    def disableMouse(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.hostkey!='':
-                self.KeyboardMouse(i,'0','disableMouse')        
 
-    def KeyboardMouse(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.mainIP].append([command])       
-        desktop.mouse=value
-        if desktop.userkey!='':
-            self.classroom.CommandStack[desktop.userkey].append([command])
-            self.classroom.LoggedUsers[desktop.userkey].mouse=value
-            
-                        
-    def enableMessages(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.Messages(i, '0', 'enableMessages')
+    def disableSound(self):
+        self.usersCommand(Desktop.disableSound)
                 
-    def disableMessages(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.Messages(i, '0', 'disableMessages')
-
-                
-    def Messages(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append([command])
-        desktop.messages=value
-        self.classroom.LoggedUsers[desktop.userkey].messages=value       
+    def enableSound(self):
+        self.usersCommand(Desktop.enableSound)                   
         
         
     def wakeup(self):
@@ -169,20 +136,8 @@ class Plugins(object):
         Actions.sendWOLBurst(macs, 2)                         
                 
     def sleep(self):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.hostkey!='':
-                self.classroom.CommandStack[i.mainIP].append(['sleep'])  
-                      
-    def disableSound(self):
-        self.usersCommand(self.Sound,'0','disableSound')
-                
-    def enableSound(self):
-        self.usersCommand(self.Sound,'1','enableSound')
-                     
-    def Sound(self,desktop,value,command):
-        self.classroom.CommandStack[desktop.userkey].append([command])
-        desktop.sound=value
-        self.classroom.LoggedUsers[desktop.userkey].sound=value
+        self.usersCommand(Desktop.sleep)
+                                  
                         
     def broadcast(self, url='', isDVD=False):
         from os.path import isfile
@@ -198,16 +153,11 @@ class Plugins(object):
         self.classroom.broadcast.transmit(url,isDVD)
 
     def startbcast(self,url,isDVD):      
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.hostkey!='':
-                self.classroom.CommandStack[i.mainIP].append(['broadcast',url,isDVD])
-        self.disableMouse()
+        self.usersCommand(Desktop.sendBroadcast,[url,isDVD])
 
     def stopbcast(self):
         for i in self.classroom.Desktops:
-            if i.hostkey!='':
-                self.classroom.CommandStack[i.mainIP].append(['stopBroadcast'])        
-        self.enableMouse()    
+            i.stopBroadcast()
                 
    
     def sendFile(self,url):
@@ -232,15 +182,13 @@ class Plugins(object):
             thelist.close()           
         else:
             command='receiveFile'
-                
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append([command,filename])  
+        
+        self.usersCommand(Desktop.sendFile,[command,filename])        
+
                 
     def launchUrl(self,url):
-        for i in self.classroom.Desktops:
-            if i.hostname in self.targets and i.login!='':
-                self.classroom.CommandStack[i.userkey].append(['launchweb',url])      
+        self.usersCommand(Desktop.launchWeb,[url])
+         
           
     def classroomConfig(self,rows=0,cols=0):
         for i in range(0, len(self.targets)-1):
@@ -317,5 +265,6 @@ class Plugins(object):
         pass
     def startApp(self,command):
         pass 
+
     def getCaptures(self,command):
-		return {"images":[{"pcname":"a25-o01","username":"aperez","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o02","username":"aperez2","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o03","username":"aperez3","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o04","username":"aperez4","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"},{"pcname":"a25-o05","username":"aperez5","lastmod":1265667056000,"url":"capturas\/Pantallazo-5.png"},{"pcname":"a25-o06","username":"aperez6","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o07","username":"aperez7","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o08","username":"aperez8","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o09","username":"aperez9","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o10","username":"aperez0","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"}]}
+        return {"images":[{"pcname":"a25-o01","username":"aperez","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o02","username":"aperez2","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o03","username":"aperez3","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o04","username":"aperez4","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"},{"pcname":"a25-o05","username":"aperez5","lastmod":1265667056000,"url":"capturas\/Pantallazo-5.png"},{"pcname":"a25-o06","username":"aperez6","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o07","username":"aperez7","lastmod":1265667056000,"url":"capturas\/Pantallazo-1.png"},{"pcname":"a25-o08","username":"aperez8","lastmod":1265667056000,"url":"capturas\/Pantallazo-2.png"},{"pcname":"a25-o09","username":"aperez9","lastmod":1265667056000,"url":"capturas\/Pantallazo-3.png"},{"pcname":"a25-o10","username":"aperez0","lastmod":1265667056000,"url":"capturas\/Pantallazo-4.png"}]}

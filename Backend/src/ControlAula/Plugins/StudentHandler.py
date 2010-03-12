@@ -22,8 +22,8 @@
 #
 ##############################################################################
 import logging,subprocess
-from Utils import Configs,MyUtils
-from Plugins import DownloadFiles
+from ControlAula.Utils import Configs,MyUtils
+from ControlAula.Plugins import DownloadFiles
 import Actions
 
 class Plugins(object):

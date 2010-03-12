@@ -23,8 +23,8 @@
 ##############################################################################
 
 import xmlrpclib
-from Utils import NetworkUtils, MyUtils,Configs
-from Plugins  import StudentHandler,Actions,VNC, Broadcast
+from ControlAula.Utils import NetworkUtils, MyUtils,Configs
+from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 import logging
 from Xlib.display import Display
 

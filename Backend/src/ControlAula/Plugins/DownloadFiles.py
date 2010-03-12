@@ -25,7 +25,7 @@
 from twisted.web import client
 from twisted.internet.defer import Deferred,DeferredList
 from twisted.internet import reactor
-from Utils import MyUtils  
+from ControlAula.Utils import MyUtils  
     
 class DownloadQueue(object):
     #maximum simultaneous downloads:

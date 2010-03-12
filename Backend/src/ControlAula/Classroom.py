@@ -23,8 +23,8 @@
 ##############################################################################
 import datetime,logging
 import Desktop
-from Utils import  Configs, MyUtils
-from Plugins import VNC,Broadcast
+from ControlAula.Utils import  Configs, MyUtils
+from ControlAula.Plugins import VNC,Broadcast
 
 class Classroom():
     """Classroom data management
@@ -61,7 +61,7 @@ class Classroom():
         self.Desktops=[]
         #creates the aula
         for i in range (0,self.cols*self.rows):
-            self.Desktops.append(Desktop.Desktop())
+            self.Desktops.append(Desktop.Desktop(self))
         #if there is a saved structure, it recovers it:        
         if self.classsetup['structure']!='':
                 targets=self.classsetup['structure'].split(',')
@@ -225,7 +225,7 @@ class Classroom():
             newPosition= self.placeHostFreely()
 
         self.Desktops[newPosition]=self.Desktops[index]            
-        self.Desktops[index]=Desktop.Desktop()
+        self.Desktops[index]=Desktop.Desktop(self)
                 
     
     def placeHostFreely(self):
@@ -245,7 +245,7 @@ class Classroom():
         newPosition=self.cols*self.rows
         self.rows+=1
         for i in range(0,self.cols):
-            self.Desktops.append(Desktop.Desktop())     
+            self.Desktops.append(Desktop.Desktop(self))     
         return newPosition
         
     def removeDesktopsRow(self):
@@ -258,7 +258,7 @@ class Classroom():
         cols=self.cols
         self.cols +=1
         for i in range (0,self.rows):
-            self.Desktops.insert(i*self.cols +cols, Desktop.Desktop())
+            self.Desktops.insert(i*self.cols +cols, Desktop.Desktop(self))
         
     def removeDesktopsCol(self):
         cols=self.cols

@@ -31,7 +31,7 @@ import sys
 import logging
 import subprocess
 import os
-from Utils import NetworkUtils
+from ControlAula.Utils import NetworkUtils
 
 
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         subprocess.call(['ethtool','-s','eth0','wol','g'])
     ######### Begin the application loop #######
 
-    from Monitor import ScanTeachers, StudentLoop
+    from ControlAula import ScanTeachers, StudentLoop
     
     try:
         monitor = ScanTeachers.AvahiMonitor()    

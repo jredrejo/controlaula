@@ -24,7 +24,7 @@
 ##############################################################################
 
 import subprocess,os,logging
-from Utils import MyUtils
+from ControlAula.Utils import MyUtils
 from signal import  SIGKILL
 from twisted.internet import protocol
 from twisted.internet import reactor

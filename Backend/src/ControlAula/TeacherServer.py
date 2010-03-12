@@ -24,7 +24,7 @@
 from twisted.web import xmlrpc
 from twisted.internet import defer
 import User,Host
-from Utils import NetworkUtils,Configs
+from ControlAula.Utils import NetworkUtils,Configs
 import os
 class RPCServer(xmlrpc.XMLRPC):
     """Object used to communicate students pcs with teacher pc

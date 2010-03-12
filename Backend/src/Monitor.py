@@ -29,7 +29,7 @@
 import signal
 import sys
 import logging
-from Utils import NetworkUtils, MyUtils, Configs
+from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 
 
@@ -106,8 +106,8 @@ if __name__ == '__main__':
     
     if  isTeacher:        
         logging.getLogger().debug("The user is a teacher")
-        from Monitor import TeacherMainLoop, Classroom
-        from Utils  import Publications
+        from ControlAula import TeacherMainLoop, Classroom
+        from ControlAula.Utils  import Publications
         from twisted.web import server
         
         service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + NetworkUtils.get_ip_inet_address(),"web=" + str( WEBPORT) ])
@@ -136,7 +136,7 @@ if __name__ == '__main__':
 
     else:         
         logging.getLogger().debug("The user is NOT a teacher")
-        from Monitor import ScanTeachers, StudentLoop
+        from ControlAula import ScanTeachers, StudentLoop
         
         try:
             monitor = ScanTeachers.AvahiMonitor()    

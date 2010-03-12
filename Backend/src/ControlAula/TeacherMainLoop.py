@@ -25,8 +25,8 @@
 
 
 from twisted.web import server,resource,  static
-from Plugins  import Handler
-from Utils import Configs
+from ControlAula.Plugins  import Handler
+from ControlAula.Utils import Configs
 
 import simplejson as json
 import os

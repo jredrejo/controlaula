@@ -25,7 +25,7 @@
 ##############################################################################
 
 import subprocess,os,logging,tempfile
-from Utils import MyUtils,NetworkUtils,crippled_des
+from ControlAula.Utils import MyUtils,NetworkUtils,crippled_des
 from signal import  SIGTERM
 
 class VNC(object):
