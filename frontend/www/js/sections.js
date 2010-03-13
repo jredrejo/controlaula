@@ -113,7 +113,7 @@
     	if(!chooser){
     		chooser = new ImageChooser({
     			url:'getCaptures',
-    			width:700,
+    			width:900,
     			height:500
     		});
     	}
@@ -380,6 +380,16 @@
         },
     });
 
+    var bigBrother = new Ext.Action({
+        text: 'Gran Hermano',
+        iconCls: 'eye',
+		  width:105,
+		  iconAlign:'top',
+        handler: function(){
+			choose();
+        },
+    });
+
     var bigBrotherON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
@@ -461,7 +471,8 @@
 					,{ text: 'Proyector',iconAlign:'top', width:105, iconCls: 'projector', menu: [projectorON,projectorOFF]}
 					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}
 //					,sendMessage
-					,{ text: 'Gran Hermano',iconAlign:'top', width:105, iconCls: 'eye', menu: [bigBrotherON,bigBrotherOFF]}
+					,bigBrother
+					//,{ text: 'Gran Hermano',iconAlign:'top', width:105, iconCls: 'eye', menu: [bigBrotherON,bigBrotherOFF]}
 					,sendFile]
 		     }]
 		}

@@ -1,14 +1,9 @@
 /*!
- * Ext JS Library 3.1.0
- * Copyright(c) 2006-2009 Ext JS, LLC
+ * Ext JS Library 3.1.1
+ * Copyright(c) 2006-2010 Ext JS, LLC
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-
-/*
-* Modified by Manu Mora Gordillo <manuito @nospam@ gmail.com>
-*/
-
 var ImageChooser = function(config){
 	this.config = config;
 }
@@ -18,39 +13,26 @@ ImageChooser.prototype = {
     lookup : {},
 
 	show : function(el, callback){
-//		if(!this.win){
+		if(!this.win){
 			this.initTemplates();
 
 			this.store = new Ext.data.JsonStore({
+			   // url: this.config.url,
 				proxy: new Ext.data.HttpProxy({
 					url: this.config.url,
 					method: 'POST'
 				}),
 			    root: 'images',
-			    fields: [
-			        'pcname', 'username', 'url',
-			        {name:'lastmod', type:'date', dateFormat:'timestamp'}
-			    ],
+			    fields: ['pcname','name', 'url'],
 			    listeners: {
 			    	'load': {fn:function(){ this.view.select(0); }, scope:this, single:true}
 			    }
 			});
-
 			this.store.load();
 
-			var formatSize = function(data){
-		        if(data.size < 1024) {
-		            return data.size + " bytes";
-		        } else {
-		            return (Math.round(((data.size*10) / 1024))/10) + " KB";
-		        }
-		    };
-
 			var formatData = function(data){
-		    	data.shortName = data.username.ellipse(15);
-		    	data.sizeString = formatSize(data);
-		    	data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
-		    	this.lookup[data.username] = data;
+		    	data.shortName = data.name.ellipse(15);
+		    	this.lookup[data.name] = data;
 		    	return data;
 		    };
 
@@ -76,66 +58,27 @@ ImageChooser.prototype = {
 		    	title: 'Gran Hermano',
 		    	id: 'img-chooser-dlg',
 		    	layout: 'border',
-				minWidth: 500,
+				minWidth: 700,
 				minHeight: 300,
+				width:700,
 				modal: true,
-//				closeAction: 'hide',
-				closable : false,
+				closeAction: 'hide',
 				border: false,
-				listeners:{
-					beforehide:function(){ clearInterval(varInterval); }
-				},
 				items:[{
 					id: 'img-chooser-view',
 					region: 'center',
 					autoScroll: true,
 					items: this.view,
-/*                    tbar:[{
-                    	text: 'Filter:'
-                    },{
-                    	xtype: 'textfield',
-                    	id: 'filter',
-                    	selectOnFocus: true,
-                    	width: 100,
-                    	listeners: {
-                    		'render': {fn:function(){
-						    	Ext.getCmp('filter').getEl().on('keyup', function(){
-						    		this.filter();
-						    	}, this, {buffer:500});
-                    		}, scope:this}
-                    	}
-                    }, ' ', '-', {
-                    	text: 'Sort By:'
-                    }, {
-                    	id: 'sortSelect',
-                    	xtype: 'combo',
-				        typeAhead: true,
-				        triggerAction: 'all',
-				        width: 100,
-				        editable: false,
-				        mode: 'local',
-				        displayField: 'desc',
-				        valueField: 'name',
-				        lazyInit: false,
-				        value: 'name',
-				        store: new Ext.data.ArrayStore({
-					        fields: ['name', 'desc'],
-					        data : [['name', 'Name'],['size', 'File Size'],['lastmod', 'Last Modified']]
-					    }),
-					    listeners: {
-							'select': {fn:this.sortImages, scope:this}
-					    }
-				    }]*/
 				},{
 					id: 'img-detail-panel',
 					region: 'east',
 					split: true,
-					width: 150,
-					minWidth: 150,
-					maxWidth: 250
+					width: 300,
+					minWidth: 300,
+					maxWidth: 300
 				}],
 				buttons: [{
-					text: 'Cerrar',
+					text: 'Cancel',
 					handler: function(){ this.win.hide(); },
 					scope: this
 				}],
@@ -147,9 +90,8 @@ ImageChooser.prototype = {
 			};
 			Ext.apply(cfg, this.config);
 		    this.win = new Ext.Window(cfg);
-//		}
+		}
 
-	//	this.reset();
 	    this.win.show(el);
 		this.callback = callback;
 		this.animateTarget = el;
@@ -158,8 +100,8 @@ ImageChooser.prototype = {
 	initTemplates : function(){
 		this.thumbTemplate = new Ext.XTemplate(
 			'<tpl for=".">',
-				'<div class="thumb-wrap" id="{pcname}">',
-				'<div class="thumb"><img src="{url}" title="{pcname}"></div>',
+				'<div class="thumb-wrap" id="{name}">',
+				'<div class="thumb"><img src="{url}" title="{name}"></div>',
 				'<span>{shortName}</span></div>',
 			'</tpl>'
 		);
@@ -168,14 +110,12 @@ ImageChooser.prototype = {
 		this.detailsTemplate = new Ext.XTemplate(
 			'<div class="details">',
 				'<tpl for=".">',
-					'<img src="{url}"><div class="details-info">',
+					'<img src="{url}" style="width:280px;"><div class="details-info">',
 					'<b>Equipo:</b>',
 					'<span>{pcname}</span>',
 					'<b>Usuario:</b>',
-					'<span>{username}</span>',
-					'<b>Último refresco:</b>',
-					'<span>{dateString}</span></div>',
-					'<div style="text-align:center;"><input type="button" onClick="conexion(\"openVNC\",\"{\'args\':{pcname}}\",\"\")" value="Abrir puesto {pcname}"></div>',
+					'<span>{name}</span></div>',
+					'<div style="text-align:center;"><input type="button" onClick="conexion(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',
 				'</tpl>',
 			'</div>'
 		);
@@ -195,27 +135,6 @@ ImageChooser.prototype = {
 		    detailEl.update('');
 		}
 	},
-
-/*	filter : function(){
-		var filter = Ext.getCmp('filter');
-		this.view.store.filter('name', filter.getValue());
-		this.view.select(0);
-	},
-
-	sortImages : function(){
-		var v = Ext.getCmp('sortSelect').getValue();
-    	this.view.store.sort(v, v == 'name' ? 'asc' : 'desc');
-    	this.view.select(0);
-    },
-
-	reset : function(){
-		if(this.win.rendered){
-			Ext.getCmp('filter').reset();
-			this.view.getEl().dom.scrollTop = 0;
-		}
-	    this.view.store.clearFilter();
-		this.view.select(0);
-	},*/
 
 	doCallback : function(){
         var selNode = this.view.getSelectedNodes()[0];
