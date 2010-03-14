@@ -63,7 +63,11 @@ ImageChooser.prototype = {
 				width:700,
 				modal: true,
 				closeAction: 'hide',
+				closable: false,
 				border: false,
+				listeners:{
+					beforehide:function(){ clearInterval(varInterval); }
+				},
 				items:[{
 					id: 'img-chooser-view',
 					region: 'center',
@@ -78,7 +82,7 @@ ImageChooser.prototype = {
 					maxWidth: 300
 				}],
 				buttons: [{
-					text: 'Cancel',
+					text: 'Cerrar',
 					handler: function(){ this.win.hide(); },
 					scope: this
 				}],
@@ -92,7 +96,7 @@ ImageChooser.prototype = {
 		    this.win = new Ext.Window(cfg);
 		}
 
-	    this.win.show(el);
+	   this.win.show(el);
 		this.callback = callback;
 		this.animateTarget = el;
 	},
@@ -101,6 +105,7 @@ ImageChooser.prototype = {
 		this.thumbTemplate = new Ext.XTemplate(
 			'<tpl for=".">',
 				'<div class="thumb-wrap" id="{name}">',
+            '<span style="background-color:#4e78b1; color:#dfe8f0; height:13px; padding-top:2px; margin-bottom:2px;">{pcname}</span>',
 				'<div class="thumb"><img src="{url}" title="{name}"></div>',
 				'<span>{shortName}</span></div>',
 			'</tpl>'
@@ -111,11 +116,9 @@ ImageChooser.prototype = {
 			'<div class="details">',
 				'<tpl for=".">',
 					'<img src="{url}" style="width:280px;"><div class="details-info">',
-					'<b>Equipo:</b>',
-					'<span>{pcname}</span>',
-					'<b>Usuario:</b>',
-					'<span>{name}</span></div>',
-					'<div style="text-align:center;"><input type="button" onClick="conexion(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',
+					'<span><b>Equipo:&nbsp;{pcname}</b></span>',
+					'<span><b>Usuario:&nbsp;{name}</b></span></div>',
+					'<div style="text-align:center;"><input type="button" onClick="enviarOrdenPuesto(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',
 				'</tpl>',
 			'</div>'
 		);
@@ -132,7 +135,7 @@ ImageChooser.prototype = {
             this.detailsTemplate.overwrite(detailEl, data);
             detailEl.slideIn('l', {stopFx:true,duration:.2});
 		}else{
-		    detailEl.update('');
+		    //detailEl.update('');
 		}
 	},
 
