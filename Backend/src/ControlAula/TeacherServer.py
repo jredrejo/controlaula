@@ -25,7 +25,7 @@ from twisted.web import xmlrpc
 from twisted.internet import defer
 import User,Host
 from ControlAula.Utils import NetworkUtils,Configs
-import os
+import os,time
 class RPCServer(xmlrpc.XMLRPC):
     """Object used to communicate students pcs with teacher pc
     """
@@ -96,6 +96,25 @@ class RPCServer(xmlrpc.XMLRPC):
         commands=self.classroom.getCommands(key)    
         return commands
     
+    def xmlrpc_screenshot(self,login,hostip, file):
+        key =login+'@'+hostip
+        if  not self.classroom.LoggedUsers.has_key(key):
+            return   "ok"
+        datum = file.data
+        shotname=login + time.strftime('%Y%m%d%H%M%S',time.localtime()) + '.png'
+        self.classroom.LoggedUsers[key].shotname=shotname
+        thefacename=os.path.join(Configs.IMAGES_DIR + '/screenshots',shotname)
+        
+        try:
+            theface = open(thefacename, "wb")
+            theface.write(datum)
+            theface.close()
+            self.classroom.addPhoto('/loginimages/screenshots/' + login + '.png',key)
+        except:
+            pass
+        #os.spawnl(os.P_NOWAIT, '/usr/bin/display', '/tmp/gnu.jpg')   
+        return "ok"
+    
     def xmlrpc_facepng(self,login,hostip, file):
         key =login+'@'+hostip
         datum = file.data
@@ -108,7 +127,7 @@ class RPCServer(xmlrpc.XMLRPC):
         except:
             pass
         #os.spawnl(os.P_NOWAIT, '/usr/bin/display', '/tmp/gnu.jpg')   
-        return "ok"
+        return "ok"    
     
     ###########################
     # XML-RPC functions to be used while developping or testing

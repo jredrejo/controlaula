@@ -99,11 +99,11 @@ class VNC(object):
         subprocess.Popen(['scrot','-t','15',screenshot])
         try:
             f = xmlrpclib.Binary(open(screenshot, 'rb').read())
-            self.myteacher.facepng(self.mylogin,self.myIP,f)         
+            self.myteacher.screenshot(self.mylogin,self.myIP,f)         
         except:
             logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
         if self.activeBB:     
-            reactor.callLater(5, self.screenshot)
+            reactor.callLater(10, self.screenshot)
                 
     def startROViewer(self,target):
 

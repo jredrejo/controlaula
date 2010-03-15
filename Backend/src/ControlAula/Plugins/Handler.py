@@ -101,14 +101,16 @@ class Plugins(object):
    
 
     def bigBrother(self):
-        self.usersCommand(Desktop.setBigBrother)
-        MyUtils.backupDir (Configs.IMAGES_DIR,Configs.IMAGES_DIR + '_bb')               
+        #self.usersCommand(Desktop.setBigBrother)
+        for i in self.classroom.Desktops:            
+                i.setBigBrother()     
+        #MyUtils.backupDir (Configs.IMAGES_DIR,Configs.IMAGES_DIR + '_bb')               
         self.classroom.myVNC.activeBB=True
         
     def disableBigBrother(self):
         self.classroom.myVNC.activeBB=False
         self.usersCommand(Desktop.resetBigBrother)        
-        MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
+        #MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
         
                         
     def enableProjector(self):
@@ -267,4 +269,10 @@ class Plugins(object):
         pass 
 
     def getCaptures(self):
-        return {"images":[{"pcname":"a25-o01","name":"aperez","url":"capturas/Pantallazo-1.png"},{"pcname":"a25-o02","name":"aperez2","url":"capturas/Pantallazo-2.png"},{"pcname":"a25-o03","name":"aperez3","url":"capturas/Pantallazo-3.png"},{"pcname":"a25-o04","name":"aperez4","url":"capturas/Pantallazo-4.png"},{"pcname":"a25-o05","name":"aperez5","url":"capturas/Pantallazo-5.png"},{"pcname":"a25-o06","name":"aperez6","url":"capturas/Pantallazo-3.png"},{"pcname":"a25-o07","name":"aperez7","url":"capturas/Pantallazo-1.png"},{"pcname":"a25-o08","name":"aperez8","url":"capturas/Pantallazo-2.png"},{"pcname":"a25-o09","name":"aperez9","url":"capturas/Pantallazo-3.png"},{"pcname":"a25-o10","name":"aperez0","url":"capturas/Pantallazo-4.png"}]}
+        if  not self.classroom.myVNC.activeBB:
+            self.bigBrother()
+        shots=[]    
+        for i in self.classroom.Desktops:
+            shots.append(i.getScreenshotInfo())
+            
+        return {"images":shots}

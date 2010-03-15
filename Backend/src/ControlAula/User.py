@@ -41,6 +41,7 @@ class User(object):
         if self.photo=='':
             self.photo='loginimages/nobody.png'
         self.timestamp=datetime.datetime.now()
+        self.shotname=''
 
     def __str__(self):
         return str( (self.login,self.hostname,self.hostip,self.ltsp,self.classname,self.username, self.ipLTSP, self.internet, self.mouse, self.sound, self.messages, self.photo,self.timestamp))

@@ -343,7 +343,7 @@ class Classroom():
         else:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
-        print newJSON    
+        #print newJSON    
         return newJSON
     
     def redistributeDesktops(self,targets):

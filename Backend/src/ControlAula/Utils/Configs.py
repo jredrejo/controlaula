@@ -325,7 +325,9 @@ if not os.path.isdir(APP_DIR):
 IMAGES_DIR=os.path.join(APP_DIR,'loginimages')
 if not os.path.isdir(IMAGES_DIR):
         os.mkdir(IMAGES_DIR)
-        
+if not os.path.isdir(IMAGES_DIR + '/screenshots'):
+        os.mkdir(IMAGES_DIR + '/screenshots')
+                
 FILES_DIR=os.path.join(APP_DIR,'sendfile')
 if not os.path.isdir(FILES_DIR):
         os.mkdir(FILES_DIR)

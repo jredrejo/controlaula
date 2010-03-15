@@ -212,3 +212,18 @@ class Desktop(object):
         dict['projector']=self.projector
         
         return dict
+    
+    def getScreenshotInfo(self):
+        ''' builds the line that must be passed to the frontend for this desktop
+       
+        '''
+        dict={}
+        dict['name']=self.login
+        dict['pcname']=self.hostname
+        if self.userkey=='':
+            dict['url']=''
+        else:
+            dict['url']='loginimages/screenshots/'+ self.classroom.LoggedUsers[self.userkey].shotname
+    
+        return dict        
+    
