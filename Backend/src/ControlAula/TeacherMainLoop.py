@@ -101,6 +101,7 @@ class ControlAulaProtocol(resource.Resource):
 
         #Filter the command needed.
         command=request.path[1:]
+        print command
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
@@ -108,7 +109,7 @@ class ControlAulaProtocol(resource.Resource):
         try:
             recvjson='{}'
             request.content.read()
-            if request.data.has_key('data'):
+            if request.args.has_key('data'):
                 recvjson = request.args['data'][0]            
             if json.loads(recvjson).has_key('args'):
                 args=json.loads(recvjson)['args']
