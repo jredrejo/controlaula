@@ -1,0 +1,101 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          controlaula
+# Required-Start:    $local_fs $remote_fs 
+# Required-Stop:     $local_fs $remote_fs
+# Should-Start:      avahi
+# Should-Stop:       avahi
+# Default-Start:     2 3 4 5
+# Default-Stop:      1
+# Short-Description: Controlaula root daemon
+# Description:       Debian init script for Controlaula root monitoring daemon
+### END INIT INFO
+#
+# Author:	José L. Redrejo Rodríguez <jredrejo at debian.org>
+#
+
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+rundir=/var/run/ 
+pidfile=$rundir/sirvecole.pid 
+logfile=/var/log/controlaula.log
+application=/usr/bin/sirvecole.py
+twistd=/usr/bin/twistd
+
+. /lib/lsb/init-functions
+
+test -x $twistd || exit 0
+test -r $application || exit 0
+
+# return true if at least one pid is alive
+alive()
+{
+    if [ -z "$*" ]; then
+	return 1
+    fi
+    for i in $*; do
+	if kill -0 $i 2> /dev/null; then
+	    return 0
+	fi
+    done
+
+    return 1
+}
+
+
+case "$1" in
+    start)
+	log_daemon_msg "Starting ControlAula"	
+	[ ! -f $logfile ] && touch $logfile
+	# Make cache files readable
+	umask 022
+	start-stop-daemon --start --quiet --exec $twistd -- \
+            --pidfile=$pidfile 	--rundir=$rundir --python=$application \
+	    --logfile=$logfile 	--no_save
+	log_end_msg $?
+    ;;
+
+    stop)
+	log_daemon_msg "Stopping ControlAula"
+	start-stop-daemon --stop --quiet --pidfile $pidfile
+	#
+	# Continue stopping until daemon finished or time over
+	#
+	count=0
+	pid=$(cat $pidfile 2>/dev/null)
+	while alive $pid; do
+		if [ $count -gt 20 ]; then
+			log_progress_msg " aborted"
+			break;
+		elif [ $count = 1 ]; then
+			log_progress_msg " [wait $count"
+		elif [ $count -gt 1 ]; then
+			log_progress_msg " $count"
+		fi
+		count=$(expr $count + 1)
+		sleep 1
+		start-stop-daemon --stop --quiet --pidfile $pidfile
+	done
+	if [ $count -gt 1 ]; then
+		log_progress_msg "]"
+	fi
+	log_end_msg $?
+    ;;
+
+    restart)
+	$0 stop
+	$0 start
+    ;;
+    
+    force-reload)
+        $0 restart
+    ;;
+
+    *)
+	log_success_msg "Usage: /etc/init.d/controlaula {start|stop|restart|force-reload}"
+	exit 1
+    ;;
+esac
+
+exit 0

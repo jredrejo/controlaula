@@ -1,0 +1,26 @@
+Source: controlaula
+Section: admin
+Priority: optional
+Maintainer: José L. Redrejo Rodríguez <jredrejo@debian.org>
+Standards-Version: 3.8.2
+Build-Depends: debhelper (>= 5.0.37.2), python-support (>= 0.3)
+Build-Depends-Indep: python
+XS-DM-Upload-Allowed: yes
+Homepage:http://www.itais.net/en
+
+Package: controlaula
+Architecture: all
+Depends: ${python:Depends}, python-avahi, python-gobject, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, scrot, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, wakeonlan, x11vnc (>= 0.8.2), iptables
+Recommends: cups-client
+Suggests: libdvdcss2
+Description: Classroom management tool
+ Assists teachers in the management of a classroom with computers in 
+ the students desktops.
+ It also gives to the student tools to share files and work in groups 
+ and send messages to the teacher or the other collegues.
+ .
+ This package has to be installed in the teacher pc and the students 
+ workstations. When using LTSP this package must be installed 
+ inside the clients chroot. 
+ .
+ Check the documentation for detailed instructions to set it up.

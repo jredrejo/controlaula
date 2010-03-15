@@ -10,10 +10,10 @@ for root, dir, files in os.walk('frontend/www'):
     dir = []
     for file in files:
         dir.append(os.path.join(root, file))
-    datafiles.append((os.path.join('controlaula', root), dir))
+    datafiles.append((os.path.join('share/controlaula', root), dir))
 
-datafiles.append(('pixmaps',['controlaula.png']))
-datafiles.append(('applications',['controlaula.desktop']))
+datafiles.append(('share/pixmaps',['controlaula.png']))
+datafiles.append(('share/applications',['controlaula.desktop']))
 datafiles.append(('/etc/xdg/autostart',['startcontrolaula.desktop']))
 
 setup(name='ControlAula',
@@ -28,9 +28,8 @@ setup(name='ControlAula',
 	package_dir={'ControlAula': 'Backend/src/ControlAula'},
 	url = 'http://www.itais.net/en/',
 	# Those are going to be installed on /usr/bin/
-	scripts=['Backend/src/Monitor.py','Backend/src/Sirvecole.py'],
+	scripts=['Backend/src/monitor.py','Backend/src/sirvecole.py'],
 
 	data_files=datafiles 
     )
 
-#python setup.py install --prefix=/usr/share --install-scripts=/usr/bin

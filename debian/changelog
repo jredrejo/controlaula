@@ -1,0 +1,289 @@
+controlaula (1.5.0-1) unstable; urgency=low
+
+  * New version rewritten to use a web frontend. Thanks very much to
+    Manu Mora for his gard and incredible work developing all the 
+    web frontend.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 15 Mar 2010 10:10:17 +0100
+
+controlaula (1.3.1-13) unstable; urgency=low
+
+  * Ready to work with gambas 2.17.
+  * Reduce avahi-browse threads
+  * Depends on gambas2 > 2.14 to avoid some gtk bugs
+  * Fixed bug that switched off all the students when only one is selected
+   
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 26 Nov 2009 13:07:31 +0100
+
+controlaula (1.3.1-12) unstable; urgency=low
+
+  * Checks to avoid incompatibilities with other similar applications.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sat, 07 Nov 2009 17:00:11 +0100
+
+controlaula (1.3.1-11) unstable; urgency=low
+
+  * Fixed bug when detecting teacher computer IP
+   
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 03 Nov 2009 23:08:46 +0100
+
+controlaula (1.3.1-9) unstable; urgency=low
+
+  * When using LTSP, if a DesktopPC has internet disabled on boot, now 
+    it is disabled as soon as a user logins, instead of waiting for the
+    teacher to start ControlAula
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sat, 31 Oct 2009 16:23:30 +0100
+
+controlaula (1.3.1-8) unstable; urgency=low
+
+  * New Dutch (nl) translation, thanks to Rob van den Berg. 
+  * Workaround to fix a problem with garbage collection in Gambas, 
+    thanks to Francisco Mora Sánchez
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 02 Sep 2009 10:34:54 +0200
+
+controlaula (1.3.1-7) unstable; urgency=low
+
+  * Increased switching off timeout from 3 to 10 seconds for ltsp clients
+  * Increased font sizes in monitorProfe (Thanks to Fco. Paniagua)
+  * Multiple clicking on a computer button to start it up it's not
+    possible (Thanks to Fco. Paniagua)
+  * When root orders where a lot now they all work (Thanks to Ricardo Salgado)
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 30 Mar 2009 09:35:52 +0200
+
+controlaula (1.3.1-6) unstable; urgency=low
+
+  * Tune disabled ports when disableInet is used
+  * Assure LoginNecesario works in all circunstances 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 09 Mar 2009 09:33:04 +0100
+
+controlaula (1.3.1-5) unstable; urgency=low
+
+  * Fixed bug when disableInet was applied on disabled computers
+  * Start without Internet now works on ltsp clients too
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 27 Feb 2009 10:18:39 +0100
+
+controlaula (1.3.1-4) unstable; urgency=low
+
+  * Synchronization of video and audio when broadcasting.
+  * New option: LoginNecesario to switch off ltsp clients when there's
+    nobody logged in the ltsp server
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 26 Feb 2009 13:30:25 +0100
+
+controlaula (1.3.1-3) unstable; urgency=low
+
+  * Ltsp clients will switch off in 3 seconds if ltsp server conn is lost
+  * Ltsp server will not switch off when SeApaga="1" 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 11 Feb 2009 11:47:01 +0100
+
+controlaula (1.3.1-2) unstable; urgency=low
+
+  * Added delay between wakeonlan call 
+  * Media broadcasting can now be done in computers without logged users
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 27 Jan 2009 12:34:07 +0100
+
+controlaula (1.3.1-1) unstable; urgency=medium
+
+  * New upstream version: 
+    - Fixed controlaula wrapper
+    - Better switching off for ltsp clients
+  * Upgrades of controlaula package
+  * Modified localapps to work as new upstream ltsp does them
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 24 Nov 2008 12:00:31 +0100
+
+controlaula (1.3-4) unstable; urgency=low
+
+  * Added optional dependency on xtightvncviewer
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 17 Jul 2008 17:37:18 +0200
+ 
+controlaula (1.3-3) unstable; urgency=low
+
+  * Fixed debian/copyright file
+  * Bumped new standard version on debian/control
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sat, 14 Jun 2008 16:08:06 +0200
+
+controlaula (1.3-2) unstable; urgency=low
+
+  * debian/changelog: trimmed entries in spanish
+  * debian/control: translated descriptions into english
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 29 May 2008 18:12:11 +0200
+
+controlaula (1.3-1) unstable; urgency=low
+
+  * First Debian upload (Closes: #483130)
+  * Local apps now work in ltsp
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 28 Apr 2008 12:44:04 +0200
+
+controlaula (1.2-3) unstable; urgency=low
+
+  * More improvements in vlc in ltsp and change mouse pointer in projector
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 14 Apr 2008 16:40:21 +0200
+
+controlaula (1.2-2) unstable; urgency=low
+
+  * Some perfomance improvements when using vlc in ltsp
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sun, 13 Apr 2008 20:13:52 +0200
+
+controlaula (1.2-1) unstable; urgency=low
+
+  * A lot of improvements for the ltsp environment
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 07 Apr 2008 12:33:23 +0200
+
+controlaula (1.1-1) unstable; urgency=low
+
+  * New version with ltsp support
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 25 Feb 2008 12:43:16 +0100
+
+controlaula (1.0-1) unstable; urgency=low
+
+  * Final release of version 1.0
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Wed, 23 Jan 2008 10:54:58 +0100
+
+controlaula (0.99rc8-3) unstable; urgency=low
+
+  * Fixes some more bugs due to removing dns dependency
+
+ -- José L. Redrejo <jredrejo@edu.juntaextremadura.net>  Thu, 17 Jan 2008 20:53:54 +0100
+
+controlaula (0.99rc8-2) unstable; urgency=low
+
+  * Fixes some bugs due to removing dns dependency
+
+ -- José L. Redrejo <jredrejo@edu.juntaextremadura.net>  Thu, 17 Jan 2008 12:16:24 +0100
+
+controlaula (0.99rc8-1) unstable; urgency=low
+
+  * More fixes to workaround some avahi bugs
+  * Removed finger-ldap & firedns dependencies
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 15 Jan 2008 16:11:56 +0100
+
+controlaula (0.99~rc5) unstable; urgency=low
+
+  * Some more bug fixes
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sat, 24 Nov 2007 17:09:49 +0100
+
+controlaula (0.99~rc4) unstable; urgency=low
+
+   * Use of autotools and some bug fixes
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Tue, 13 Nov 2007 10:00:00 +0200
+ 
+controlaula (0.99~rc3) unstable; urgency=low
+
+   * Lot of workarounds to make it work in low memory, video and slow disk PCs
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Thu, 8 Nov 2007 10:00:00 +0200
+
+controlaula (0.99~rc2) unstable; urgency=low
+
+   * Lot of bugfixes
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Wed, 23 May 2007 10:00:00 +0200
+
+controlaula (0.99~rc1) unstable; urgency=low
+
+   * New version, rewritten from scratch and tons of changes
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Wed, 1 Jan 2007 10:00:00 +0200
+
+controlaula (0.9.2-4) unstable; urgency=low
+
+   * Recompiled for gambas2 version >> 1.9.43
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Thu, 28 Dec 2006 13:45:43 +0200
+
+controlaula (0.9.2-3.1) unstable; urgency=low
+
+   * Fixed bug when scanning pc
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Mon, 2 Oct 2006 13:45:43 +0200
+
+controlaula (0.9.2-3) unstable; urgency=low
+
+   * New spanish pdf manual
+   * Fixed bug when scanning pc
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Mon, 2 Oct 2006 13:45:43 +0200
+
+controlaula (0.9.2-1) unstable; urgency=low
+
+   * Changed the dns lookup to fit the new Extremadura high schools setup
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Mon, 25 Sep 2006 13:45:43 +0200
+
+controlaula (0.9.1-5) unstable; urgency=low
+
+   * Fixed bug in permissions of /var/monitorprofe/monitorprofe.cfg
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Fri, 1 Sep 2006 13:45:43 +0200
+
+controlaula (0.9.1-4) unstable; urgency=low
+
+   * Deshecho el cambio de timeout porque en ordenadores IBM falla
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Sun, 25 Jun 2006 13:45:43 +0200
+
+controlaula (0.9.1-3) unstable; urgency=low
+
+   * Fixed error in MonitorNecesario
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Sun, 25 Jun 2006 13:45:43 +0200
+
+controlaula (0.9.1-2) unstable; urgency=low
+
+   * Fixed proyector script
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Fri, 23 Jun 2006 13:45:43 +0200
+
+controlaula (0.9.1-1) unstable; urgency=low
+
+   * Vlc transmits now for different ports depending on the teacher uid, so multiple transmissions are allowed in the same network. Thanks to Ángel Martínez Giles <adminies.valdelacalzada@edu.juntaextremadura.net>
+   * sirvecole now allows connections from a pc different from the teacher PC if "ipAdmin" is set in /etc/sirvecole
+   * sirvecole will halt the student PC after two minutes without the monitorprofe application contacts if MonitorNecesario is set to "1" in /etc/sirvecole
+   * enable paused printers when restarting monitorprofe & sirvecole
+   * reverted previous use of vlc as dvd with menus can not be broadcasted
+   * Francisco Paniagua <adminies.maestrogonzalokorreas@edu.juntaextremadura.net> improvements:
+    - improved scanning of the network. 
+    - The teacher can reconnect a single student to the video transmission.
+    - Added a config file (/var/monitorprofe/monitorprofe.cfg) to share some settings by all the teachers that use the same pc. 
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Wed, 21 Jun 2006 13:45:43 +0200
+
+controlaula (0.9.0-1) unstable; urgency=low
+
+  * debian/control: Changed dependencies according to the new gambas packages naming policy.
+  * Added /etc/xdg/autostart/sirvecole.desktop to assure Desktop access from root to the active desktop.
+  * debian/rules: cleanup
+  * Added Turkish (thanks to Zeki Celikbas <celikbas@itu.edu.tr>) and italian (thanks to Andrea Grandi <a.grandi@gmail.com>) translations
+  * Changed the way vlc is called to use dvd menus when available.
+  * Added preconfiguration file at /etc/monitorprofe
+  * debian/postinst: changed sirvecole daemon start up and cleanup
+  * debian/sirvecole: daemon in the Debian way
+  * Sirvecole: all the kill commands have now high priority.
+  * Several improvements and bug fixes by Francisco Paniagua <adminies.maestrogonzalokorreas@edu.juntaextremadura.net>:
+   - Pop up menu in the pc buttons to allow fast individual actions
+   - Projector now works when a DNS server is not available in the network.
+   - Audio files filter selector fixed
+   - Some bug fixes in the classroom layout tool
+   - Improved PC scanning speed
+
+ -- José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>  Wed, 17 May 2006 13:45:43 +0200
