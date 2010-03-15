@@ -7,6 +7,9 @@
  * 
  */
 
+var REFRESH_BIGBROTHER = 3000; /* in miliseconds*/
+var REFRESH_CLASSROOM = 5000; /* in miliseconds*/
+
 
 // Print DataView classroom
 function printClassroom(equipos){

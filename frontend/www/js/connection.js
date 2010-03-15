@@ -13,7 +13,7 @@ dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
 function initScreens(){
 	connection("datosaula",dataRefresh,"pintaaula");
 	connection("datosaula",dataRefresh,"pintaconfig");
-	setInterval('connection("datosaula","","pintaaula")','5000');
+	setInterval('connection("datosaula","","pintaaula")',REFRESH_CLASSROOM);
 }
 
 function sendOrderPC(url,computer,action){
