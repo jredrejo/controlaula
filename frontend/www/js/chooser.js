@@ -66,7 +66,7 @@ ImageChooser.prototype = {
 				closable: false,
 				border: false,
 				listeners:{
-					beforehide:function(){ clearInterval(varInterval); }
+					beforehide:function(){ clearInterval(varInterval); connection("disableBigBrother","",""); }
 				},
 				items:[{
 					id: 'img-chooser-view',
@@ -118,7 +118,7 @@ ImageChooser.prototype = {
 					'<img src="{url}" style="width:280px;"><div class="details-info">',
 					'<span><b>Equipo:&nbsp;{pcname}</b></span>',
 					'<span><b>Usuario:&nbsp;{name}</b></span></div>',
-					'<div style="text-align:center;"><input type="button" onClick="enviarOrdenPuesto(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',
+					'<div style="text-align:center;"><input type="button" onClick="sendOrderPC(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',
 				'</tpl>',
 			'</div>'
 		);

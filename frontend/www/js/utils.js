@@ -8,50 +8,50 @@
  */
 
 
-// pintar DataView de alumnos
-function pintarDataView(equipos){
+// Print DataView classroom
+function printClassroom(equipos){
 
-	var clase = eval('(' + equipos + ')');
-	var alumnos = {"images":[]};
-	var cols = clase.classroom.structure.cols;
-	var seleccionados = dataviewON.getSelectedIndexes();
+	var class = eval('(' + equipos + ')');
+	var students = {"images":[]};
+	var cols = class.classroom.structure.cols;
+	var selected = dataviewON.getSelectedIndexes();
 
-	if(clase.classroom.pclist.length==0)
+	if(class.classroom.pclist.length==0)
 		return;
 
-	for(var i=0;i<clase.classroom.pclist.length;i++){
+	for(var i=0;i<class.classroom.pclist.length;i++){
 
-		var nombre = clase.classroom.pclist[i].loginname;
-		var foto = clase.classroom.pclist[i].photo;
-		var pcname = clase.classroom.pclist[i].PCname;
+		var name = class.classroom.pclist[i].loginname;
+		var photo = class.classroom.pclist[i].photo;
+		var pcname = class.classroom.pclist[i].PCname;
 		var internet=mouse=message="images/pc_none.png";
 		
-		if(clase.classroom.pclist[i].PCname=="none"){
+		if(class.classroom.pclist[i].PCname=="none"){
 			pcname = "&nbsp;";
-			nombre = "&nbsp;";
-			foto = "images/pc_none.png";			
-		}else if(clase.classroom.pclist[i].ON=="0"){
-			nombre = "Apagado";
-			foto = "images/pc_apagado.png";
-		}else if(clase.classroom.pclist[i].loginname=="" && clase.classroom.pclist[i].ON=="1"){
-			nombre = "Login";
-			foto = "images/pc_no_logueado.png";
+			name = "&nbsp;";
+			photo = "images/pc_none.png";			
+		}else if(class.classroom.pclist[i].ON=="0"){
+			name = "Apagado";
+			photo = "images/pc_apagado.png";
+		}else if(class.classroom.pclist[i].loginname=="" && class.classroom.pclist[i].ON=="1"){
+			name = "Login";
+			photo = "images/pc_no_logueado.png";
 		}
 
-		if(clase.classroom.pclist[i].internetEnabled=="1") internet="images/icon_web.png";
-		if(clase.classroom.pclist[i].mouseEnabled=="1") mouse="images/icon_mouse.png";
-		if(clase.classroom.pclist[i].messagesEnabled=="1") message="images/icon_messages.png";
+		if(class.classroom.pclist[i].internetEnabled=="1") internet="images/icon_web.png";
+		if(class.classroom.pclist[i].mouseEnabled=="1") mouse="images/icon_mouse.png";
+		if(class.classroom.pclist[i].messagesEnabled=="1") message="images/icon_messages.png";
 
-		alumnos.images[i]={"name":nombre,"url":foto,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message,"position":"pos"+i}
+		students.images[i]={"name":name,"url":photo,"pcname":pcname,"internet":internet,"mouse":mouse,"message":message,"position":"pos"+i}
 
 /*		if(dataviewON.getNodes().length!=0)
-			for(var key in alumnos.images[i]){
+			for(var key in students.images[i]){
 				try{
-					if(alumnos.images[i][key] != dataviewON.store.getAt(i).get(key))
-						dataviewON.store.getAt(i).set(key,alumnos.images[i][key]);
+					if(students.images[i][key] != dataviewON.store.getAt(i).get(key))
+						dataviewON.store.getAt(i).set(key,students.images[i][key]);
 				}catch(error){
 					MyRecordType = Ext.data.Record.create(['name','url','pcname','internet','mouse','message','position']);
-					myrec = new MyRecordType(alumnos.images[i]);
+					myrec = new MyRecordType(students.images[i]);
 					//ds.PartnersCombo.add(myrec);
 					dataviewON.store.add(myrec);
 				}
@@ -61,7 +61,7 @@ function pintarDataView(equipos){
 //	if(dataviewON.getNodes().length==0){
 
 		var myStore = new Ext.data.JsonStore({
-			data: alumnos,
+			data: students,
 			root: 'images',
 			fields: ['name','url','pcname','internet','mouse','message','position']
 		});
@@ -73,69 +73,54 @@ function pintarDataView(equipos){
 	dataviewON.setWidth(sizeDataview);
 	panel.setWidth(sizePanel);
 
-	dataviewON.select(seleccionados);
-
-	for(var i=0;i<clase.classroom.pclist.length;i++){
-		if(alumnos.images[i].url!="images/pc_no_logueado.png" && alumnos.images[i].url!="images/pc_apagado.png" && alumnos.images[i].url!="images/pc_none.png"){
-			new Ext.ToolTip({
-				target: 'img-pos'+i,
-				title: 'Gran Hermano - '+alumnos.images[i].pcname+' ('+alumnos.images[i].name+')',
-				width:500,
-				html: '<div style="text-align:center;"><img src="'+alumnos.images[i].url+'" style="width:490px;"><br><br><input type="button" value="Visualizar puesto '+alumnos.images[i].pcname+'" onClick="javascript:enviarOrdenPuesto(\'openVNC\',\''+alumnos.images[i].pcname+'\',\'\')"></div>',
-				trackMouse:true,
-		        autoHide: false,
-		        closable: true,
-				dismissDelay: 5000
-			});
-		}
-	}
+	dataviewON.select(selected);
 }
 
-// pintar pantalla de configuracion
-function pintarConfiguracionAula(equipos){
+// Print DataView classroom
+function printClassroomConfig(computers){
 
-	var clase = eval('(' + equipos + ')');
+	var class = eval('(' + computers + ')');
 
-	structureClass.cols=clase.classroom.structure.cols;
-	structureClass.rows=clase.classroom.structure.rows;
+	structureClass.cols=class.classroom.structure.cols;
+	structureClass.rows=class.classroom.structure.rows;
 	
 	var configClass = Ext.getCmp('config');
 	configClass.removeAll();
 
-	// creacion dinamica de columnas
-	for(i=0;i<clase.classroom.structure.cols;i++){
+	// Dynamic creation of columns
+	for(i=0;i<class.classroom.structure.cols;i++){
 		eval("var column"+i+"={id:'col"+i+"',columnWidth:.16,style:'padding:10px 0 10px 10px',items:[]}");
 		eval("configClass.add("+i+",column"+i+")");
 	}
 	configClass.doLayout();
 	
-	// añadimos los equipos a cada columna
-   for(i=0;i<clase.classroom.pclist.length;i++){
+	// add computer to each column
+   for(i=0;i<class.classroom.pclist.length;i++){
 		
-		var nombre = Ext.util.Format.ellipsis(clase.classroom.pclist[i].loginname,15);
-		var pcname = Ext.util.Format.ellipsis(clase.classroom.pclist[i].PCname,15);
-		var foto = clase.classroom.pclist[i].photo;
+		var name = Ext.util.Format.ellipsis(class.classroom.pclist[i].loginname,15);
+		var pcname = Ext.util.Format.ellipsis(class.classroom.pclist[i].PCname,15);
+		var photo = class.classroom.pclist[i].photo;
 		
-		if(clase.classroom.pclist[i].PCname=="none"){
+		if(class.classroom.pclist[i].PCname=="none"){
 			pcname = "&nbsp;";
-			foto = "images/pc_none.png";			
-			nombre="&nbsp;";
-		}else if(clase.classroom.pclist[i].ON=="0"){
-			nombre="Apagado";
-			foto = "images/pc_apagado.png";
-		}else if(clase.classroom.pclist[i].loginname=="" && clase.classroom.pclist[i].ON=="1"){
-			nombre = "Login";
-			foto = "images/pc_no_logueado.png";
+			photo = "images/pc_none.png";			
+			name="&nbsp;";
+		}else if(class.classroom.pclist[i].ON=="0"){
+			name="Apagado";
+			photo = "images/pc_apagado.png";
+		}else if(class.classroom.pclist[i].loginname=="" && class.classroom.pclist[i].ON=="1"){
+			name = "Login";
+			photo = "images/pc_no_logueado.png";
 		}
 
-	   var queColumna = parseInt(i) % parseInt(clase.classroom.structure.cols);
-	   var posicionEnColumna = parseInt(i) / parseInt(clase.classroom.structure.cols);
+	   var queColumna = parseInt(i) % parseInt(class.classroom.structure.cols);
+	   var posicionEnColumna = parseInt(i) / parseInt(class.classroom.structure.cols);
 		
 		var computer={
 			id: 'pc'+i,
 	       	title: pcname,
 	        tools: tools,
-	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
+	        html: '<div style="text-align:center;"><img src="'+photo+'" style="height:50px;"/><br><b>'+name+'</b></div>'
 	   }
 	   
 	   eval("column"+parseInt(queColumna)+".items["+parseInt(posicionEnColumna)+"] = computer;");
@@ -160,18 +145,18 @@ function addColumn(){
 	eval("configClass.add("+numCol+",column"+numCol+")");
 	configClass.doLayout();
 	
-	// añadimos los equipos a cada columna
+	// add computer to each column
    for(i=0;i<structureClass.rows;i++){
 
-		var nombre="Apagado";
-		var foto = "images/pc_apagado.png";
+		var name="Apagado";
+		var photo = "images/pc_apagado.png";
 		var pcname = "None";
 			
 		var computer={
 //			id: 'pc'+i,
 	        title: pcname,
 	        tools: tools,
-	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
+	        html: '<div style="text-align:center;"><img src="'+photo+'" style="height:50px;"/><br><b>'+name+'</b></div>'
 	   }
 	   	
 	   Ext.getCmp('col'+numCol).add(computer);
@@ -202,18 +187,18 @@ function addRow(){
 
 	var numCol = parseInt(structureClass.cols);
 
-	// añadimos los equipos a cada columna
+	// add computer to each column
    for(i=0;i<numCol;i++){
 
-		var nombre="Apagado";
-		var foto = "images/pc_apagado.png";
+		var name="Apagado";
+		var photo = "images/pc_apagado.png";
 		var pcname = "None";
 			
 		var computer={
 			//id: 'pc'+i,
 	        title: pcname,
 	        tools: tools,
-	        html: '<div style="text-align:center;"><img src="'+foto+'" style="height:50px;"/><br><b>'+nombre+'</b></div>'
+	        html: '<div style="text-align:center;"><img src="'+photo+'" style="height:50px;"/><br><b>'+name+'</b></div>'
 	   }
 		
 	   Ext.getCmp('col'+i).add(computer);
@@ -233,7 +218,7 @@ function delRow(){
 		return;
 	}
 
-	// añadimos los equipos a cada columna
+	// add computer to each column
    for(i=0;i<numCol;i++){
 
 	   var colTMP = Ext.getCmp('col'+i);

@@ -9,56 +9,33 @@
 
 dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
 
-//Pregunta el estado de todos los equipos del aula
+//Init screens
 function initScreens(){
-	conexion("datosaula",dataRefresh,"pintaaula");
-	conexion("datosaula",dataRefresh,"pintaconfig");
-	setInterval('conexion("datosaula","","pintaaula")','5000');
-
-/*	conexion("datosAulaPrueba",dataRefresh,"pintaaula");
-	setInterval('conexion("datosAulaPrueba",dataRefresh,"pintaaula")','5000');*/
+	connection("datosaula",dataRefresh,"pintaaula");
+	connection("datosaula",dataRefresh,"pintaconfig");
+	setInterval('connection("datosaula","","pintaaula")','5000');
 }
 
-//Pregunta el estado de uno o varios equipos del aula
-function estadoEquipos(equipos){
-
-	var classroom = { "pcs": []};
-	var arrayEquipos = equipos.split(",");
-
-	for(i=0;i<arrayEquipos.length;i++){
-		classroom.pcs[i] = { "name": arrayEquipos[i]};
-	}
-
-	dataString = Ext.util.JSON.encode(classroom);
-
-	// Para ejecutarlo cada 5 segundos
-	//setInterval('conexion("datosaula",dataString,"pintaaula")','5000');
-
-	conexion("datosaula",dataString,"pintaaula");
-}
-
-// Enviar Orden a los equipos del aula
-function enviarOrdenPuesto(dir,puesto,action){
+function sendOrderPC(url,computer,action){
 
 	var classroom = {
-		"pclist" : [puesto]
+		"pclist" : [computer]
 	}
 
 	dataStringCommand = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataStringCommand,action);
+	connection(url,dataStringCommand,action);
 }
 
-// Enviar Orden a los equipos del aula
-function enviarOrdenSeleccionados(dir,argumentos,action){
+function sendOrderSelected(url,args,action){
 
 	if(dataviewON.getSelectedRecords().length=="0"){
 		Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
 		return;
 	}
 
-	var seleccionados = Array();
+	var selected = Array();
 	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
+		selected[i] = dataviewON.getSelectedRecords()[i].get("pcname");
 		var name = dataviewON.getSelectedRecords()[i].get("name")
 
 		if(dir=="wakeup" && name=="Apagado"){
@@ -71,31 +48,30 @@ function enviarOrdenSeleccionados(dir,argumentos,action){
 	}	
 
 	var classroom = {
-		"pclist" : seleccionados,
-		"args" : argumentos
+		"pclist" : selected,
+		"args" : args
 	}
 
 	dataStringCommand = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataStringCommand,action);
+	connection(url,dataStringCommand,action);
 }
 
-// Enviar Orden a los equipos del aula
-function enviarOrdenTodos(dir,argumentos,action){
+function sendOrderAll(url,args,action){
 
 	dataviewON.selectRange(0,dataviewON.getNodes().length);
 
-	var seleccionados = Array();
+	var selected = Array();
 	for(i=0;i<dataviewON.getSelectedRecords().length;i++){
-		seleccionados[i] = dataviewON.getSelectedRecords()[i].get("pcname");
+		selected[i] = dataviewON.getSelectedRecords()[i].get("pcname");
 	}	
 
 	var classroom = {
-		"pclist" : seleccionados,
-		"args" : argumentos
+		"pclist" : selected,
+		"args" : args
 	}
 
 	dataString = Ext.util.JSON.encode(classroom);
-	conexion(dir,dataString,action);
+	connection(url,dataString,action);
 }
 
 function sendClassroomConfig(){
@@ -120,28 +96,28 @@ function sendClassroomConfig(){
 	
 	// Enviamos la nueva configuracion de los puestos al backend
 	dataString = Ext.util.JSON.encode(classroom);				
-	conexion("classroomConfig",dataString,"cambiaconfig");
+	connection("classroomConfig",dataString,"cambiaconfig");
 }
 
-// Funcion general de conexion
-function conexion(dir,datos,accion){
+// Funcion general de connection
+function connection(url,data,action){
 	Ext.Ajax.request({
-		url : dir , 
-		params : { data : datos },
+		url : url , 
+		params : { data : data },
 		method: 'POST',
 		success: function (result, request) { 
 			// distintas respuestas segun la accion enviada
-			switch(accion){
+			switch(action){
 				case "pintaaula":{
-					pintarDataView(result.responseText);
+					printClassroom(result.responseText);
 					break;
 				}
 				case "pintaconfig":{
-					pintarConfiguracionAula(result.responseText);
+					printClassroomConfig(result.responseText);
 					break;
 				}
 				case "cambiaconfig":{
-					conexion("datosaula","","pintaaula");
+					connection("datosaula","","pintaaula");
 					break;
 				}
 				case "broadcastVideo":{

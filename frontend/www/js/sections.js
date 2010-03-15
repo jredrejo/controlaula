@@ -22,7 +22,7 @@
 		    '<img src="{message}" style="padding-top:0px; width:20px; height:20px;">',
 		    '</div>',
 			 //'<div style="float:left; position:absolute;"><img src="images/icon_video.png" style="width:18px; height:18px;"></div>',
-			 '<img src="{url}" title="{name}" id="img-{position}"></div>',
+			 '<img src="{url}" title="{name}"></div>',
 		    '<span class="x-editable" style="font-weight:bold;">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
@@ -151,7 +151,7 @@
 							   		maskWindow = new Ext.LoadMask("treeVideo", {msg:"Emitiendo vídeo"});
 									maskWindow.show();
 
-									enviarOrdenSeleccionados('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
+									sendOrderSelected('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
 								}
 						    },{
 						        text: 'Emitir a todos',
@@ -160,7 +160,7 @@
 									maskWindow = new Ext.LoadMask("treeVideo", {msg:"Emitiendo vídeo"});
 									maskWindow.show();
 
-									enviarOrdenTodos('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
+									sendOrderAll('broadcast',tree.getSelectionModel().getSelectedNode().id,"broadcastVideo");
 								}
 						    },{
 						        text: 'Cerrar',
@@ -189,7 +189,7 @@
 						        handler: function(){
 									maskWindow = new Ext.LoadMask("idDVD", {msg:"Emitiendo DVD"});
 									maskWindow.show();
-									enviarOrdenSeleccionados('broadcast','DVD','broadcastDVD'); 
+									sendOrderSelected('broadcast','DVD','broadcastDVD'); 
 								}
 						    },{
 						        text: 'Emitir a todos',
@@ -197,7 +197,7 @@
 						        handler: function(){
 									maskWindow = new Ext.LoadMask("idDVD", {msg:"Emitiendo DVD"});
 									maskWindow.show();
-									enviarOrdenTodos('broadcast','DVD','broadcastDVD'); 
+									sendOrderAll('broadcast','DVD','broadcastDVD'); 
 								}
 						    },{
 						        text: 'Cerrar',
@@ -231,7 +231,7 @@
 										handler: function(){
 											maskWindow = new Ext.LoadMask("treeFile", {msg:"Enviando archivo"});
 											maskWindow.show();
-											enviarOrdenSeleccionados('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
+											sendOrderSelected('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
 										}
 									 },{
 										text: 'Enviar a todos',
@@ -239,7 +239,7 @@
 										handler: function(){
 											maskWindow = new Ext.LoadMask("treeFile", {msg:"Enviando archivo"});
 											maskWindow.show();
-											enviarOrdenTodos('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
+											sendOrderAll('sendfile',treeSendFile.getSelectionModel().getSelectedNode().id,"sendFile");
 										}
 									 },{
 										  text: 'Cerrar',
@@ -256,7 +256,7 @@
    var internetON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableInternet","","cambiaconfig");
+			sendOrderSelected("enableInternet","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -264,7 +264,7 @@
     var internetOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableInternet","","cambiaconfig");
+			sendOrderSelected("disableInternet","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -272,7 +272,7 @@
     var mouseON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableMouse","","cambiaconfig");
+			sendOrderSelected("enableMouse","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -280,7 +280,7 @@
     var mouseOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableMouse","","cambiaconfig");
+			sendOrderSelected("disableMouse","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -288,7 +288,7 @@
     var messagesON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableMessages","","cambiaconfig");
+			sendOrderSelected("enableMessages","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -296,7 +296,7 @@
     var messagesOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableMessages","","cambiaconfig");
+			sendOrderSelected("disableMessages","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -304,7 +304,7 @@
     var soundON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableSound","","cambiaconfig");
+			sendOrderSelected("enableSound","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -312,7 +312,7 @@
     var soundOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableSound","","cambiaconfig");
+			sendOrderSelected("disableSound","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -320,7 +320,7 @@
     var projectorON = new Ext.Action({
         text: 'Habilitar',
         handler: function(){
-			enviarOrdenSeleccionados("enableProjector","","cambiaconfig");
+			sendOrderSelected("enableProjector","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -328,7 +328,7 @@
     var projectorOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableProjector","","cambiaconfig");
+			sendOrderSelected("disableProjector","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -366,7 +366,7 @@
 		  iconAlign:'top',
         handler: function(){
 			//sendMessageWindow();
-            enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
+            sendOrderSelected("bigbrother","","cambiaconfig");
         },
     });
 
@@ -394,7 +394,7 @@
         text: 'Habilitar',
         handler: function(){
 			choose();
-//			enviarOrdenSeleccionados("bigbrother","","cambiaconfig");
+//			sendOrderSelected("bigbrother","","cambiaconfig");
         },
         iconCls: 'done'
     });
@@ -402,7 +402,7 @@
     var bigBrotherOFF = new Ext.Action({
         text: 'Deshabilitar',
         handler: function(){
-			enviarOrdenSeleccionados("disableBigbrother","","cambiaconfig");
+			sendOrderSelected("disableBigbrother","","cambiaconfig");
         },
         iconCls: 'cancel'
     });
@@ -441,7 +441,7 @@
 					width:105,
 					iconAlign:'top',
 					tooltip:'Encender los equipos seleccionados',
-			        handler:function(){enviarOrdenSeleccionados("wakeup","","cambiaconfig");}
+			        handler:function(){sendOrderSelected("wakeup","","cambiaconfig");}
 			     },{
 			        text: 'Selecc. Ninguno',
 			        iconCls: 'none',
@@ -455,7 +455,7 @@
 					width:105,
 					iconAlign:'top',
 					tooltip:'Apagar los equipos seleccionados',
-			        handler:function(){enviarOrdenSeleccionados("sleep","","cambiaconfig");}
+			        handler:function(){sendOrderSelected("sleep","","cambiaconfig");}
 			     }]
 		     },{
 		        xtype: 'buttongroup',
@@ -514,7 +514,7 @@
 					panel.update('<div style="text-align:center;"><img src="images/pc_none.png" style="height:50px;"/><br><b>&nbsp;</b></div>');
 
 					dataDelete = Ext.util.JSON.encode({ pclist:panel.id });	
-					conexion("deleteComputer",dataDelete,"cambiaconfig");
+					connection("deleteComputer",dataDelete,"cambiaconfig");
 				}
 			})
         }
@@ -546,6 +546,6 @@
 		html: '<div style="text-align:center;">Filas&nbsp;<input type="button" value="-" onClick="delRow();" style="width:25px;"/><input type="button" value="+" onClick="addRow();" style="width:25px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Columnas&nbsp;<input type="button" value="-" onClick="delColumn();" style="width:25px;"/><input type="button" value="+" onClick="addColumn();" style="width:25px;"/></div>',
     	listeners:{
 			drop:function(){updateID(); sendClassroomConfig()},
-			beforeShow:function(){conexion("datosaula",dataRefresh,"pintaconfig");}
+			beforeShow:function(){connection("datosaula",dataRefresh,"pintaconfig");}
 		},
 	};
