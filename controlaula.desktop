@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=firefox "http://localhost:8900"
+Icon=/usr/share/pixmaps/controlaula.png
+Terminal=false
+Name[es_ES]=Control del Aula
+Name= Classrooom control
+Name[fr]=Control de la classe
+Comment[es_ES]=Herramienta para que el profesor pueda controlar los ordenadores del aula
+Comment[fr]=Outil pour controller les ordinateurs de la classe
+Comment=Teacher tool to control classroom computers
+Categories=Application;Education;

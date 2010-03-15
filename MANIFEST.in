@@ -1,0 +1,5 @@
+include GPL-LICENSE.txt controlaula.desktop controlaula.png  startcontrolaula.desktop
+recursive-include Backend frontend 
+
+recursive-include Backend *
+recursive-include frontend * 
