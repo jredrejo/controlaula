@@ -101,7 +101,6 @@ class ControlAulaProtocol(resource.Resource):
 
         #Filter the command needed.
         command=request.path[1:]
-        print command
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''

@@ -113,6 +113,21 @@ class VNC(object):
         command += passwd 
         command += ' ' + target +':' + self.clientport
         self.procViewer=MyUtils.launchAsNobody(command)      
+        
+    def startViewer(self,target,ltsp,ip):
+        port=5900
+        if ltsp:
+            d=ip.split('.')
+            port=str(5900 + int(d[3]))
+                        
+        passwd=tempfile.mkstemp()[1]
+        self.createVNCPassword(self.writePasswd , passwd)
+
+        command=['xvncviewer','-UseLocalCursor','0','-LowColourLevel','1',' -Shared']
+        command +=['-passwd',passwd   ]
+        command +=[ip+':'+str(port),'-name',target]    
+        self.procViewer=subprocess.Popen(command)
+          
                   
     def stop(self):
 
@@ -147,9 +162,11 @@ class VNC(object):
     
         f = open(file, "w")
         f.write(response)
-        f.close    
-        os.chown(file,65534,0)
-    
+        f.close  
+        try:  
+            os.chown(file,65534,0)
+        except:
+            pass #it will only work when it's executed by sirvecole
     
     
     

@@ -39,6 +39,7 @@ class Plugins(object):
                 'bigbrother':self.bigBrother,
                 'disableBigbrother':self.disableBigBrother,
                 'enableProjector':self.enableProjector,
+                
                 'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
@@ -50,6 +51,7 @@ class Plugins(object):
                 'disableMessages':self.disableMessages,
                 'wakeup':self.wakeup,
                 'sleep':self.sleep,        
+                'openVNC':self.openVNC,
                 'broadcast':self.broadcast,
                 'sendmessage':self.sendMessage,
                 'sendfile':self.sendFile,
@@ -112,6 +114,11 @@ class Plugins(object):
         self.usersCommand(Desktop.resetBigBrother)        
         #MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
         
+    def openVNC(self):
+        for i in self.classroom.Desktops:
+            if i.hostname==self.targets[0]:
+                self.classroom.myVNC.startViewer( i.hostname,i.ltsp,i.ip)
+                break     
                         
     def enableProjector(self):
         self.classroom.myVNC.startServer()
@@ -269,8 +276,8 @@ class Plugins(object):
         pass 
 
     def getCaptures(self):
-        if  not self.classroom.myVNC.activeBB:
-            self.bigBrother()
+
+        self.bigBrother()
         shots=[]    
         for i in self.classroom.Desktops:
             shots.append(i.getScreenshotInfo())

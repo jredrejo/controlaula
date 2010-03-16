@@ -39,7 +39,7 @@ class Plugins(object):
         self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,
-                'disablebigbrother':self.disableBigBrother,
+                'resetbigbrother':self.disableBigBrother,
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,

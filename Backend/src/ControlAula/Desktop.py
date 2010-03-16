@@ -112,8 +112,9 @@ class Desktop(object):
             
     def setBigBrother(self):
         if self.userkey!='':
-            self.classroom.CommandStack[self.userkey].append(['bigbrother'])
-            self.bigbrother=True
+            if not self.bigbrother:
+                self.classroom.CommandStack[self.userkey].append(['bigbrother'])
+                self.bigbrother=True
                 
     def resetBigBrother(self):
         if self.userkey !='':
@@ -175,6 +176,7 @@ class Desktop(object):
         self.messages=user.messages
         self.photo=user.photo
         self.ip=user.ip
+        self.ltsp=user.ltsp
         if user.ltsp:
             self.mainIP=user.ipLTSP
         else:

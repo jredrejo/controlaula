@@ -187,7 +187,7 @@ class Classroom():
         the (seconds) interval"""
 
         for i in self.LoggedUsers.keys():
-            if self.broadcast.broadcasting:
+            if self.broadcast.broadcasting or self.myVNC.activeBB:
                 self.updateUserTimeStamp(self.LoggedUsers[i].key)
             else:            
                 if self._checkInterval(self.LoggedUsers[i],self.interval):
@@ -195,7 +195,7 @@ class Classroom():
                     self.removeUser(i)
                 
         for i in self.Hosts.keys():
-            if self.broadcast.broadcasting:
+            if self.broadcast.broadcasting or self.myVNC.activeBB:
                 self.updateHostTimeStamp(self.Hosts[i].ip)
             else:
                 if self._checkInterval(self.Hosts[i],self.interval):
