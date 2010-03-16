@@ -8,6 +8,8 @@ var ImageChooser = function(config){
 	this.config = config;
 }
 
+var selCapture;
+
 ImageChooser.prototype = {
     // cache data by image name for easy lookup
     lookup : {},
@@ -18,10 +20,10 @@ ImageChooser.prototype = {
 
 			this.store = new Ext.data.JsonStore({
 			   // url: this.config.url,
-				proxy: new Ext.data.HttpProxy({
-					url: this.config.url,
-					method: 'POST'
-				}),
+					proxy: new Ext.data.HttpProxy({
+						url: this.config.url,
+						method: 'POST'
+					}),
 			    root: 'images',
 			    fields: ['pcname','name', 'url'],
 			    listeners: {
@@ -125,18 +127,31 @@ ImageChooser.prototype = {
 		this.detailsTemplate.compile();
 	},
 
+	reload : function(){
+		this.store.load();
+		this.updateDetails();
+	},
+
 	showDetails : function(){
 	    var selNode = this.view.getSelectedNodes();
 	    var detailEl = Ext.getCmp('img-detail-panel').body;
 		if(selNode && selNode.length > 0){
-			selNode = selNode[0];
-		    var data = this.lookup[selNode.id];
-            detailEl.hide();
-            this.detailsTemplate.overwrite(detailEl, data);
-            detailEl.slideIn('l', {stopFx:true,duration:.2});
+			selNode = selCapture = selNode[0];
+		   var data = this.lookup[selNode.id];
+         detailEl.hide();
+         this.detailsTemplate.overwrite(detailEl, data);
+         detailEl.slideIn('l', {stopFx:true,duration:.2});
 		}else{
 		    //detailEl.update('');
 		}
+	},
+
+	updateDetails : function(){
+	      var detailEl = Ext.getCmp('img-detail-panel').body;
+		   var data = this.lookup[selCapture.id];
+         //detailEl.hide();
+         this.detailsTemplate.overwrite(detailEl, data);
+         detailEl.slideIn('l', {stopFx:true,duration:.2});
 	},
 
 	doCallback : function(){

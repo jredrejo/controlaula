@@ -118,7 +118,7 @@
     		});
     	}
     	chooser.show(document.getElementById("buttons"), insertImage);
-		varInterval = setInterval("chooser.store.load()",REFRESH_BIGBROTHER);
+		varInterval = setInterval("chooser.reload()",REFRESH_BIGBROTHER);
     };
 
    var maskWindow;
