@@ -26,7 +26,7 @@
 
 import subprocess,os,logging,tempfile
 from ControlAula.Utils import MyUtils,NetworkUtils,crippled_des
-from signal import  SIGTERM
+from signal import  SIGTERM,SIGKILL
 
 class VNC(object):
     '''
@@ -83,9 +83,9 @@ class VNC(object):
                     self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
                 else:
                     if MyUtils.isLTSP()=='':
-                        self.procServer=subprocess.Popen(['x11vnc', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
+                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
                     else:
-                        self.procServer=subprocess.Popen(['x11vnc', '-ncache','10', '-passwd',  self.writePasswd])
+                        self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10', '-passwd',  self.writePasswd])
         except:
             logging.getLogger().error('x11vnc is not working in this system')
             
@@ -96,9 +96,10 @@ class VNC(object):
         from twisted.internet import reactor
         import xmlrpclib
         screenshot=os.path.join( MyUtils.getHomeUser(),'.controlaula/vnc.png')
-        subprocess.Popen(['scrot','-t','15',screenshot])
+        screenshot_thumb=os.path.join( MyUtils.getHomeUser(),'.controlaula/vnc-thumb.png')
+        subprocess.Popen(['scrot','-t','25',screenshot])
         try:
-            f = xmlrpclib.Binary(open(screenshot, 'rb').read())
+            f = xmlrpclib.Binary(open(screenshot_thumb, 'rb').read())
             self.myteacher.screenshot(self.mylogin,self.myIP,f)         
         except:
             logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
@@ -134,7 +135,8 @@ class VNC(object):
         try:
             #self.procServer.terminate(): not available in python 2.5
             pid=self.procServer.pid
-            os.kill(pid, SIGTERM)
+            self.procServer=None
+            os.kill(pid, SIGKILL)
         except:
             pass        
     def getData(self):

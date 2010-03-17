@@ -112,7 +112,16 @@ class Desktop(object):
             
     def setBigBrother(self):
         if self.userkey!='':
-            if not self.bigbrother:
+            from shutil import copyfile
+            from Utils import Configs
+            import os.path            
+            if not self.bigbrother:      
+                photo=os.path.basename(self.photo)          
+                self.classroom.LoggedUsers[self.userkey].shotname=photo
+                try:
+                    copyfile(os.path.join(Configs.IMAGES_DIR,photo),os.path.join(Configs.IMAGES_DIR + '/screenshots',photo))
+                except:
+                    pass
                 self.classroom.CommandStack[self.userkey].append(['bigbrother'])
                 self.bigbrother=True
                 

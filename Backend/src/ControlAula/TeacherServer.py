@@ -102,6 +102,10 @@ class RPCServer(xmlrpc.XMLRPC):
             return   "ok"
         datum = file.data
         shotname=login + time.strftime('%Y%m%d%H%M%S',time.localtime()) + '.png'
+        try:
+            os.remove(os.path.join(Configs.IMAGES_DIR + '/screenshots',self.classroom.LoggedUsers[key].shotname))
+        except:
+            pass
         self.classroom.LoggedUsers[key].shotname=shotname
         thefacename=os.path.join(Configs.IMAGES_DIR + '/screenshots',shotname)
         
@@ -109,7 +113,6 @@ class RPCServer(xmlrpc.XMLRPC):
             theface = open(thefacename, "wb")
             theface.write(datum)
             theface.close()
-            self.classroom.addPhoto('/loginimages/screenshots/' + login + '.png',key)
         except:
             pass
         #os.spawnl(os.P_NOWAIT, '/usr/bin/display', '/tmp/gnu.jpg')   

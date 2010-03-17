@@ -39,7 +39,7 @@ class Plugins(object):
         self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,
-                'resetbigbrother':self.disableBigBrother,
+                'disablebigbrother':self.disableBigBrother,
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
@@ -81,8 +81,8 @@ class Plugins(object):
         self.myVNC.startServer()    
         
     def disableBigBrother(self):
-        self.myVNC.activeBB=False        
         self.myVNC.stop() 
+        self.myVNC.activeBB=False            
                 
     def projector(self):
         self.myVNC.startROViewer(self.teacherIP)

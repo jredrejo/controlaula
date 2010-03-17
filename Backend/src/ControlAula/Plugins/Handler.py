@@ -37,7 +37,7 @@ class Plugins(object):
                 'classroomConfig':self.classroomConfig,    
                 'deleteComputer':self.deleteComputer,
                 'bigbrother':self.bigBrother,
-                'disableBigbrother':self.disableBigBrother,
+                'disableBigBrother':self.disableBigBrother,
                 'enableProjector':self.enableProjector,
                 
                 'disableProjector':self.disableProjector,
@@ -68,7 +68,7 @@ class Plugins(object):
         return self.handlers.has_key(command)  
     
     def process(self,command):        
-        if self.handlers.has_key(command):            
+        if self.handlers.has_key(command):                   
             handler=self.handlers[command]
             logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
             s=handler(*self.args)
@@ -111,7 +111,8 @@ class Plugins(object):
         
     def disableBigBrother(self):
         self.classroom.myVNC.activeBB=False
-        self.usersCommand(Desktop.resetBigBrother)        
+        for i in self.classroom.Desktops:            
+                i.resetBigBrother()              
         #MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
         
     def openVNC(self):

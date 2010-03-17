@@ -109,7 +109,9 @@ class ControlAulaProtocol(resource.Resource):
             recvjson='{}'
             request.content.read()
             if request.args.has_key('data'):
-                recvjson = request.args['data'][0]            
+                recvjson = request.args['data'][0]    
+                if recvjson=='':
+                    recvjson='{}'        
             if json.loads(recvjson).has_key('args'):
                 args=json.loads(recvjson)['args']
         except:
