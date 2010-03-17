@@ -86,9 +86,9 @@ ImageChooser.prototype = {
 					id: 'img-detail-panel',
 					region: 'east',
 					split: true,
-					width: 300,
-					minWidth: 300,
-					maxWidth: 300
+					width: 350,
+					minWidth: 350,
+					maxWidth: 350
 				}],
 				buttons: [{
 					text: 'Cerrar',
@@ -124,7 +124,7 @@ ImageChooser.prototype = {
 		this.detailsTemplate = new Ext.XTemplate(
 			'<div class="details">',
 				'<tpl for=".">',
-					'<img src="{url}" style="width:280px;"><div class="details-info">',
+					'<img src="{url}" style="width:330px;"><div class="details-info">',
 					'<span><b>Equipo:&nbsp;{pcname}</b></span>',
 					'<span><b>Usuario:&nbsp;{name}</b></span></div>',
 					'<div style="text-align:center;"><input type="button" onClick="sendOrderPC(\'openVNC\',\'{pcname}\',\'\')" value="Ver equipo"></div>',

@@ -113,7 +113,7 @@
     	if(!chooser){
     		chooser = new ImageChooser({
     			url:'getCaptures',
-    			width:900,
+    			width:950,
     			height:500
     		});
     	}
