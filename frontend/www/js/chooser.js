@@ -105,7 +105,7 @@ ImageChooser.prototype = {
 		    this.win = new Ext.Window(cfg);
 		}
 
-	   this.win.show(el);
+	    this.win.show(el);
 		this.callback = callback;
 		this.animateTarget = el;
 	},

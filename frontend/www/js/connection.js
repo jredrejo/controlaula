@@ -30,6 +30,9 @@ function sendOrderSelected(url,args,action){
 
 	if(dataviewON.getSelectedRecords().length=="0"){
 		Ext.Msg.alert('Atención', 'Debe seleccionar al menos un equipo.');
+
+		if(maskWindow)
+			maskWindow.hide();
 		return;
 	}
 
@@ -156,6 +159,19 @@ function connection(url,data,action){
 					}else if(resultJSON.result=="ack"){
 						winSendFile.hide();
 					    Ext.example.msg('Envíar Archivo','El envío se ha realizado correctamente.');
+					}
+					break;
+				}
+				case "sendMessage":{
+					maskWindow.hide();
+
+					resultJSON = Ext.util.JSON.decode(result.responseText);
+					if(resultJSON.result=="Bad send"){
+						Ext.Msg.alert('Atención', 'Ocurrió un error.');
+						return;
+					}else if(resultJSON.result=="ack"){
+						winSendMessage.hide();
+					    Ext.example.msg('Envíar Mensaje','El envío se ha realizado correctamente.');
 					}
 					break;
 				}

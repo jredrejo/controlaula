@@ -7,6 +7,30 @@
  * 
  */
 
+var web="http://www.educarex.es";
+
+Ext.ns('Ext.ux.form');
+Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
+    initComponent : function(){
+        Ext.ux.form.SearchField.superclass.initComponent.call(this);
+        this.on('specialkey', function(f, e){
+            if(e.getKey() == e.ENTER){
+                this.onTrigger();
+            }
+        }, this);
+    },
+
+    validationEvent:false,
+    validateOnBlur:false,
+    trigger1Class:'x-form-clear-trigger',
+    trigger2Class:'x-form-search-trigger',
+    hideTrigger1:true,
+    hasSearch : false,
+
+    onTrigger : function(){
+		document.getElementById("frameweb").src = web = "http://"+this.getRawValue();
+    }
+});
 
 //#########################################################################################################
 //####################################### Parametros de DataView ##########################################
@@ -122,7 +146,7 @@
     };
 
    var maskWindow;
-   var winSendVideo, winDVD, winSendFile;
+   var winSendVideo, winDVD, winSendFile, winSendMessage, winWeb;
 
 	function openWindow(type){
 
@@ -250,6 +274,100 @@
 					winSendFile.show(this);
 					break;
 				}
+				case 'sendMessage':{
+					if(!winSendMessage){
+						var formSendMessage = new Ext.FormPanel({
+													labelAlign: 'top',
+													frame:true,
+													bodyStyle:'padding:5px 5px 0',
+													width: 600,
+													items: [{
+														items:[{
+															layout: 'form',
+															items: [{
+																xtype:'textarea',
+																fieldLabel: 'Mensaje',
+																name: 'message',
+																anchor:'100%'
+															}]
+														}]
+													}],
+												})
+
+						winSendMessage = new Ext.Window({
+									 applyTo:'windowSendMessage',
+									 layout:'fit',
+									 width:450,
+									 height:180,
+									 closeAction:'hide',
+									 plain: true,
+									 focus: Ext.emptyFn,
+
+									 items:[formSendMessage],
+
+									 buttons: [{
+										text: 'Enviar a seleccionados',
+										width:130,
+										handler: function(){
+											maskWindow = new Ext.LoadMask("windowSendMessage", {msg:"Enviando mensaje"});
+											maskWindow.show();
+											sendOrderSelected('sendmessage',formSendMessage.getForm().findField("message").getValue(),"sendMessage");
+										}
+									 },{
+										text: 'Enviar a todos',
+										width:130,
+										handler: function(){
+											maskWindow = new Ext.LoadMask("windowSendMessage", {msg:"Enviando mensaje"});
+											maskWindow.show();
+											sendOrderAll('sendmessage',formSendMessage.getForm().findField("message").getValue(),"sendMessage");
+										}
+									 },{
+										  text: 'Cerrar',
+										  handler: function(){ winSendMessage.hide();}
+									 }]
+								});
+					}
+					winSendMessage.show(this);
+					break;
+				}
+				case 'web':{
+					if(!winWeb){
+						winWeb = new Ext.Window({
+									 applyTo:'windowWeb',
+									 layout:'fit',
+									 width:1000,
+									 height:650,
+									 closeAction:'hide',
+									 plain: true,
+									 focus: Ext.emptyFn,
+
+							         html: "<iframe id='frameweb' style='width:100%; height:100%' src='http://www.educarex.es'></iframe>",
+									 tbar: ['<b>Web:</b> ', ' http://',
+										new Ext.ux.form.SearchField({
+											width:320,
+											value:"ww.educarex.es"
+										})],
+									 buttons: [{
+										text: 'Enviar a seleccionados',
+										width:130,
+										handler: function(){
+											sendOrderSelected('launchweb',document.getElementById("frameweb").src,"");
+										}
+									 },{
+										text: 'Enviar a todos',
+										width:130,
+										handler: function(){
+											sendOrderAll('launchweb',document.getElementById("frameweb").src,"");
+										}
+									 },{
+										  text: 'Cerrar',
+										  handler: function(){ winWeb.hide();}
+									 }]
+								});
+					}
+					winWeb.show(this);
+					break;
+				}
 			}
 	}
 
@@ -365,8 +483,17 @@
 		  width:105,
 		  iconAlign:'top',
         handler: function(){
-			//sendMessageWindow();
-            sendOrderSelected("bigbrother","","cambiaconfig");
+			openWindow("sendMessage");
+        },
+    });
+
+    var web = new Ext.Action({
+        text: 'Navegación Web',
+        iconCls: 'internet',
+		  width:105,
+		  iconAlign:'top',
+        handler: function(){
+			openWindow("web");
         },
     });
 
@@ -388,23 +515,6 @@
         handler: function(){
 			choose();
         },
-    });
-
-    var bigBrotherON = new Ext.Action({
-        text: 'Habilitar',
-        handler: function(){
-			choose();
-//			sendOrderSelected("bigbrother","","cambiaconfig");
-        },
-        iconCls: 'done'
-    });
-
-    var bigBrotherOFF = new Ext.Action({
-        text: 'Deshabilitar',
-        handler: function(){
-			sendOrderSelected("disableBigbrother","","cambiaconfig");
-        },
-        iconCls: 'cancel'
     });
 
 	var botonsDataview = {
@@ -470,10 +580,10 @@
 					,{ text: 'Mensajes',iconAlign:'top', width:105, iconCls: 'messages', menu: [messagesON,messagesOFF]}
 					,{ text: 'Proyector',iconAlign:'top', width:105, iconCls: 'projector', menu: [projectorON,projectorOFF]}
 					,{ text: 'Video',iconAlign:'top', width:105, iconCls: 'video', menu: [videoDVD,videoFile]}
-//					,sendMessage
-					,bigBrother
-					//,{ text: 'Gran Hermano',iconAlign:'top', width:105, iconCls: 'eye', menu: [bigBrotherON,bigBrotherOFF]}
-					,sendFile]
+					,sendMessage
+					,sendFile
+					,web
+					,bigBrother]
 		     }]
 		}
 
