@@ -38,10 +38,10 @@ function sendOrderSelected(url,args,action){
 		selected[i] = dataviewON.getSelectedRecords()[i].get("pcname");
 		var name = dataviewON.getSelectedRecords()[i].get("name")
 
-		if(dir=="wakeup" && name=="Apagado"){
+		if(url=="wakeup" && name=="Apagado"){
 			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Encendiendo"});
 			myMask.show();
-		}else if(dir=="sleep" && name!="Apagado" && name!="&nbsp;"){
+		}else if(url=="sleep" && name!="Apagado" && name!="&nbsp;"){
 			var myMask = new Ext.LoadMask(dataviewON.getSelectedRecords()[i].get("position"), {msg:"Apagando"});
 			myMask.show();
 		}

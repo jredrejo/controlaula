@@ -47,7 +47,7 @@ ImageChooser.prototype = {
 				store: this.store,
 				listeners: {
 					'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
-					'dblclick'       : {fn:this.doCallback, scope:this},
+					'dblclick'       : {fn:this.openVPN, scope:this},
 					'loadexception'  : {fn:this.onLoadException, scope:this},
 					'beforeselect'   : {fn:function(view){
 				        return view.store.getRange().length > 0;
@@ -151,20 +151,15 @@ ImageChooser.prototype = {
 		   var data = this.lookup[selCapture.id];
          //detailEl.hide();
          this.detailsTemplate.overwrite(detailEl, data);
-         detailEl.slideIn('l', {stopFx:true,duration:.2});
+//         detailEl.slideIn('l', {stopFx:true,duration:.2});
 	},
 
-	doCallback : function(){
+	openVPN : function(){
         var selNode = this.view.getSelectedNodes()[0];
-		var callback = this.callback;
-		var lookup = this.lookup;
-		this.win.hide(this.animateTarget, function(){
-            if(selNode && callback){
-				var data = lookup[selNode.id];
-				callback(data);
-			}
-		});
-    },
+		var data = this.lookup[selNode.id];
+		if(data["pcname"]!="")
+			sendOrderPC('openVNC',data["pcname"],'');
+	},
 
 	onLoadException : function(v,o){
 	    this.view.getEl().update('<div style="padding:10px;">Error loading images.</div>');
