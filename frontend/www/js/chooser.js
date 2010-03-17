@@ -33,8 +33,15 @@ ImageChooser.prototype = {
 			this.store.load();
 
 			var formatData = function(data){
-		    	data.shortName = data.name.ellipse(15);
-		    	this.lookup[data.name] = data;
+				if(data.url=="")
+					data.url="images/pc_none.png";
+
+				if(data.name=="")
+					data.shortName="&nbsp;";
+				else
+					data.shortName = data.name.ellipse(15);
+
+				this.lookup[data.name] = data;
 		    	return data;
 		    };
 
