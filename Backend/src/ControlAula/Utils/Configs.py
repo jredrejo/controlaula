@@ -24,7 +24,7 @@
 import MyUtils
 
 import ConfigParser,os,shutil, logging
-
+from sys import argv
 
 class SirvecoleConfig(object):
 
@@ -334,7 +334,7 @@ if not os.path.isdir(FILES_DIR):
                 
 NOBODY_IMG=os.path.join(IMAGES_DIR,'nobody.png')
 if not os.path.exists(NOBODY_IMG):
-    shutil.copy2(os.path.join(os.getcwd(),'Monitor/nobody.png'),NOBODY_IMG)
+    shutil.copy2(os.path.join(os.path.dirname(argv[0]),'nobody.png'),NOBODY_IMG)
 LOG_FILENAME= os.path.join(MyUtils.getHomeUser(),'.controlaula/controlaula.log')
 
 PORT=8900

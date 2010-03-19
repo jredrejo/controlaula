@@ -115,6 +115,8 @@ class ControlAulaProtocol(resource.Resource):
             if json.loads(recvjson).has_key('args'):
                 args=json.loads(recvjson)['args']
         except:
+            pass
+        if args=='':
             try:
                 args=request.args['node']
             except:
