@@ -23,12 +23,12 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	dh_installdirs
-	python setup.py install --prefix=/usr --no-compile --root=debian/controlaula
+	python setup.py install --prefix=/usr    --root=$(CURDIR)/debian/controlaula
 
 
 # Build architecture-independent files here.
 binary-indep: build install
-	dh_pysupport
+	dh_pysupport -i
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 

@@ -1,4 +1,4 @@
-controlaula (1.5.0-1) unstable; urgency=low
+controlaula (1.4.99-1) unstable; urgency=low
 
   * New version rewritten to use a web frontend. Thanks very much to
     Manu Mora for his gard and incredible work developing all the 
