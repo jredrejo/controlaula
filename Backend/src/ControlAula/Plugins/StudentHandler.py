@@ -52,7 +52,7 @@ class Plugins(object):
                 'sleep':self.sleep,        
                 'broadcast':self.broadcast,
                 'stopBroadcast':self.stopBroadcast,
-                'sendmessage':self.sendMessage,
+                'receiveMessage':self.receiveMessage,
                 'receiveFile':self.receiveFile,
                 'receiveDir':self.receiveDir,                
                 'startapplication':self.startApp,
@@ -147,8 +147,12 @@ class Plugins(object):
     def stopBroadcast(self):
         self.myBcast.stop()      
          
-    def sendMessage(self, text):
-        self.destroyProcess()
+    def receiveMessage(self, text):
+        import pynotify
+        pynotify.init('controlaula')
+        n=pynotify.Notification("Mensaje del profesor",text,"dialog-warning")
+        n.set_timeout(pynotify.EXPIRES_NEVER)
+        n.show()
         
     def receiveFile(self,url):
         from os.path import join

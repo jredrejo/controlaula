@@ -272,7 +272,8 @@ class Plugins(object):
         return result     
     
     def sendMessage(self, text):
-        pass
+        self.usersCommand(Desktop.sendMessage,[text])
+        
     def startApp(self,command):
         pass 
 

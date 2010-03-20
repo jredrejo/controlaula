@@ -98,6 +98,10 @@ class Desktop(object):
 
     def disableMessages(self):
         self._Messages('0', 'enableMessages')   
+        
+    def sendMessage(self,text):
+        if self.userkey!='':
+            self.classroom.CommandStack[self.userkey].append(['receiveMessage',text])
                     
     def setProjector(self):
         if self.hostkey!='':
