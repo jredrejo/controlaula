@@ -54,13 +54,13 @@ def SigHandler(signum, frame):
     sys.exit()                                                   
 
 
-def _add_teacher(self, name, address, port):
+def _add_teacher(self, name, address, port,data={}):
     #discard ipv6 entries
     if address.find(":") == -1:
         logging.getLogger().debug('New teacher detected: ' + name)
         if not Teachers.has_key(name):
             Teachers[name]=(address,port)
-            MyStudent.newTeacher(name)
+            MyStudent.newTeacher(name,data)
 
 
 def _remove_teacher(self, name, address, port):    

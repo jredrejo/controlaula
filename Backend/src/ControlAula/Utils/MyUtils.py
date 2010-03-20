@@ -77,7 +77,11 @@ def getClassroomName(name):
     '''for a hostname following the classroomname-oXX criteria, returns the classroom name'''
     
     hostname=name.strip().split('.')[0].replace('_','-')
-    return hostname.split('-')[0]
+    items=hostname.split('-')
+    if len(items)==2:
+        return items[0]
+    else:
+        return "noclassroomname" 
 
 def getDesktopNumber(name):
     '''for a hostname following the classroomname-oXX criteria, returns the "XX"'''

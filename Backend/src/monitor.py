@@ -54,13 +54,13 @@ def SigHandler(signum, frame):
     sys.exit()                                                   
 
 
-def _add_teacher(self, name, address, port):
+def _add_teacher(self, name, address, port,data={}):
     #discard ipv6 entries
     if address.find(":") == -1:
         logging.getLogger().debug('New teacher detected: ' + name)
         if not Teachers.has_key(name):
             Teachers[name]=(address,port)
-            MyStudent.newTeacher(name)
+            MyStudent.newTeacher(name,data)
 
 
 def _remove_teacher(self, name, address, port):    
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         from ControlAula.Utils  import Publications
         from twisted.web import server
         
-        service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + NetworkUtils.get_ip_inet_address(),"web=" + str( WEBPORT) ])
+        service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + NetworkUtils.get_ip_inet_address(),"web=" + str( WEBPORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
         service.publish()
         #Initialize classroom data
         MyClass=Classroom.Classroom(REFRESH)

@@ -77,9 +77,15 @@ class AvahiMonitor():
         def resolve_service_reply(*service):
             address, port = service[-4:-2]
             name = unicode(service[2])
+            data=avahi.txt_array_to_string_array(service[9])
+            datdict={}
+            for i in data:
+                bit=i.split('=')
+                if len(bit)==2:
+                    datdict[bit[0]]=bit[1]
             for cb in self._callbacks['new-service']:
                 self._plugged[name] = (address,port)                
-                cb(self,name, address, port)
+                cb(self,name, address, port,datdict)
                 
         def resolve_service_error(exception):
             try:

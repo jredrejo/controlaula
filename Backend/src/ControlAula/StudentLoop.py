@@ -73,10 +73,12 @@ class Obey(object):
                 
         reactor.callLater(self.interval, self.listen)
         
-    def newTeacher(self,name):
+    def newTeacher(self,name,data={}):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
+        if Configs.RootConfigs['classroomname']!=data['classroomname']:
+            return #it's a teacher of any other classroom
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
 
         self.catched=name
