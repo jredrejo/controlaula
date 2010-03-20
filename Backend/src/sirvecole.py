@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 ##############################################################################
 # Project:     Controlaula/Sirvecole
@@ -32,7 +32,7 @@ import logging
 import subprocess
 import os
 from ControlAula.Utils import NetworkUtils
-
+from twisted.application import service
 
 
 
@@ -73,49 +73,55 @@ def _remove_teacher(self, name, address, port):
         
         
         
-if __name__ == '__main__':
-    
+#if __name__ == '__main__':
+
      
-    from twisted.internet import glib2reactor
-    glib2reactor.install()  
-    
-    from twisted.internet import reactor
-    
-    
+#    from twisted.internet import glib2reactor
+#    glib2reactor.install()  
 
-    # Initialise the signal handler.
-    signal.signal(signal.SIGINT, SigHandler)  
-    
-    HOSTNAME=NetworkUtils.getHostName()
-    
+from twisted.internet import reactor
 
 
-    logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)-8s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename=LOG_FILENAME)
-    
-    if os.path.exists('/usr/sbin/ethtool'):
-        subprocess.call(['ethtool','-s','eth0','wol','g'])
-    ######### Begin the application loop #######
 
-    from ControlAula import ScanTeachers, StudentLoop
-    
+# Initialise the signal handler.
+signal.signal(signal.SIGINT, SigHandler)  
+
+HOSTNAME=NetworkUtils.getHostName()
+
+
+
+logging.basicConfig(level=logging.DEBUG,
+                format='%(asctime)s %(levelname)-8s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S',
+                filename=LOG_FILENAME)
+
+if os.path.exists('/usr/sbin/ethtool'):
+    subprocess.call(['ethtool','-s','eth0','wol','g'])
+######### Begin the application loop #######
+
+from ControlAula import ScanTeachers, StudentLoop
+
+try:
+    monitor = ScanTeachers.AvahiMonitor()    
+    monitor.add_callback('new-service', _add_teacher)
+    monitor.add_callback('remove-service',    _remove_teacher)
+    monitor.start()
+
+except Exception, ex:
+    error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
+    logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
+    sys.exit()
+
+#vlc cache for the nobody user:
+if not os.path.isdir('/nonexistent/.vlc/cache'):
     try:
-        monitor = ScanTeachers.AvahiMonitor()    
-        monitor.add_callback('new-service', _add_teacher)
-        monitor.add_callback('remove-service',    _remove_teacher)
-        monitor.start()
+        os.makedirs('/nonexistent/.vlc/cache')
+    except:
+        pass
 
-    except Exception, ex:
-        error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
-        logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
-        sys.exit()
+MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
+reactor.callWhenRunning(MyStudent.listen)
     
-    #PENDING: SI NO EXISTE /nonexistent/.vlc/cache hay que crearlo
-    
-    MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
-    reactor.callWhenRunning(MyStudent.listen)
-        
-reactor.run()
+#reactor.run()
 
+application = service.Application('controlaula',uid=0,gid=0)
