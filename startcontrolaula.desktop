@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=/usr/bin/Monitor.py
+Exec=/usr/bin/controlaula
 Icon=/usr/share/pixmaps/controlaula.png
 Terminal=false
 Name[es_ES]=Control del Aula

@@ -51,8 +51,8 @@ case "$1" in
 	# Make cache files readable
 	umask 022
 	start-stop-daemon --start --quiet --exec $twistd -- \
-            --pidfile=$pidfile 	--rundir=$rundir --python=$application \
-	    --logfile=$logfile 	--no_save
+            --pidfile=$pidfile  --python $application	--rundir=$rundir  \
+	    --logfile=$logfile  --reactor=glib2 	--no_save
 	log_end_msg $?
     ;;
 

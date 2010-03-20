@@ -1,4 +1,4 @@
-include GPL-LICENSE.txt controlaula.desktop controlaula.png  startcontrolaula.desktop
+include GPL-LICENSE.txt controlaula.desktop controlaula.png  startcontrolaula.desktop controlaula nobody.png
 recursive-include Backend frontend 
 
 recursive-include Backend *

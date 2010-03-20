@@ -15,6 +15,8 @@ for root, dir, files in os.walk('frontend/www'):
 datafiles.append(('share/pixmaps',['controlaula.png']))
 datafiles.append(('share/applications',['controlaula.desktop']))
 datafiles.append(('/etc/xdg/autostart',['startcontrolaula.desktop']))
+datafiles.append(('share/controlaula',['nobody.png']))
+datafiles.append(('share/controlaula',['Backend/src/monitor.py']))
 
 setup(name='ControlAula',
 	version='1.5',
@@ -26,9 +28,10 @@ setup(name='ControlAula',
 	license = "GNU GPLv3",
     packages=['ControlAula','ControlAula.Plugins','ControlAula.Utils'],
 	package_dir={'ControlAula': 'Backend/src/ControlAula'},
+#	package_data={'ControlAula': ['nobody.png']},    
 	url = 'http://www.itais.net/en/',
 	# Those are going to be installed on /usr/bin/
-	scripts=['Backend/src/monitor.py','Backend/src/sirvecole.py'],
+	scripts=['controlaula','Backend/src/sirvecole.py'],
 
 	data_files=datafiles 
     )
