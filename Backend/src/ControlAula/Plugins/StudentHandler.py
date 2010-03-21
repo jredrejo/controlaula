@@ -43,6 +43,8 @@ class Plugins(object):
                 'projector':self.projector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
+                'rootenableInternet':self.rootEnableInternet,
+                'rootdisableInternet':self.rootDisableInternet,                
                 'enableMouse':self.enableMouse,
                 'disableMouse':self.disableMouse,
                 'enableSound':self.enableSound,
@@ -89,8 +91,27 @@ class Plugins(object):
          
     def enableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','1')
+              
     def disableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','0')
+        
+    def rootEnableInternet(self,login):
+        try:
+            p1=subprocess.Popen(['iptables-save'],stdout=subprocess.PIPE).communicate()[0]
+            for i in p1.split('\n'):
+                if i[:9]=='-A OUTPUT':
+                    if i.find('--uid-owner ' + login) >-1:
+                        command='iptables -D' + i[2:]
+                        subprocess.Popen(command,shell=True)
+        
+        except:
+            pass
+        
+    def rootDisableInternet(self,login):
+        command=['iptables','-I','OUTPUT','-p','tcp','-m','multiport','--dports']
+        command +=['21,23,80,143,194,443,445','-m','owner','--uid-owner',login,'-j','DROP']
+        subprocess.Popen(command)
+        
     def enableMouse(self):
         if MyUtils.getLoginName()=='root':
             Actions.enableKeyboardAndMouse(self.display)

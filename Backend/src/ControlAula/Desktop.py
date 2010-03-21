@@ -76,7 +76,7 @@ class Desktop(object):
         if self.userkey!='':
             self.classroom.CommandStack[self.userkey].append([command])
             #the host must disable internet to this user:
-            self.classroom.CommandStack[self.mainIP].append([command,self.login])
+            self.classroom.CommandStack[self.ip].append(['root'+command,self.login])
             self.internet=value
             self.classroom.Hosts[self.mainIP].internetEnabled=value
             self.classroom.LoggedUsers[self.userkey].internet=value        
