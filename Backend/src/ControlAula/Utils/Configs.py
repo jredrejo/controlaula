@@ -319,26 +319,29 @@ class MonitorConfig(object):
         
                                 
 ########################################################                                
+
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
 if not os.path.isdir(APP_DIR):
         os.mkdir(APP_DIR)
-IMAGES_DIR=os.path.join(APP_DIR,'loginimages')
-if not os.path.isdir(IMAGES_DIR):
-        os.mkdir(IMAGES_DIR)
-if not os.path.isdir(IMAGES_DIR + '/screenshots'):
-        os.mkdir(IMAGES_DIR + '/screenshots')
-                
-FILES_DIR=os.path.join(APP_DIR,'sendfile')
-if not os.path.isdir(FILES_DIR):
-        os.mkdir(FILES_DIR)
-                
-NOBODY_IMG=os.path.join(IMAGES_DIR,'nobody.png')
-if not os.path.exists(NOBODY_IMG):
-    shutil.copy2(os.path.join(path[0],'nobody.png'),NOBODY_IMG)
-LOG_FILENAME= os.path.join(MyUtils.getHomeUser(),'.controlaula/controlaula.log')
-
-PORT=8900
-PAGES='/var/www'
+            
+if MyUtils. getLoginName()!='root':            
+    IMAGES_DIR=os.path.join(APP_DIR,'loginimages')
+    if not os.path.isdir(IMAGES_DIR):
+            os.mkdir(IMAGES_DIR)
+    if not os.path.isdir(IMAGES_DIR + '/screenshots'):
+            os.mkdir(IMAGES_DIR + '/screenshots')
+                    
+    FILES_DIR=os.path.join(APP_DIR,'sendfile')
+    if not os.path.isdir(FILES_DIR):
+            os.mkdir(FILES_DIR)
+                    
+    NOBODY_IMG=os.path.join(IMAGES_DIR,'nobody.png')
+    if not os.path.exists(NOBODY_IMG):
+        shutil.copy2(os.path.join(path[0],'nobody.png'),NOBODY_IMG)
+    LOG_FILENAME= os.path.join(MyUtils.getHomeUser(),'.controlaula/controlaula.log')
+    
+    PORT=8900
+#PAGES='/var/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
                 
