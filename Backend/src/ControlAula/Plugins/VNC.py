@@ -164,7 +164,7 @@ class VNC(object):
     
         f = open(file, "w")
         f.write(response)
-        f.close  
+        f.close()  
         try:  
             os.chown(file,65534,0)
         except:

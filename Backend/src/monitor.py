@@ -29,13 +29,14 @@
 import signal
 import sys
 import logging
+import os.path
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
-PAGES='/var/www/controlaula'
+PAGES='/usr/share/controlaula/frontend/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
 
@@ -125,7 +126,11 @@ if __name__ == '__main__':
         _ListenMsg = """\n\tFatal Error - cannot listen on port %s.
         \tThis port may already be in use by another program.\n\n"""
 
-        print WEBPORT
+        #print WEBPORT
+        f = open(os.path.join(Configs.APP_DIR,'launcher') , 'wb')
+        f.write('http://localhost:' + str(WEBPORT) + '/index.html')
+        f.close()  
+        
         try:
             reactor.listenTCP(WEBPORT, AulaSite)
             reactor.callWhenRunning(MyClass.UpdateLists)
