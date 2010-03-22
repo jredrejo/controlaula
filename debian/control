@@ -10,7 +10,7 @@ Homepage:http://www.itais.net/en
 
 Package: controlaula
 Architecture: all
-Depends: ${python:Depends}, python-avahi, python-gobject, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, scrot, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, wakeonlan, x11vnc (>= 0.8.2), iptables
+Depends: ${python:Depends}, python-avahi, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, scrot, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, wakeonlan, x11vnc (>= 0.8.2), iptables
 Recommends: cups-client
 Suggests: libdvdcss2
 Description: Classroom management tool
