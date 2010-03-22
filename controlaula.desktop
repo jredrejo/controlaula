@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=firefox `cat ~/.controlaula/launcher`
+Exec=x-www-browser  ~/.controlaula/launcher.html
 Icon=/usr/share/pixmaps/controlaula.png
 Terminal=false
 Name[es_ES]=Control del Aula
