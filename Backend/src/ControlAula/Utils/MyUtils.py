@@ -155,8 +155,12 @@ def getXttyAuth():
         if p[i]=='-auth':
             xauth=p[i+1]
             break
-        
-    if xauth!='' and getLoginName()=='root':       
+
+    if xauth=='':
+        xauth=os.path.join(getHomeUser(),  '.Xauthority'   )
+                    
+    if getLoginName()=='root':       
+
         command='xauth -f ' + xauth + ' add `hostname -s`/unix' + display + ' . ' + generateUUID(24)
         subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
         os.environ['XAUTHORITY']=xauth
