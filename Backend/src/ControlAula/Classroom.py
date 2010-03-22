@@ -23,7 +23,7 @@
 ##############################################################################
 import datetime,logging
 import Desktop
-from ControlAula.Utils import  Configs, MyUtils
+from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
 from ControlAula.Plugins import VNC,Broadcast
 
 class Classroom(object):
@@ -89,8 +89,9 @@ class Classroom(object):
         if not self.Hosts.has_key(host.ip):
             logging.getLogger().debug('The  host  %s has appeared' %   (host.ip))
             self.Hosts[host.ip]=host
-            self.placeHostDesktop(host.ip)
-            #intialize list of commands for this client
+            if host.hostname!=NetworkUtils.getHostName(): #the teacher host is not added to the list when it's LTSP
+                self.placeHostDesktop(host.ip)
+            #intialize list of commands for this client, if is a LTSP server, it needs to be added
             self.CommandStack[host.ip]=[]
             #save its mac address:
             Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)

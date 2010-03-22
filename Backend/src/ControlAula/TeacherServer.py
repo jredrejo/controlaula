@@ -68,8 +68,6 @@ class RPCServer(xmlrpc.XMLRPC):
             return False
         if NetworkUtils.get_ip_inet_address()== hostip and NetworkUtils.getHostName()==hostname:
             return False #the teacher host is not added to the list
-        if NetworkUtils.get_ip_inet_address('192.168.0.253')== hostip and NetworkUtils.getHostName()==hostname:
-            return False #the teacher host is not added to the list     and LTSP server   
         host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
         self.classroom.addHost(host)
         return True
