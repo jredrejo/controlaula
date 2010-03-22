@@ -36,7 +36,10 @@
         .sendFile { background-image:url('images/icon_file.png') !important; }
         .message { background-image:url('images/icon_message.png') !important; }
         .eye { background-image:url('images/icon_eye.png') !important; }
-
+        .add { background-image:url('images/icon_add.png') !important; }
+        .remove { background-image:url('images/icon_remove.png') !important; }
+        .config { background-image:url('images/cog.png') !important; }
+        .about { background-image:url('images/information.png') !important; }
 
 		#loading-mask{
 		    position:absolute;
@@ -86,8 +89,8 @@
     </style>
 
 </head>
-<body>
-	Cargando
+<body style="background-image:url('images/controlaula.png'); background-repeat:no-repeat; background-position:top right;">
+	<div id="mainDiv" style="width:100%;"></div>
 	<div id="loading-mask" style=""></div>
 	<div id="loading">
 		<div class="loading-indicator"><img src="images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>Controlaula<br /><span id="loading-msg">Cargando estilos e imagenes...</span></div>
@@ -132,11 +135,16 @@
     <script type="text/javascript" src="js/focus.js"></script>
     <script type="text/javascript" src="js/ARIA.js"></script>
 
+    <!-- dataView -->
+    <link rel="stylesheet" type="text/css" href="css/Spinner.css" />
+    <script type="text/javascript" src="js/Spinner.js"></script>
+    <script type="text/javascript" src="js/SpinnerField.js"></script>
+
 	<!-- Own files -->
+    <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/connection.js"></script>
     <script type="text/javascript" src="js/sections.js"></script>
-    <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
 
@@ -152,10 +160,16 @@
 	<div id="windowSendMessage" class="x-hidden">
 		<div class="x-window-header">Enviar Mensaje</div>
 	</div>
-
 	<div id="windowWeb" class="x-hidden">
 		<div class="x-window-header">Navegación Web</div>
 	</div>
+	<div id="windowConfig" class="x-hidden">
+		<div class="x-window-header">Configurar Aula</div>
+	</div>
+	<div id="windowAbout" class="x-hidden">
+		<div class="x-window-header">Sobre Controlaula</div>
+	</div>
+
 	<div id="tree" class="x-hidden"></div>
 	<div id="treeSendFile" class="x-hidden"></div>
 

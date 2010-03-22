@@ -8,6 +8,7 @@
  */
 
 Ext.onReady(function() {
+
 	initScreens();
 
     var hideMask = function () {

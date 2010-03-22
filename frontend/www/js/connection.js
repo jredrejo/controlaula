@@ -12,7 +12,7 @@ dataRefresh = Ext.util.JSON.encode({"args" : "refresh"});
 //Init screens
 function initScreens(){
 	connection("datosaula",dataRefresh,"pintaaula");
-	connection("datosaula",dataRefresh,"pintaconfig");
+	//connection("datosaula",dataRefresh,"pintaconfig");
 	setInterval('connection("datosaula","","pintaaula")',REFRESH_CLASSROOM);
 }
 
