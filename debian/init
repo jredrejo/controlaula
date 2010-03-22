@@ -43,12 +43,83 @@ alive()
     return 1
 }
 
+start_dependent_services()
+{
+	
+  # Determine current runlevel
+  r=$(/sbin/runlevel) || true
+  r=${r#*\ }
+  
+  if [ "$r" = "unknown" ]; then #we're inside the ltsp chroot: mount needed dirs on tmpfs
+        if  grep  -qs "nfs" /etc/mtab 
+        then    
+                root_write_method="bind_mounts"
+	  	bind_mounts
+        fi  
+ 
+  	sleep 1
+  else
+  	return
+  fi
+  services="dbus avahi-daemon"
+  # Start the services in the correct order
+  for i in $services ; do
+    service=$(basename $i)
+    service=${service#S??}
+    invoke-rc.d $service start || true
+  done	
+}
+
+bind_mounts () {
+
+    test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+    rw_dirs="/var/lib/dbus /etc/avahi/services /var/cache/hald" 
+    bindfiles="/etc/passwd /etc/group /etc/sirvecole"
+    copy_dirs="/home /var/cache/ltsp-localapps"
+   
+    
+    for f in $rw_dirs ; do
+    	touch "$f" 2> /dev/null || root_write_method="bind_mounts"
+        if [ -e "$f" ]  &&  [ "$root_write_method" = "bind_mounts" ]; then
+        	root_write_method=""
+            mkdir -p $tmpfs_dir/$f
+            mount --bind $tmpfs_dir/$f $f
+        else
+            echo "WARNING: $f does not exist or it's already writtable"
+        fi
+    done
+    
+    for d in $copy_dirs ; do   	
+        touch "$d" 2> /dev/null || root_write_method="bind_mounts"
+		if [ -d "$d" ] &&  [ "$root_write_method" = "bind_mounts" ]; then
+			root_write_method=""
+            cd $tmpfs_dir
+            tar -cpf - $d 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist or it's already writtable"
+        fi
+    done
+
+    # mount one file on top of another
+    for f in $bindfiles ; do
+        if [ -e "$f" ]; then
+            mkdir -p "$(dirname $tmpfs_dir/$f)"
+            cp $f $tmpfs_dir/$f
+            mount --bind $tmpfs_dir/$f $f
+        else
+            echo "WARNING: $f does not exist"
+        fi
+    done
+    
+}
 
 case "$1" in
     start)
 	log_daemon_msg "Starting ControlAula"	
 	[ ! -f $logfile ] && touch $logfile
 	# Make cache files readable
+    start_dependent_services
 	umask 022
 	start-stop-daemon --start --quiet --exec $twistd -- \
             --pidfile=$pidfile  --python $application	--rundir=$rundir  \
