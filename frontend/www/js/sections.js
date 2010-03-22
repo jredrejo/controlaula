@@ -7,7 +7,7 @@
  * 
  */
 
-var web="http://www.educarex.es";
+var web="http://rayuela.educarex.es";
 
 Ext.ns('Ext.ux.form');
 Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
@@ -341,11 +341,11 @@ Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 									 plain: true,
 									 focus: Ext.emptyFn,
 
-							         html: "<iframe id='frameweb' style='width:100%; height:100%' src='http://www.educarex.es'></iframe>",
+							         html: "<iframe id='frameweb' style='width:100%; height:100%' src='http://rayuela.educarex.es'></iframe>",
 									 tbar: ['<b>Web:</b> ', ' http://',
 										new Ext.ux.form.SearchField({
 											width:320,
-											value:"ww.educarex.es"
+											value:"rayuela.educarex.es"
 										})],
 									 buttons: [{
 										text: 'Enviar a seleccionados',
@@ -547,7 +547,7 @@ Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     });
 
     var web = new Ext.Action({
-        text: 'Navegación Web',
+        text: 'Navegación',
         iconCls: 'internet',
 		  width:110,
 		  iconAlign:'top',
@@ -587,7 +587,7 @@ Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     });
 
     var about = new Ext.Action({
-        text: 'Sobre Controlaula',
+        text: 'Controlaula',
         iconCls: 'about',
 		  width:110,
 		  iconAlign:'top',
