@@ -26,7 +26,7 @@ import Desktop
 from ControlAula.Utils import  Configs, MyUtils
 from ControlAula.Plugins import VNC,Broadcast
 
-class Classroom():
+class Classroom(object):
     """Classroom data management
     """
     def __init__(self,refreshInterval):    

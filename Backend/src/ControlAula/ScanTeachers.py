@@ -39,7 +39,7 @@ else:
 
 import logging
 
-class AvahiMonitor():
+class AvahiMonitor(object):
 
     def __init__(self):
         self._callbacks = {'new-service':  [],

@@ -127,8 +127,11 @@ if __name__ == '__main__':
         \tThis port may already be in use by another program.\n\n"""
 
         #print WEBPORT
-        f = open(os.path.join(Configs.APP_DIR,'launcher') , 'wb')
-        f.write('http://localhost:' + str(WEBPORT) + '/index.html')
+        f = open(os.path.join(Configs.APP_DIR,'launcher.html') , 'wb')
+        htmltext='<html><head>  <meta http-equiv="Refresh" content="0; url='
+        htmltext +='http://localhost:' + str(WEBPORT) + '/index.html"'
+        htmltext +='</head><body></body></html>'
+        f.write(htmltext)
         f.close()  
         
         try:
