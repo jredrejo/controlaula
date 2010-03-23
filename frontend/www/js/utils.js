@@ -71,8 +71,8 @@ function printClassroom(equipos){
 		dataviewON.setStore(myStore);
 //	}
 
-	var sizeDataview = 100*parseInt(cols);
-	var sizePanel = 100*parseInt(cols)+350;
+	var sizeDataview = 98*parseInt(cols);
+	var sizePanel = 98*parseInt(cols)+280;
 	dataviewON.setWidth(sizeDataview);
 	panel.setWidth(sizePanel);
 

@@ -602,21 +602,21 @@ Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
       //   xtype: 'fieldset',
          labelWidth: 90,
          //title:'',
-         defaults: {width: 300, border:true},    // Default config options for child items
+         defaults: {width: 280, border:true},    // Default config options for child items
          defaultType: 'textfield',
          autoHeight: true,
          bodyStyle: Ext.isIE ? 'padding:0 0 5px 15px;' : 'padding:10px 15px;',
          border: false,
          style: {
-             "margin-left": "10px", // when you add custom margin in IE 6...
+             "margin-left": "0px", // when you add custom margin in IE 6...
              "margin-right": Ext.isIE6 ? (Ext.isStrict ? "-10px" : "-13px") : "0"  // you have to adjust for it somewhere else
          },
        items:[{
            xtype: 'buttongroup',
            columns: 2,
            defaults: {scale: 'small', padding:5},
-			  title:'Equipos',
-			  padding:5,
+			title:'Equipos',
+			padding:5,
 	        items:[{
 			        text: 'Selecc. Todo',
 			        iconCls: 'all',
