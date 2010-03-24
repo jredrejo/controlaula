@@ -8,39 +8,6 @@
     <!-- page specific -->
     <style type="text/css">
 
-        /* styles for iconCls */
-        .x-icon-tickets {
-            background-image: url('images/tickets.png');
-        }
-        .x-icon-subscriptions {
-            background-image: url('images/subscriptions.png');
-        }
-        .x-icon-users {
-            background-image: url('images/group.png');
-        }
-        .x-icon-templates { background-image: url('images/templates.png'); }
-        .on { background-image:url('images/icon_on.png') !important; }
-        .off { background-image:url('images/icon_off.png') !important; }
-        .all { background-image:url('images/icon_all.png') !important;}
-        .none { background-image:url('images/icon_none.png') !important; }
-        .internet { background-image:url('images/icon_web_small.png') !important; }
-        .mouse { background-image:url('images/icon_mouse_small.png') !important; }
-        .messages { background-image:url('images/icon_messages_small.png') !important; }
-        .sound { background-image:url('images/icon_sound.png') !important; }
-        .done { background-image:url('images/icon_done.png') !important; }
-        .cancel { background-image:url('images/icon_cancel.png') !important; }
-        .projector { background-image:url('images/icon_projector.png') !important; }
-        .video { background-image:url('images/icon_video.png') !important; }
-        .dvd { background-image:url('images/icon_dvd3.png') !important; }
-        .movie { background-image:url('images/icon_movie2.png') !important; }
-        .sendFile { background-image:url('images/icon_file.png') !important; }
-        .message { background-image:url('images/icon_message.png') !important; }
-        .eye { background-image:url('images/icon_eye.png') !important; }
-        .add { background-image:url('images/icon_add.png') !important; }
-        .remove { background-image:url('images/icon_remove.png') !important; }
-        .config { background-image:url('images/cog.png') !important; }
-        .about { background-image:url('images/icon_controlaula.png') !important; }
-
 		#loading-mask{
 		    position:absolute;
 		    left:0;
@@ -87,7 +54,6 @@
         }
 
     </style>
-
 </head>
 <body style="background-image:url('images/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 	<div id="mainDiv" style="width:100%;"></div>
@@ -107,47 +73,37 @@
 
     <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Inicializando...';</script>
 
-
-
-    <!-- Group Tab -->
-    <script type="text/javascript" src="js/GroupTabPanel.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/GroupTab.css" />
-    <script type="text/javascript" src="js/GroupTab.js"></script>
-
-    <!-- Portal -->
+    <!-- Config Classroom -->
     <link rel="stylesheet" type="text/css" href="css/Portal.css" />
     <script type="text/javascript" src="js/Portal.js"></script>
     <script type="text/javascript" src="js/PortalColumn.js"></script>
     <script type="text/javascript" src="js/Portlet.js"></script>
 
-    <!-- advanced dataView -->
+    <!-- Big Brother -->
 	<link rel="stylesheet" type="text/css" href="css/chooser.css" />
 	<script type="text/javascript" src="js/chooser.js"></script>
 
-    <!-- dataView -->
+    <!-- Classroom Map -->
     <script type="text/javascript" src="js/DataView-more.js"></script>
     <link rel="stylesheet" type="text/css" href="css/data-view.css" />
 
-    <!-- examples -->
+    <!-- Preload -->
     <link rel="stylesheet" type="text/css" href="css/examples.css" />
     <script type="text/javascript" src="js/examples.js"></script>
 
+    <!-- Tree Files -->
     <script type="text/javascript" src="js/focus.js"></script>
     <script type="text/javascript" src="js/ARIA.js"></script>
 
-    <!-- dataView -->
-    <link rel="stylesheet" type="text/css" href="css/Spinner.css" />
-    <script type="text/javascript" src="js/Spinner.js"></script>
-    <script type="text/javascript" src="js/SpinnerField.js"></script>
-
-	<!-- Own files -->
-    <script type="text/javascript" src="js/menu.js"></script>
+	<!-- Controlaula files -->
+    <link rel="stylesheet" type="text/css" href="css/icons.css" />
+    <script type="text/javascript" src="js/mainPanel.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/connection.js"></script>
     <script type="text/javascript" src="js/sections.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
-
+	<!-- Windows Options -->
 	<div id="broadcastFile" class="x-hidden">
 		<div class="x-window-header">Emitir archivo de Vídeo</div>
 	</div>
@@ -170,6 +126,7 @@
 		<div class="x-window-header">Sobre Controlaula</div>
 	</div>
 
+	<!-- Tree Files -->
 	<div id="tree" class="x-hidden"></div>
 	<div id="treeSendFile" class="x-hidden"></div>
 
