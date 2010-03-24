@@ -29,7 +29,7 @@
 import signal
 import sys
 import logging
-import os.path
+import os
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 
@@ -73,12 +73,57 @@ def _remove_teacher(self, name, address, port):
             if MyStudent.catched==name:
                 MyStudent.removeMyTeacher()
         
-        
+class singleinstance(object):
+    '''
+    singleinstance - : make sure that
+                     only a single instance of an application is running.
+    '''
+                        
+    def __init__(self, pidPath):
+        '''
+        pidPath - full path/filename where pid for running application is to be
+                  stored.  Often this is ./var/<pgmname>.pid
+        '''
+        self.pidPath=pidPath
+
+        if os.path.exists(pidPath):
+            pid=open(pidPath, 'r').read().strip()
+            try:
+                os.kill(pid, 0)
+                pidRunning = True
+            except OSError:
+                pidRunning = False
+
+            if pidRunning:
+                self.lasterror=True
+            else:
+                self.lasterror=False
+        else:
+            self.lasterror=False
+
+        if not self.lasterror:
+            # Write my pid into pidFile to keep multiple copies of program from running
+            fp=open(pidPath, 'w')
+            fp.write(str(os.getpid()))
+            fp.close()
+
+    def alreadyrunning(self):
+        return self.lasterror
+
+    def __del__(self):
+        if not self.lasterror:
+            os.unlink(self.pidPath)
+                    
         
         
 if __name__ == '__main__':
     
     #############Initialization#############
+    
+    myapp = singleinstance(os.path.join (Configs.APP_DIR,'controlaula.pid')  )
+
+    if myapp.alreadyrunning():
+        sys.exit("Another instance of this program is already running")    
     
     isTeacher=MyUtils.userIsTeacher()
     #isTeacher=False
