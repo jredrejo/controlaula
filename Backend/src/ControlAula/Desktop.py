@@ -111,6 +111,7 @@ class Desktop(object):
             
     def resetProjector(self):
         if self.hostkey!='':
+            self.classroom.CommandStack[self.mainIP].append(['resetProjector'])
             self.projector=False
             self.enableKeyboardMouse()
             

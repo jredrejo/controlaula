@@ -50,13 +50,8 @@ class Obey(object):
         self.myVNC=None
         self.broadcast=None
         self.myDisp=None
-        if self.mylogin=='root':
-            disp=MyUtils.getXttyAuth()[0]
-            if disp!='':
-                try:
-                    self.myDisp=Display(disp)
-                except:
-                    pass
+        self.isLTSP=MyUtils.isLTSP()
+
         
     def listen(self):
         from twisted.internet import reactor           
@@ -74,6 +69,14 @@ class Obey(object):
         reactor.callLater(self.interval, self.listen)
         
     def newTeacher(self,name,data={}):
+        if self.mylogin=='root' and self.myDisp==None:
+            disp=MyUtils.getXttyAuth()[0]
+            if disp!='':
+                try:
+                    self.myDisp=Display(disp)
+                except:
+                    pass
+                        
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
@@ -103,8 +106,8 @@ class Obey(object):
                 #ipLTSP='',internetEnabled=True,mouseEnabled=True,
                 #soundEnabled=True,messagesEnabled=False,photo=''):
                             
-                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, (MyUtils.isLTSP()!=''),
-                                      Configs.RootConfigs['classroomname']  ,self.myFullName,MyUtils.isLTSP(),
+                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, (self.isLTSP!=''),
+                                      Configs.RootConfigs['classroomname']  ,self.myFullName,self.isLTSP,
                                       Configs.MonitorConfigs.GetGeneralConfig('internet') ,
                                       Configs.MonitorConfigs.GetGeneralConfig('mouse') ,
                                       Configs.MonitorConfigs.GetGeneralConfig('sound'),
@@ -127,9 +130,9 @@ class Obey(object):
                 #_addHost(self, login,hostname,hostip,mac,ltsp=False,
                 #classname='',internetEnabled=True):
                 logging.getLogger().debug('Sending to the teacher this info: %s,%s,%s,%s,%s' % (self.myHostname,self.myIp, self.myMAC,
-                                       MyUtils.isLTSP(),Configs.RootConfigs['classroomname']))
+                                       self.isLTSP,Configs.RootConfigs['classroomname']))
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       MyUtils.isLTSP(),Configs.RootConfigs['classroomname'],1)
+                                       self.isLTSP,Configs.RootConfigs['classroomname'],1)
                 
             vncrp,vncwp,vncport,bcastport=self.myteacher.connData()
             self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)

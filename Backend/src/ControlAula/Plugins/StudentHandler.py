@@ -41,6 +41,7 @@ class Plugins(object):
                 'bigbrother':self.bigBrother,
                 'disablebigbrother':self.disableBigBrother,
                 'projector':self.projector,
+                'resetProjector':self.resetProjector,                
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
                 'rootenableInternet':self.rootEnableInternet,
@@ -88,7 +89,10 @@ class Plugins(object):
                 
     def projector(self):
         self.myVNC.startROViewer(self.teacherIP)
-         
+
+    def resetProjector(self):
+        self.myVNC.stop()
+                 
     def enableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','1')
               

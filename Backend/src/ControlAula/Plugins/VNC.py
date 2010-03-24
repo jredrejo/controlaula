@@ -53,13 +53,14 @@ class VNC(object):
         else:
             self.writePasswd=writepasswd
             
-        if MyUtils.isLTSP()=='':
+        self.isLTSP=MyUtils.isLTSP()
+            
+        if self.isLTSP=='':
             self.port=str(NetworkUtils.getUsableTCPPort('127.0.0.1',5900))
         else:
-            s=MyUtils.isLTSP()
-            d=s.split('.')
+            d=self.isLTSP.split('.')
             if len(d)<4: #sometimes, it needs two tries :(
-                d=MyUtils.isLTSP().split('.')
+                d=self.isLTSP.split('.')
             self.port=str(5900 + int(d[3]))
             
         self.readonly=readonly
@@ -82,7 +83,7 @@ class VNC(object):
                 if self.readonly:
                     self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
                 else:
-                    if MyUtils.isLTSP()=='':
+                    if self.isLTSP=='':
                         self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
                     else:
                         self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10', '-passwd',  self.writePasswd])
@@ -136,9 +137,14 @@ class VNC(object):
             #self.procServer.terminate(): not available in python 2.5
             pid=self.procServer.pid
             self.procServer=None
-            os.kill(pid, SIGKILL)
+            os.kill(pid, SIGKILL)            
         except:
             pass        
+        subprocess.Popen(['killall','-9','x11vnc'])
+        subprocess.Popen(['killall','-9','xvncviewer'])
+        subprocess.Popen(['killall','-9','xvnc4viewer'])
+
+            
     def getData(self):
         return (self.readPasswd,self.writePasswd,self.port)
     

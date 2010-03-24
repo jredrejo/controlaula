@@ -126,9 +126,8 @@ class Plugins(object):
         self.usersCommand(Desktop.setProjector)            
         
     def disableProjector(self):
-        self.classroom.myVNC.stop()
         self.usersCommand(Desktop.resetProjector)  
-
+        self.classroom.myVNC.stop()
 
     def disableSound(self):
         self.usersCommand(Desktop.disableSound)
