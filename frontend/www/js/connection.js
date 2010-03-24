@@ -102,8 +102,14 @@ function sendClassroomConfig(){
 	connection("classroomConfig",dataString,"cambiaconfig");
 }
 
+var lastPClist;
+
 // Funcion general de connection
 function connection(url,data,action){
+
+	if(url=="datosaula" && data!='{"args":"refresh"}')
+		data = Ext.util.JSON.encode({"args" : lastPClist});
+
 	Ext.Ajax.request({
 		url : url , 
 		params : { data : data },
@@ -112,6 +118,10 @@ function connection(url,data,action){
 			// distintas respuestas segun la accion enviada
 			switch(action){
 				case "pintaaula":{
+					var tmpClassroom = Ext.util.JSON.decode(result.responseText);
+					if(tmpClassroom.classroom.pclist!="")
+						lastPClist = tmpClassroom.classroom.pclist; 
+
 					printClassroom(result.responseText);
 					break;
 				}
