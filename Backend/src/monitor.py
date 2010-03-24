@@ -32,7 +32,7 @@ import logging
 import os
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
-
+from twisted.internet.task import LoopingCall
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
@@ -72,6 +72,18 @@ def _remove_teacher(self, name, address, port):
             Teachers.pop(name)
             if MyStudent.catched==name:
                 MyStudent.removeMyTeacher()
+
+def checkActivity():
+
+    def sendNext():
+
+        if not MyUtils.isActive():
+            reactor.stop()
+            sys.exit()
+             
+    loop = LoopingCall(sendNext)
+    loop.start(1.5)
+    return     
         
 class singleinstance(object):
     '''
@@ -89,7 +101,7 @@ class singleinstance(object):
         if os.path.exists(pidPath):
             pid=open(pidPath, 'r').read().strip()
             try:
-                os.kill(pid, 0)
+                os.kill(int(pid), 0)
                 pidRunning = True
             except OSError:
                 pidRunning = False
@@ -205,5 +217,6 @@ if __name__ == '__main__':
         MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
         reactor.callWhenRunning(MyStudent.listen)
         
+reactor.callWhenRunning(checkActivity)        
 reactor.run()
 

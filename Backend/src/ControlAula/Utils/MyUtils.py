@@ -25,15 +25,29 @@
 
 import pwd,os,subprocess,logging
 import NetworkUtils
+loginname=''
+fullusername=''
+homeuser=''
+ipLTSP='unknown'
 
 def getLoginName():
-    return pwd.getpwuid(os.getuid())[0]
+    global loginname
+    #loginname=''
+    if loginname=='':
+        loginname=pwd.getpwuid(os.getuid())[0]
+    return loginname
 
 def getFullUserName():
-    return pwd.getpwuid(os.getuid())[4].split(",")[0]
+    global fullusername
+    if fullusername=='':
+        fullusername=pwd.getpwuid(os.getuid())[4].split(",")[0]
+    return fullusername
 
 def getHomeUser():
-    return  pwd.getpwuid(os.getuid())[5]
+    global homeuser
+    if homeuser=='':
+        homeuser=pwd.getpwuid(os.getuid())[5]
+    return  homeuser
 
 def userIsTeacher(teachersGroup='teachers'):   
     p1 = subprocess.Popen(["id", "-Gn"], stdout=subprocess.PIPE)
@@ -42,6 +56,10 @@ def userIsTeacher(teachersGroup='teachers'):
     return (output != '')
 
 def isLTSP():
+    global ipLTSP
+    if ipLTSP!='unknown':
+        return ipLTSP
+    
     ipLTSP=''
     if getLoginName()=='root':
         p1 = subprocess.Popen(["ps", "-AF"], stdout=subprocess.PIPE)
@@ -211,3 +229,11 @@ def backupDir(src,dst):
 def restoreDir(src,dst):
     if os.path.exists(src):
         backupDir(src,dst)
+
+def isActive():
+    logged = subprocess.Popen("who|cut -f1 -d' '|uniq", shell=True,stdout=subprocess.PIPE).communicate()[0]  
+    loggedusers=logged.splitlines()
+    user= getLoginName()
+    active=(user in loggedusers)
+
+    return active 
