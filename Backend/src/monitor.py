@@ -82,7 +82,7 @@ def checkActivity():
             sys.exit()
              
     loop = LoopingCall(sendNext)
-    loop.start(1.5)
+    loop.start(2.5)
     return     
         
 class singleinstance(object):
