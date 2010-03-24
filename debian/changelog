@@ -1,3 +1,9 @@
+controlaula (1.4.99-2) unstable; urgency=low
+
+  * Algunas optimizaciones 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 24 Mar 2010 10:00:21 +0100
+
 controlaula (1.4.99-1) unstable; urgency=low
 
   * New version rewritten to use a web frontend. Thanks very much to
