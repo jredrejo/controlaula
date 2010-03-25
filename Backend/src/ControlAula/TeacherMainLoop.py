@@ -157,7 +157,7 @@ class ControlAulaProtocol(resource.Resource):
                 elif command == 'datosaula':
                     if args=='refresh':
                         self.teacher.classroom.oldJSON=''
-                    respjson= self.teacher.classroom.getJSONFrontend()
+                    respjson= self.teacher.classroom.getJSONFrontend(args)
                     
                 else:
                     # Analyse the request and construct a response.

@@ -327,7 +327,7 @@ class Classroom(object):
                 break
         
         
-    def getJSONFrontend(self):
+    def getJSONFrontend(self,oldList):
         import simplejson as json
         classroom={}
         classroom['pclist']=[]
@@ -336,15 +336,17 @@ class Classroom(object):
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
+        
+        oldClass={'pclist':oldList}
+        oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
+        oldJSON=json.dumps({'classroom':oldClass})
+
         if self.myVNC.activeBB:
-            self.oldJSON=''
+            oldJSON=''
             
-        if newJSON!=self.oldJSON:
-            self.oldJSON=newJSON
-        else:
+        if newJSON==oldJSON:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
-        #print newJSON    
         return newJSON
     
     def redistributeDesktops(self,targets):
