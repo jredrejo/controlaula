@@ -1,0 +1,25 @@
+.x-icon-tickets { background-image: url('../images/tickets.png'); }
+.x-icon-subscriptions { background-image: url('../images/subscriptions.png'); }
+.x-icon-users { background-image: url('../images/group.png'); }
+.x-icon-templates { background-image: url('../images/templates.png'); }
+.on { background-image:url('../images/icon_on.png') !important; }
+.off { background-image:url('../images/icon_off.png') !important; }
+.all { background-image:url('../images/icon_all.png') !important;}
+.none { background-image:url('../images/icon_none.png') !important; }
+.internet { background-image:url('../images/icon_web_small.png') !important; }
+.mouse { background-image:url('../images/icon_mouse_small.png') !important; }
+.messages { background-image:url('../images/icon_messages_small.png') !important; }
+.sound { background-image:url('../images/icon_sound.png') !important; }
+.done { background-image:url('../images/icon_done.png') !important; }
+.cancel { background-image:url('../images/icon_cancel.png') !important; }
+.projector { background-image:url('../images/icon_projector.png') !important; }
+.video { background-image:url('../images/icon_video.png') !important; }
+.dvd { background-image:url('../images/icon_dvd3.png') !important; }
+.movie { background-image:url('../images/icon_movie2.png') !important; }
+.sendFile { background-image:url('../images/icon_file.png') !important; }
+.message { background-image:url('../images/icon_message.png') !important; }
+.eye { background-image:url('../images/icon_eye.png') !important; }
+.add { background-image:url('../images/icon_add.png') !important; }
+.remove { background-image:url('../images/icon_remove.png') !important; }
+.config { background-image:url('../images/cog.png') !important; }
+.about { background-image:url('../images/icon_controlaula.png') !important; }
