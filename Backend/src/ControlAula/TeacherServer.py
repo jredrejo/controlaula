@@ -33,6 +33,8 @@ class RPCServer(xmlrpc.XMLRPC):
         xmlrpc.XMLRPC.__init__(self)
         self.classroom=None
         self.externalIP=NetworkUtils.get_ip_inet_address()
+        if self.externalIP=='':
+            self.externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         self.hostname=NetworkUtils.getHostName()
             
 

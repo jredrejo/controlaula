@@ -84,9 +84,9 @@ class VNC(object):
                     self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
                 else:
                     if self.isLTSP=='':
-                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
+                        self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10', '-passwd',  self.writePasswd])                       
                     else:
-                        self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10', '-passwd',  self.writePasswd])
+                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
         except:
             logging.getLogger().error('x11vnc is not working in this system')
             
@@ -105,7 +105,7 @@ class VNC(object):
         except:
             logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
         if self.activeBB:     
-            reactor.callLater(10, self.screenshot)
+            reactor.callLater(5, self.screenshot)
                 
     def startROViewer(self,target):
 

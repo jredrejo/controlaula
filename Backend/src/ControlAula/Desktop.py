@@ -43,7 +43,7 @@ class Desktop(object):
         self.classroom=classroom
 
     def __str__(self):
-        return str((self.hostkey,self.userkey,self.login,self.username,self.hostname,self.ip,self.ltsp,self.internet,self.sound,self.mouse,self.messages,self.photo))
+        return str((self.hostkey,self.userkey,self.login,self.username,self.hostname,self.ip,self.ltsp, self.internet,self.sound,self.mouse,self.messages,self.photo))
 
     def _KeyboardMouse(self,value,command):
         if self.hostkey!='':

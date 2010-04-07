@@ -68,6 +68,8 @@ def isLTSP():
         output = p3.communicate()[0]
         if output != '':
             ipLTSP=NetworkUtils.get_ip_inet_address()
+            if ipLTSP=='':
+                ipLTSP=NetworkUtils.get_ip_inet_address('192.168.0.254')
     else:
         try:
             ipLTSP=os.environ["LTSP_CLIENT"]

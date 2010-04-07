@@ -47,9 +47,12 @@ def get_ip_inet_address(connection_ip='198.41.0.4'):
     
     198.41.0.4 is a DNS ROOT Server, so it's the default value to connect to Internet
     """
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect((connection_ip, 0)) 
-    inet_address= s.getsockname()[0]
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)   
+    try: 
+        s.connect((connection_ip, 0))
+        inet_address= s.getsockname()[0]
+    except:
+        inet_address=''
     s.close()
     logging.getLogger().debug("Inet Address:" + inet_address)
     return inet_address 
@@ -194,8 +197,9 @@ def ltspGW():
     if ltspGateway=='0':
         try:
             externalIP=get_ip_inet_address()
-            internalIP=get_ip_inet_address(connection_ip='192.168.0.2')
-            if externalIP==internalIP:
+            internalIP=get_ip_inet_address('192.168.0.2')
+        
+            if externalIP==internalIP or externalIP=='':
                 ltspGateway=defaultGW()
             else:
                 ltspGateway=internalIP

@@ -118,7 +118,7 @@ class Plugins(object):
     def openVNC(self):
         for i in self.classroom.Desktops:
             if i.hostname==self.targets[0]:
-                self.classroom.myVNC.startViewer( i.hostname,i.ltsp,i.ip)
+                self.classroom.myVNC.startViewer( i.hostname,i.ltsp,i.hostkey)
                 break     
                         
     def enableProjector(self):
