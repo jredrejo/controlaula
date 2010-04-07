@@ -17,7 +17,7 @@
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
-rundir=/var/run/ 
+rundir=/var/run 
 pidfile=$rundir/sirvecole.pid 
 logfile=/var/log/controlaula.log
 application=/usr/bin/sirvecole.py

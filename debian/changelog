@@ -1,3 +1,9 @@
+controlaula (1.4.99-3) unstable; urgency=low
+
+  * Cambios en el proceso de json
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 25 Mar 2010 18:07:17 +0100
+
 controlaula (1.4.99-2) unstable; urgency=low
 
   * Algunas optimizaciones 
