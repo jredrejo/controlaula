@@ -162,6 +162,7 @@ class Plugins(object):
         self.classroom.broadcast.transmit(url,isDVD)
 
     def startbcast(self,url,isDVD):      
+        print "startbcast"
         self.usersCommand(Desktop.sendBroadcast,[url,isDVD])
 
     def stopbcast(self):

@@ -189,11 +189,11 @@ def getXttyAuth():
     return (display,xauth)
     
 def launchAsNobody(command):
-        display,xauth=getXtty()
-        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
-        logging.getLogger().debug(finalcommand)
-        proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
-        return proc    
+    display,xauth=getXtty()
+    finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
+    logging.getLogger().debug(finalcommand)
+    proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
+    return proc    
         
 def parse(url):
     import urlparse

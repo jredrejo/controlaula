@@ -42,8 +42,6 @@ HOSTNAME=''
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
 
-Teachers={}
-    
 def SigHandler(signum, frame):
     print 'Stopping Sirvecole'
 
@@ -52,33 +50,16 @@ def SigHandler(signum, frame):
     except:
         pass
     sys.exit()                                                   
-
-
-def _add_teacher(self, name, address, port,data={}):
-    #discard ipv6 entries
-    if address.find(":") == -1:
-        logging.getLogger().debug('New teacher detected: ' + name)
-        if not Teachers.has_key(name):
-            Teachers[name]=(address,port)
-            MyStudent.newTeacher(name,data)
-
-
-def _remove_teacher(self, name, address, port):    
-    #discard ipv6 entries
-    if address.find(":") == -1:
-        if  Teachers.has_key(name):
-            logging.getLogger().debug('teacher disappeared: ' + name)
-            Teachers.pop(name)
+       
+def prepareBroadcast():        
+    NetworkUtils.cleanRoutes()
+    ltspGW=NetworkUtils.ltspGW()
+    if ltspGW!='0':
+        NetworkUtils.addRoute('239.255.255.0', ltspGW)
+    else:
+        reactor.callLater(10, prepareBroadcast)
         
-        
-        
-        
-#if __name__ == '__main__':
-
-     
-#    from twisted.internet import glib2reactor
-#    glib2reactor.install()  
-
+ 
 from twisted.internet import reactor
 
 
@@ -99,29 +80,23 @@ if os.path.exists('/usr/sbin/ethtool'):
     subprocess.call(['ethtool','-s','eth0','wol','g'])
 ######### Begin the application loop #######
 
-from ControlAula import ScanTeachers, StudentLoop
-
-try:
-    monitor = ScanTeachers.AvahiMonitor()    
-    monitor.add_callback('new-service', _add_teacher)
-    monitor.add_callback('remove-service',    _remove_teacher)
-    monitor.start()
-
-except Exception, ex:
-    error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
-    logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
-    sys.exit()
+from ControlAula import StudentLoop
 
 #vlc cache for the nobody user:
-if not os.path.isdir('/nonexistent/.vlc/cache'):
+if not os.path.isdir('/nonexistent'):
     try:
-        os.makedirs('/nonexistent/.vlc/cache')
+        os.makedirs('/nonexistent')
+    except:
+        pass
+    try:
+        os.chown('/nonexistent',65534, 0)
     except:
         pass
 
-MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
+MyStudent=StudentLoop.Obey(int(REFRESH/2))
 reactor.callWhenRunning(MyStudent.listen)
-    
-#reactor.run()
+reactor.callWhenRunning(MyStudent.startScan)
+
+reactor.callWhenRunning(prepareBroadcast)
 
 application = service.Application('controlaula',uid=0,gid=0)

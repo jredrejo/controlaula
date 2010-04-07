@@ -24,7 +24,7 @@
 ##############################################################################
 
 import subprocess,os,logging
-from ControlAula.Utils import MyUtils
+from ControlAula.Utils import MyUtils,NetworkUtils
 from signal import  SIGKILL
 from twisted.internet import protocol
 from twisted.internet import reactor
@@ -58,22 +58,23 @@ class Vlc(object):
         self.stop()
             
     def transmit(self,url,dvd=False):
-        self.stop()
+        self.broadcasting=False
         self.url=url
         self.dvd=dvd
         command=["vlc","--no-ipv6"]      
         if dvd:
             command+=["dvdsimple:///dev/dvd"]
         else:
-            command+=[url]
+            command+=[str(url)]
         command +=["--sout"]
-        command +=["#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}"]
-        command +=["--ttl","5","--audio-desync","1100","--volume", "1024" ]
+        #command +=["'#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"]
+
+        command +=["udp:239.255.255.0:" + self.port]
+        command +=["--sout-all","--ttl","5","--audio-desync","1100","--volume", "1024" ]
 
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
-            reactor.spawnProcess(self.procTx , "vlc",command,env=os.environ)
-            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port])  
+            reactor.spawnProcess(self.procTx , 'vlc',command,env=os.environ) 
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
@@ -83,6 +84,8 @@ class Vlc(object):
     def started(self):
         if not self.broadcasting:
             self.broadcasting=True
+            
+            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port]) 
             for cb in self._callbacks['started']:            
                 cb(self.url,self.dvd)
             
@@ -93,42 +96,47 @@ class Vlc(object):
         self.broadcasting=False    
             
     def receive(self):
-        self.destroyProcess(self.procRx)                
+        self.destroyProcess(self.procRx) 
+        NetworkUtils.cleanRoutes()              
         ltspaudio=' '
         if MyUtils.isLTSP()!='':
             ltspaudio=' PULSE_SERVER=127.0.0.1:4713 ESPEAKER=127.0.0.1:16001 '
                   
         command=ltspaudio 
-        if os.path.isfile('/usr/bin/cvlc'):
-            command +=  '/usr/bin/cvlc '
-        else:
-            command +='vlc ' 
+        command +='vlc -I dummy ' 
         command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  udp://@239.255.255.0:'
         command += self.port 
+        NetworkUtils.addRoute('239.255.255.0')
         self.procRx=MyUtils.launchAsNobody(command)
             
     def stop(self):
-        self.destroyProcess(self.procRx)
-        self.destroyProcess(self.procTx,True)
-        subprocess.Popen(['killall','vlc'])  
+        logging.getLogger().debug('vlc stopped')
+        try:
+            if self.procRx is not None:
+                self.destroyProcess(self.procRx)
+            if self.procTx is not None:
+                self.destroyProcess(self.procTx,True)
+            subprocess.Popen(['killall','vlc'])  
+        except:
+            pass
+        
                   
     def getData(self):
         return self.port
     
-    def destroyProcess(self,proc,shell=False):
-        #pdb.set_trace()
-        if proc != None:
-            try:
+    def destroyProcess(self,procD,shell=False):
+        logging.getLogger().debug('vlc destroyed')
+        try:
             #proc.terminate(): not available in python 2.5    
                 if shell:
-                    pid=proc.transport.pid
+                    pid=procD.transport.pid
                 else:           
-                    pid=proc.pid
+                    pid=procD.pid
                 
                 os.kill(pid, SIGKILL)
 
-            except:
-                pass  
+        except:
+            pass  
     
     def add_callback(self, sig_name, callback):
         self._callbacks[sig_name].append(callback)

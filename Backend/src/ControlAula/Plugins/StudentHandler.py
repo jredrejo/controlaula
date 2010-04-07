@@ -170,7 +170,8 @@ class Plugins(object):
         self.myBcast.receive()
         
     def stopBroadcast(self):
-        self.myBcast.stop()      
+        if self.myBcast is not None:
+            self.myBcast.stop()      
          
     def receiveMessage(self, text):
         import pynotify

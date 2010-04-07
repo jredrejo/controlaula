@@ -23,7 +23,8 @@
 ##############################################################################
 
 from twisted.internet.utils import getProcessValue
-import subprocess
+#import subprocess
+from ControlAula.Utils import NetworkUtils
 from Xlib import X
 
 def setSound(value):
@@ -31,18 +32,19 @@ def setSound(value):
     d=getProcessValue('amixer', ['-c','0','--','sset','Master',value])
     #'amixer -c 0 -- sset Master ' + value
     
-def disableKeyboardAndMouse(display): 
-
-    root = display.screen().root
-    root.grab_pointer(1, X.PointerMotionMask|X.ButtonReleaseMask|X.ButtonPressMask,  
-                X.GrabModeAsync, X.GrabModeAsync, X.NONE, X.NONE, X.CurrentTime) 
-    root.grab_keyboard(1,X.GrabModeAsync, X.GrabModeAsync,X.CurrentTime)
+def disableKeyboardAndMouse(display):   
+    if display is not None:
+        root = display.screen().root
+        root.grab_pointer(1, X.PointerMotionMask|X.ButtonReleaseMask|X.ButtonPressMask,  
+                    X.GrabModeAsync, X.GrabModeAsync, X.NONE, X.NONE, X.CurrentTime) 
+        root.grab_keyboard(1,X.GrabModeAsync, X.GrabModeAsync,X.CurrentTime)
     
         
 def enableKeyboardAndMouse(display):
-    display.ungrab_keyboard(X.CurrentTime)
-    display.ungrab_pointer(X.CurrentTime)
-    display.flush()       
+    if display is  not None:
+        display.ungrab_keyboard(X.CurrentTime)
+        display.ungrab_pointer(X.CurrentTime)
+        display.flush()       
   
 def sendWOLBurst(macs,throttle):    
     from twisted.internet.task import LoopingCall    
@@ -58,8 +60,10 @@ def sendWOLBurst(macs,throttle):
             return defer.succeed(None)
         next = work.pop(0)
 
-        subprocess.Popen(['wakeonlan',next ])
-        subprocess.Popen(['wakeonlan','-i','192.168.0.255',next ])           
+        #subprocess.Popen(['wakeonlan',next ])
+        #subprocess.Popen(['wakeonlan','-i','192.168.0.255',next ])
+        NetworkUtils.startup(next)
+                   
         return None
     loop = LoopingCall(sendNext)
     loop.start(throttle)

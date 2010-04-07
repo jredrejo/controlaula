@@ -25,19 +25,23 @@
 import xmlrpclib
 from ControlAula.Utils import NetworkUtils, MyUtils,Configs
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
-import logging
+from ControlAula import ScanTeachers
+import logging,sys
 from Xlib.display import Display
 
+
+            
 class Obey(object):
     '''
    What the student must do :D
     '''
 
-    def __init__(self, teachers,interval):
+            
+    def __init__(self, interval):
         '''
         Constructor
         '''
-        self.Teachers=teachers
+        self.Teachers={}
         self.interval=interval
         self.mylogin=MyUtils.getLoginName()
         self.myFullName=MyUtils.getFullUserName()
@@ -51,32 +55,68 @@ class Obey(object):
         self.broadcast=None
         self.myDisp=None
         self.isLTSP=MyUtils.isLTSP()
-
+        self.monitor=None
         
+    def startScan(self):
+        try:
+            self.monitor = ScanTeachers.AvahiMonitor()    
+            self.monitor.add_callback('new-service', self._add_teacher)
+            self.monitor.add_callback('remove-service',   self._remove_teacher)
+            self.monitor.start()
+        
+        except Exception, ex:
+            error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
+            logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
+            sys.exit()        
+        
+
+    def _add_teacher(self, func, name, address, port,data={}):
+        #discard ipv6 entries
+        if address.find(":") == -1:
+            logging.getLogger().debug('New teacher detected: ' + name)
+            if not self.Teachers.has_key(name):
+                self.Teachers[name]=(address,port)
+                self.newTeacher(name,data)
+    
+    
+    def _remove_teacher(self,func, name, address, port):    
+        #discard ipv6 entries
+        if address.find(":") == -1:
+            if  self.Teachers.has_key(name):
+                logging.getLogger().debug('teacher disappeared: ' + name)
+                self.Teachers.pop(name)
+                        
     def listen(self):
         from twisted.internet import reactor           
         if     self.catched !='':
-            #Keep the user as an active user
+
+            if self.myDisp is None:
+                self.getDisplay()
+                self.handler.display=self.myDisp
+            
+            #Keep the user as an active user                        
             try:                
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
                 self.sendData(order)
             except:
-                self.removeMyTeacher()
+                self.removeMyTeacher()            
+                        
+        else:
+            try:
+                self.monitor.stop()
+                self.monitor.start()
+            except:
+                pass
                 
             if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
                 Actions.setSound('mute')
                 
+
+                        
         reactor.callLater(self.interval, self.listen)
         
     def newTeacher(self,name,data={}):
-        if self.mylogin=='root' and self.myDisp==None:
-            disp=MyUtils.getXttyAuth()[0]
-            if disp!='':
-                try:
-                    self.myDisp=Display(disp)
-                except:
-                    pass
-                        
+        self.getDisplay()                        
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
@@ -95,6 +135,7 @@ class Obey(object):
             self.sendData(order)
         except:
             self.removeMyTeacher()
+            
         
         
     def sendData(self,order):
@@ -134,22 +175,40 @@ class Obey(object):
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
                                        self.isLTSP,Configs.RootConfigs['classroomname'],1)
                 
-            vncrp,vncwp,vncport,bcastport=self.myteacher.connData()
-            self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)
-            self.broadcast=Broadcast.Vlc(bcastport)
-            self.handler.myVNC=self.myVNC
-            self.handler.myBcast=self.broadcast
-            if self.myDisp!=None:
-                self.handler.display=self.myDisp                
+                self.getTeacherData()
                 
         elif order == 'commands':
-            self.getCommands()
+            if self.myVNC is not None:
+                self.getCommands()
+            else:
+                self.getTeacherData()
 
     def removeMyTeacher(self):
         if self.Teachers.has_key(self.catched): #in case avahi hasn't detected the teacher has already gone..
             self.Teachers.pop(self.catched)        
         self.catched=''
         self.myteacher=None
+        
+    def getTeacherData(self):
+        vncrp,vncwp,vncport,bcastport=self.myteacher.connData()
+        self.myVNC=VNC.VNC(False,vncrp,vncwp,vncport)
+        self.broadcast=Broadcast.Vlc(bcastport)
+        self.handler.myVNC=self.myVNC
+        self.handler.myBcast=self.broadcast
+        if self.myDisp is None:
+            self.getDisplay()
+        self.handler.display=self.myDisp        
+ 
+
+            
+    def getDisplay(self):    
+        if self.mylogin=='root' and self.myDisp==None:
+            disp=MyUtils.getXttyAuth()[0]
+            if disp!='':
+                try:
+                    self.myDisp=Display(disp)
+                except:
+                    pass              
 
     def getCommands(self):
         commands=self.myteacher.getCommands( self.mylogin, self.myIp )

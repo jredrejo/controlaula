@@ -39,8 +39,6 @@ PORT=8900
 PAGES='/usr/share/controlaula/frontend/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
-
-Teachers={}
     
 def SigHandler(signum, frame):
     print 'Stopping Monitor'
@@ -54,24 +52,6 @@ def SigHandler(signum, frame):
         MyClass.myVNC.stop()
     sys.exit()                                                   
 
-
-def _add_teacher(self, name, address, port,data={}):
-    #discard ipv6 entries
-    if address.find(":") == -1:
-        logging.getLogger().debug('New teacher detected: ' + name)
-        if not Teachers.has_key(name):
-            Teachers[name]=(address,port)
-            MyStudent.newTeacher(name,data)
-
-
-def _remove_teacher(self, name, address, port):    
-    #discard ipv6 entries
-    if address.find(":") == -1:
-        if  Teachers.has_key(name):
-            logging.getLogger().debug('teacher disappeared: ' + name)
-            Teachers.pop(name)
-            if MyStudent.catched==name:
-                MyStudent.removeMyTeacher()
 
 def checkActivity():
 
@@ -201,21 +181,12 @@ if __name__ == '__main__':
 
     else:         
         logging.getLogger().debug("The user is NOT a teacher")
-        from ControlAula import ScanTeachers, StudentLoop
+        from ControlAula import StudentLoop
+
         
-        try:
-            monitor = ScanTeachers.AvahiMonitor()    
-            monitor.add_callback('new-service', _add_teacher)
-            monitor.add_callback('remove-service',    _remove_teacher)
-            monitor.start()
-    
-        except Exception, ex:
-            error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
-            logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
-            sys.exit()
-        
-        MyStudent=StudentLoop.Obey(Teachers,int(REFRESH/2))
+        MyStudent=StudentLoop.Obey(int(REFRESH/2))
         reactor.callWhenRunning(MyStudent.listen)
+        reactor.callWhenRunning(MyStudent.startScan)
         
 reactor.callWhenRunning(checkActivity)        
 reactor.run()

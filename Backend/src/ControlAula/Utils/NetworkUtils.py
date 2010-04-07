@@ -24,8 +24,10 @@
 
 
 import array,fcntl,socket,struct,os
-import logging
+import logging,subprocess
 
+gateway='0'
+ltspGateway='0'
 
 def get_ip_address(ifname):
     """Returns the ip address of the interface ifname"""
@@ -151,3 +153,67 @@ def getUsableTCPPort(address,port):
     
     
     return freeport
+
+
+def startup(address):
+
+    addr_byte = address.split(':')
+    hw_addr = struct.pack('BBBBBB', int(addr_byte[0], 16),
+      int(addr_byte[1], 16),
+      int(addr_byte[2], 16),
+      int(addr_byte[3], 16),
+      int(addr_byte[4], 16),
+      int(addr_byte[5], 16))
+
+    msg = '\xff' * 6 + hw_addr * 16
+    
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    try:
+        s.sendto(msg, ('<broadcast>', 9))
+        s.sendto(msg, ('<broadcast>', 7))
+        s.sendto(msg, ('192.168.0.255', 9))
+        s.sendto(msg, ('192.168.0.255', 7))   
+    except:
+        s.sendto(msg, ('<broadcast>', 2000))
+        s.sendto(msg, ('192.168.0.255', 2000))
+    s.close()
+
+def defaultGW():
+    global gateway
+    if gateway=='0':
+        try:
+            s=subprocess.Popen('route -n|grep "0.0.0.0"|grep UG',shell=True,stdout=subprocess.PIPE).communicate()[0]
+            gateway=s.splitlines()[0].split()[1]
+        except:
+            gateway='0'
+    return gateway
+    
+def ltspGW():
+    global ltspGateway
+    if ltspGateway=='0':
+        try:
+            externalIP=get_ip_inet_address()
+            internalIP=get_ip_inet_address(connection_ip='192.168.0.2')
+            if externalIP==internalIP:
+                ltspGateway=defaultGW()
+            else:
+                ltspGateway=internalIP
+        except:
+            ltspGateway='0'
+    return ltspGateway
+
+def cleanRoutes():
+    s=subprocess.Popen(['route','-n'],stdout=subprocess.PIPE).communicate()[0]
+    l=s.splitlines()
+    for route in l:
+        target=route.split()[0]
+        if target[:8]=='239.255.':
+            subprocess.Popen(['route','del','-net',target + '/24'])
+            
+def addRoute(net,gw=''):
+    if gw=='':
+        newgw=defaultGW()
+    else:
+        newgw=gw
+    subprocess.Popen(['route','add','-net',net+ '/24','gw',newgw])
