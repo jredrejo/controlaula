@@ -99,12 +99,10 @@ class Obey(object):
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
                 self.sendData(order)
             except:
-                self.removeMyTeacher()            
-                        
+                self.removeMyTeacher()                                   
         else:
             try:
-                self.monitor.stop()
-                self.monitor.start()
+                self.startScan()
             except:
                 pass
                 

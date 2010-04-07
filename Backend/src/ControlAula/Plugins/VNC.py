@@ -121,6 +121,7 @@ class VNC(object):
         if ltsp:
             d=ip.split('.')
             port=str(5900 + int(d[3]))
+            ip='127.0.0.1'
                         
         passwd=tempfile.mkstemp()[1]
         self.createVNCPassword(self.writePasswd , passwd)

@@ -147,8 +147,10 @@ if __name__ == '__main__':
         from ControlAula import TeacherMainLoop, Classroom
         from ControlAula.Utils  import Publications
         from twisted.web import server
-        
-        service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + NetworkUtils.get_ip_inet_address(),"web=" + str( WEBPORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
+        externalIP=NetworkUtils.get_ip_inet_address()
+        if externalIP=='':
+            externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
+        service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( WEBPORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
         service.publish()
         #Initialize classroom data
         MyClass=Classroom.Classroom(REFRESH)
