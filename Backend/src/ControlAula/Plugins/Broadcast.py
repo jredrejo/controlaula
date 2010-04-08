@@ -93,7 +93,8 @@ class Vlc(object):
         self.stop()
         for cb in self._callbacks['ended']:            
             cb()     
-        self.broadcasting=False    
+        self.broadcasting=False   
+        self.clean_callbacks() 
             
     def receive(self):
         self.destroyProcess(self.procRx) 
@@ -140,7 +141,9 @@ class Vlc(object):
     
     def add_callback(self, sig_name, callback):
         self._callbacks[sig_name].append(callback)
- 
+        
+    def clean_callbacks(self):
+        self._callbacks = {'started':[],  'ended':[]}
     
 class MyPP(protocol.ProcessProtocol):
     def __init__(self,stop,start,end):

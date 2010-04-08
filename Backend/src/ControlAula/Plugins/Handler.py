@@ -156,7 +156,7 @@ class Plugins(object):
         if not isDVD:
             if not isfile(url):
                 return {'result':'Bad file'}          
-
+        self.classroom.broadcast.clean_callbacks() 
         self.classroom.broadcast.add_callback('started',self.startbcast)
         self.classroom.broadcast.add_callback('ended',self.stopbcast)
         self.classroom.broadcast.transmit(url,isDVD)

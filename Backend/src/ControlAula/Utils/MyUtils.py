@@ -144,6 +144,7 @@ def getLDMinfo():
 def getXtty():
     from tempfile import mkstemp
     from shutil import copyfile    
+    from time import sleep
     disp,auth=getXttyAuth()
         
     if disp!='':
@@ -151,6 +152,7 @@ def getXtty():
         
     if auth!='':
         xfile=mkstemp()[1]
+        sleep(0.5)
         copyfile(auth,xfile)
         os.chown(xfile,65534,0)
         xauth='XAUTHORITY='+xfile
