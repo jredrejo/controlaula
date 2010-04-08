@@ -1,3 +1,10 @@
+controlaula (1.4.99-4) unstable; urgency=low
+
+  * Eliminada dependencia de wakeonlan
+  * Ajustes y limpiezas varias en el código para soportar LTSP
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 08 Apr 2010 13:10:15 +0200
+
 controlaula (1.4.99-3) unstable; urgency=low
 
   * Cambios en el proceso de json
