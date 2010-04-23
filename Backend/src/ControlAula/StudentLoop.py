@@ -56,6 +56,7 @@ class Obey(object):
         self.myDisp=None
         self.isLTSP=MyUtils.isLTSP()
         self.monitor=None
+        self.startScan()
         
     def startScan(self):
         try:
@@ -65,7 +66,6 @@ class Obey(object):
             self.monitor.start()
         
         except Exception, ex:
-            error_msg = "Couldn't initialize Avahi monitor: %s" % str(ex)
             logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
             sys.exit()        
         
@@ -102,15 +102,15 @@ class Obey(object):
                 self.removeMyTeacher()                                   
         else:
             try:
-                self.startScan()
+                pass
+                #PENDING: find a way to restart the avahi browsing
+                #self.startScan() 
             except:
                 pass
                 
             if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
                 Actions.setSound('mute')
-                
-
-                        
+                                        
         reactor.callLater(self.interval, self.listen)
         
     def newTeacher(self,name,data={}):
