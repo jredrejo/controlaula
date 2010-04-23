@@ -1,26 +1,33 @@
+controlaula (1.4.99-5) unstable; urgency=low
+
+  * VNC Delay
+  * Changed desktops ordenation
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 23 Apr 2010 10:49:30 +0200
+
 controlaula (1.4.99-4) unstable; urgency=low
 
-  * Eliminada dependencia de wakeonlan
-  * Ajustes y limpiezas varias en el código para soportar LTSP
+  * No depends on wakeonlan anymore
+  * Some clean up to support LTSP
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 08 Apr 2010 13:10:15 +0200
 
 controlaula (1.4.99-3) unstable; urgency=low
 
-  * Cambios en el proceso de json
+  * Changes in json process
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 25 Mar 2010 18:07:17 +0100
 
 controlaula (1.4.99-2) unstable; urgency=low
 
-  * Algunas optimizaciones 
+  * Several optimizations 
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 24 Mar 2010 10:00:21 +0100
 
 controlaula (1.4.99-1) unstable; urgency=low
 
   * New version rewritten to use a web frontend. Thanks very much to
-    Manu Mora for his gard and incredible work developing all the 
+    Manu Mora for his hard and incredible work developing all the 
     web frontend.
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 15 Mar 2010 10:10:17 +0100

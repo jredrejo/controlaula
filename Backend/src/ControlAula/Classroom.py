@@ -284,7 +284,8 @@ class Classroom(object):
             if number !='':
                 position=int(number)            
                 if position >0:
-                    position -=1
+                    #position -=1
+                    position=len(self.Desktops)-position
                 if self.Desktops[position].hostkey!='':
                     self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
             else:
