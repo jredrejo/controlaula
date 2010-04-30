@@ -409,14 +409,21 @@ Ext.ux.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 				}
 				case 'about':{
 					if(!winAbout){
+						aboutControlaula='<div style="width:100%; text-align:center;"><img src="images/controlaula_logo.png"><br><span style="font-size:30px; font-weight:bold;">Controlaula</span><br>Versión 1.4.99-5 - Copyright 2010 Licencia GLP<br><a href="http://controlaula.sourceforge.net" target="_blank">http://controlaula.sourceforge.net</a></div>';
+						aboutControlaula+='<br>Autores:<br> - <b>Jos&eacute; Luis Redrejo Rodríguez</b> &lt;jredrejo @no-spam@ debian.org&gt;<br> - <b>Manu Mora Gordillo</b> &lt;manuito @no-spam@ gmail.com&gt;';
+						aboutControlaula+='<br><br>Agradecimientos por su colaboración a: Francisco Damián Méndez Palma';
+						aboutControlaula+='<br><br>ControlAula is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>'
+						aboutControlaula+='ControlAula is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.';
+						aboutControlaula+='You should have received a copy of the GNU General Public License along with ControlAula. If not, see <a href="http://www.gnu.org/licenses/" target="_blank">http://www.gnu.org/licenses/></a>.';
+
 						winAbout = new Ext.Window({
 									 applyTo:'windowAbout',
 									 layout:'fit',
 									 width:600,
-									 height:400,
+									 height:440,
 									 closeAction:'hide',
 									 plain: true,
-									 html:'Aplicacion para Control del Aula. Licencia GPL. Autores: bla bla bla bla bla',
+									 html:aboutControlaula,
 									 //items:[optConfigurar],
 									 buttons: [{
 										  text: 'Cerrar',
