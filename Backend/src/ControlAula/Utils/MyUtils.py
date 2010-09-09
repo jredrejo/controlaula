@@ -79,6 +79,40 @@ def isLTSP():
     return ipLTSP
 
 
+
+def snapshot(thumbpath,x=300,y=300):
+    try:
+        import gtk.gdk
+        w = gtk.gdk.get_default_root_window() 
+        sz = w.get_size() 
+        pb = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB,False,8,sz[0],sz[1]) 
+        pb = pb.get_from_drawable(w,w.get_colormap(),0,0,0,0,sz[0],sz[1])         
+        
+        if sz[0] > x or sz[1] > y:
+            scaleFactor = 1.0 * x / sz[0]
+            if sz[1] * scaleFactor > y:
+                scaleFactor = 1.0 * y/ sz[1]
+            
+            finalsize=[ int(sz[0] * scaleFactor),int(sz[1] * scaleFactor)]
+            pb = pb.scale_simple(finalsize[0], finalsize[1], gtk.gdk.INTERP_BILINEAR)
+            
+    except:
+        import sys
+        from PyQt4.QtGui import QPixmap, QApplication 
+        from PyQt4.QtCore import  Qt
+        app = QApplication(sys.argv) 
+        pb=QPixmap.grabWindow(QApplication.desktop().winId())
+        pb = pb.scaled(x,y, Qt.KeepAspectRatio,Qt.SmoothTransformation)
+        
+        
+
+    if (pb != None): 
+        pb.save(thumbpath,'png') 
+        return True
+    else:
+        return False
+    
+
 def generateUUID(length=5):
     """returns a pseudo random string to be used as password.
     The length of the password is determined by the length parameter"""

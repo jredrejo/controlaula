@@ -94,16 +94,16 @@ class VNC(object):
             self.screenshot()
  
     def screenshot(self):
-        from twisted.internet import reactor
+        from twisted.internet import reactor        
         import xmlrpclib
-        screenshot=os.path.join( MyUtils.getHomeUser(),'.controlaula/vnc.png')
+        
         screenshot_thumb=os.path.join( MyUtils.getHomeUser(),'.controlaula/vnc-thumb.png')
-        subprocess.Popen(['scrot','-t','25',screenshot])
-        try:
-            f = xmlrpclib.Binary(open(screenshot_thumb, 'rb').read())
-            self.myteacher.screenshot(self.mylogin,self.myIP,f)         
-        except:
-            logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
+        if MyUtils.snapshot(screenshot_thumb):        
+            try:
+                f = xmlrpclib.Binary(open(screenshot_thumb, 'rb').read())
+                self.myteacher.screenshot(self.mylogin,self.myIP,f)         
+            except:
+                logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))   
         if self.activeBB:     
             reactor.callLater(5, self.screenshot)
                 
