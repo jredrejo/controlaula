@@ -215,8 +215,8 @@ class Plugins(object):
                 self.classroom.addDesktopsCol()
             elif self.classroom.cols >cols:
                 self.classroom.removeDesktopsCol()
-        else:
-            self.classroom.redistributeDesktops(self.targets) 
+            else:
+                self.classroom.redistributeDesktops(self.targets) 
         
         self.classroom.oldJSON=''                                 
         self.classroom.saveClassLayout()
