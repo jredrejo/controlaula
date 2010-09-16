@@ -72,11 +72,12 @@ class Obey(object):
 
     def _add_teacher(self, func, name, address, port,data={}):
         #discard ipv6 entries
-        if address.find(":") == -1:
-            logging.getLogger().debug('New teacher detected: ' + name)
+        if address.find(":") == -1:            
             if not self.Teachers.has_key(name):
+                logging.getLogger().debug('New teacher detected: ' + name)
                 self.Teachers[name]=(address,port)
-                self.newTeacher(name,data)
+                if self.checkClass(data):
+                    self.newTeacher(name)
     
     
     def _remove_teacher(self,func, name, address, port):    
@@ -113,13 +114,16 @@ class Obey(object):
                                         
         reactor.callLater(self.interval, self.listen)
         
-    def newTeacher(self,name,data={}):
-        self.getDisplay()                        
+    def newTeacher(self,name):
+        self.getDisplay()         
+                  
+        if self.myteacher is not None:
+            self.removeMyTeacher()
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
-        if Configs.RootConfigs['classroomname']!=data['classroomname']:
-            return #it's a teacher of any other classroom
+        
+        
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
 
         self.catched=name
@@ -181,6 +185,21 @@ class Obey(object):
             else:
                 self.getTeacherData()
 
+    def checkClass(self,data={}):
+        NetworkUtils.getWirelessData()
+ 
+                
+                
+        if Configs.RootConfigs['classroomname']==data['classroomname']:
+            return True#it's a teacher of my classroom
+        
+        if Configs.RootConfigs['classroomname']=="noclassroomname":
+            return (self.myteacher==None) #There's no classroomname, so link to the first one
+            #PENDING = CHECK MAC
+        
+        
+        return False
+    
     def removeMyTeacher(self):
         if self.Teachers.has_key(self.catched): #in case avahi hasn't detected the teacher has already gone..
             self.Teachers.pop(self.catched)        

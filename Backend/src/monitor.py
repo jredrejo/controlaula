@@ -147,6 +147,7 @@ if __name__ == '__main__':
         from ControlAula import TeacherMainLoop, Classroom
         from ControlAula.Utils  import Publications
         from twisted.web import server
+        NetworkUtils.getWirelessData()
         externalIP=NetworkUtils.get_ip_inet_address()
         if externalIP=='':
             externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')

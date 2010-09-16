@@ -138,6 +138,7 @@ class ControlAulaProtocol(resource.Resource):
                 
                 if json.loads(recvjson).has_key('structure'):
                     structure=json.loads(recvjson)['structure']
+
                     handler.args=[structure['rows'],structure['cols']]
                 result=handler.process(command)
                 #respjson= json.dumps({'result':'ack'})

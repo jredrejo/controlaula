@@ -28,6 +28,7 @@ import NetworkUtils
 loginname=''
 fullusername=''
 homeuser=''
+bssid=''
 ipLTSP='unknown'
 
 def getLoginName():
@@ -129,13 +130,17 @@ def classroomName():
 
 def getClassroomName(name):
     '''for a hostname following the classroomname-oXX criteria, returns the classroom name'''
-    
+    NetworkUtils.getWirelessData()
+    classname="noclassroomname" 
     hostname=name.strip().split('.')[0].replace('_','-')
     items=hostname.split('-')
     if len(items)==2:
-        return items[0]
+        classname= items[0]
     else:
-        return "noclassroomname" 
+        if NetworkUtils.essid!='':
+            classname=NetworkUtils.essid
+        
+    return classname
 
 def getDesktopNumber(name):
     '''for a hostname following the classroomname-oXX criteria, returns the "XX"'''

@@ -23,11 +23,17 @@
 ##############################################################################
 
 
-import array,fcntl,socket,struct,os
+import array,fcntl,socket,struct,os,re
 import logging,subprocess
 
 gateway='0'
 ltspGateway='0'
+essid=''
+bssid=''
+IFNAMSIZE = 16
+IW_ESSID_MAX_SIZE = 16
+SIOCGIWESSID  = 0x8B1B
+SIOCGIWAP     = 0x8B15
 
 def get_ip_address(ifname):
     """Returns the ip address of the interface ifname"""
@@ -87,7 +93,20 @@ def get_HwAddr(ifname):
     return mac
 
 
-
+def getWirelessNICnames():
+    """ return list of  wireless device names   """
+    device = re.compile('[a-z]{3,4}[0-9]') 
+    ifnames = []
+    
+    f = open('/proc/net/wireless', 'r')
+    data = f.readlines()
+    for line in data:
+        try:
+            ifnames.append(device.search(line).group())
+        except AttributeError:
+            pass 
+    
+    return ifnames
 
 
 def all_interfaces():
@@ -116,6 +135,30 @@ def all_interfaces():
 
     return lst
 
+def getESSID( ifname):
+
+    sockfd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    essid = ""
+    
+    buff = array.array('c', '\0'*32)
+    caddr_t, length = buff.buffer_info()
+    s = struct.pack('Pi', caddr_t, length)
+       
+    buff2 = IFNAMSIZE-len(ifname)
+    ifreq = ifname + '\0'*buff2
+    ifreq = ifreq + s                  
+    try:
+        result = fcntl.ioctl(sockfd.fileno(), SIOCGIWESSID, ifreq)
+        i=0
+        result=result[16:]
+    except IOError, (i, e):
+        i=i
+        result=e
+            
+    if i > 0:
+        return (i, result)
+    str = buff.tostring()
+    return (0,str.strip('\x00'))
 
 
 def getHostName():
@@ -131,6 +174,45 @@ def getFreeTCPPort():
     return newPort
 
 
+def getWirelessData():
+    global essid
+    global bssid
+    wifiNICs=getWirelessNICnames()
+    if len(wifiNICs)>0:
+        for i in wifiNICs:
+            value,nessid=getESSID(i)
+            if value==0:
+                essid=nessid
+                value2,nbssid=getAPaddr(i)
+                if value2==0:
+                    bssid=nbssid    
+
+def getAPaddr(ifname):
+    sockfd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    
+    buff = array.array('c', '\0'*32)
+    caddr_t, length = buff.buffer_info()
+    s = struct.pack('Pi', caddr_t, length)
+        
+
+    buff2 = IFNAMSIZE-len(ifname)
+    ifreq = ifname + '\0'*buff2
+    ifreq = ifreq + s                  
+    try:
+        result = fcntl.ioctl(sockfd.fileno(), SIOCGIWAP, ifreq)
+        i=0
+        result=result[16:]
+    except IOError, (i, e):
+        i=i
+        result=e
+                                  
+                                  
+    if i > 0:
+        return (i, result)
+    else:
+        mac_addr = struct.unpack('xxBBBBBB',result[:8])
+        return (0,"%02X:%02X:%02X:%02X:%02X:%02X" % mac_addr)
+    
 def scan_server(address, port): 
     """Returns true if a port is open at address, or false otherwise"""
     s = socket.socket() 

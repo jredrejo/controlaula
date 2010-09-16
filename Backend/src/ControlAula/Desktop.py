@@ -41,6 +41,7 @@ class Desktop(object):
         self.bigbrother=False
         self.projector=False
         self.classroom=classroom
+        self.host=None
 
     def __str__(self):
         return str((self.hostkey,self.userkey,self.login,self.username,self.hostname,self.ip,self.ltsp, self.internet,self.sound,self.mouse,self.messages,self.photo))
@@ -171,6 +172,7 @@ class Desktop(object):
         self.mainIP=host.ip
         self.ltsp=host.ltsp
         self.internet=host.internet
+        self.host=host
 
     
     
@@ -204,6 +206,11 @@ class Desktop(object):
         self.login=''
         self.username=''
         self.photo=''
+        #recover host settings:
+        self.ip=self.host.ip
+        self.mainIP=self.host.ip
+        self.ltsp=self.host.ltsp
+        self.internet= self.host.internet
         
     def getFrontendInfo(self):
         ''' builds the line that must be passed to the frontend for this desktop

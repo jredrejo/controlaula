@@ -44,4 +44,4 @@ class User(object):
         self.shotname=''
 
     def __str__(self):
-        return str( (self.login,self.hostname,self.hostip,self.ltsp,self.classname,self.username, self.ipLTSP, self.internet, self.mouse, self.sound, self.messages, self.photo,self.timestamp))
+        return str( (self.login,self.hostname,self.ip,self.ltsp,self.classname,self.username, self.ipLTSP, self.internet, self.mouse, self.sound, self.messages, self.photo,self.timestamp))
