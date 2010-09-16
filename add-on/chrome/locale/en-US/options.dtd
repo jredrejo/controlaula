@@ -1,0 +1,4 @@
+<!ENTITY prefwindow.title "ControlAula button launcher preferences">
+<!ENTITY pane1.title "ControlAula button launcher preferences">
+<!ENTITY stringpref.label "localhost Port:">
+<!ENTITY stringpref.accesskey "P">
