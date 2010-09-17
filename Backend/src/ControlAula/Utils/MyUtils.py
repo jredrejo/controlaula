@@ -135,10 +135,12 @@ def getClassroomName(name):
     hostname=name.strip().split('.')[0].replace('_','-')
     items=hostname.split('-')
     if len(items)==2:
-        classname= items[0]
-    else:
-        if NetworkUtils.essid!='':
-            classname=NetworkUtils.essid
+        if len(items[1])==3 and (items[1].upper()=='PRO' or items[1][:1].upper()=='O'):
+            classname= items[0]
+            return classname
+    
+    if NetworkUtils.essid!='':
+        classname=NetworkUtils.essid
         
     return classname
 

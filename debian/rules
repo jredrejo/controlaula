@@ -38,6 +38,7 @@ binary-indep: build install
 	dh_installman 
 	dh_install
 	dh_desktop
+	dh_link
 	dh_compress
 	dh_fixperms
 	dh_installdeb

@@ -13,6 +13,11 @@ ControlAula.showFirefoxContextMenu = function(event) {
   document.getElementById("context-ControlAula").hidden = gContextMenu.onImage;
 };
 
+                      
+var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService);
+prefs = prefs.getBranch("extensions.ControlAula.")
+                      
 window.addEventListener("load", ControlAula.onFirefoxLoad, false);
 
 
