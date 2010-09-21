@@ -125,7 +125,7 @@ if __name__ == '__main__':
         glib2reactor.install()  
     
     from twisted.internet import reactor
-    
+    from twisted.web import server
 
     # Initialise the signal handler.
     signal.signal(signal.SIGINT, SigHandler)  
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         logging.getLogger().debug("The user is a teacher")
         from ControlAula import TeacherMainLoop, Classroom
         from ControlAula.Utils  import Publications
-        from twisted.web import server
+        
         NetworkUtils.getWirelessData()
         externalIP=NetworkUtils.get_ip_inet_address()
         if externalIP=='':
@@ -161,35 +161,43 @@ if __name__ == '__main__':
         AulaRoot.PageDir=PAGES
         AulaRoot.teacher.classroom=MyClass
         
-        AulaSite = server.Site(AulaRoot) #Factory object
-        # This is the error message to use if we can't listen on a selected port.
-        _ListenMsg = """\n\tFatal Error - cannot listen on port %s.
-        \tThis port may already be in use by another program.\n\n"""
-
-        #print WEBPORT
-        f = open(os.path.join(Configs.APP_DIR,'launcher.html') , 'wb')
-        htmltext='<html><head>  <meta http-equiv="Refresh" content="0; url='
-        htmltext +='http://localhost:' + str(WEBPORT) + '/index.html"'
-        htmltext +='</head><body></body></html>'
-        f.write(htmltext)
-        f.close()  
-        
-        try:
-            reactor.listenTCP(WEBPORT, AulaSite)
-            reactor.callWhenRunning(MyClass.UpdateLists)
-        except CannotListenError:
-            # If we can't use this port, then exit.
-            print(_ListenMsg % str(WEBPORT))
-            sys.exit()              
+         
 
     else:         
         logging.getLogger().debug("The user is NOT a teacher")
         from ControlAula import StudentLoop
-
+        # Start up the web service.     
+        AulaRoot = StudentLoop.ControlAulaProtocol() #Resource object
+        AulaRoot.PageDir=PAGES
+        
         
         MyStudent=StudentLoop.Obey(int(REFRESH/2))
         reactor.callWhenRunning(MyStudent.listen)
         reactor.callWhenRunning(MyStudent.startScan)
+
+AulaSite = server.Site(AulaRoot) #Factory object
+# This is the error message to use if we can't listen on a selected port.
+_ListenMsg = """\n\tFatal Error - cannot listen on port %s.
+\tThis port may already be in use by another program.\n\n"""
+
+#print WEBPORT
+f = open(os.path.join(Configs.APP_DIR,'launcher.html') , 'wb')
+htmltext='<html><head>  <meta http-equiv="Refresh" content="0; url='
+htmltext +='http://localhost:' + str(WEBPORT) + '/index.html"'
+htmltext +='</head><body></body></html>'
+f.write(htmltext)
+f.close()  
+
+try:
+    reactor.listenTCP(WEBPORT, AulaSite)
+    if isTeacher:
+        reactor.callWhenRunning(MyClass.UpdateLists)
+except CannotListenError:
+    # If we can't use this port, then exit.
+    print(_ListenMsg % str(WEBPORT))
+    if isTeacher:
+        sys.exit()     
+
         
 reactor.callWhenRunning(checkActivity)        
 reactor.run()

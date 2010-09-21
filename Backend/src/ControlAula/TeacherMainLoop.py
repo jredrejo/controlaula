@@ -53,11 +53,17 @@ class ControlAulaProtocol(resource.Resource):
     # to read data.
     def render_GET(self, request):
 
+        pagename=request.path[1:].lower()
+        if  pagename=='':
+            request.path='/index.html'
+            pagename='index.html'
+        
+        
         # Check if requested file exists.    
         if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
-            requestedfile=os.path.join(Configs.APP_DIR , request.path[1:])
+            requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
         else:    
-            requestedfile = os.path.join(self.PageDir, request.path[1:])
+            requestedfile = os.path.join(self.PageDir,request.path[1:])
         
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.

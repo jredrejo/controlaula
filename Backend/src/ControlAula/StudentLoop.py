@@ -22,13 +22,14 @@
 #
 ##############################################################################
 
-import xmlrpclib
+import xmlrpclib,os
 from ControlAula.Utils import NetworkUtils, MyUtils,Configs
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging,sys
 from Xlib.display import Display
-
+from twisted.web import server,resource,  static
+import simplejson as json
 
             
 class Obey(object):
@@ -78,6 +79,9 @@ class Obey(object):
                 self.Teachers[name]=(address,port)
                 if self.checkClass(data):
                     self.newTeacher(name)
+                else:
+                    logging.getLogger().debug(name + ' is not my teacher')
+                    
     
     
     def _remove_teacher(self,func, name, address, port):    
@@ -235,3 +239,74 @@ class Obey(object):
                 self.handler.process(i[0])
         
         
+
+class ControlAulaProtocol(resource.Resource):
+    """Respond with the appropriate ControlAUla  protocol response.
+    A GET should return a file. A POST should use JSON to retrieve and send data
+    """
+
+    isLeaf = True  # This is a resource end point.
+
+
+    def __init__ (self):
+        resource.Resource.__init__(self)
+        
+        self.PageDir=""        
+        
+
+
+
+    ########################################################
+    # Return the page for a GET. This will handle requests
+    # to read data.
+    def render_GET(self, request):
+
+        # Check if requested file exists.    
+        pagename=request.path[1:].lower()
+        if  pagename=='index.htm' or pagename=='index.html' or pagename=='':
+            request.path='/alumno.html'
+        requestedfile = os.path.join(self.PageDir,request.path[1:])
+        
+        if not os.path.isfile(requestedfile):
+            # Didn't find it? Return an error.
+            request.setResponseCode(404)
+            return"""
+            <html><head><title>404 - No Such Resource</title></head>
+            <body><h1>No Such Resource</h1>
+            <p>File not found: %s - No such file.</p></body></html>
+            """ % requestedfile
+
+        # Look for the requested file.
+        f=static.File(requestedfile)
+
+        
+        if f.type is None:
+            f.type, f.encoding = static.getTypeAndEncoding(requestedfile,
+                f.contentTypes,
+                f.contentEncodings,
+                f.defaultType)        
+        
+        if f.type:
+            ctype=f.type.split(":")[0]
+            # Send the headers.
+            request.setHeader('content-type', ctype)
+            
+        if f.encoding:
+            request.setHeader('content-encoding', f.encoding)
+        # Send the page.
+        static.FileTransfer(f.openForReading(), f.getFileSize(), request)
+        
+        return server.NOT_DONE_YET
+
+
+    def render_POST(self, request):
+        """ Process a POST and return a response. This will handle
+        all the AJAX read and write requests for data.
+        """        
+        respjson=''
+        # Return the JSON response.
+        return respjson
+
+
+
+
