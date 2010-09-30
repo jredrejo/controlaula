@@ -124,7 +124,10 @@ class ControlAulaProtocol(resource.Resource):
             pass
         if args=='':
             try:
-                args=request.args['node']
+                if 'node' in request.args:
+                    args=request.args['node']
+                elif 'message' in request.args:
+                    args=request.args['message']    
             except:
                 pass
                 

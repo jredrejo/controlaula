@@ -62,41 +62,41 @@ def prepareBroadcast():
  
 from twisted.internet import reactor
 
+if __name__ == '__main__':
 
-
-# Initialise the signal handler.
-signal.signal(signal.SIGINT, SigHandler)  
-
-HOSTNAME=NetworkUtils.getHostName()
-
-
-
-logging.basicConfig(level=logging.DEBUG,
-                format='%(asctime)s %(levelname)-8s %(message)s',
-                datefmt='%a, %d %b %Y %H:%M:%S',
-                filename=LOG_FILENAME)
-
-if os.path.exists('/usr/sbin/ethtool'):
-    subprocess.call(['ethtool','-s','eth0','wol','g'])
-######### Begin the application loop #######
-
-from ControlAula import StudentLoop
-
-#vlc cache for the nobody user:
-if not os.path.isdir('/nonexistent'):
-    try:
-        os.makedirs('/nonexistent')
-    except:
-        pass
-    try:
-        os.chown('/nonexistent',65534, 0)
-    except:
-        pass
-
-MyStudent=StudentLoop.Obey(int(REFRESH/2))
-reactor.callWhenRunning(MyStudent.listen)
-reactor.callWhenRunning(MyStudent.startScan)
-
-reactor.callWhenRunning(prepareBroadcast)
-
-application = service.Application('controlaula',uid=0,gid=0)
+    # Initialise the signal handler.
+    signal.signal(signal.SIGINT, SigHandler)  
+    
+    HOSTNAME=NetworkUtils.getHostName()
+    
+    
+    
+    logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)-8s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename=LOG_FILENAME)
+    
+    if os.path.exists('/usr/sbin/ethtool'):
+        subprocess.call(['ethtool','-s','eth0','wol','g'])
+    ######### Begin the application loop #######
+    
+    from ControlAula import StudentLoop
+    
+    #vlc cache for the nobody user:
+    if not os.path.isdir('/nonexistent'):
+        try:
+            os.makedirs('/nonexistent')
+        except:
+            pass
+        try:
+            os.chown('/nonexistent',65534, 0)
+        except:
+            pass
+    
+    MyStudent=StudentLoop.Obey(int(REFRESH/2))
+    reactor.callWhenRunning(MyStudent.listen)
+    reactor.callWhenRunning(MyStudent.startScan)
+    
+    reactor.callWhenRunning(prepareBroadcast)
+    
+    application = service.Application('controlaula',uid=0,gid=0)

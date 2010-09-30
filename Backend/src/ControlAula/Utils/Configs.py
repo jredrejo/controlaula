@@ -156,6 +156,7 @@ class MonitorConfig(object):
         self._ConfigParser = ConfigParser.ConfigParser()
 
         # If we were given a file name, read in and parse the configuration.
+
         if self._ConfigFileName:
             self._GetConfig() 
 
@@ -317,7 +318,100 @@ class MonitorConfig(object):
         self._ConfigParser.write(configfile)
         configfile.close()
         
-                                
+def import_legacy_config(oldconfig,newconfig):
+    
+    configaulas={}
+    macs={}
+    cols=0
+    rows=0
+    total=0
+
+    def get_aula(posname):
+        l=posname.find('[')
+        aula=posname[:l]
+        index=int(posname[l:][1:3])-1
+        return aula,index
+
+    old_configparser = ConfigParser.ConfigParser()
+    old_configparser.read(oldconfig)
+
+    itemlist=old_configparser.items('General')
+    for i in itemlist:
+        if i[0]=='filas':
+            cols=int(i[1].replace('"',''))
+        elif i[0]=='columnas':
+            rows=int(i[1].replace('"',''))
+
+    total=cols*rows
+    if total==0: return
+
+    itemlist=old_configparser.items('Position')
+    for i in itemlist:
+        aula,index=get_aula(i[0])
+        rname=aula+'-o'+ '%0*d' % (2, int(i[1]))
+        if aula not in configaulas:            
+            configaulas[aula]=['Unknown']*total
+        configaulas[aula][index]=rname
+
+    itemlist=old_configparser.items('MAC')
+    for i in itemlist:
+        pos =i[0].replace('[','-o').replace(']','')
+        if not pos in macs:
+            macs[pos]=i[1].replace('"','')
+            
+    itemlist=old_configparser.items('Ocul')
+    for i in itemlist:
+        aula,index=get_aula(i[0])
+        if i[1]!='"0"':
+            configaulas[aula][index]='none' 
+
+
+    new_configparser = ConfigParser.RawConfigParser()         
+        
+    for i in  configaulas:
+
+        s=""
+        new_configparser.add_section(i)
+        new_configparser.set(i,'rows',rows)
+        new_configparser.set(i,'cols',cols)
+        for n in configaulas[i]:
+            s=s+n + ","
+        
+        new_configparser.set(i,'structure',s[:-1])        
+        
+    new_configparser.add_section('MAC')
+    for mac in macs:    
+        new_configparser.set('MAC',mac,macs[mac])    
+
+    new_configparser.add_section('General')  
+      
+    configfile=open(newconfig, 'wb')
+    new_configparser.write(configfile)
+    configfile.close()    
+
+
+def import_newmacs(oldconfig,newconfig):
+    
+    modified=False
+
+    old_configparser = ConfigParser.ConfigParser()
+    old_configparser.read(oldconfig)
+    new_configparser = ConfigParser.ConfigParser()  
+    new_configparser.read(newconfig)
+
+    olditemlist=old_configparser.items('MAC')
+    newitemlist=new_configparser.items('MAC')
+    newlist=zip(*newitemlist)[0]
+    for i in olditemlist:
+        pos =i[0].replace('[','-o').replace(']','')
+        if not pos in newlist:            
+            new_configparser.set('MAC',pos,i[1].replace('"','')) 
+            modified=True
+
+    if modified:  
+        configfile=open(newconfig, 'wb')
+        new_configparser.write(configfile)
+        configfile.close()                                 
 ########################################################                                
 
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
@@ -347,15 +441,22 @@ REFRESH=5
                 
 RootConfigs=SirvecoleConfig('/etc/sirvecole').GetConfig() 
 CONF_FILENAME=os.path.join(APP_DIR,'monitor.cfg')
-if not os.path.exists(CONF_FILENAME):  
-    config = ConfigParser.RawConfigParser()                
-    config.add_section('General')
-    config.set('General','internet','1')
-    config.set('General','mouse','1')
-    config.set('General','sound','1')       
-    config.set('General','messages','1')     
-    configfile=open(CONF_FILENAME, 'wb')
-    config.write(configfile)
-    configfile.close()    
+#if there is a config file from old versions of ControlAula and there's not
+# a config file for the current version, try to convert it
+if not os.path.exists(CONF_FILENAME):
+    if os.path.exists('/var/lib/monitorprofe/monitorprofe.cfg'):
+        import_legacy_config('/var/lib/monitorprofe/monitorprofe.cfg',CONF_FILENAME)
+    else:
+        config = ConfigParser.RawConfigParser()                
+        config.add_section('General')
+        config.set('General','internet','1')
+        config.set('General','mouse','1')
+        config.set('General','sound','1')       
+        config.set('General','messages','1')     
+        configfile=open(CONF_FILENAME, 'wb')
+        config.write(configfile)
+        configfile.close()
+elif os.path.exists('/var/lib/monitorprofe/monitorprofe.cfg'):
+    import_newmacs('/var/lib/monitorprofe/monitorprofe.cfg',CONF_FILENAME)    
     
 MonitorConfigs=MonitorConfig(CONF_FILENAME)
