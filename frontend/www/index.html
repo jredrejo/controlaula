@@ -1,0 +1,360 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
+
+	<!-- Libreria JQuery -->
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
+
+	<!-- Libreria JQuery UI -->
+	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
+	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
+
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery.json.js"></script>
+
+	<script type="text/JavaScript" language="javascript" src="js/buttons.js"></script>
+	<script type="text/JavaScript" language="javascript" src="js/connection.js"></script>
+	<script type="text/JavaScript" language="javascript" src="js/utils.js"></script>
+
+	<meta charset="UTF-8" />
+	
+	<style type="text/css">
+		#feedback { font-size: 1.4em; }
+		#selectable .ui-selecting { background: #FECA40; }
+		#selectable .ui-selected { background: #F39814; color: white; }
+		#selectable { list-style-type: none; margin: 0; padding: 0; }
+		#selectable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
+	</style>
+
+	<style type="text/css">
+		#sortable { list-style-type: none; margin: 0; padding: 0; }
+		#sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
+	</style>
+
+	<style>
+		.ui-progressbar-value { background-image: url(img/pbar-ani.gif); }
+	</style>
+
+
+	<script type="text/javascript">
+
+	$(function() {
+		$("#tabsComputers").tabs();
+		$("#tabsActions").tabs();
+		$("#tabsClassroom").tabs();
+
+		$("#selectable").selectable();
+
+		$("#sortable").sortable({
+			stop: function(event, ui) { 
+				sendClassroomConfig();
+			}
+		});
+
+		$("#sortable").disableSelection();
+
+
+		$("#sliderRows").slider({
+			value:5,
+			min: 1,
+			max: 8,
+			step: 1,
+			slide: function(event, ui) {
+				$("#rows").val(ui.value);
+			}
+		});
+		$("#rows").val($("#sliderRows").slider("value"));
+
+		$("#sliderColumns").slider({
+			value:3,
+			min: 1,
+			max: 5,
+			step: 1,
+			slide: function(event, ui) {
+				$("#columns").val(ui.value);
+			}
+		});
+		$("#columns").val($("#sliderColumns").slider("value"));
+
+
+		$("#sliderComputers").slider({
+			value:15,
+			min: 1,
+			max: 30,
+			step: 1,
+			slide: function(event, ui) {
+				$("#computers").val(ui.value);
+			}
+		});
+		$("#computers").val($("#sliderComputers").slider("value"));
+
+		$( "#progressbar" ).progressbar({
+			value: 59
+		});
+
+		$('#computer').select();
+
+
+		$("#dialogSelectComputers").dialog({ autoOpen: false });
+
+
+
+
+
+			//theme switcher
+			$('#set').hide();
+			$('#changeItUp').hover(function(){$('#set').fadeIn();}, function(){});
+			$('#themes a').click(function(){
+				var theme = $(this).attr('href');
+				$('head').append('<link href="'+ theme +'" rel="Stylesheet" type="text/css" />');
+				return false;
+			});
+			$('#set').hover(function(){}, function(){$(this).fadeOut();});
+
+
+	});
+
+
+
+
+	</script>
+	<style>
+		.ui-menu { position: absolute; width: 100px; }
+
+
+		#themes {padding-left: 20px; background: url(images/icon_gallery.gif) no-repeat left 50%;}
+		
+		.ui-default-state {
+			padding: .5em 1em;
+			cursor: pointer;
+		}
+		#themes {padding-left: 20px; font-size: 1.2em; background: url(images/icon_gallery.gif) no-repeat left 50%;}
+		#set {border: 2px solid #ddd; padding: 2px; background: #444; float: left;}
+		#set a {margin: 2px; border: 1px solid #444; float: left;}
+		#set a:hover {border-color: #fff;}
+
+	</style>
+
+</head>
+<body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
+
+	<table width="100%" border="0" cellpading="4" cellspacing="20">
+	<tr>
+		<td style="width:25%; vertical-align:top;">
+			<div id="tabsComputers">
+				<ul>
+					<li><a href="#tabs-1">Equipos</a></li>
+				</ul>
+				<div id="tabs-1" style="padding:2px;">
+					<table width="100%">
+						<tr>
+							<td style="text-align:center;"><button id="selectAll" style="width:130px;">Selecc. Todo</button></td>
+							<td style="text-align:center;"><button id="turnOn" style="width:130px;">Encender</button></td>
+						</tr>
+						<tr>
+							<td style="text-align:center;"><button id="selectNone" style="width:130px;">Selecc. Ninguno</button></td>
+							<td style="text-align:center;"><button id="turnOff" style="width:130px;">Apagar</button></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</td>
+		<td style="width:75%; vertical-align:top;" rowspan="2">
+			<div id="tabsClassroom" style="width:500px;">
+				<ul>
+					<li><a href="#tabsClassroom-1">Aula</a></li>
+					<li><a href="#tabsClassroom-2">Ordenar Aula</a></li>
+					<li><a href="#tabsClassroom-3">Configuraci&oacute;n</a></li>
+				<!--	<li><a href="#tabsClassroom-4">LDAP</a></li>-->
+				</ul>
+				<div id="tabsClassroom-1" style="padding:2px;">
+					<table width="100%">
+						<tr><td>
+							<ol id="selectable">
+								<!--<li class="ui-state-default" id="computer1"><img src="img/turnOn.png"/></li>-->
+							</ol>
+					</td></tr>
+					</table>
+				</div>
+				<div id="tabsClassroom-2" style="padding:2px;">
+					<table width="100%">
+						<tr><td>
+							<ul id="sortable"></ul>
+						</td></tr>
+					</table>
+				</div>
+				<div id="tabsClassroom-3" style="padding:2px;">
+					<p class="ui-state-default ui-corner-all" style="padding:4px;margin-top:1em;">
+					<span class="ui-icon ui-icon-signal" style="float:left; margin:-2px 5px 0 0;"></span>
+					Manual
+					</p>
+						<div style="padding-left:30px">
+						<p>
+							<label for="rows">Filas:</label>
+							<input type="text" id="rows" style="border:0; color:#f6931f; font-weight:bold; width:30px; text-align:center;" />
+							<div id="sliderRows" style="width:300px;"></div>
+						</p>
+						<p>
+							<label for="columns">Columnas:</label>
+							<input type="text" id="columns" style="border:0; color:#f6931f; font-weight:bold; width:30px; text-align:center;" />
+							<div id="sliderColumns" style="width:300px;"></div>
+						</p>
+						<p>
+							<label for="columns">Equipos:</label>
+							<input type="text" id="computers" style="border:0; color:#f6931f; font-weight:bold; width:30px; text-align:center;" />
+							<div id="sliderComputers" style="width:300px;"></div>
+						</p>
+						</div>
+					<br>
+	<!--				<p class="ui-state-default ui-corner-all" style="padding:4px;margin-top:1em;">
+					<span class="ui-icon ui-icon-signal" style="float:left; margin:-2px 5px 0 0;"></span>
+					Automática
+					</p>
+
+					<div id="progressbar" style="width:100%;"></div>
+					<p style="text-align:center;"><button id="scanNet" style="width:130px;" onClick="alert('En desarrollo');">Escanear</button></p>-->
+
+					<p id="themes" style="position: relative; margin-top: 2em;"><span id="changeItUp" style="text-decoration: underline;">Temas de escritorio</span>
+
+					<span id="set" style="position: absolute; left: 0; top: -10px;">
+						<a href="js/jquery/ui/css/blue/jquery-ui-1.8.5.custom.css" title="Blue"><img src="img/themes/blue.png" alt="image" width="100" height="50" /></a>
+						<a href="js/jquery/ui/css/gray/jquery-ui-1.8.5.custom.css" title="Gray"><img src="img/themes/gray.png" alt="image" width="100" height="50" /></a>
+						<a href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" title="Orange"><img src="img/themes/orange.png" alt="image" width="100" height="50" /></a>
+						<a href="js/jquery/ui/css/green/jquery-ui-1.8.5.custom.css" title="Green"><img src="img/themes/green.png" alt="image" width="100" height="50" /></a>
+					</span></p>
+				</div>
+		<!--		<div id="tabsClassroom-4" style="padding:2px;">
+					<p class="validateTips">Obtener los datos de LDAP.</p>
+
+					<form>
+					<fieldset>
+						<p><label for="name">Nombre</label>&nbsp;
+						<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" /></p>
+
+						<label for="password">Contraseña</label>&nbsp;
+						<input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
+					</fieldset>
+						<p style="text-align:right;"><button id="connectLDAP" style="width:130px;" onClick="alert('En desarrollo');">Conectar</button></p>
+					</form>
+
+				</div>-->
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align:top;">
+			<div id="tabsActions">
+				<ul>
+					<li><a href="#tabs-1">Acciones</a></li>
+				</ul>
+				<div id="tabs-1">
+					<table width="100%" style="margin-top:15px;">
+						<tr>
+							<td style="text-align:center;">
+								<div>
+									<div>
+										<button id="internet" style="width:105px;">Internet</button>
+										<button id="select">Select an action</button>
+									</div>
+									<ul style="z-index:1000;">
+										<li><a href="#"><div id="enableInternet">Habilitar</div></a></li>
+										<li><a href="#"><div id="disableInternet">Deshabilitar</div></a></li>
+									</ul>
+								</div>
+							</td>
+							<td style="text-align:center;">
+								<div>
+									<div>
+										<button id="sound" style="width:105px;">Altavoz</button>
+										<button id="select">Select an action</button>
+									</div>
+									<ul style="z-index:1000;">
+										<li><a href="#"><div id="enableSound">Habilitar</div></a></li>
+										<li><a href="#"><div id="diasbleSound">Deshabilitar</div></a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:center;">
+
+								<div>
+									<button id="mouse" style="width:105px;">Rat&oacute;n/Teclado</button>
+									<button id="select">Select an action</button>
+								</div>
+
+								<ul  style="z-index:1000;">
+									<li><a href="#"><div id="enableMouse">Habilitar</div></a></li>
+									<li><a href="#"><div id="disableMouse">Deshabilitar</div></a></li>
+								</ul>
+							</td>
+							<td style="text-align:center;">
+								<div>
+									<div>
+										<button id="messages" style="width:105px;">Mensages</button>
+										<button id="select">Select an action</button>
+									</div>
+									<ul style="z-index:1000;">
+										<li><a href="#"><div id="enableMessages">Habilitar</div></a></li>
+										<li><a href="#"><div id="disableMessages">Deshabilitar</div></a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:center;">
+
+								<div>
+									<button id="projector" style="width:105px;">Proyector</button>
+									<button id="select">Select an action</button>
+								</div>
+
+								<ul  style="z-index:1000;">
+									<li><a href="#"><div id="enableProjector">Habilitar</div></a></li>
+									<li><a href="#"><div id="disableProjector">Deshabilitar</div></a></li>
+								</ul>
+							</td>
+							<td style="text-align:center;">
+								<div>
+									<div>
+										<button id="video" style="width:105px;">Video</button>
+										<button id="select">Select an action</button>
+									</div>
+									<ul style="z-index:1000;">
+										<li><a href="#"><div id="enableVideo">Habilitar</div></a></li>
+										<li><a href="#"><div id="disableVideo">Deshabilitar</div></a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:center;">
+								<button id="sendMessage" style="width:132px;">Enviar Mensaje</button>
+							</td>
+							<td style="text-align:center;">
+								<button id="sendFile" style="width:132px;">Enviar Fichero</button>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:center;">
+								<button id="web" style="width:132px;">Web</button>
+							</td>
+							<td style="text-align:center;">
+								<button id="bigBrother" style="width:132px;">Gran Hermano</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</td>
+	</tr>
+	</table>
+
+	<div id="dialogSelectComputers" title="Atenci&oacute;n">
+		<p>
+			<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 7px 0;"></span>
+			Para realizar la acci&oacute;n debe seleccionar al menos un equipo.
+		</p>
+	</div>
+
+</body>
+<script language="javascript"> initScreens(); </script>
