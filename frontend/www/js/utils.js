@@ -38,11 +38,11 @@ function printClassroom(equipos){
 		}
 
 		if(class.classroom.pclist[i].internetEnabled=="1") internet="img/icon_web.png";
-		//if(class.classroom.pclist[i].mouseEnabled=="1") mouse="img/icon_mouse.png";
+		if(class.classroom.pclist[i].mouseEnabled=="1") mouse="img/icon_mouse.png";
 		if(class.classroom.pclist[i].messagesEnabled=="1") message="img/icon_messages.png";
 
-		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="'+pcname+'">'+pcname+'</div><img src="'+photo+'"/><div id="pc_name">'+name+'</div></li>');
-		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="'+pcname+'">'+pcname+'</div><img src="'+photo+'"/>'+name+'</li>');
+		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 	}	
 	lastPClist = class.classroom.pclist;
 }
@@ -75,7 +75,7 @@ function refreshClassroom(equipos){
 		}
 
 		if(class.classroom.pclist[i].internetEnabled=="1") internet="img/icon_web.png";
-		//if(class.classroom.pclist[i].mouseEnabled=="1") mouse="img/icon_mouse.png";
+		if(class.classroom.pclist[i].mouseEnabled=="1") mouse="img/icon_mouse.png";
 		if(class.classroom.pclist[i].messagesEnabled=="1") message="img/icon_messages.png";
 
 		var refresh = '<img src="'+photo+'"/>'+name;
@@ -87,8 +87,8 @@ function refreshClassroom(equipos){
 		$('#selectable #selectable-'+i).remove();
 		$('#sortable #sortable-'+i).remove();
 
-		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="'+pcname+'">'+pcname+'</div><img src="'+photo+'"/><div id="pc_name">'+name+'</div></li>');
-		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="'+pcname+'">'+pcname+'</div><img src="'+photo+'"/>'+name+'</li>');
+		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 
 	}
 	lastPClist = class.classroom.pclist;
@@ -111,7 +111,7 @@ function sendOrderSelected(url,args,action){
 	
 	$("#selectable li").each(function(i, item){
 		if($("#"+item.id).hasClass('ui-selected')==true){
-			selected[i] = item.children(0).id;
+			selected[i] = $("#"+item.id+" #pcName").html();
 			i++;
 		}
 	});
