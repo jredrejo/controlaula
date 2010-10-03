@@ -132,15 +132,15 @@ function sendOrderSelected(url,args,action){
 
 function sendClassroomConfig(){
 
-	var selected = Array();
+	var computers = Array();
 	var i=0;
 
-	var computers = $("#sortable").sortable( "toArray" );
+	//var computers = $("#sortable").sortable( "toArray" );
 
-/*	$("#selectable li div").each(function(i, item){
-		selected[i] = item.id;
-		i++;
-	});*/
+	$("#sortable li").each(function(i, item){
+			computers[i] = $("#"+item.id+" #pcName").html();
+			i++;
+	});
 
 	var classroom = {
 		"pclist": computers, 
