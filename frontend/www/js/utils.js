@@ -44,8 +44,8 @@ function printClassroom(equipos){
 		if(class.classroom.pclist[i].mouseEnabled=="1") mouse="img/icon_mouse.png";
 		if(class.classroom.pclist[i].messagesEnabled=="1") message="img/icon_messages.png";
 
-		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
-		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 	}	
 	lastPClist = class.classroom.pclist;
 }
@@ -90,8 +90,8 @@ function refreshClassroom(equipos){
 		$('#selectable #selectable-'+i).remove();
 		$('#sortable #sortable-'+i).remove();
 
-		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
-		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 
 	}
 	lastPClist = class.classroom.pclist;
