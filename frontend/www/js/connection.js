@@ -27,8 +27,9 @@ function connection(url,data,action){
 	if(url=="datosaula" && data!=dataRefresh)
 		var data = $.JSON.encode({"args" : lastPClist});
 
-    datatosent=new Object()
-    datatosent.data=data
+	datatosent=new Object()
+	datatosent.data=data
+
 	$.ajax({ 
 		url : url , 
 		type: 'POST',

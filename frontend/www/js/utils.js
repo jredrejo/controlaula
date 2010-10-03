@@ -15,6 +15,9 @@ function printClassroom(equipos){
 
 	if(class.classroom.pclist.length==0)
 		return;
+//alert(class.classroom.structure.rows+" - "+class.classroom.structure.cols);
+
+	setColsRows(class.classroom.structure.cols, class.classroom.structure.rows);
 
 	//$('#selectable .ui-state-default').remove();
 
@@ -144,11 +147,23 @@ function sendClassroomConfig(){
 
 	var classroom = {
 		"pclist": computers, 
-		"structure":{"cols":"","rows":""}
+		"structure":{
+			"cols": $("#sliderColumns").slider("value"),
+			"rows": $("#sliderRows").slider("value")
+		}
 	};
 
 	var dataString = $.JSON.encode(classroom)
 	connection("classroomConfig",dataString,"cambiaconfig");
+}
+
+function setColsRows(cols,rows){
+
+	$("#sliderRows").slider("value",rows);
+	$("#rows").val(rows);
+
+	$("#sliderColumns").slider("value",cols);
+	$("#columns").val(cols);
 }
 
 function modalMessage(){

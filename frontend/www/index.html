@@ -54,7 +54,6 @@
 
 
 		$("#sliderRows").slider({
-			value:5,
 			min: 1,
 			max: 8,
 			step: 1,
@@ -62,10 +61,8 @@
 				$("#rows").val(ui.value);
 			}
 		});
-		$("#rows").val($("#sliderRows").slider("value"));
 
 		$("#sliderColumns").slider({
-			value:3,
 			min: 1,
 			max: 5,
 			step: 1,
@@ -73,8 +70,6 @@
 				$("#columns").val(ui.value);
 			}
 		});
-		$("#columns").val($("#sliderColumns").slider("value"));
-
 
 		$("#sliderComputers").slider({
 			value:15,
@@ -110,7 +105,7 @@
 			});
 			$('#set').hover(function(){}, function(){$(this).fadeOut();});
 
-
+		initScreens();
 	});
 
 
@@ -203,6 +198,8 @@
 							<input type="text" id="computers" style="border:0; color:#f6931f; font-weight:bold; width:30px; text-align:center;" />
 							<div id="sliderComputers" style="width:300px;"></div>
 						</p>
+					<br>
+						<p style="text-align:center;"><button id="saveConfiguration" style="width:160px;">Guardar configuración</button></p>
 						</div>
 					<br>
 	<!--				<p class="ui-state-default ui-corner-all" style="padding:4px;margin-top:1em;">
@@ -212,6 +209,11 @@
 
 					<div id="progressbar" style="width:100%;"></div>
 					<p style="text-align:center;"><button id="scanNet" style="width:130px;" onClick="alert('En desarrollo');">Escanear</button></p>-->
+
+					<p class="ui-state-default ui-corner-all" style="padding:4px;margin-top:1em;">
+					<span class="ui-icon ui-icon-signal" style="float:left; margin:-2px 5px 0 0;"></span>
+					Interfaz
+					</p>
 
 					<p id="themes" style="position: relative; margin-top: 2em;"><span id="changeItUp" style="text-decoration: underline;">Temas de escritorio</span>
 
@@ -357,4 +359,3 @@
 	</div>
 
 </body>
-<script language="javascript"> initScreens(); </script>

@@ -218,4 +218,8 @@ $(function() {
 
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
 		$( "#scanNet" ).button({ icons: { primary: "ui-icon-refresh"}});
+
+		$( "#saveConfiguration" )
+			.button({ icons: { primary: "ui-icon-disk"}})
+			.click(function(){ sendClassroomConfig(); });
 });
