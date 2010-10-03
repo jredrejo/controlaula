@@ -140,6 +140,8 @@ function sendClassroomConfig(){
 
 	//var computers = $("#sortable").sortable( "toArray" );
 
+	setColsRows($("#sliderColumns").slider("value"),$("#sliderRows").slider("value"));
+
 	$("#sortable li").each(function(i, item){
 			computers[i] = $("#"+item.id+" #pcName").html();
 			i++;
@@ -164,6 +166,27 @@ function setColsRows(cols,rows){
 
 	$("#sliderColumns").slider("value",cols);
 	$("#columns").val(cols);
+
+	$("#selectable").css("width",cols*100);
+	$("#sortable").css("width",cols*100);
+
+	//setComputers();
+}
+
+function setComputers(){
+	var count = $("#sliderComputers").slider("value")-$("#sortable li").length;
+
+	if(count>0){
+		for(i=$("#sortable li").length; i<$("#sliderComputers").slider("value"); i++){
+			$('#selectable').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">Unknown</div><img src="img/turnOff.png"/><div id="userName">Apagado</div></li>');
+			$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">Unknown</div><img src="img/turnOff.png"/><div id="userName">Apagado</div></li>');
+		}
+	}else if(count<0){
+		for(i=$("#sortable li").length;i>$("#sliderComputers").slider("value");i--){
+			$('#selectable').remove("#selectable-"+i);
+			$('#sortable').remove("#sortable-"+i);
+		}
+	}
 }
 
 function modalMessage(){
