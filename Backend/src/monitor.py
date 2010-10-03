@@ -33,7 +33,7 @@ import os
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 from twisted.internet.task import LoopingCall
-from twisted.web import server
+
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     if not isTeacher:        
         from twisted.internet import glib2reactor
         glib2reactor.install()  
-    
+    from twisted.web import server
     from twisted.internet import reactor
 
 

@@ -112,8 +112,8 @@ class ControlAulaProtocol(resource.Resource):
         args=''
 
         try:
-            recvjson='{}'
-            request.content.read()
+            recvjson='{}'            
+            request.content.read()          
             if request.args.has_key('data'):
                 recvjson = request.args['data'][0]    
                 if recvjson=='':
