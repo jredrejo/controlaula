@@ -1,3 +1,10 @@
+controlaula (1.5.1-1) unstable; urgency=low
+
+  * Frontend changed to jquery
+  * generation of ltsp-controlaula package
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 04 Oct 2010 13:20:38 +0200
+
 controlaula (1.5.0-1) unstable; urgency=low
 
   * Added firefox/iceweasel extension

@@ -401,7 +401,10 @@ def import_newmacs(oldconfig,newconfig):
 
     olditemlist=old_configparser.items('MAC')
     newitemlist=new_configparser.items('MAC')
-    newlist=zip(*newitemlist)[0]
+    if len(newitemlist)>0:
+        newlist=zip(*newitemlist)[0]
+    else:
+        newlist=[]
     for i in olditemlist:
         pos =i[0].replace('[','-o').replace(']','')
         if not pos in newlist:            

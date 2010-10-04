@@ -110,7 +110,7 @@ class ControlAulaProtocol(resource.Resource):
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
-
+        
         try:
             recvjson='{}'            
             request.content.read()          
@@ -132,7 +132,7 @@ class ControlAulaProtocol(resource.Resource):
                 pass
                 
 
-        if handler.existCommand(command):
+        if handler.existCommand(command):          
             #if it's a petition to execute some command
             try:
                 if len(args)>0:

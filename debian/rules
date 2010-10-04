@@ -28,15 +28,16 @@ install: build
 
 # Build architecture-independent files here.
 binary-indep: build install
-	dh_pysupport -i
+	dh_pysupport -pcontrolaula
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
 	dh_installdocs
 	dh_installmenu
-	dh_installinit -i --init-script controlaula -r --no-start -u"start 24 2 3 4 5 . stop 20 1 	." 
+	dh_installinit  --init-script controlaula -r --no-start -u"start 24 2 3 4 5 . stop 20 1 	." 
 	dh_installman 
 	dh_install
+	dh_pysupport -pltsp-controlaula
 	dh_desktop
 	dh_link
 	dh_compress
