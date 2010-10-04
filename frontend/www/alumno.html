@@ -2,7 +2,12 @@
 <head>
 	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
 
+	<!-- Libreria JQuery -->
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
 
+	<!-- Libreria JQuery UI -->
+	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
+	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
 
 	<meta charset="UTF-8" />
 	
@@ -41,6 +46,29 @@
 
 	</style>
 
+
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+          var usuario = null;
+		  
+
+		$.post("getlogin", function(data){
+		 			$('<iframe />', {
+    					name: 'myFrame',
+    					id:   'myFrame',
+    					src: 'http:192.168.0.254:8900/chat.html?id=' + data
+					}).appendTo('body');
+		 });
+		  
+		 
+
+		 
+		 
+      });
+    </script>
+	
 </head>
 <body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 

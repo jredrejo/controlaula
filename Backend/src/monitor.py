@@ -119,7 +119,7 @@ if __name__ == '__main__':
         sys.exit("Another instance of this program is already running")    
     
     isTeacher=MyUtils.userIsTeacher()
-    #isTeacher=False
+    isTeacher=False
     
     if not isTeacher:        
         from twisted.internet import glib2reactor
