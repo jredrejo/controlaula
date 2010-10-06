@@ -36,6 +36,7 @@ class Plugins(object):
         self.myVNC=None
         self.myBcast=None
         self.teacherIP=''
+        self.teacher_port='8900'
         self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,

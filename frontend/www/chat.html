@@ -1,0 +1,142 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
+
+	<!-- Libreria JQuery -->
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
+
+	<!-- Libreria JQuery UI -->
+	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
+	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
+
+    <!-- Libreria chat -->
+    <script src="js/jquery/jquery.ui.chatbox.js" type="text/javascript" charset="utf-8"></script>      
+    <link type="text/css" href="js/jquery/ui/css/jquery.ui.chatbox.css" rel="stylesheet" />
+
+	<meta charset="UTF-8" />
+	
+	<style type="text/css">
+		#feedback { font-size: 1.4em; }
+		#selectable .ui-selecting { background: #FECA40; }
+		#selectable .ui-selected { background: #F39814; color: white; }
+		#selectable { list-style-type: none; margin: 0; padding: 0; }
+		#selectable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
+	</style>
+
+	<style type="text/css">
+		#sortable { list-style-type: none; margin: 0; padding: 0; }
+		#sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
+	</style>
+
+	<style>
+		.ui-progressbar-value { background-image: url(img/pbar-ani.gif); }
+	</style>
+
+
+	<style>
+		.ui-menu { position: absolute; width: 100px; }
+
+
+		#themes {padding-left: 20px; background: url(images/icon_gallery.gif) no-repeat left 50%;}
+		
+		.ui-default-state {
+			padding: .5em 1em;
+			cursor: pointer;
+		}
+		#themes {padding-left: 20px; font-size: 1.2em; background: url(images/icon_gallery.gif) no-repeat left 50%;}
+		#set {border: 2px solid #ddd; padding: 2px; background: #444; float: left;}
+		#set a {margin: 2px; border: 1px solid #444; float: left;}
+		#set a:hover {border-color: #fff;}
+
+	</style>
+
+
+
+
+    <script type="text/javascript" charset="utf-8">
+            function showIfError(response) {
+                if (response.status == 'ok')
+                    return false;
+                for (var err in response.errors) {
+                    $("#chat_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
+                };
+                return true;
+            };
+
+            function cmdSubmitCallback(response) {
+                showIfError(response);
+            };
+
+            function getChatMessageCallback(response) {
+                showIfError(response);
+                
+                $("#chat_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
+                getChatMessage();
+            };
+
+            function getChatMessage(data) {
+                var data = data || {};
+                $.get(conf.getChatURL(), data, getChatMessageCallback, 'json');
+            };
+
+    
+      $(document).ready(function(){
+          		  
+                function Configuration() {
+                    this.userName = '%(student_id)';
+                    this.channel = 'controlaula-chat';
+                    this.server = './';                   
+                };
+                
+                
+                
+     $("#link_add").click(function(event, ui) {
+          $("#chat_div").chatbox({id : "chat_div",
+                                  title : conf.userName|| "Chat ControlAula",
+                                  user : conf.userName,
+                                  offset: 20,
+                                  messageSent: function(id, user, msg){                                       
+                                       var data = conf.copyForRequest();
+                                       data['message'] = msg
+                                    $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
+                                  }});
+                                  
+                                  
+                                  $("#chat_div").chatbox("option", "hidden",false)
+      });
+      
+                      
+                
+                
+                Configuration.prototype.getChatURL = function() {
+                    return this.server + this.channel;
+                };
+                Configuration.prototype.copyForRequest = function() {
+                    return {user: this.userName};
+                };
+
+                conf = new Configuration();
+                
+                getChatMessage();
+
+
+		 
+		 
+      });
+    </script>
+	
+</head>
+
+<body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
+
+    <p><a id="link_add" href="#">Abrir ventana de chat</a></p>
+    
+    
+    
+       
+        <div id="chat_div">
+
+        </div>
+
+</body>
+

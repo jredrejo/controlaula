@@ -135,6 +135,7 @@ class Obey(object):
         self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
         self.handler.myteacher=self.myteacher
         self.handler.teacherIP=teacherIP
+        self.handler.teacher_port=str(newteacher[1])
         self.handler.myIP=self.myIp
         try:                
             order=self.myteacher.hostPing( self.mylogin, self.myIp )
@@ -248,11 +249,12 @@ class ControlAulaProtocol(resource.Resource):
     isLeaf = True  # This is a resource end point.
 
 
-    def __init__ (self):
+    def __init__ (self,obey):
         resource.Resource.__init__(self)
         
         self.PageDir=""        
-        
+        self.mylogin=MyUtils.getLoginName()
+        self.teacher_handler=obey.handler
 
 
 
@@ -303,9 +305,17 @@ class ControlAulaProtocol(resource.Resource):
         """ Process a POST and return a response. This will handle
         all the AJAX read and write requests for data.
         """        
-        respjson=''
-        # Return the JSON response.
-        return respjson
+        try:
+                  
+            request.content.read()   
+           
+            if request.path[1:] =='getConnection':
+                return json.dumps({'login':self.mylogin,'teacher_ip':self.teacher_handler.teacherIP,'teacher_port':self.teacher_handler.teacher_port})
+            else:
+                return ""
+        except:
+            return ""
+            
 
 
 

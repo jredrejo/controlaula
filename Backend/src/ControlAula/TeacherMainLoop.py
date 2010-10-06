@@ -27,10 +27,12 @@
 from twisted.web import server,resource,  static
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs
-
+import cgi
 import simplejson as json
 import os
 import TeacherServer
+from collections import defaultdict
+from time import strftime,time
 
 class ControlAulaProtocol(resource.Resource):
     """Respond with the appropriate ControlAUla  protocol response.
@@ -45,7 +47,7 @@ class ControlAulaProtocol(resource.Resource):
         
         self.PageDir=""        
         self.teacher = TeacherServer.RPCServer()
-
+        self.channels = defaultdict(list)
 
 
     ########################################################
@@ -62,8 +64,14 @@ class ControlAulaProtocol(resource.Resource):
         # Check if requested file exists.    
         if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
             requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
+        elif request.path[:9]=='/student/':
+                requestedfile = os.path.join(self.PageDir,request.path[9:])
+                if request.path=='/student/controlaula-chat':
+                    self.channels[request.path].append(request)
+                    return server.NOT_DONE_YET
         else:    
-            requestedfile = os.path.join(self.PageDir,request.path[1:])
+                requestedfile = os.path.join(self.PageDir,request.path[1:])
+
         
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.
@@ -110,6 +118,12 @@ class ControlAulaProtocol(resource.Resource):
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
+
+        #petition from the student controlaula
+        if request.path[:9]=='/student/':
+            return self._handle_chat(request)
+
+
         
         try:
             recvjson='{}'            
@@ -199,3 +213,45 @@ class ControlAulaProtocol(resource.Resource):
         except:
             return None
 
+
+    def response_fail(self, messages=None):
+        messages = messages or []
+        return json.dumps({
+            'status': 'fail',
+            'errors': messages,
+            'time': int(time())
+        })        
+    def response_ok(self, **kwds):
+        kwds.update({'status': 'ok', 'time': int(time())})
+        return json.dumps(kwds)    
+        
+
+    def _handle_chat(self, request):
+                   
+        request.content.read() 
+        if request.path=='/student/':                    
+            if len(request.args)>0:
+                requestedfile=os.path.join(self.PageDir,'chat.html')
+                try:
+                    page_to_send =open(requestedfile, "r").read()
+                    html_to_send=page_to_send.replace('%(student_id)', request.args['login'][0])
+                    return html_to_send 
+                except:
+                    request.setResponseCode(404)
+                    return"""
+                    <html><head><title>404 - No Such Resource</title></head>
+                    <body><h1>No Such Resource</h1>
+                    <p>File not found: %s - No such file.</p></body></html>
+                    """ % requestedfile     
+        else: #chatting             
+            user = request.args.get('user', request.getClientIP())
+            message = request.args.get('message', None)
+            if not message:
+                return self.response_fail(['*message* not found', ])
+            message = cgi.escape(message[0])
+            response = self.response_ok(user= [  '('+strftime('%H:%M:%S') + ') '+ user[0]], message=message)
+            for chann_request in self.channels[request.path]:
+                chann_request.write(response)
+                chann_request.finish()
+            del self.channels[request.path]
+            return self.response_ok();            

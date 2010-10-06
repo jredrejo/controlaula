@@ -119,7 +119,7 @@ if __name__ == '__main__':
         sys.exit("Another instance of this program is already running")    
     
     isTeacher=MyUtils.userIsTeacher()
-    isTeacher=False
+    #isTeacher=False#enable for debugging
     
     if not isTeacher:        
         from twisted.internet import glib2reactor
@@ -167,12 +167,11 @@ if __name__ == '__main__':
     else:         
         logging.getLogger().debug("The user is NOT a teacher")
         from ControlAula import StudentLoop
-        # Start up the web service.     
-        AulaRoot = StudentLoop.ControlAulaProtocol() #Resource object
-        AulaRoot.PageDir=PAGES
-        
-        
         MyStudent=StudentLoop.Obey(int(REFRESH/2))
+        
+        # Start up the web service.     
+        AulaRoot = StudentLoop.ControlAulaProtocol(MyStudent) #Resource object
+        AulaRoot.PageDir=PAGES
         reactor.callWhenRunning(MyStudent.listen)
         reactor.callWhenRunning(MyStudent.startScan)
     

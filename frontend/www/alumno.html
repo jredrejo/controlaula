@@ -5,9 +5,6 @@
 	<!-- Libreria JQuery -->
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
 
-	<!-- Libreria JQuery UI -->
-	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
-	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
 
 	<meta charset="UTF-8" />
 	
@@ -49,29 +46,44 @@
 
 
 
-    <script type="text/javascript">
+    <script type="text/javascript" charset="utf-8">
+
+    
       $(document).ready(function(){
-          var usuario = null;
-		  
+              
+        $.post("getConnection", { },
+           function(data){
+              if (data.teacher_ip != "") {
+                 url_teacher='http://' + data.teacher_ip + ':' + data.teacher_port + '/student/';
+                 $("#student_form").get(0).setAttribute("action",url_teacher);
+                 $('input[name=login]').val(data.login);                
+                 $("#student_form").submit();
 
-		$.post("getlogin", function(data){
-		 			$('<iframe />', {
-    					name: 'myFrame',
-    					id:   'myFrame',
-    					src: 'http:192.168.0.254:8900/chat.html?id=' + data
-					}).appendTo('body');
-		 });
-		  
-		 
+                 
+              }
 
+           }, "json");              
+
+		  
+ 
 		 
+         
 		 
       });
     </script>
 	
 </head>
+
 <body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 
 
+
+
+<form id="student_form"  method="POST" action="">
+  <input type="hidden" name="login" value=""> <!-- your PID -->
+</form>
+
+
+
 </body>
-<script language="javascript"> initScreens(); </script>
+
