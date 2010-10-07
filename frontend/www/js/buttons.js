@@ -80,9 +80,9 @@ $(function() {
 		$( "#web" ).button({ icons: { primary: "ui-icon-search"}});
 		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});
 
-		printSplitButton("chat","ui-icon-video",'$("#chat_div").chatbox("option", "hidden",true);');
-	   $("#enableChat").click(function() { $("#chat_div").chatbox("option", "hidden",true) });
- 	   $("#disableChat").click(function() { $("#chat_div").chatbox("option", "hidden",false) }); 
+		printSplitButton("chat","ui-icon-video",'$("#chat_div").chatbox("option", "hidden",false);');
+	   $("#enableChat").click(function() { $("#chat_div").chatbox("option", "hidden",false) });
+ 	   $("#disableChat").click(function() { $("#chat_div").chatbox("option", "hidden",true) }); 
 
 
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
