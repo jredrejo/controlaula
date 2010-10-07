@@ -204,3 +204,50 @@ function modalMessage(){
 
 	return true;
 }
+
+function printInterface(){
+		$("#tabsComputers").tabs();
+		$("#tabsActions").tabs();
+		$("#tabsClassroom").tabs();
+
+		$("#selectable").selectable();
+
+		$("#sortable").sortable({
+			stop: function(event, ui) { 
+				sendClassroomConfig();
+			}
+		});
+
+		$("#sortable").disableSelection();
+}
+
+function printSliders(){
+		$("#sliderRows").slider({
+			min: 1,
+			max: 8,
+			step: 1,
+			slide: function(event, ui) {
+				$("#rows").val(ui.value);
+			}
+		});
+
+		$("#sliderColumns").slider({
+			min: 1,
+			max: 5,
+			step: 1,
+			slide: function(event, ui) {
+				$("#columns").val(ui.value);
+			}
+		});
+
+		$("#sliderComputers").slider({
+			value:15,
+			min: 1,
+			max: 30,
+			step: 1,
+			slide: function(event, ui) {
+				$("#computers").val(ui.value);
+			}
+		});
+		$("#computers").val($("#sliderComputers").slider("value"));
+}

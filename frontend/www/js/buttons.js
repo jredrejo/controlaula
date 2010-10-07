@@ -1,25 +1,10 @@
-$(function() {
 
-		$( "#selectAll" )
-			.button({ icons: { primary: "ui-icon-circle-plus"}})
-			.click(function(){ selectAll() });
+function printSplitButton(target,icon,funct){
 
-		$( "#selectNone" )
-			.button({ icons: { primary: "ui-icon-circle-minus"}})
-			.click(function(){ selectNone() });
-
-		$( "#turnOn" )
-			.button({ icons: { primary: "ui-icon-power"}})
-			.click(function(){ sendOrderSelected("wakeup","","cambiaconfig"); });
-
-		$( "#turnOff" )
-			.button({ icons: { primary: "ui-icon-circle-close"}})
-			.click(function(){ sendOrderSelected("sleep","","cambiaconfig"); });
-
-		$("#internet")
-			.button({ icons: { primary: "ui-icon-signal-diag"}})
+		$("#"+target)
+			.button({ icons: { primary: icon}})
 			.click( function() {
-				sendOrderSelected("enableInternet","","cambiaconfig");
+				eval(funct);
 			})
 			.next()
 				.button( {
@@ -44,169 +29,48 @@ $(function() {
 			.next()
 				.hide()
 				.menu();
+}
 
+
+$(function() {
+
+		$( "#selectAll" )
+			.button({ icons: { primary: "ui-icon-circle-plus"}})
+			.click(function(){ selectAll() });
+
+		$( "#selectNone" )
+			.button({ icons: { primary: "ui-icon-circle-minus"}})
+			.click(function(){ selectNone() });
+
+		$( "#turnOn" )
+			.button({ icons: { primary: "ui-icon-power"}})
+			.click(function(){ sendOrderSelected("wakeup","","cambiaconfig"); });
+
+		$( "#turnOff" )
+			.button({ icons: { primary: "ui-icon-circle-close"}})
+			.click(function(){ sendOrderSelected("sleep","","cambiaconfig"); });
+
+		printSplitButton("internet","ui-icon-signal-diag",'sendOrderSelected("enableInternet","","cambiaconfig");');
 	   $("#enableInternet").click(function() { sendOrderSelected("enableInternet","","cambiaconfig"); });
  	   $("#disableInternet").click(function() { sendOrderSelected("disableInternet","","cambiaconfig"); }); 
 
-		$("#mouse")
-			.button({ icons: { primary: "ui-icon-person"}})
-			.click( function() {
-				sendOrderSelected("enableMouse","","cambiaconfig");
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
+		printSplitButton("mouse","ui-icon-person",'sendOrderSelected("enableMouse","","cambiaconfig");');
 	   $("#enableMouse").click(function() { sendOrderSelected("enableMouse","","cambiaconfig"); });
  	   $("#disableMouse").click(function() { sendOrderSelected("disableMouse","","cambiaconfig"); }); 
 
-		$("#sound")
-			.button({ icons: { primary: "ui-icon-volume-on"}})
-			.click( function() {
-				sendOrderSelected("enableSound","","cambiaconfig");
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
+		printSplitButton("sound","ui-icon-volume-on",'sendOrderSelected("enableSound","","cambiaconfig");');
 	   $("#enableSound").click(function() { sendOrderSelected("enableSound","","cambiaconfig"); });
  	   $("#disableSound").click(function() { sendOrderSelected("disableSound","","cambiaconfig"); }); 
 
-		$("#messages")
-			.button({ icons: { primary: "ui-icon-mail-closed"}})
-			.click( function() {
-				sendOrderSelected("enableMessages","","cambiaconfig");
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
+		printSplitButton("messages","ui-icon-mail-closed",'sendOrderSelected("enableMessages","","cambiaconfig");');
 	   $("#enableMessages").click(function() { sendOrderSelected("enableMessages","","cambiaconfig"); });
  	   $("#disableMessages").click(function() { sendOrderSelected("disableMessages","","cambiaconfig"); }); 
 
-
-		$("#projector")
-			.button({ icons: { primary: "ui-icon-image"}})
-			.click( function() {
-				sendOrderSelected("enableProjector","","cambiaconfig");
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
+		printSplitButton("projector","ui-icon-image",'sendOrderSelected("enableProjector","","cambiaconfig");');
 	   $("#enableProjector").click(function() { sendOrderSelected("enableProjector","","cambiaconfig"); });
  	   $("#disableProjector").click(function() { sendOrderSelected("disableProjector","","cambiaconfig"); }); 
 
-
-		$("#video")
-			.button({ icons: { primary: "ui-icon-video"}})
-			.click( function() {
-				sendOrderSelected("enableVideo","","cambiaconfig");
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
+		printSplitButton("video","ui-icon-video",'sendOrderSelected("enableVideo","","cambiaconfig");');
 	   $("#enableVideo").click(function() { sendOrderSelected("enableVideo","","cambiaconfig"); });
  	   $("#disableVideo").click(function() { sendOrderSelected("disableVideo","","cambiaconfig"); }); 
 
@@ -216,38 +80,9 @@ $(function() {
 		$( "#web" ).button({ icons: { primary: "ui-icon-search"}});
 		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});
 
-
-		$("#chat")
-			.button({ icons: { primary: "ui-icon-video"}})
-			.click( function() {
-				/* Aquí pones la función para activar el chat */
-			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-
-	   $("#enableChat").click(function() { /* Aquí pones la función para activar el chat */ });
- 	   $("#disableChat").click(function() { /* Aquí pones la función para desaactivar el chat */ }); 
+		printSplitButton("chat","ui-icon-video",'$("#chat_div").chatbox("option", "hidden",true);');
+	   $("#enableChat").click(function() { $("#chat_div").chatbox("option", "hidden",true) });
+ 	   $("#disableChat").click(function() { $("#chat_div").chatbox("option", "hidden",false) }); 
 
 
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
