@@ -6,7 +6,7 @@
 # Purpose:     Set cookies for user into Mozilla Firefox and Google Chrome
 # Language:    Python 2.5
 # Date:        5-Oct-2010.
-# Ver.:        5-Oct-2010.
+# Ver.:        7-Oct-2010.
 # Copyright:    2009-2010 - Manu Mora Gordillo       <manuito @nospam@ gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -32,50 +32,47 @@ import os
 
 def getPathCookiesFirefox():
 	path = "/home/"+getpass.getuser()+"/.mozilla/firefox/"
-	
+
 	with open(path+"profiles.ini") as f:
 		for line in f:
-			fields = line.partition("=")
-			if(fields[0]=="Path")
-				return path+fields[1]
+			fields = line.split("=")
+			if fields[0]=="Path":
+				
+				return path+fields[1].strip("\n")
+
 
 
 def setCookieFirefox ():
 
 	path = getPathCookiesFirefox()
-	pathCookies = path+"cookies.sqlite"
+	pathCookies = path+"/cookies.sqlite"
 
 	if os.path.isdir(path):
-		if not os.path.isfile(pathCookies):
-			# create cookies.sqlite BD
 
-		connection = sqlite.connect(path+"cookies.sqlite")
-		#memoryConnection = sqlite.connect(':memory:')
+		connection = sqlite.connect(pathCookies)
 		cursor = connection.cursor()
 
-		cursor.execute("DELETE * FROM coockies WHERE name='controlaula.loginname='")
+		cursor.execute("DELETE FROM moz_cookies WHERE name='controlaula.loginname'")
 		connection.commit()
 
-		cursor.execute("INSERT INTO coockies (id, name, value) VALUES (null,'controlaula.loginname','"+getpass.getuser()+"')");
+		cursor.execute("INSERT INTO moz_cookies (id, name, value, host) VALUES (null,'controlaula.loginname','"+getpass.getuser()+"','ControlAula')");
 		connection.commit()
+
 
 
 def setCookieChrome ():
 	path = "/home/"+getpass.getuser()+"/.config/google-chrome/Default/"
-	pathCookies = "/home/"+getpass.getuser()+"/.config/google-chrome/Default/Cookies"
+	pathCookies = path+"Cookies"
 
 	if os.path.isdir(path):
-		if not os.path.isfile(pathCookies):
-			# create Cookies BD
 
 		connection = sqlite.connect(pathCookies)
-		#memoryConnection = sqlite.connect(':memory:')
 		cursor = connection.cursor()
 
-		cursor.execute("DELETE * FROM coockies WHERE name='controlaula.loginname='")
+		cursor.execute("DELETE FROM cookies WHERE name='controlaula.loginname'")
 		connection.commit()
 
-		cursor.execute("INSERT INTO coockies (id, name, value) VALUES (null,'controlaula.loginname','"+getpass.getuser()+"')");
+		cursor.execute("INSERT INTO cookies (creation_utc, name, value, host_key, path, expires_utc, secure, httponly, last_access_utc) VALUES (null,'controlaula.loginname','"+getpass.getuser()+"','ControlAula','/','12940149655000000','0','0','12924381655978530')");
 		connection.commit()
 
 
