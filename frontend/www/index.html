@@ -10,6 +10,10 @@
 	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
 
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery.json.js"></script>
+    
+    <!-- Libreria chat -->
+    <script src="js/jquery/jquery.ui.chatbox.js" type="text/javascript" charset="utf-8"></script>      
+    <link type="text/css" href="js/jquery/ui/css/jquery.ui.chatbox.css" rel="stylesheet" />    
 
 	<script type="text/JavaScript" language="javascript" src="js/buttons.js"></script>
 	<script type="text/JavaScript" language="javascript" src="js/connection.js"></script>
@@ -113,6 +117,83 @@
 			$('#set').hover(function(){}, function(){$(this).fadeOut();});
 
 		initScreens();
+        
+        
+        //Parafernalia del chat:
+            function showIfError(response) {
+                if (response.status == 'ok')
+                    return false;
+                for (var err in response.errors) {
+                    $("#chat_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
+                };
+                return true;
+            };
+
+            function cmdSubmitCallback(response) {
+                showIfError(response);
+            };
+
+            function getChatMessageCallback(response) {
+                showIfError(response);
+                
+                $("#chat_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
+                getChatMessage();
+            };
+
+            function getChatMessage(data) {
+                var data = data || {};
+                $.get(conf.getChatURL(), data, getChatMessageCallback, 'json');
+            };
+
+    
+      $(document).ready(function(){
+          		  
+                function Configuration() {
+                    this.userName = '';
+                    this.channel = 'controlaula-chat';
+                    this.server = './';                   
+                };
+                
+                $.post("getLoginTeacher", { },
+                    function(data){
+                        if (data.login != "") {
+                         conf.userName=data.login;        
+                           
+                         $("#chat_div").chatbox({id : "chat_div",
+                          title : conf.userName|| "Chat ControlAula",
+                          user : conf.userName,
+                          offset: 20,
+                          hidden: true,
+                          messageSent: function(id, user, msg){                                       
+                               var data = conf.copyForRequest();
+                               data['message'] = msg
+                            $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
+                          }});           
+                          
+                          $("#chat_div").chatbox("option", "hidden",true)
+                  
+                  
+                  }
+
+           }, "json");  
+                
+                           
+                Configuration.prototype.getChatURL = function() {
+                    return this.server + this.channel;
+                };
+                Configuration.prototype.copyForRequest = function() {
+                    return {user: this.userName};
+                };
+
+                conf = new Configuration();
+                getChatMessage();
+                		 
+		 
+      });        
+        
+        
+        
+        
 	});
 
 
@@ -379,5 +460,8 @@
 			Para realizar la acci&oacute;n debe seleccionar al menos un equipo.
 		</p>
 	</div>
+
+
+    <div id="chat_div">  </div>
 
 </body>

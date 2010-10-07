@@ -89,25 +89,22 @@
                 };
                 
                 
-                
-     $("#link_add").click(function(event, ui) {
-          $("#chat_div").chatbox({id : "chat_div",
-                                  title : conf.userName|| "Chat ControlAula",
-                                  user : conf.userName,
-                                  offset: 20,
-                                  messageSent: function(id, user, msg){                                       
-                                       var data = conf.copyForRequest();
-                                       data['message'] = msg
-                                    $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
-                                  }});
-                                  
-                                  
-                                  $("#chat_div").chatbox("option", "hidden",false)
-      });
+                 $("#link_add").click(function(event, ui) {
+                      $("#chat_div").chatbox({id : "chat_div",
+                                              title : conf.userName|| "Chat ControlAula",
+                                              user : conf.userName,
+                                              offset: 20,
+                                              messageSent: function(id, user, msg){                                       
+                                                   var data = conf.copyForRequest();
+                                                   data['message'] = msg
+                                                $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
+                                              }});
+                                              
+                                              
+                                              $("#chat_div").chatbox("option", "hidden",false)
+                  });
       
                       
-                
-                
                 Configuration.prototype.getChatURL = function() {
                     return this.server + this.channel;
                 };
@@ -117,10 +114,7 @@
 
                 conf = new Configuration();
                 
-                getChatMessage();
-
-
-		 
+                getChatMessage();		 
 		 
       });
     </script>

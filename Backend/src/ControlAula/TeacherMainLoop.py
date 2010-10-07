@@ -27,6 +27,7 @@
 from twisted.web import server,resource,  static
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs
+from ControlAula.Utils import MyUtils
 import cgi
 import simplejson as json
 import os
@@ -45,7 +46,8 @@ class ControlAulaProtocol(resource.Resource):
     def __init__ (self):
         resource.Resource.__init__(self)
         
-        self.PageDir=""        
+        self.PageDir=""
+        self.mylogin=MyUtils.getLoginName()        
         self.teacher = TeacherServer.RPCServer()
         self.channels = defaultdict(list)
 
@@ -64,11 +66,11 @@ class ControlAulaProtocol(resource.Resource):
         # Check if requested file exists.    
         if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
             requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
+        elif '/controlaula-chat' in request.path:
+                self.channels['controlaula-chat'].append(request)
+                return server.NOT_DONE_YET           
         elif request.path[:9]=='/student/':
-                requestedfile = os.path.join(self.PageDir,request.path[9:])
-                if request.path=='/student/controlaula-chat':
-                    self.channels[request.path].append(request)
-                    return server.NOT_DONE_YET
+                requestedfile = os.path.join(self.PageDir,request.path[9:])                
         else:    
                 requestedfile = os.path.join(self.PageDir,request.path[1:])
 
@@ -118,11 +120,13 @@ class ControlAulaProtocol(resource.Resource):
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
-
+        
         #petition from the student controlaula
-        if request.path[:9]=='/student/':
+        if request.path[:9]=='/student/' or command=='controlaula-chat':
             return self._handle_chat(request)
-
+        
+        if command=='getLoginTeacher':                       
+                return json.dumps({'login':self.mylogin})
 
         
         try:
@@ -246,12 +250,13 @@ class ControlAulaProtocol(resource.Resource):
         else: #chatting             
             user = request.args.get('user', request.getClientIP())
             message = request.args.get('message', None)
+            print user,message,request.path
             if not message:
                 return self.response_fail(['*message* not found', ])
             message = cgi.escape(message[0])
             response = self.response_ok(user= [  '('+strftime('%H:%M:%S') + ') '+ user[0]], message=message)
-            for chann_request in self.channels[request.path]:
+            for chann_request in self.channels['controlaula-chat']:
                 chann_request.write(response)
                 chann_request.finish()
-            del self.channels[request.path]
+            del self.channels['controlaula-chat']
             return self.response_ok();            
