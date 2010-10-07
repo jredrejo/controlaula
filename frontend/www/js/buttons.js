@@ -216,6 +216,40 @@ $(function() {
 		$( "#web" ).button({ icons: { primary: "ui-icon-search"}});
 		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});
 
+
+		$("#chat")
+			.button({ icons: { primary: "ui-icon-video"}})
+			.click( function() {
+				/* Aquí pones la función para activar el chat */
+			})
+		.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+			})
+			.click( function() {
+				var menu = $(this).parent().next().show().position({
+					my: "left top",
+					at: "left bottom",
+					of: this
+				});
+				$(document).one("click", function() {
+					menu.hide();
+				});
+				return false;
+			})
+		.parent()
+			.buttonset()
+		.next()
+			.hide()
+			.menu();
+
+	   $("#enableChat").click(function() { /* Aquí pones la función para activar el chat */ });
+ 	   $("#disableChat").click(function() { /* Aquí pones la función para desaactivar el chat */ }); 
+
+
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
 		$( "#scanNet" ).button({ icons: { primary: "ui-icon-refresh"}});
 
