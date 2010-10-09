@@ -75,7 +75,10 @@ $(function() {
  	   $("#disableVideo").click(function() { sendOrderSelected("disableVideo","","cambiaconfig"); }); 
 
 		$( "#sendMessage" ).button({ icons: { primary: "ui-icon-mail-closed"}});
-		$( "#sendFile" ).button({ icons: { primary: "ui-icon-folder-open"}});
+
+		$( "#sendFile" )
+			.button({ icons: { primary: "ui-icon-folder-open"}})
+			.click(function() { modalSendFile() });
 
 		$( "#web" ).button({ icons: { primary: "ui-icon-search"}});
 		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});

@@ -205,6 +205,34 @@ function modalMessage(){
 	return true;
 }
 
+
+function modalSendFile(){
+
+	$("#dialogSendFile")
+		.dialog({
+			modal: true,
+			width: 550,
+			resizable: false,
+			buttons: {
+				Ok: function() { $( this ).dialog( "close" ); }
+			}
+		})
+		.dialog('open'); 
+
+				$('#fileTreeDemo_2').fileTree({
+					root: 'demo/', 
+					script: 'jqueryFileTree.php', 
+					folderEvent: 'click', 
+					expandSpeed: 750, 
+					collapseSpeed: 750, 
+					multiFolder: false },
+					function(file) { 
+						alert(file);
+				});
+
+	return true;
+}
+
 function printInterface(){
 		$("#tabsComputers").tabs();
 		$("#tabsActions").tabs();
