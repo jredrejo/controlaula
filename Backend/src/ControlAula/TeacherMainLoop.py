@@ -164,7 +164,7 @@ class ControlAulaProtocol(resource.Resource):
                     handler.args=[structure['rows'],structure['cols']]
                 result=handler.process(command)
                 #respjson= json.dumps({'result':'ack'})
-                if command != 'getAllNodes':
+                if command not in ( 'getAllNodes' ,'getVideoNodes'):
                     respjson=json.dumps(result)
                 else:
                     respjson=result
