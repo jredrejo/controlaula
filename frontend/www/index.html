@@ -80,45 +80,8 @@
 			return false;
 		});
 		$('#set').hover(function(){}, function(){$(this).fadeOut();});
-        
-        
-        // Chat
-       $.post("getLoginTeacher", { },
-           function(data){
-               if (data.login != "") {
-                   conf.userName=data.login;        
-                     
-                   $("#chat_div").chatbox({
-							  id : "chat_div",
-	                    title : conf.userName|| "Chat ControlAula",
-	                    user : conf.userName,
-	                    offset: 20,
-	                    hidden: true,
-	                    messageSent: function(id, user, msg){                                       
-	                         var data = conf.copyForRequest();
-	                         data['message'] = msg
-	                      $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
-	                }});           
-                    
-                    $("#chat_div").chatbox("option", "hidden",true)
-					}
 
-     			}, "json");  
-       
-                  
-       Configuration.prototype.getChatURL = function() {
-           return this.server + this.channel;
-       };
-       Configuration.prototype.copyForRequest = function() {
-           return {user: this.userName};
-       };
-
-       conf = new Configuration();
-       getChatMessage();  
-
-
-
-  
+       initChat();
 	});
 	</script>
 </head>
@@ -149,6 +112,7 @@
 			<div id="tabsClassroom" style="width:500px;">
 				<ul>
 					<li><a href="#tabsClassroom-1">Aula</a></li>
+					<li><a href="#tabsClassroom-4">Chat</a></li>
 					<li><a href="#tabsClassroom-2">Ordenar Aula</a></li>
 					<li><a href="#tabsClassroom-3">Configuraci&oacute;n</a></li>
 				<!--	<li><a href="#tabsClassroom-4">LDAP</a></li>-->
@@ -215,6 +179,9 @@
 						<a href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" title="Orange"><img src="img/themes/orange.png" alt="image" width="100" height="50" /></a>
 						<a href="js/jquery/ui/css/green/jquery-ui-1.8.5.custom.css" title="Green"><img src="img/themes/green.png" alt="image" width="100" height="50" /></a>
 					</span></p>
+				</div>
+				<div id="tabsClassroom-4" style="padding:2px;">
+					<div id=""></div>
 				</div>
 		<!--		<div id="tabsClassroom-4" style="padding:2px;">
 					<p class="validateTips">Obtener los datos de LDAP.</p>
@@ -366,7 +333,7 @@
 	</div>
 
 	<div id="dialogSendFile" title="Enviar Fichero">
-		<div id="fileTreeDemo_2" class="demo"></div> 
+		<div id="sendFileTree"></div> 
 	</div>
 
     <div id="chat_div">  </div>

@@ -219,16 +219,16 @@ function modalSendFile(){
 		})
 		.dialog('open'); 
 
-				$('#fileTreeDemo_2').fileTree({
-					root: 'demo/', 
-					script: 'jqueryFileTree.php', 
-					folderEvent: 'click', 
-					expandSpeed: 750, 
-					collapseSpeed: 750, 
-					multiFolder: false },
-					function(file) { 
-						alert(file);
-				});
+		$('#sendFileTree').fileTree({
+			root: '/', 
+			script: 'getAllNodes',
+			folderEvent: 'click', 
+			expandSpeed: 750, 
+			collapseSpeed: 750, 
+			multiFolder: false },
+			function(file) { 
+				alert("El fichero seleccionado es: "+file);
+		});
 
 	return true;
 }
