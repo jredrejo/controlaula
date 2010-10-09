@@ -27,7 +27,6 @@
 from twisted.web import server,resource,  static
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs
-from ControlAula.Utils import MyUtils
 import cgi
 import simplejson as json
 import os
@@ -47,7 +46,6 @@ class ControlAulaProtocol(resource.Resource):
         resource.Resource.__init__(self)
         
         self.PageDir=""
-        self.mylogin=MyUtils.getLoginName()        
         self.teacher = TeacherServer.RPCServer()
         self.channels = defaultdict(list)
 
@@ -125,9 +123,6 @@ class ControlAulaProtocol(resource.Resource):
         if request.path[:9]=='/student/' or command=='controlaula-chat':
             return self._handle_chat(request)
         
-        if command=='getLoginTeacher':                       
-                return json.dumps({'login':self.mylogin})
-
         
         try:
             recvjson='{}'            
@@ -142,8 +137,8 @@ class ControlAulaProtocol(resource.Resource):
             pass
         if args=='':
             try:
-                if 'node' in request.args:
-                    args=request.args['node']
+                if 'dir' in request.args:
+                    args=request.args['dir']
                 elif 'message' in request.args:
                     args=request.args['message']    
             except:
@@ -169,7 +164,10 @@ class ControlAulaProtocol(resource.Resource):
                     handler.args=[structure['rows'],structure['cols']]
                 result=handler.process(command)
                 #respjson= json.dumps({'result':'ack'})
-                respjson=json.dumps(result)
+                if command != 'getAllNodes':
+                    respjson=json.dumps(result)
+                else:
+                    respjson=result
             except:
                 pass
                 
@@ -250,7 +248,7 @@ class ControlAulaProtocol(resource.Resource):
         else: #chatting             
             user = request.args.get('user', request.getClientIP())
             message = request.args.get('message', None)
-            print user,message,request.path
+            
             if not message:
                 return self.response_fail(['*message* not found', ])
             message = cgi.escape(message[0])

@@ -61,7 +61,8 @@ class Plugins(object):
                 'enableSound':self.enableSound,
                 'getVideoNodes':self.fileBrowserVideo,
                 'getAllNodes':self.fileBrowserAll,
-                'getCaptures':self.getCaptures
+                'getCaptures':self.getCaptures,
+                'getLoginTeacher':self.getLogin      
                 }  
         
     def existCommand(self,command):
@@ -256,20 +257,29 @@ class Plugins(object):
        
     def fileBrowserAll(self,node):
         path=node[0]
-        result=[]
+
         if path=='home':
             path=MyUtils.getHomeUser()
-        for f in os.listdir(path):
-            if f[:1]=='.':#skip hidden files and dirs
-                continue
-            ff=os.path.join(path,f)
-            item={'text':f,'id':ff,'cls':'folder'}
-            if not os.path.isdir(ff):
-                item['cls']='file'
-                item['leaf']=True
-            result.append(item)
-          
-        return result     
+            
+        r=['<ul class="jqueryFileTree" style="display: none;">']
+        try:
+            r=['<ul class="jqueryFileTree" style="display: none;">']
+            for f in os.listdir(path):
+                if f[:1]=='.':#skip hidden files and dirs
+                    continue
+                ff=os.path.join(path,f)            
+                if os.path.isdir(ff):
+                    r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+                else:
+                    e=os.path.splitext(f)[1][1:] # get .ext and remove dot
+                    r.append('<li class="file ext_%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+            
+            r.append('</ul>')                    
+        except Exception,e:
+            r.append('Could not load directory: %s' % str(e))
+        r.append('</ul>')
+        return ''.join(r)
+
     
     def sendMessage(self, text):
         self.usersCommand(Desktop.sendMessage,[text])
@@ -285,3 +295,6 @@ class Plugins(object):
             shots.append(i.getScreenshotInfo())
             
         return {"images":shots}
+    
+    def getLogin(self):
+        return {'login':MyUtils.getLoginName() }
