@@ -21,6 +21,10 @@
 		<script src="js/jquery/jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script> 
 		<link href="js/jquery/jqueryFileTree/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" /> 
 
+    <!-- Video Library -->
+		<script src="js/jquery/video/mm.full.min.js" type="text/javascript"></script> 
+		<link href="js/jquery/video/player-controls.css" rel="stylesheet" type="text/css" media="screen" /> 
+
     <!-- Our Functions -->
 	<script type="text/JavaScript" language="javascript" src="js/buttons.js"></script>
 	<script type="text/JavaScript" language="javascript" src="js/connection.js"></script>
@@ -82,6 +86,9 @@
 		$('#set').hover(function(){}, function(){$(this).fadeOut();});
 
        initChat();
+
+
+		$('div.media-player').jmeControl();
 	});
 	</script>
 </head>
@@ -115,6 +122,7 @@
 					<li><a href="#tabsClassroom-4">Chat</a></li>
 					<li><a href="#tabsClassroom-2">Ordenar Aula</a></li>
 					<li><a href="#tabsClassroom-3">Configuraci&oacute;n</a></li>
+					<li><a href="#tabsClassroom-5">Vídeo (Demo)</a></li>
 				<!--	<li><a href="#tabsClassroom-4">LDAP</a></li>-->
 				</ul>
 				<div id="tabsClassroom-1" style="padding:2px;">
@@ -182,6 +190,49 @@
 				</div>
 				<div id="tabsClassroom-4" style="padding:2px;">
 					<div id=""></div>
+				</div>
+				<div id="tabsClassroom-5" style="padding:2px; text-align:center;">
+					
+					<div class="media-player" style="padding:25px;">
+	
+						<video poster="http://protofunc.com/jme/media/bbb_watchtrailer.gif" controls="controls" preload="none">
+							<source src="http://protofunc.com/jme/media/bbb_trailer_mobile.m4v" type="video/mp4" />
+						</video>
+			
+			
+						<!-- media-state: has some interessting state-classes + serves as a play-pause interface for mouse -->
+						<div class="media-state"></div>
+			
+						<!-- media-label for labelling a player: good for a11y -->
+						<span class="media-label">video: big buck bunny</span>
+			
+						<!-- media-controls is grouping some controls -->
+						<div class="media-controls" style="height:35px;">
+				
+							<!-- play-pause-button -->
+							<a class="play-pause"><span class="ui-icon"> </span><span class="button-text">play / pause</span></a>
+				
+							<!-- current-time: displays the current time -->
+							<span class="current-time player-display">00:00</span>
+				
+							<!-- timeline-slider: time-slider with label (a11y.slider.ext) -->
+							<div class="timeline-slider">
+								<span class="handle-label">play position</span>
+					
+								<!-- progressbar: inside of the timeline-slider -->
+								<div class="progressbar"></div>
+							</div>
+				
+							<!-- duration displays duration -->
+							<span class="duration player-display">00:00</span>
+				
+							<!-- mute-unmute: toggle mute state -->
+							<a class="mute-unmute"><span class="ui-icon"> </span><span class="button-text">mute / unmute</span></a>
+				
+							<!-- volume-slider -->
+							<div class="volume-slider" data-mutestate="true"><span class="handle-label">volume control</span></div>
+						</div>
+					</div>
 				</div>
 		<!--		<div id="tabsClassroom-4" style="padding:2px;">
 					<p class="validateTips">Obtener los datos de LDAP.</p>
