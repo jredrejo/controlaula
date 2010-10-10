@@ -69,7 +69,7 @@
 
 /*		$( "#progressbar" ).progressbar({ value: 59 });*/
 		$("#dialogAlert").dialog({ autoOpen: false });
-
+		$("#dialogSendFile").dialog({ autoOpen: false });
 
 		//theme switcher
 		$('#set').hide();
@@ -85,9 +85,9 @@
 	});
 	</script>
 </head>
-<body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
+<body style="margin:0px; background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 
-	<table width="100%" border="0" cellpading="4" cellspacing="20">
+	<table width="100%" cellpading="4" cellspacing="10">
 	<tr>
 		<td style="width:25%; vertical-align:top;">
 			<div id="tabsComputers">
@@ -97,12 +97,12 @@
 				<div id="tabs-1" style="padding:2px;">
 					<table width="100%">
 						<tr>
-							<td style="text-align:center;"><button id="selectAll" style="width:130px;">Selecc. Todo</button></td>
-							<td style="text-align:center;"><button id="turnOn" style="width:130px;">Encender</button></td>
+							<td style="text-align:center;"><button id="selectAll" style="width:122px;">Selecc. Todo</button></td>
+							<td style="text-align:center;"><button id="turnOn" style="width:122px;">Encender</button></td>
 						</tr>
 						<tr>
-							<td style="text-align:center;"><button id="selectNone" style="width:130px;">Selecc. Ninguno</button></td>
-							<td style="text-align:center;"><button id="turnOff" style="width:130px;">Apagar</button></td>
+							<td style="text-align:center;"><button id="selectNone" style="width:122px;">Selecc. Ninguno</button></td>
+							<td style="text-align:center;"><button id="turnOff" style="width:122px;">Apagar</button></td>
 						</tr>
 					</table>
 				</div>
@@ -208,12 +208,12 @@
 					<li><a href="#tabs-1">Acciones</a></li>
 				</ul>
 				<div id="tabs-1">
-					<table width="100%" style="margin-top:15px;">
+					<table width="100%" style="margin-top:15px; width:268px;">
 						<tr>
 							<td style="text-align:center;">
 								<div>
 									<div>
-										<button id="internet" style="width:105px;">Internet</button>
+										<button id="internet" style="width:95px;">Internet</button>
 										<button id="select">Select an action</button>
 									</div>
 									<ul style="z-index:1000;">
@@ -225,7 +225,7 @@
 							<td style="text-align:center;">
 								<div>
 									<div>
-										<button id="sound" style="width:105px;">Altavoz</button>
+										<button id="sound" style="width:95px;">Altavoz</button>
 										<button id="select">Select an action</button>
 									</div>
 									<ul style="z-index:1000;">
@@ -239,7 +239,7 @@
 							<td style="text-align:center;">
 
 								<div>
-									<button id="mouse" style="width:105px;">Rat&oacute;n/Teclado</button>
+									<button id="mouse" style="width:95px;">Rat&oacute;n/Teclado</button>
 									<button id="select">Select an action</button>
 								</div>
 
@@ -251,7 +251,7 @@
 							<td style="text-align:center;">
 								<div>
 									<div>
-										<button id="messages" style="width:105px;">Mensages</button>
+										<button id="messages" style="width:95px;">Mensages</button>
 										<button id="select">Select an action</button>
 									</div>
 									<ul style="z-index:1000;">
@@ -265,7 +265,7 @@
 							<td style="text-align:center;">
 
 								<div>
-									<button id="projector" style="width:105px;">Proyector</button>
+									<button id="projector" style="width:95px;">Proyector</button>
 									<button id="select">Select an action</button>
 								</div>
 
@@ -277,7 +277,7 @@
 							<td style="text-align:center;">
 								<div>
 									<div>
-										<button id="video" style="width:105px;">Video</button>
+										<button id="video" style="width:95px;">Video</button>
 										<button id="select">Select an action</button>
 									</div>
 									<ul style="z-index:1000;">
@@ -289,24 +289,24 @@
 						</tr>
 						<tr>
 							<td style="text-align:center;">
-								<button id="sendMessage" style="width:132px;">Enviar Mensaje</button>
+								<button id="sendMessage" style="width:122px;">Enviar Mensaje</button>
 							</td>
 							<td style="text-align:center;">
-								<button id="sendFile" style="width:132px;">Enviar Fichero</button>
+								<button id="sendFile" style="width:122px;">Enviar Fichero</button>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align:center;">
-								<button id="web" style="width:132px;">Web</button>
+								<button id="web" style="width:122px;">Web</button>
 							</td>
 							<td style="text-align:center;">
-								<button id="bigBrother" style="width:132px;">Gran Hermano</button>
+								<button id="bigBrother" style="width:122px;">Gran Hermano</button>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align:center;">
 								<div>
-									<button id="chat" style="width:105px;">Chat</button>
+									<button id="chat" style="width:95px;">Chat</button>
 									<button id="select">Select an action</button>
 								</div>
 
