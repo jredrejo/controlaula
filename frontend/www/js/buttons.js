@@ -70,8 +70,8 @@ $(function() {
 	   $("#enableProjector").click(function() { sendOrderSelected("enableProjector","","cambiaconfig"); });
  	   $("#disableProjector").click(function() { sendOrderSelected("disableProjector","","cambiaconfig"); }); 
 
-		printSplitButton("video","ui-icon-video",'sendOrderSelected("enableVideo","","cambiaconfig");');
-	   $("#enableVideo").click(function() { sendOrderSelected("enableVideo","","cambiaconfig"); });
+		printSplitButton("video","ui-icon-video",'modalSendVideo();');
+	   $("#enableVideo").click(function() { modalSendVideo(); });
  	   $("#disableVideo").click(function() { sendOrderSelected("disableVideo","","cambiaconfig"); }); 
 
 		$( "#sendMessage" ).button({ icons: { primary: "ui-icon-mail-closed"}});

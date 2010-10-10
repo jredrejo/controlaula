@@ -68,7 +68,7 @@
 
 
 /*		$( "#progressbar" ).progressbar({ value: 59 });*/
-		$("#dialogSelectComputers").dialog({ autoOpen: false });
+		$("#dialogAlert").dialog({ autoOpen: false });
 
 
 		//theme switcher
@@ -325,15 +325,15 @@
 	</tr>
 	</table>
 
-	<div id="dialogSelectComputers" title="Atenci&oacute;n">
+	<div id="dialogAlert" title="Atenci&oacute;n">
 		<p>
-			<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 7px 0;"></span>
-			Para realizar la acci&oacute;n debe seleccionar al menos un equipo.
+			<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 7px 0;"></span>
+			<span id="dialogAlertMessage"></span>
 		</p>
 	</div>
 
-	<div id="dialogSendFile" title="Enviar Fichero">
-		<div id="sendFileTree"></div> 
+	<div id="dialogSendFile">
+		<div id="sendFileTree" style="overflow: scroll; height:400px;"></div> 
 	</div>
 
     <div id="chat_div">  </div>

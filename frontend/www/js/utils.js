@@ -107,8 +107,7 @@ function selectNone(){
 	$("#selectable li").removeClass("ui-selected");
 }
 
-function sendOrderSelected(url,args,action){
-
+function computersSelected(){
 	var selected = Array();
 	var i=0;
 	
@@ -118,9 +117,15 @@ function sendOrderSelected(url,args,action){
 			i++;
 		}
 	});
+	return selected;
+}
+
+function sendOrderSelected(url,args,action){
+
+	var selected = computersSelected();
 
 	if(selected.length==0){
-		modalMessage();
+		modalAlert("Para realizar la acci&oacute;n debe seleccionar al menos un equipo");
 		return;
 	}
 
@@ -189,9 +194,11 @@ function setComputers(){
 	}
 }
 
-function modalMessage(){
+function modalAlert(message){
 
-	$("#dialogSelectComputers")
+	$("#dialogAlertMessage").html(message);
+
+	$("#dialogAlert")
 		.dialog({
 			modal: true,
 			width: 350,
@@ -205,29 +212,89 @@ function modalMessage(){
 	return true;
 }
 
+function modalConfirm(message, funct){
+
+	$("#dialogAlertMessage").html(message);
+
+	$("#dialogAlert")
+		.dialog({
+			modal: true,
+			width: 350,
+			resizable: false,
+			buttons: {
+				"Si": function() { eval(funct); },
+				"No": function() { $( this ).dialog( "close" ); }
+			}
+		})
+		.dialog('open'); 
+
+	return true;
+}
 
 function modalSendFile(){
+	var selected = computersSelected();
+
+	if(selected.length==0){
+		modalAlert("Para enviar un fichero debe seleccionar al menos un equipo");
+		return;
+	}
 
 	$("#dialogSendFile")
 		.dialog({
+			title: "Enviar Fichero",
 			modal: true,
 			width: 550,
 			resizable: false,
 			buttons: {
-				Ok: function() { $( this ).dialog( "close" ); }
+				"Cerrar": function() { $( this ).dialog( "close" ); }
 			}
 		})
 		.dialog('open'); 
 
 		$('#sendFileTree').fileTree({
-			root: '/', 
+			root: '/home', 
 			script: 'getAllNodes',
 			folderEvent: 'click', 
 			expandSpeed: 750, 
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				alert("El fichero seleccionado es: "+file);
+				modalConfirm("¿Desea enviar el fichero seleccionado?","sendOrderSelected('sendFile','"+file+"','sendFile');");
+		});
+
+	return true;
+}
+
+function modalSendVideo(){
+
+	var selected = computersSelected();
+
+	if(selected.length==0){
+		modalAlert("Para realizar una emisi&oacute;n de v&iacute;deo debe seleccionar al menos un equipo");
+		return;
+	}
+
+	$("#dialogSendFile")
+		.dialog({
+			title: "Enviar V&iacute;deo",
+			modal: true,
+			width: 550,
+			resizable: false,
+			buttons: {
+				"Cerrar": function() { $( this ).dialog( "close" ); }
+			}
+		})
+		.dialog('open'); 
+
+		$('#sendFileTree').fileTree({
+			root: '/home', 
+			script: 'getVideoNodes',
+			folderEvent: 'click', 
+			expandSpeed: 750, 
+			collapseSpeed: 750, 
+			multiFolder: false },
+			function(file) { 
+				modalConfirm("¿Desea enviar el v&iacute;deo seleccionado?","sendOrderSelected('broadcast','"+file+"','broadcast');");
 		});
 
 	return true;
