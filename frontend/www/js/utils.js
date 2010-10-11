@@ -203,6 +203,7 @@ function modalAlert(message){
 			modal: true,
 			width: 350,
 			resizable: false,
+			hide: "explode",
 			buttons: {
 				Ok: function() { $( this ).dialog( "close" ); }
 			}
@@ -294,7 +295,7 @@ function modalSendVideo(){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				modalConfirm("¿Desea enviar el v&iacute;deo seleccionado?","sendOrderSelected('broadcast','"+file+"','broadcast');");
+				modalConfirm("¿Desea comenzar la emisi&oacute;n del v&iacute;deo seleccionado?","sendOrderSelected('broadcast','"+file+"','broadcast');");
 		});
 
 	return true;

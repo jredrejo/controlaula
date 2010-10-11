@@ -35,7 +35,8 @@ function connection(url,data,action){
 		type: 'POST',
 		data : datatosent,
 		success: function (result) { 
-			// distintas respuestas segun la accion enviada
+			var res = $.parseJSON(result);
+
 			switch(action){
 				case "printClassroom":{
 					printClassroom(result);
@@ -55,69 +56,41 @@ function connection(url,data,action){
 				}*/
 				case "broadcast":{
 
-					$( "dialogAlert" ).dialog( "close" );
-					$( "dialogSendFile" ).dialog( "close" );
+					$( "#dialogAlert" ).dialog( "close" );
+					if(res.result=="ack"){
+						$( "#dialogSendFile" ).dialog( "close" );
 
-					$("#dialogAlertMessage").html("Comienza la emisi&oacute;n de video");
-					$("#dialogAlert")
-						.dialog({
-							modal: true,
-							width: 350,
-							resizable: false,
-							show: "fold",
-							hide: "explode"
-						})
-						.dialog('open');
-
-					setTimeout('$( "#dialogAlert" ).dialog( "close" )',2500);
-					break;
-				}
-				case "sendFile":{
-
-					$( "dialogAlert" ).dialog( "close" );
-					$( "dialogSendFile" ).dialog( "close" );
-
-					$("#dialogAlertMessage").html("Env&iacute;o realizado correctamente");
-					$("#dialogAlert")
-						.dialog({
-							modal: true,
-							width: 350,
-							resizable: false,
-							show: "fold",
-							hide: "explode"
-						})
-						.dialog('open');
-
-					setTimeout('$( "#dialogAlert" ).dialog( "close" )',2500);
-					break;
-				}
-			/*	case "broadcastDVD":{
-					maskWindow.hide();
-
-					resultJSON = Ext.util.JSON.decode(result.responseText);
-					if(resultJSON.result=="Bad DVD"){
-						Ext.Msg.alert('Atención', 'DVD incorrecto.');
-						return;
-					}else if(resultJSON.result=="ack"){
-						winDVD.hide();
-					    Ext.example.msg('Emitir DVD','Comienza la emisión del DVD.');
+						modalAlert("Comienza la emisi&oacute;n de v&iacute;deo");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+					}else{
+						modalAlert("Surgi&oacute; un error, puede volver a intentarlo");
 					}
 					break;
 				}
 				case "sendFile":{
-					maskWindow.hide();
 
-					resultJSON = Ext.util.JSON.decode(result.responseText);
-					if(resultJSON.result=="Bad send"){
-						Ext.Msg.alert('Atención', 'Ocurrió un error.');
-						return;
-					}else if(resultJSON.result=="ack"){
-						winSendFile.hide();
-					    Ext.example.msg('Envíar Archivo','El envío se ha realizado correctamente.');
+					$( "#dialogAlert" ).dialog( "close" );
+					if(res.result=="ack"){
+						$( "#dialogSendFile" ).dialog( "close" );
+
+						modalAlert("Env&iacute;o realizado correctamente");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+					}else{
+						modalAlert("Surgi&oacute; un error, puede volver a intentarlo");
 					}
 					break;
 				}
-				case "sendMessage":{
+				case "broadcastDVD":{
+
+					if(res.result=="Bad DVD"){
+						modalAlert("Surgi&oacute; un error en la emisi&oacute;n del DVD, puede volver a intentarlo");
+					}else if(res.result=="ack"){
+						modalAlert("Comienza la emisi&oacute;n del DVD");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+					}
+					break;
+				}
+		/*		case "sendMessage":{
 					maskWindow.hide();
 
 					resultJSON = Ext.util.JSON.decode(result.responseText);
@@ -133,8 +106,8 @@ function connection(url,data,action){
 				default:{}
 			}
 		},
-		failure: function ( result, request) { 
-			//document.getElementById("contenedor").innerHTML += "Error: "+result.responseText+"<br>";
+		error: function ( result ) { 
+			modalAlert("Surgi&oacute; un error");
 		} 
   });
 }

@@ -72,6 +72,7 @@ $(function() {
 
 		printSplitButton("video","ui-icon-video",'modalSendVideo();');
 	   $("#enableVideo").click(function() { modalSendVideo(); });
+	   $("#enableDVD").click(function() { sendOrderSelected("broadcastDVD","","broadcastDVD"); });
  	   $("#disableVideo").click(function() { sendOrderSelected("disableVideo","","cambiaconfig"); }); 
 
 		$( "#sendMessage" ).button({ icons: { primary: "ui-icon-mail-closed"}});
