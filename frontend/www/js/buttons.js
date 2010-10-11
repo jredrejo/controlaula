@@ -83,7 +83,10 @@ $(function() {
 			.button({ icons: { primary: "ui-icon-folder-open"}})
 			.click(function() { modalSendFile() });
 
-		$( "#web" ).button({ icons: { primary: "ui-icon-search"}});
+		$( "#web" )
+			.button({ icons: { primary: "ui-icon-search"}})
+			.click(function() { modalWeb() });
+
 		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});
 
 		printSplitButton("chat","ui-icon-video",' showChatbox() ');
