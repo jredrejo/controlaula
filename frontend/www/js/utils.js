@@ -252,7 +252,7 @@ function modalSendFile(){
 		.dialog('open'); 
 
 		$('#sendFileTree').fileTree({
-			root: '/home', 
+			root: 'home', 
 			script: 'getAllNodes',
 			folderEvent: 'click', 
 			expandSpeed: 750, 
@@ -287,7 +287,7 @@ function modalSendVideo(){
 		.dialog('open'); 
 
 		$('#sendFileTree').fileTree({
-			root: '/home', 
+			root: 'home', 
 			script: 'getVideoNodes',
 			folderEvent: 'click', 
 			expandSpeed: 750, 
