@@ -75,7 +75,9 @@ $(function() {
 	   $("#enableDVD").click(function() { sendOrderSelected("broadcastDVD","","broadcastDVD"); });
  	   $("#disableVideo").click(function() { sendOrderSelected("disableVideo","","cambiaconfig"); }); 
 
-		$( "#sendMessage" ).button({ icons: { primary: "ui-icon-mail-closed"}});
+		$( "#sendMessage" )
+			.button({ icons: { primary: "ui-icon-mail-closed"}})
+			.click(function() { modalSendMessage() });
 
 		$( "#sendFile" )
 			.button({ icons: { primary: "ui-icon-folder-open"}})

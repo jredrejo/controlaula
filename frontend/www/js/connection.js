@@ -46,14 +46,6 @@ function connection(url,data,action){
 					refreshClassroom(result);
 					break;
 				}
-		/*		case "pintaconfig":{
-					printClassroomConfig(result.responseText);
-					break;
-				}
-				case "cambiaconfig":{
-					connection("datosaula","","pintaaula");
-					break;
-				}*/
 				case "broadcast":{
 
 					$( "#dialogAlert" ).dialog( "close" );
@@ -90,20 +82,16 @@ function connection(url,data,action){
 					}
 					break;
 				}
-		/*		case "sendMessage":{
-					maskWindow.hide();
+				case "sendMessage":{
 
-					resultJSON = Ext.util.JSON.decode(result.responseText);
-					if(resultJSON.result=="Bad send"){
-						Ext.Msg.alert('Atención', 'Ocurrió un error.');
-						return;
-					}else if(resultJSON.result=="ack"){
-						winSendMessage.hide();
-					    Ext.example.msg('Envíar Mensaje','El envío se ha realizado correctamente.');
+					if(res.result=="Bad send"){
+						modalAlert("Surgi&oacute; un error en el env&iacute;o del mensaje, puede volver a intentarlo");
+					}else if(res.result=="ack"){
+						modalAlert("El env&iacute;o del mensaje se ha realizado correctamente");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',2500);
 					}
 					break;
-				}*/
-				default:{}
+				}
 			}
 		},
 		error: function ( result ) { 
