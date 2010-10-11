@@ -136,7 +136,18 @@ function modalSendVideo(){
 	return true;
 }
 
+function goToURL(url){
+
+	if(url=="")	
+		url=$("#url").val();
+
+	$("#frameWeb").attr("src","http://"+url);
+	$("#url").val(url);
+}
+
 function modalWeb(){
+
+	goToURL("www.educarex.es");
 
 	$("#dialogWeb")
 		.dialog({
@@ -145,6 +156,8 @@ function modalWeb(){
 			width: 950,
 			resizable: false,
 			buttons: {
+				"Enviar Web a seleccionados": function() { sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); },
+				"Enviar Web a todos": function() { selectAll(); sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); },
 				"Cerrar": function() { $( this ).dialog( "close" ); }
 			}
 		})

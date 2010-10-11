@@ -93,6 +93,9 @@ $(function() {
 	   $("#enableChat").click(function() {  showChatbox(); });
  	   $("#disableChat").click(function() { hiddenChatbox(); }); 
 
+		$( "#goToURL" )
+			.button({ icons: { primary: "ui-icon-search"}})
+			.click(function() { goToURL(""); }); 
 
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
 		$( "#scanNet" ).button({ icons: { primary: "ui-icon-refresh"}});

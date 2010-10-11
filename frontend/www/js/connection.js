@@ -92,6 +92,16 @@ function connection(url,data,action){
 					}
 					break;
 				}
+				case "launchweb":{
+
+					if(res.result=="Bad send"){
+						modalAlert("Surgi&oacute; un error en el env&iacute;o del mensaje, puede volver a intentarlo");
+					}else if(res.result=="ack"){
+						modalAlert("Se ha enviado la web correctamente");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',1000);
+					}
+					break;
+				}
 			}
 		},
 		error: function ( result ) { 
