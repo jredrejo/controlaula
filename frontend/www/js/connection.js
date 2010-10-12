@@ -63,10 +63,7 @@ function connection(url,data,action){
 
 					$( "#dialogAlert" ).dialog( "close" );
 					if(res.result=="ack"){
-						$( "#dialogSendFile" ).dialog( "close" );
 
-						modalAlert("Env&iacute;o realizado correctamente");
-						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
 					}else{
 						modalAlert("Surgi&oacute; un error, puede volver a intentarlo");
 					}
@@ -74,11 +71,26 @@ function connection(url,data,action){
 				}
 				case "broadcastDVD":{
 
-					if(res.result=="Bad DVD"){
-						modalAlert("Surgi&oacute; un error en la emisi&oacute;n del DVD, puede volver a intentarlo");
-					}else if(res.result=="ack"){
-						modalAlert("Comienza la emisi&oacute;n del DVD");
-						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+					switch(res.result){
+						case "Bad DVD":{
+							modalAlert("Surgi&oacute; un error en la emisi&oacute;n del DVD, puede volver a intentarlo");
+							break;
+						}
+						case "NODISK":{
+							modalAlert("No se ha detectado ning&uacute;n DVD insertado");
+							break;
+						}
+						case "ack":{
+							$( "#dialogSendFile" ).dialog( "close" );
+
+							modalAlert("Comienza la emisi&oacute;n del DVD");
+							setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+							break;
+						}
+						default:{
+							modalSendVideo(res.result);
+							break;
+						}
 					}
 					break;
 				}

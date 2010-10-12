@@ -101,7 +101,10 @@ function modalSendMessage(){
 	return true;
 }
 
-function modalSendVideo(){
+function modalSendVideo(dir){
+
+	if(dir==null)
+		dir="home";
 
 	var selected = computersSelected();
 
@@ -112,7 +115,7 @@ function modalSendVideo(){
 
 	$("#dialogSendFile")
 		.dialog({
-			title: "Enviar V&iacute;deo",
+			title: "Emitir V&iacute;deo",
 			modal: true,
 			width: 550,
 			resizable: false,
@@ -123,7 +126,7 @@ function modalSendVideo(){
 		.dialog('open'); 
 
 		$('#sendFileTree').fileTree({
-			root: 'home', 
+			root: dir, 
 			script: 'getVideoNodes',
 			folderEvent: 'click', 
 			expandSpeed: 750, 
