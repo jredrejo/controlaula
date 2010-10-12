@@ -151,7 +151,7 @@ class Plugins(object):
         self.usersCommand(Desktop.sleep)
                                   
     def broadcastDVD(self):
-        self.broadcast('',True)
+        return self.broadcast('',True)
                         
     def broadcast(self, url='', isDVD=False):
         from os.path import isfile
@@ -164,7 +164,10 @@ class Plugins(object):
         self.classroom.broadcast.clean_callbacks() 
         self.classroom.broadcast.add_callback('started',self.startbcast)
         self.classroom.broadcast.add_callback('ended',self.stopbcast)
-        self.classroom.broadcast.transmit(url,isDVD)
+        result=self.classroom.broadcast.transmit(url,isDVD)
+        if result!=True:
+            self.stopbcast
+            return {'result':result} 
 
     def startbcast(self,url,isDVD):      
         
