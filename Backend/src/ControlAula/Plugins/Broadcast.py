@@ -23,7 +23,7 @@
 # 
 ##############################################################################
 
-import subprocess,os,logging
+import subprocess,os,logging,dbus
 from ControlAula.Utils import MyUtils,NetworkUtils
 from signal import  SIGKILL
 from twisted.internet import protocol
@@ -57,15 +57,44 @@ class Vlc(object):
     def __del__(self):
         self.stop()
             
+            
+    def get_disk_info(self):
+        disc_info=('',0,0,'')
+        bus = dbus.SystemBus()
+        hal_manager_obj = bus.get_object("org.freedesktop.Hal", "/org/freedesktop/Hal/Manager")
+        hal_manager_iface = dbus.Interface(hal_manager_obj,"org.freedesktop.Hal.Manager")       
+        
+        device_names = hal_manager_iface.GetAllDevices()           
+        for udi in device_names:
+
+            d_object = bus.get_object('org.freedesktop.Hal',udi)
+            d_interface = dbus.Interface(d_object,'org.freedesktop.Hal.Device')
+            properties = d_interface.GetAllProperties()
+                  
+            if  properties.has_key("volume.disc.is_videodvd") :
+                disc_info=(properties["block.device"].encode("utf-8"),properties["volume.disc.is_videodvd"],properties["volume.disc.is_vcd"],properties["volume.mount_point"].encode("utf-8"))
+                break
+            
+        return disc_info
+                   
     def transmit(self,url,dvd=False):
         self.broadcasting=False
         self.url=url
         self.dvd=dvd
         command=["vlc","--no-ipv6"]      
         if dvd:
-            command+=["dvdsimple:///dev/dvd"]
+            device,isdvd,isvcd,mount_point=self.get_disk_info()
+            if device=='':
+                return "NODISK"
+            elif isdvd==1:
+                command+=["dvdsimple://" + device]
+            elif isvcd==1:
+                command+=[" vcdx://" + device]
+            else:
+                return mount_point
         else:
             command+=[str(url)]
+            
         command +=["--sout"]
         #command +=["'#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"]
 
@@ -153,6 +182,7 @@ class MyPP(protocol.ProcessProtocol):
         self.end=end
         
     def errReceived(self, data):
+        print data
         if  data.find('nothing to play')>-1 or data.find('cannot open source:')>-1:
             self.stop()
             return False        

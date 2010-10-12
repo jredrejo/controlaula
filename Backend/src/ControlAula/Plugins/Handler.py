@@ -54,7 +54,8 @@ class Plugins(object):
                 'sleep':self.sleep,        
                 'openVNC':self.openVNC,
                 'broadcast':self.broadcast,
-                'sendmessage':self.sendMessage,
+                'broadcastDVD':self.broadcastDVD,
+                'sendMessage':self.sendMessage,
                 'sendfile':self.sendFile,
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
@@ -149,6 +150,8 @@ class Plugins(object):
     def sleep(self):
         self.usersCommand(Desktop.sleep)
                                   
+    def broadcastDVD(self):
+        self.broadcast('',True)
                         
     def broadcast(self, url='', isDVD=False):
         from os.path import isfile
