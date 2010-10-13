@@ -64,7 +64,8 @@ class Plugins(object):
                 'getVideoNodes':self.fileBrowserVideo,
                 'getAllNodes':self.fileBrowserAll,
                 'getCaptures':self.getCaptures,
-                'getLoginTeacher':self.getLogin      
+                'getLoginTeacher':self.getLogin,
+                'errorLog':self.errorLog
                 }  
         
     def existCommand(self,command):
@@ -309,3 +310,6 @@ class Plugins(object):
     
     def getLogin(self):
         return {'login':MyUtils.getLoginName() }
+
+    def errorLog(self):
+			logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
