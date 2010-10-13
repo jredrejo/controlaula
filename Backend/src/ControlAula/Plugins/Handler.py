@@ -312,4 +312,4 @@ class Plugins(object):
         return {'login':MyUtils.getLoginName() }
 
     def errorLog(self):
-			logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
+        logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
