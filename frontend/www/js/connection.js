@@ -116,8 +116,14 @@ function connection(url,data,action){
 				}
 			}
 		},
-		error: function ( result ) { 
-			modalAlert("Surgi&oacute; un error");
+      error:function (result){
+			if(url!="errorLog"){
+				modalAlert("Surgi&oacute; un error");
+				setTimeout('$( "#dialogAlert" ).dialog( "close" )',1000);
+
+				var errorData = $.JSON.encode({"args" : url+": "+result.status+" "+result.statusText});
+				connection("errorLog",errorData,"");
+			}
 		} 
   });
 }
