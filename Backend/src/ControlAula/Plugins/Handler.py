@@ -311,5 +311,5 @@ class Plugins(object):
     def getLogin(self):
         return {'login':MyUtils.getLoginName() }
 
-    def errorLog(self):
-        logging.getLogger().debug('The action is %s with params: %s' %   (str(handler),str(self.args)))
+    def errorLog(self,error_msg):
+        logging.getLogger().debug('Error report from Frontend: %s ' %   (error_msg))
