@@ -133,8 +133,11 @@ function refreshClassroom(equipos){
 	lastPClist = class.classroom.pclist;
 }
 
-function showCapture(url){
-	$("#imageBigBrother").html("<img src='"+url+"'/>");
+function showCapture(url,computer){
+
+	var dataString = $.JSON.encode({ 'args' : computer	})
+
+	$("#imageBigBrother").html("<img src='"+url+"'/><br><br><input type='button' value='Ver equipo' onClick='javascript:connection(\"openVNC\","+dataString+",\"\");'>");
 //	$("#imageBigBrother").html("<img src='http://localhost:8900/img/turnOn.png'/>");
 	$("#imageBigBrother").show("slide",{},500);
 }
@@ -158,6 +161,6 @@ function printBigBrother(equipos){
 			photo = "img/pcNone.png";			
 		}
 
-		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'" onClick="showCapture(\''+photo+'\');"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'" onClick="showCapture(\''+photo+'\',\''+pcname+'\');"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 	}	
 }
