@@ -120,7 +120,10 @@ class Plugins(object):
         #MyUtils.restoreDir (Configs.IMAGES_DIR + '_bb',Configs.IMAGES_DIR)  
         
     def openVNC(self,computer):
-        self.classroom.myVNC.startViewer( computer,i.ltsp,i.hostkey)
+		for i in self.classroom.Desktops:
+			if i.hostname==computer:
+				self.classroom.myVNC.startViewer( i.hostname,i.ltsp,i.hostkey)
+				break 
                         
     def enableProjector(self):
         self.classroom.myVNC.startServer()
