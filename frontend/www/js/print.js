@@ -132,3 +132,26 @@ function refreshClassroom(equipos){
 	}
 	lastPClist = class.classroom.pclist;
 }
+
+function printBigBrother(equipos){
+
+	if(equipos.images.length==0)
+		return;
+
+	$('#selectableBigBrother li').remove();
+
+	for(var i=0;i<equipos.images.length;i++){
+
+		var name = equipos.images[i].name;
+		var photo = equipos.images[i].url;
+		var pcname = equipos.images[i].pcname;
+		
+		if(equipos.images[i].pcname=="Unknown"){
+			pcname = "&nbsp;";
+			name = "&nbsp;";
+			photo = "img/pcNone.png";			
+		}
+
+		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+	}	
+}

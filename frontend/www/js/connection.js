@@ -114,6 +114,15 @@ function connection(url,data,action){
 					}
 					break;
 				}
+				case "bigbrother":{
+					connection("getCaptures","","getCaptures");
+					break;
+				}
+				case "getCaptures":{
+					printBigBrother(res);
+					setTimeout('connection("getCaptures","","getCaptures");',REFRESH_BIGBROTHER);
+					break;
+				}
 			}
 		},
       error:function (result){

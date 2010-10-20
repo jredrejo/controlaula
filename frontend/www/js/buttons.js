@@ -86,7 +86,9 @@ $(function() {
 			.button({ icons: { primary: "ui-icon-search"}})
 			.click(function() { modalWeb() });
 
-		$( "#bigBrother" ).button({ icons: { primary: "ui-icon-person"}});
+		$( "#bigBrother" )
+			.button({ icons: { primary: "ui-icon-person"}})
+			.click(function() { modalBigBrother() });
 
 		printSplitButton("chat","ui-icon-video",' showChatbox() ');
 	   $("#enableChat").click(function() {  showChatbox(); });

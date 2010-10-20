@@ -167,3 +167,22 @@ function modalWeb(){
 		.dialog('open'); 
 	return true;
 }
+
+function modalBigBrother(){
+
+	$("#dialogBigBrother")
+		.dialog({
+			title: "Gran Hermano",
+			modal: true,
+			width: 950,
+			resizable: false,
+			buttons: {
+				"Cerrar": function() { $( this ).dialog( "close" ); }
+			}
+		})
+		.dialog('open'); 
+
+	connection("bigbrother","","bigbrother");
+
+	return true;
+}
