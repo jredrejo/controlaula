@@ -13,6 +13,8 @@ var dataRefresh = $.JSON.encode({"args" : "refresh"});
 var REFRESH_BIGBROTHER = 3000; /* in miliseconds*/
 var REFRESH_CLASSROOM = 5000; /* in miliseconds*/
 
+var intervalBigBrother;
+
 //Init screens
 function initScreens(){
 	connection("datosaula",dataRefresh,"printClassroom");
@@ -120,7 +122,11 @@ function connection(url,data,action){
 				}
 				case "getCaptures":{
 					printBigBrother(res);
-					setTimeout('connection("getCaptures","","getCaptures");',REFRESH_BIGBROTHER);
+					intervalBigBrother = setTimeout('connection("getCaptures","","getCaptures");',REFRESH_BIGBROTHER);
+					break;
+				}
+				case "disableBigBrother":{
+					clearInterval(intervalBigBrother);
 					break;
 				}
 			}

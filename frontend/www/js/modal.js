@@ -178,7 +178,8 @@ function modalBigBrother(){
 			resizable: false,
 			buttons: {
 				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			},
+			beforeClose: function(event, ui) { connection("disableBigBrother","","disableBigBrother"); }
 		})
 		.dialog('open'); 
 
