@@ -133,6 +133,12 @@ function refreshClassroom(equipos){
 	lastPClist = class.classroom.pclist;
 }
 
+function showCapture(url){
+	$("#imageBigBrother").html("<img src='"+url+"'/>");
+//	$("#imageBigBrother").html("<img src='http://localhost:8900/img/turnOn.png'/>");
+	$("#imageBigBrother").show("slide",{},500);
+}
+
 function printBigBrother(equipos){
 
 	if(equipos.images.length==0)
@@ -152,6 +158,6 @@ function printBigBrother(equipos){
 			photo = "img/pcNone.png";			
 		}
 
-		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'" onClick="showCapture(\''+photo+'\');"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 	}	
 }
