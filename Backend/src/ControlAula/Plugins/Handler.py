@@ -56,7 +56,7 @@ class Plugins(object):
                 'broadcast':self.broadcast,
                 'broadcastDVD':self.broadcastDVD,
                 'sendMessage':self.sendMessage,
-                'sendfile':self.sendFile,
+                'sendFile':self.sendFile,
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
