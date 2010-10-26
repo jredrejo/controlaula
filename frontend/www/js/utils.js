@@ -23,7 +23,7 @@ function computersSelected(){
 	
 	$("#selectable li").each(function(i, item){
 		if($("#"+item.id).hasClass('ui-selected')==true){
-			selected[i] = $("#"+item.id+" #pcName").html();
+			selected[i] = $("#"+item.id + ":eq(0) > #pcName").html();
 			i++;
 		}
 	});
