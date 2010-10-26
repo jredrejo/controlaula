@@ -103,11 +103,29 @@
                                               
                                               $("#chat_div").chatbox("option", "hidden",false)
                   });
+                  
+                 $("#link_add2").click(function(event, ui) {
+                      $("#chataula_div").chatbox({id : "chataula_div",
+                                              title : conf.userName|| "Chat ControlAula",
+                                              user : conf.userName,
+                                              offset: 20,
+                                              messageSent: function(id, user, msg){                                       
+                                                   var data = conf.copyForRequest();
+                                                   data['message'] = msg
+                                                $.post(conf.getChatClassURL(), data, cmdSubmitCallback, 'json');
+                                              }});
+                                              
+                                              
+                                              $("#chataula_div").chatbox("option", "hidden",false)
+                  });                  
       
                       
                 Configuration.prototype.getChatURL = function() {
-                    return this.server + this.channel;
+                    return this.server + this.userName;
                 };
+                Configuration.prototype.getChatClassURL = function() {
+                    return this.server + this.channel;
+                };                
                 Configuration.prototype.copyForRequest = function() {
                     return {user: this.userName};
                 };
@@ -123,14 +141,30 @@
 
 <body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 
-    <p><a id="link_add" href="#">Abrir ventana de chat</a></p>
-    
-    
-    
+
        
-        <div id="chat_div">
 
-        </div>
+    <table width="100%" style="margin-top:15px; width:268px;">
+        <tr> 
+            <td style="text-align:center;">
+                <a id="link_add" href="#">Abrir chat con el profesor</a>
+            </td>
+        </tr>
+        <tr> 
+            <td style="text-align:center;">
+                <a id="link_add2" href="#">Abrir chat de aula</a>
+            </td>
+        </tr>
+        <tr> 
+            <td style="text-align:center;">
+                <button id="sendFile" style="width:122px;">Enviar Fichero al profesor</button>
+            </td>
+        </tr>
+	</table>
+    
+    
+        <div id="chat_div"> </div>
 
+        <div id="chataula_div">  </div>
 </body>
 
