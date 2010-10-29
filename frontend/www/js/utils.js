@@ -48,7 +48,7 @@ function sendOrderSelected(url,args,action){
 	connection(url,dataString,action);
 }
 
-function sendSelected(url,args,action){
+function sendOrder(url,args,action){
 
 	var classroom = {
 		"args" : args

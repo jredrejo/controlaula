@@ -2,37 +2,34 @@
 <head>
 	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
 
-	<!-- Libreria JQuery -->
+	<!-- JQuery Library -->
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
 
-	<!-- Libreria JQuery UI -->
+	<!-- JQuery UI Library -->
 	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
 	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
 
-    <!-- Libreria chat -->
+	<!-- JQuery JSON Library -->
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery.json.js"></script>
+    
+    <!-- Chat Library -->
     <script src="js/jquery/jquery.ui.chatbox.js" type="text/javascript" charset="utf-8"></script>      
-    <link type="text/css" href="js/jquery/ui/css/jquery.ui.chatbox.css" rel="stylesheet" />
+    <link type="text/css" href="js/jquery/ui/css/jquery.ui.chatbox.css" rel="stylesheet" />    
+    <script src="js/chat.js" type="text/javascript" charset="utf-8"></script> 
+
+    <!-- jQueryFileTree Library -->
+		<script src="js/jquery/jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script> 
+		<link href="js/jquery/jqueryFileTree/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" /> 
+
+    <!-- Our Functions -->
+	<script type="text/JavaScript" language="javascript" src="student/js/buttons.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/modal.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/print.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/utils.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/connection.js"></script>
 
 	<meta charset="UTF-8" />
 	
-	<style type="text/css">
-		#feedback { font-size: 1.4em; }
-		#selectable .ui-selecting { background: #FECA40; }
-		#selectable .ui-selected { background: #F39814; color: white; }
-		#selectable { list-style-type: none; margin: 0; padding: 0; }
-		#selectable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
-	</style>
-
-	<style type="text/css">
-		#sortable { list-style-type: none; margin: 0; padding: 0; }
-		#sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 80px; height: 95px; font-size: 1em; text-align: center; cursor:pointer; }
-	</style>
-
-	<style>
-		.ui-progressbar-value { background-image: url(img/pbar-ani.gif); }
-	</style>
-
-
 	<style>
 		.ui-menu { position: absolute; width: 100px; }
 
@@ -49,9 +46,6 @@
 		#set a:hover {border-color: #fff;}
 
 	</style>
-
-
-
 
     <script type="text/javascript" charset="utf-8">
             function showIfError(response) {
@@ -81,45 +75,18 @@
 
     
       $(document).ready(function(){
-          		  
+
+
+				$("#tabsStudent").tabs();
+				$("#dialogSendFile").dialog({ autoOpen: false });
+
+
                 function Configuration() {
                     this.userName = '%(student_id)';
                     this.channel = 'controlaula-chat';
                     this.server = './';                   
                 };
-                
-                
-                 $("#link_add").click(function(event, ui) {
-                      $("#chat_div").chatbox({id : "chat_div",
-                                              title : conf.userName|| "Chat ControlAula",
-                                              user : conf.userName,
-                                              offset: 20,
-                                              messageSent: function(id, user, msg){                                       
-                                                   var data = conf.copyForRequest();
-                                                   data['message'] = msg
-                                                $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
-                                              }});
-                                              
-                                              
-                                              $("#chat_div").chatbox("option", "hidden",false)
-                  });
-                  
-                 $("#link_add2").click(function(event, ui) {
-                      $("#chataula_div").chatbox({id : "chataula_div",
-                                              title : conf.userName|| "Chat ControlAula",
-                                              user : conf.userName,
-                                              offset: 20,
-                                              messageSent: function(id, user, msg){                                       
-                                                   var data = conf.copyForRequest();
-                                                   data['message'] = msg
-                                                $.post(conf.getChatClassURL(), data, cmdSubmitCallback, 'json');
-                                              }});
-                                              
-                                              
-                                              $("#chataula_div").chatbox("option", "hidden",false)
-                  });                  
-      
-                      
+                            
                 Configuration.prototype.getChatURL = function() {
                     return this.server + this.userName;
                 };
@@ -141,30 +108,30 @@
 
 <body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
 
-
-       
-
-    <table width="100%" style="margin-top:15px; width:268px;">
-        <tr> 
-            <td style="text-align:center;">
-                <a id="link_add" href="#">Abrir chat con el profesor</a>
-            </td>
-        </tr>
-        <tr> 
-            <td style="text-align:center;">
-                <a id="link_add2" href="#">Abrir chat de aula</a>
-            </td>
-        </tr>
-        <tr> 
-            <td style="text-align:center;">
-                <button id="sendFile" style="width:122px;">Enviar Fichero al profesor</button>
-            </td>
-        </tr>
-	</table>
+	<div id="tabsStudent" style="width:60%">
+		<ul>
+			<li><a href="#tabs-1">Acciones</a></li>
+		</ul>
+		<div id="tabs-1" style="padding:2px;">
+			<table width="100%">
+				<tr>
+					<td style="text-align:center; padding:30px;"><button id="sendFileStudent" style="width:160px;">Enviar Fichero</button></td>
+					<td style="text-align:center;"><button id="receivedFileStudent" style="width:160px;">Ficheros Recibidos</button></td>
+				</tr>
+				<tr>
+					<td style="text-align:center; padding:30px;"><button id="chatClassroom" style="width:160px;">Chat de clase</button></td>
+					<td style="text-align:center;"><button id="chatTeacher" style="width:160px;">Chat con Profesor</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
     
-    
-        <div id="chat_div"> </div>
+     <div id="chat_div"> </div>
 
-        <div id="chataula_div">  </div>
+     <div id="chataula_div">  </div>
+
+	<div id="dialogSendFile">
+		<div id="sendFileTree" style="overflow: scroll; height:300px;"></div> 
+	</div>
 </body>
 

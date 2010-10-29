@@ -79,7 +79,7 @@ function modalReceivedFiles(){
 			width: 550,
 			resizable: false,
 			buttons: {
-				"Abrir Carpeta Recibidos": function() { sendSelected('openFile','dirReceivedTeacher','openFile'); },
+				"Abrir Carpeta Recibidos": function() { sendOrder('openFile','dirReceivedTeacher','openFile'); },
 				"Cerrar": function() { $( this ).dialog( "close" ); }
 			}
 		})
@@ -93,7 +93,7 @@ function modalReceivedFiles(){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				sendSelected('openFile',file,'openFile');
+				sendOrder('openFile',file,'openFile');
 		});
 
 	return true;
