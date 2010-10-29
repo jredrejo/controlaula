@@ -78,16 +78,17 @@ $(function() {
 			.button({ icons: { primary: "ui-icon-mail-closed"}})
 			.click(function() { modalSendMessage() });
 
-		printSplitButton("sendFile","ui-icon-folder-open",'modalSendFile();');
-		$( "#receivedFiles" ).click(function() { modalReceivedFiles(); });
+		$( "#sendFile" )
+			.button({ icons: { primary: "ui-icon-folder-open"}})
+			.click(function() { modalSendFile() });
 
 		$( "#web" )
 			.button({ icons: { primary: "ui-icon-search"}})
-			.click(function() { modalWeb(); });
+			.click(function() { modalWeb() });
 
 		$( "#bigBrother" )
 			.button({ icons: { primary: "ui-icon-person"}})
-			.click(function() { modalBigBrother(); });
+			.click(function() { modalBigBrother() });
 
 		printSplitButton("chat","ui-icon-video",' showChatbox() ');
 	   $("#enableChat").click(function() {  showChatbox(); });

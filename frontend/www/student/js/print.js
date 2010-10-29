@@ -133,20 +133,13 @@ function refreshClassroom(equipos){
 	lastPClist = class.classroom.pclist;
 }
 
-var computerSelected="";
+function showCapture(url,computer){
 
-function showCapture(element,computer){
-	
-	computerSelected = computer;
+    $("#imageBigBrother").html("<img src='"+url+"'/><br><br><input type='button' value='Ver equipo' onClick='javascript:connection(\"openVNC\",\"{\\\"args\\\":\\\""+computer+"\\\"}\"   ,\"\");'>");
 
-    $("#imageBigBrother").html("<img src='"+$('#thumbCapture_'+element).attr("src")+"' id='imageCoputer-"+computer+"'/><br><br><input type='button' value='Ver equipo' onClick='javascript:connection(\"openVNC\",\"{\\\"args\\\":\\\""+computer+"\\\"}\"   ,\"\");'>");
+//	$("#imageBigBrother").html("<img src='http://localhost:8900/img/turnOn.png'/>");
 	$("#imageBigBrother").show("slide",{},500);
 }
-
-function refreshCapture(url){
-	$("#imageCoputer-"+computerSelected).attr("src",url);
-}
-
 
 function printBigBrother(equipos){
 
@@ -167,38 +160,6 @@ function printBigBrother(equipos){
 			photo = "img/pcNone.png";			
 		}
 
-		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'" onClick="showCapture(\''+i+'\',\''+pcname+'\');"><div id="pcName_'+i+'">'+pcname+'</div><img class="thumb-imageBigBrother" id="thumbCapture_'+i+'" src="'+photo+'"/><div id="userName_'+i+'">'+name+'</div></li>');
-	}
-}
-
-function refreshBigBrother(equipos){
-
-	if(equipos.images.length==0)
-		return;
-
-	for(var i=0;i<equipos.images.length;i++){
-
-		var name = equipos.images[i].name;
-		var photo = equipos.images[i].url;
-		var pcname = equipos.images[i].pcname;
-		
-		if(equipos.images[i].pcname=="Unknown"){
-			pcname = "&nbsp;";
-			name = "&nbsp;";
-			photo = "img/pcNone.png";			
-		}else{
-			if(pcname!=$('#pcName_'+i).val())
-				$('#pcName_'+i).val(pcname)
-
-			if(name!=$('#userName_'+i).val())
-				$('#userName_'+i).val(name)
-
-			if(photo!=$('#thumbCapture_'+i).val())
-				$('#thumbCapture_'+i).attr("src",photo);
-
-		}
-
-		if(computerSelected==pcname)
-			refreshCapture(photo);
-	}
+		$('#selectableBigBrother').append('<li class="ui-state-default" id="selectable-'+i+'" onClick="showCapture(\''+photo+'\',\''+pcname+'\');"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
+	}	
 }

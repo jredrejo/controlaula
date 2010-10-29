@@ -37,13 +37,7 @@ function modalConfirm(message, funct){
 }
 
 function modalSendFile(){
-	var selected = computersSelected();
-
-	if(selected.length==0){
-		modalAlert("Para enviar un fichero debe seleccionar al menos un equipo");
-		return;
-	}
-
+alert("hola");
 	$("#dialogSendFile")
 		.dialog({
 			title: "Enviar Fichero",
@@ -65,35 +59,6 @@ function modalSendFile(){
 			multiFolder: false },
 			function(file) { 
 				modalConfirm("¿Desea enviar el fichero seleccionado?","sendOrderSelected('sendFile','"+file+"','sendFile');");
-		});
-
-	return true;
-}
-
-function modalReceivedFiles(){
-
-	$("#dialogSendFile")
-		.dialog({
-			title: "Ficheros Recibidos",
-			modal: true,
-			width: 550,
-			resizable: false,
-			buttons: {
-				"Abrir Carpeta Recibidos": function() { sendSelected('openFile','dirReceivedTeacher','openFile'); },
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
-		})
-		.dialog('open'); 
-
-		$('#sendFileTree').fileTree({
-			root: 'receivedFiles', 
-			script: 'getAllNodes',
-			folderEvent: 'click', 
-			expandSpeed: 750, 
-			collapseSpeed: 750, 
-			multiFolder: false },
-			function(file) { 
-				sendSelected('openFile',file,'openFile');
 		});
 
 	return true;
@@ -173,8 +138,8 @@ function goToURL(url){
 	if(url=="")	
 		url=$("#url").val();
 
-/*	$("#frameWeb").attr("src","http://"+url);
-	$("#url").val(url);*/
+	$("#frameWeb").attr("src","http://"+url);
+	$("#url").val(url);
 }
 
 function modalWeb(){

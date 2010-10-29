@@ -122,12 +122,7 @@ function connection(url,data,action){
 				}
 				case "getCaptures":{
 					printBigBrother(res);
-					connection("getCaptures","","refreshCaptures");
-					break;
-				}
-				case "refreshCaptures":{
-					refreshBigBrother(res);
-					intervalBigBrother = setTimeout('connection("getCaptures","","refreshCaptures");',REFRESH_BIGBROTHER);
+					intervalBigBrother = setTimeout('connection("getCaptures","","getCaptures");',REFRESH_BIGBROTHER);
 					break;
 				}
 				case "disableBigBrother":{
