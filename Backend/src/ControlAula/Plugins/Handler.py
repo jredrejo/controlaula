@@ -295,9 +295,15 @@ class Plugins(object):
         return  ''.join(r)        
 
     def getReceivedFiles(self):
+        user=MyUtils.getLoginName()
+        path=MyUtils.getHomeUser()+'/recibidos_profesor/'
+        if not os.path.isdir(path):
+            os.mkdir(path,0750)
+            os.chown(path,user,user)
+
         r=['<ul class="jqueryFileTree" style="display: none;">']
         try:
-            path=MyUtils.getHomeUser()+'/recibidos_profesor/'
+
             files_and_dirs=os.listdir(path)
             sorted_files_and_dirs=sorted(files_and_dirs,key=lambda x: (x.lower(),x.swapcase()))
             for f in sorted_files_and_dirs:
