@@ -249,7 +249,9 @@ class Plugins(object):
 
         if path=='home':
             return self.getTreeHome()
-            
+
+        if path=='receivedFiles':
+            return self.getReceivedFiles()
             
         r=['<ul class="jqueryFileTree" style="display: none;">']
         try:
@@ -291,7 +293,29 @@ class Plugins(object):
         r.append('</ul>')
         
         return  ''.join(r)        
+
+    def getReceivedFiles(self):
+        r=['<ul class="jqueryFileTree" style="display: none;">']
+        try:
+            path=MyUtils.getHomeUser()+'/recibidos_profesor/'
+            files_and_dirs=os.listdir(path)
+            sorted_files_and_dirs=sorted(files_and_dirs,key=lambda x: (x.lower(),x.swapcase()))
+            for f in sorted_files_and_dirs:
+                if f[:1]=='.':#skip hidden files and dirs
+                    continue
+                ff=os.path.join(path,f)
+
+                if os.path.isdir(ff):
+                    r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+                else:
+                    e=os.path.splitext(f)[1][1:] # get .ext and remove dot
+                    r.append('<li class="file ext_%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+              
+        except Exception,e:
+            r.append('Could not load directory: %s' % str(e))
+        r.append('</ul>')
         
+        return  ''.join(r)     
     
     def sendMessage(self, text):
         self.usersCommand(Desktop.sendMessage,[text])
