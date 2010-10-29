@@ -70,6 +70,35 @@ function modalSendFile(){
 	return true;
 }
 
+function modalReceivedFiles(){
+
+	$("#dialogSendFile")
+		.dialog({
+			title: "Ficheros Recibidos",
+			modal: true,
+			width: 550,
+			resizable: false,
+			buttons: {
+				"Abrir Carpeta Recibidos": function() { sendSelected('openFile','dirReceivedTeacher','openFile'); },
+				"Cerrar": function() { $( this ).dialog( "close" ); }
+			}
+		})
+		.dialog('open'); 
+
+		$('#sendFileTree').fileTree({
+			root: 'receivedFiles', 
+			script: 'getAllNodes',
+			folderEvent: 'click', 
+			expandSpeed: 750, 
+			collapseSpeed: 750, 
+			multiFolder: false },
+			function(file) { 
+				sendSelected('openFile',file,'openFile');
+		});
+
+	return true;
+}
+
 function modalSendMessage(){
 	var selected = computersSelected();
 

@@ -102,37 +102,36 @@
 	});
 	</script>
 </head>
-<body style="margin:0px; background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
+<body style="margin:0px; background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding-top:3px;">
 
-	<table width="100%" cellpading="4" cellspacing="10">
+	<table width="100%" cellpading="2" cellspacing="2"1>
 	<tr>
-		<td style="width:260px; vertical-align:top;">
+		<td style="width:260px; vertical-align:top; height:120px;">
 			<div id="tabsComputers">
 				<ul>
 					<li><a href="#tabs-1">Equipos</a></li>
 				</ul>
-				<div id="tabs-1" style="padding:2px;">
+				<div id="tabs-1" style="padding:3px;">
 					<table width="100%">
 						<tr>
-							<td style="text-align:center;"><button id="selectAll" style="width:122px;">Selecc. Todo</button></td>
-							<td style="text-align:center;"><button id="turnOn" style="width:122px;">Encender</button></td>
+							<td style="text-align:center;"><button id="selectAll" style="width:123px;">Selecc. Todo</button></td>
+							<td style="text-align:center;"><button id="turnOn" style="width:123px;">Encender</button></td>
 						</tr>
 						<tr>
-							<td style="text-align:center;"><button id="selectNone" style="width:122px;">Selecc. Ninguno</button></td>
-							<td style="text-align:center;"><button id="turnOff" style="width:122px;">Apagar</button></td>
+							<td style="text-align:center;"><button id="selectNone" style="width:123px;">Selecc. Ninguno</button></td>
+							<td style="text-align:center;"><button id="turnOff" style="width:123px;">Apagar</button></td>
 						</tr>
 					</table>
 				</div>
 			</div>
 		</td>
-		<td style="vertical-align:top;" rowspan="2">
+		<td style="vertical-align:top; padding-left:10px;" rowspan="2">
 			<div id="tabsClassroom" style="width:500px;">
 				<ul>
 					<li><a href="#tabsClassroom-1">Aula</a></li>
 					<li><a href="#tabsClassroom-4">Chat</a></li>
 					<li><a href="#tabsClassroom-2">Ordenar Aula</a></li>
 					<li><a href="#tabsClassroom-3">Configuraci&oacute;n</a></li>
-					<li><a href="#tabsClassroom-5">Vídeo (Demo)</a></li>
 				<!--	<li><a href="#tabsClassroom-4">LDAP</a></li>-->
 				</ul>
 				<div id="tabsClassroom-1" style="padding:2px;">
@@ -201,49 +200,7 @@
 				<div id="tabsClassroom-4" style="padding:2px;">
 					<div id=""></div>
 				</div>
-				<div id="tabsClassroom-5" style="padding:2px; text-align:center;">
-					
-					<div class="media-player" style="padding:25px;">
-	
-						<video poster="http://protofunc.com/jme/media/bbb_watchtrailer.gif" controls="controls" preload="none">
-							<source src="http://protofunc.com/jme/media/bbb_trailer_mobile.m4v" type="video/mp4" />
-						</video>
-			
-			
-						<!-- media-state: has some interessting state-classes + serves as a play-pause interface for mouse -->
-						<div class="media-state"></div>
-			
-						<!-- media-label for labelling a player: good for a11y -->
-						<span class="media-label">video: big buck bunny</span>
-			
-						<!-- media-controls is grouping some controls -->
-						<div class="media-controls" style="height:35px;">
-				
-							<!-- play-pause-button -->
-							<a class="play-pause"><span class="ui-icon"> </span><span class="button-text">play / pause</span></a>
-				
-							<!-- current-time: displays the current time -->
-							<span class="current-time player-display">00:00</span>
-				
-							<!-- timeline-slider: time-slider with label (a11y.slider.ext) -->
-							<div class="timeline-slider">
-								<span class="handle-label">play position</span>
-					
-								<!-- progressbar: inside of the timeline-slider -->
-								<div class="progressbar"></div>
-							</div>
-				
-							<!-- duration displays duration -->
-							<span class="duration player-display">00:00</span>
-				
-							<!-- mute-unmute: toggle mute state -->
-							<a class="mute-unmute"><span class="ui-icon"> </span><span class="button-text">mute / unmute</span></a>
-				
-							<!-- volume-slider -->
-							<div class="volume-slider" data-mutestate="true"><span class="handle-label">volume control</span></div>
-						</div>
-					</div>
-				</div>
+
 		<!--		<div id="tabsClassroom-4" style="padding:2px;">
 					<p class="validateTips">Obtener los datos de LDAP.</p>
 
@@ -351,7 +308,15 @@
 								<button id="sendMessage" style="width:122px;">Enviar Mensaje</button>
 							</td>
 							<td style="text-align:center;">
-								<button id="sendFile" style="width:122px;">Enviar Fichero</button>
+								<div>
+									<div>
+										<button id="sendFile" style="width:95px;">Env&nbsp;Fichero</button>
+										<button id="select">Select an action</button>
+									</div>
+									<ul style="z-index:1000;">
+										<li><a href="#"><div id="receivedFiles">Ficheros recibidos</div></a></li>
+									</ul>
+								</div>
 							</td>
 						</tr>
 						<tr>

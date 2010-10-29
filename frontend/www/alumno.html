@@ -2,9 +2,35 @@
 <head>
 	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
 
-	<!-- Libreria JQuery -->
+	<!-- JQuery Library -->
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
 
+	<!-- JQuery UI Library -->
+	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
+	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
+
+	<!-- JQuery JSON Library -->
+	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery.json.js"></script>
+    
+    <!-- Chat Library -->
+    <script src="js/jquery/jquery.ui.chatbox.js" type="text/javascript" charset="utf-8"></script>      
+    <link type="text/css" href="js/jquery/ui/css/jquery.ui.chatbox.css" rel="stylesheet" />    
+    <script src="js/chat.js" type="text/javascript" charset="utf-8"></script> 
+
+    <!-- jQueryFileTree Library -->
+		<script src="js/jquery/jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script> 
+		<link href="js/jquery/jqueryFileTree/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" /> 
+
+    <!-- Video Library -->
+		<script src="js/jquery/video/mm.full.min.js" type="text/javascript"></script> 
+		<link href="js/jquery/video/player-controls.css" rel="stylesheet" type="text/css" media="screen" /> 
+
+    <!-- Our Functions -->
+	<script type="text/JavaScript" language="javascript" src="student/js/buttons.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/modal.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/print.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/utils.js"></script>
+	<script type="text/JavaScript" language="javascript" src="student/js/connection.js"></script>
 
 	<meta charset="UTF-8" />
 	
@@ -50,40 +76,62 @@
 
     
       $(document).ready(function(){
-              
+
+		$("#tabsStudent").tabs();
+
+		$( "#sendFileStudent" )
+			.button({ icons: { primary: "ui-icon-folder-open"}})
+			.click(function() { modalSendFile() });
+
+		$( "#receivedFileStudent" )
+			.button({ icons: { primary: "ui-icon-folder-open"}})
+			.click(function() { modalSendMessage() });
+
+		$( "#selectMessageStudent" )
+			.button({ icons: { primary: "ui-icon-mail-closed"}})
+			.click(function() { modalSendMessage() });
+
+		$( "#chatStudent" )
+			.button({ icons: { primary: "ui-icon-mail-closed"}})
+			.click(function() { modalSendMessage() });
+
         $.post("getConnection", { },
            function(data){
               if (data.teacher_ip != "") {
                  url_teacher='http://' + data.teacher_ip + ':' + data.teacher_port + '/student/';
                  $("#student_form").get(0).setAttribute("action",url_teacher);
                  $('input[name=login]').val(data.login);                
-                 $("#student_form").submit();
-
-                 
+                 $("#student_form").submit(); 
               }
-
            }, "json");              
-
-		  
- 
-		 
-         
-		 
       });
     </script>
 	
 </head>
 
 <body style="background-image:url('img/controlaula.png'); background-repeat:no-repeat; background-position:top right; padding:3px;">
-
-
-
+hola
+	<div id="tabsStudent" style="width:60%">
+		<ul>
+			<li><a href="#tabs-1">Acciones</a></li>
+		</ul>
+		<div id="tabs-1" style="padding:2px;">
+			<table width="100%">
+				<tr>
+					<td style="text-align:center; padding:30px;"><button id="sendFileStudent" style="width:160px;">Enviar Fichero</button></td>
+					<td style="text-align:center;"><button id="receivedFileStudent" style="width:160px;">Ficheros Recibidos</button></td>
+				</tr>
+				<tr>
+					<td style="text-align:center; padding:30px;"><button id="selectMessageStudent" style="width:160px;">Enviar Mensaje</button></td>
+					<td style="text-align:center;"><button id="chatStudent" style="width:160px;">Chat</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 
 <form id="student_form"  method="POST" action="">
   <input type="hidden" name="login" value=""> <!-- your PID -->
 </form>
-
-
 
 </body>
 

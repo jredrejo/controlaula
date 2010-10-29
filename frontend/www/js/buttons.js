@@ -78,9 +78,8 @@ $(function() {
 			.button({ icons: { primary: "ui-icon-mail-closed"}})
 			.click(function() { modalSendMessage() });
 
-		$( "#sendFile" )
-			.button({ icons: { primary: "ui-icon-folder-open"}})
-			.click(function() { modalSendFile() });
+		printSplitButton("sendFile","ui-icon-folder-open",'modalSendFile();');
+		$( "#receivedFiles" ).click(function() { modalReceivedFiles(); });
 
 		$( "#web" )
 			.button({ icons: { primary: "ui-icon-search"}})

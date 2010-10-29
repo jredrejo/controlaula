@@ -48,6 +48,16 @@ function sendOrderSelected(url,args,action){
 	connection(url,dataString,action);
 }
 
+function sendSelected(url,args,action){
+
+	var classroom = {
+		"args" : args
+	}
+
+	var dataString = $.JSON.encode(classroom);
+	connection(url,dataString,action);
+}
+
 function sendClassroomConfig(){
 
 	var computers = Array();
