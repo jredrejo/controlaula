@@ -65,8 +65,7 @@ class Plugins(object):
                 'getAllNodes':self.fileBrowserAll,
                 'getCaptures':self.getCaptures,
                 'getLoginTeacher':self.getLogin,
-                'errorLog':self.errorLog,
-                'commandStudent':self.commandStudent
+                'errorLog':self.errorLog
                 }  
         
     def existCommand(self,command):
@@ -321,8 +320,3 @@ class Plugins(object):
     def errorLog(self,error_msg):
         logging.getLogger().debug('Error report from Frontend: %s ' %   (error_msg))
         
-    def commandStudent(self,*args):
-        command=args[-1]
-        target=args[-2]
-        if len(args)>2:
-            realargs=args[:-2]

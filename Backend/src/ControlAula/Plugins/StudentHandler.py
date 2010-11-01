@@ -25,7 +25,8 @@ import logging,subprocess
 from ControlAula.Utils import Configs,MyUtils
 from ControlAula.Plugins import DownloadFiles
 import Actions
-
+import os
+import urllib,mimetypes
 class Plugins(object):
     
     def __init__(self,myteacher,myIP):
@@ -62,7 +63,8 @@ class Plugins(object):
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
-                'enableSound':self.enableSound           
+                'enableSound':self.enableSound,
+                'getAllNodes':self.fileBrowserAll         
                 }  
         self.currentProcess=None
         self.filesQueue=DownloadFiles.DownloadQueue()
@@ -247,4 +249,59 @@ class Plugins(object):
             except:
                 pass     
           
+    def getPathUser(self):
+        return MyUtils.getHomeUser()
+
+    def fileBrowserAll(self,node,video=False):
+        path=urllib.unquote(unicode(node[0])).encode( "utf-8" )
+
+        if path=='home':
+            return self.getTreeHome()
+
+        if path=='receivedFiles':
+            user=MyUtils.getLoginName()
+            path=  os.path.join(MyUtils.getHomeUser(),'recibidos_profesor')
+            if not os.path.isdir(path):
+                os.mkdir(path,0750)
+                os.chown(path,user,user)
+            
+        r=['<ul class="jqueryFileTree" style="display: none;">']
+        try:
+
+            files_and_dirs=os.listdir(path)
+            sorted_files_and_dirs=sorted(files_and_dirs,key=lambda x: (x.lower(),x.swapcase()))
+            for f in sorted_files_and_dirs:
+                if f[:1]=='.':#skip hidden files and dirs
+                    continue
+                ff=os.path.join(path,f)  
+                       
+                if os.path.isdir(ff):
+                    r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+                    
+                else:
+                    if video:
+                        mtype=mimetypes.guess_type(f,True)[0]
+                        type=''
+                        if mtype!=None:
+                            type=mtype[:5] 
+                        if type not in ['audio','video']:#skip non-multimedia files
+                            continue                                 
+                    
+                    e=os.path.splitext(f)[1][1:] # get .ext and remove dot
+                    r.append('<li class="file ext_%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+              
+        except Exception,e:
+            r.append('Could not load directory: %s' % str(e))
+        r.append('</ul>')
         
+        self.myteacher.getAnswer(  ''.join(r))
+
+    def getTreeHome(self):
+        path=MyUtils.getHomeUser()
+        user=MyUtils.getLoginName()
+        r=['<ul class="jqueryFileTree" style="display: none;">']
+        r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (path,user))
+        r.append('<li class="directory collapsed"><a href="#" rel="/media/">Media</a></li>' )        
+        r.append('</ul>')
+        
+        self.myteacher.getAnswer(  ''.join(r))    

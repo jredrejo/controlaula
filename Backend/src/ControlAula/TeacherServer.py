@@ -36,6 +36,7 @@ class RPCServer(xmlrpc.XMLRPC):
         if self.externalIP=='':
             self.externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         self.hostname=NetworkUtils.getHostName()
+        self.deferred_request=None
             
 
         
@@ -219,4 +220,11 @@ class RPCServer(xmlrpc.XMLRPC):
         return defer.succeed(("hello","world"))
 #        return defer.fail(12)
 
+    def xmlrpc_getAnswer(self,answer):
+        if self.deferred_request is not None:
+            self.deferred_request.write(answer)
+            self.deferred_request.finish()
+            self.deferred_request=None
+        return ""
 
+       

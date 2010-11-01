@@ -112,7 +112,7 @@ class ControlAulaProtocol(resource.Resource):
         if request.path=='/RPC2':
             return self.teacher.render(request)
         
-        isStudent=False
+        student_asks=False
 
 
         #Filter the command needed.
@@ -121,19 +121,18 @@ class ControlAulaProtocol(resource.Resource):
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
-        if command !='datosaula':
-            print command
+        #if command !='datosaula':
+        #    print command
 
             
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
         
         #petition from the student controlaula
-        isStudent=(request.path[:9]=='/student/')
-        if isStudent:
-            real_command=command.replace('student/','')
-            command='commandStudent'
-            if real_command=='':
+        student_asks=(request.path[:9]=='/student/')
+        if student_asks:
+            command=command.replace('student/','')            
+            if command=='':
                 return self._handle_chat(request)
                
       
@@ -166,12 +165,12 @@ class ControlAulaProtocol(resource.Resource):
                     handler.args=[args] 
                 else:
                     handler.args=[]
-                if isStudent:
+                if student_asks:
                     if 'user_id' in request.args:                                         
-                        handler.args.append(request.args['user_id'][0] + '@' + request.host.host)
-                        handler.args.append(real_command)
-                        
-                                           
+                        user_key=request.args['user_id'][0] + '@' + request.client.host
+                        self.teacher.deferred_request=request
+                        self.teacher.classroom.addCommand( user_key,command,args)
+                        return server.NOT_DONE_YET                                           
                     
                     #handler.args=['/opt/'+args]
                 if json.loads(recvjson).has_key('pclist'):
@@ -182,8 +181,7 @@ class ControlAulaProtocol(resource.Resource):
                         handler.targets=json.loads(recvjson)['pclist']
                 
                 if json.loads(recvjson).has_key('structure'):
-                    structure=json.loads(recvjson)['structure']
-    
+                    structure=json.loads(recvjson)['structure']    
                     handler.args=[structure['rows'],structure['cols']]
                 result=handler.process(command)
                 #respjson= json.dumps({'result':'ack'})

@@ -153,7 +153,7 @@ if __name__ == '__main__':
         # Start up the web service.     
         AulaRoot = TeacherMainLoop.ControlAulaProtocol() #Resource object
         AulaRoot.PageDir=Configs.WWWPAGES
-        AulaRoot.teacher.classroom=MyClass
+        AulaRoot.teacher.classroom=MyClass        
 
         AulaSite = server.Site(AulaRoot) #Factory object
         # This is the error message to use if we can't listen on a selected port.
