@@ -13,7 +13,8 @@
   <toolbarpalette id="BrowserToolbarPalette">
   <toolbarbutton id="ControlAula-toolbar-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
     label="&ControlAulaToolbarButton.label;" tooltiptext="&ControlAulaToolbarButton.tooltip;"
-    onclick="openUILink('http://localhost:' + prefs.getCharPref('stringpref') + '/index.html', event)"/>
+    onclick="openUILink('file:///' + homeDir + '/.controlaula/controlaula.html', event)"/>
+
   </toolbarpalette>
 
 

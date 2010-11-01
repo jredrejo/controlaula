@@ -5,7 +5,7 @@
 # Purpose:     Handler of the different Plugins
 # Language:    Python 2.5
 # Date:        3-Feb-2010.
-# Ver:        3-Feb-2010.
+# Ver:        31-Oct-2010.
 # Author:    José L.  Redrejo Rodríguez
 # Copyright:    2009-2010 - José L. Redrejo Rodríguez       <jredrejo @nospam@ debian.org>
 #
@@ -65,7 +65,8 @@ class Plugins(object):
                 'getAllNodes':self.fileBrowserAll,
                 'getCaptures':self.getCaptures,
                 'getLoginTeacher':self.getLogin,
-                'errorLog':self.errorLog
+                'errorLog':self.errorLog,
+                'commandStudent':self.commandStudent
                 }  
         
     def existCommand(self,command):
@@ -319,3 +320,9 @@ class Plugins(object):
 
     def errorLog(self,error_msg):
         logging.getLogger().debug('Error report from Frontend: %s ' %   (error_msg))
+        
+    def commandStudent(self,*args):
+        command=args[-1]
+        target=args[-2]
+        if len(args)>2:
+            realargs=args[:-2]

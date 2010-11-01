@@ -24,7 +24,9 @@
 
 
 import pwd,os,subprocess,logging
+import shutil
 import NetworkUtils
+
 loginname=''
 fullusername=''
 homeuser=''
@@ -282,3 +284,30 @@ def isActive():
     active=(user in loggedusers)
 
     return active 
+
+def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
+    from Configs import WWWPAGES,APP_DIR
+    requestedfile=os.path.join(WWWPAGES,'controlaula.html')
+    local_web_dir=os.path.join(APP_DIR,'www')
+    if not os.path.exists(local_web_dir):
+        try:
+            os.mkdir(local_web_dir)
+            shutil.copy(os.path.join(WWWPAGES,'js/jquery/jquery-1.4.2.min.js') , os.path.join(local_web_dir,'jquery-1.4.2.min.js'))
+            shutil.copy(os.path.join(WWWPAGES,'img/controlaula.png') , os.path.join(local_web_dir,'controlaula.png'))
+        except:
+            logging.getLogger().debug('Error copying www pages to user directory')
+                        
+        
+    page_to_send =open(requestedfile, "r").read()
+    html_to_save=page_to_send.replace('%(user_id)', getLoginName())
+    html_to_save=html_to_save.replace('%(teacher_ip)', teacher_ip)
+    html_to_save=html_to_save.replace('%(teacher_port)',str(teacher_port))
+    if isTeacher:
+        html_to_save=html_to_save.replace('%(isteacher)', 'true')
+    else:
+        html_to_save=html_to_save.replace('%(isteacher)', 'false')
+        
+    f = open(os.path.join(APP_DIR,'controlaula.html') , 'wb')
+    f.write(html_to_save)
+    f.close()
+    

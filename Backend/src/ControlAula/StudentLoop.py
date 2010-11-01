@@ -5,7 +5,7 @@
 # Purpose:     Class listen to the teacher and execute his orders
 # Language:    Python 2.5
 # Date:        22-Jan-2010.
-# Ver:        29-Jan-2010.
+# Ver:        1-Nov-2010.
 # Author:    José L.  Redrejo Rodríguez
 # Copyright:    2009-2010 - José L. Redrejo Rodríguez       <jredrejo @nospam@ debian.org>
 #
@@ -22,21 +22,19 @@
 #
 ##############################################################################
 
-import xmlrpclib,os
+import xmlrpclib
 from ControlAula.Utils import NetworkUtils, MyUtils,Configs
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging,sys
 from Xlib.display import Display
-from twisted.web import server,resource,  static
-import simplejson as json
+
 
             
 class Obey(object):
     '''
    What the student must do :D
     '''
-
             
     def __init__(self, interval):
         '''
@@ -126,7 +124,7 @@ class Obey(object):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
-        
+        MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
 
@@ -210,6 +208,7 @@ class Obey(object):
             self.Teachers.pop(self.catched)        
         self.catched=''
         self.myteacher=None
+        MyUtils.putLauncher()
         
     def getTeacherData(self):
         vncrp,vncwp,vncport,bcastport=self.myteacher.connData()
@@ -239,84 +238,3 @@ class Obey(object):
                 self.handler.args=i[1:]
                 self.handler.process(i[0])
         
-        
-
-class ControlAulaProtocol(resource.Resource):
-    """Respond with the appropriate ControlAUla  protocol response.
-    A GET should return a file. A POST should use JSON to retrieve and send data
-    """
-
-    isLeaf = True  # This is a resource end point.
-
-
-    def __init__ (self,obey):
-        resource.Resource.__init__(self)
-        
-        self.PageDir=""        
-        self.mylogin=MyUtils.getLoginName()
-        self.teacher_handler=obey.handler
-
-
-
-    ########################################################
-    # Return the page for a GET. This will handle requests
-    # to read data.
-    def render_GET(self, request):
-
-        # Check if requested file exists.    
-        pagename=request.path[1:].lower()
-        if  pagename=='index.htm' or pagename=='index.html' or pagename=='':
-            request.path='/alumno.html'
-        requestedfile = os.path.join(self.PageDir,request.path[1:])
-        
-        if not os.path.isfile(requestedfile):
-            # Didn't find it? Return an error.
-            request.setResponseCode(404)
-            return"""
-            <html><head><title>404 - No Such Resource</title></head>
-            <body><h1>No Such Resource</h1>
-            <p>File not found: %s - No such file.</p></body></html>
-            """ % requestedfile
-
-        # Look for the requested file.
-        f=static.File(requestedfile)
-
-        
-        if f.type is None:
-            f.type, f.encoding = static.getTypeAndEncoding(requestedfile,
-                f.contentTypes,
-                f.contentEncodings,
-                f.defaultType)        
-        
-        if f.type:
-            ctype=f.type.split(":")[0]
-            # Send the headers.
-            request.setHeader('content-type', ctype)
-            
-        if f.encoding:
-            request.setHeader('content-encoding', f.encoding)
-        # Send the page.
-        static.FileTransfer(f.openForReading(), f.getFileSize(), request)
-        
-        return server.NOT_DONE_YET
-
-
-    def render_POST(self, request):
-        """ Process a POST and return a response. This will handle
-        all the AJAX read and write requests for data.
-        """        
-        try:
-                  
-            request.content.read()   
-           
-            if request.path[1:] =='getConnection':
-                return json.dumps({'login':self.mylogin,'teacher_ip':self.teacher_handler.teacherIP,'teacher_port':self.teacher_handler.teacher_port})
-            else:
-                return ""
-        except:
-            return ""
-            
-
-
-
-

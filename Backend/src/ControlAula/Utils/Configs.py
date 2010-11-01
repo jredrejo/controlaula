@@ -5,7 +5,7 @@
 # Purpose:     Several  configs parameters for the application
 # Language:    Python 2.5
 # Date:        10-Feb-2010.
-# Ver:        10-Feb-2010.
+# Ver:        1-Nov-2010.
 # Author:    José L. Redrejo Rodríguez
 # Copyright:   2009 - José L. Redrejo Rodríguez    <jredrejo @nospam@ debian.org>
 #
@@ -418,6 +418,8 @@ def import_newmacs(oldconfig,newconfig):
 ########################################################                                
 
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
+WWWPAGES='/usr/share/controlaula/frontend/www'
+
 if not os.path.isdir(APP_DIR):
         os.mkdir(APP_DIR)
             

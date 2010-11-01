@@ -22,7 +22,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# Important:    WHEN EDITING THIS FILE, USE TABS TO INDENT - NOT SPACES!
 ##############################################################################
 
 

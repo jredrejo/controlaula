@@ -6,7 +6,7 @@
 # Purpose:     Starting module for this daemon
 # Language:    Python 2.5
 # Date:        15-Jan-2010.
-# Ver.:        27-Jan-2010.
+# Ver.:        1-Nov-2010.
 # Copyright:    2009-2010 - José L. Redrejo Rodríguez       <jredrejo @nospam@ debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,6 @@ from twisted.internet.task import LoopingCall
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
-PAGES='/usr/share/controlaula/frontend/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
     
@@ -108,96 +107,77 @@ class singleinstance(object):
                     
         
         
-if __name__ == '__main__':
-    
-    #############Initialization#############
+if __name__ == '__main__':   
     
     myapp = singleinstance(os.path.join (Configs.APP_DIR,'controlaula.pid')  )
-
     if myapp.alreadyrunning():
         sys.exit("Another instance of this program is already running")    
-    
-    isTeacher=MyUtils.userIsTeacher()
-    #isTeacher=False#enable for debugging
-    
-    if not isTeacher:        
-        from twisted.internet import glib2reactor
-        glib2reactor.install()  
-    from twisted.web import server
-    from twisted.internet import reactor
-
-
-    # Initialise the signal handler.
-    signal.signal(signal.SIGINT, SigHandler)  
-    
-    USERNAME=MyUtils.getLoginName()
-    HOSTNAME=NetworkUtils.getHostName()
-    WEBPORT=NetworkUtils.getUsableTCPPort("localhost",PORT)
     
     logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename=LOG_FILENAME)
+                    filename=LOG_FILENAME)        
     
+    # Initialise the signal handler.
+    signal.signal(signal.SIGINT, SigHandler)  
+    
+    #Get and save some global variables:        
+    isTeacher=MyUtils.userIsTeacher()
+    #isTeacher=False#enable for debugging
+    USERNAME=MyUtils.getLoginName()
+    HOSTNAME=NetworkUtils.getHostName()
+    Configs.PORT=NetworkUtils.getUsableTCPPort("localhost",PORT)
+    MyUtils.putLauncher( '',Configs.PORT  , isTeacher)
+    
+    if not isTeacher:        
+        from twisted.internet import glib2reactor
+        glib2reactor.install()      
+    from twisted.internet import reactor    
     
     ######### Begin the application loop #######
-    
     if  isTeacher:        
         logging.getLogger().debug("The user is a teacher")
         from ControlAula import TeacherMainLoop, Classroom
         from ControlAula.Utils  import Publications
+        from twisted.web import server
         
         NetworkUtils.getWirelessData()
         externalIP=NetworkUtils.get_ip_inet_address()
         if externalIP=='':
             externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
-        service=Publications.Publications(port=WEBPORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( WEBPORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
+        service=Publications.Publications(port=Configs.PORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( Configs.PORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
         service.publish()
         #Initialize classroom data
         MyClass=Classroom.Classroom(REFRESH)
         
         # Start up the web service.     
         AulaRoot = TeacherMainLoop.ControlAulaProtocol() #Resource object
-        AulaRoot.PageDir=PAGES
+        AulaRoot.PageDir=Configs.WWWPAGES
         AulaRoot.teacher.classroom=MyClass
+
+        AulaSite = server.Site(AulaRoot) #Factory object
+        # This is the error message to use if we can't listen on a selected port.
+        _ListenMsg = """\n\tFatal Error - cannot listen on port %s.
+        \tThis port may already be in use by another program.\n\n"""        
         
+        try:
+            reactor.listenTCP(Configs.PORT, AulaSite)
+            reactor.callWhenRunning(MyClass.UpdateLists)
+        except CannotListenError:
+            # If we can't use this port, then exit.
+            print(_ListenMsg % str(Configs.PORT))
+            sys.exit()          
          
 
     else:         
         logging.getLogger().debug("The user is NOT a teacher")
         from ControlAula import StudentLoop
-        MyStudent=StudentLoop.Obey(int(REFRESH/2))
         
-        # Start up the web service.     
-        AulaRoot = StudentLoop.ControlAulaProtocol(MyStudent) #Resource object
-        AulaRoot.PageDir=PAGES
+        MyStudent=StudentLoop.Obey(int(REFRESH/2))
         reactor.callWhenRunning(MyStudent.listen)
-        reactor.callWhenRunning(MyStudent.startScan)
+        reactor.callWhenRunning(MyStudent.startScan)    
     
-    AulaSite = server.Site(AulaRoot) #Factory object
-    # This is the error message to use if we can't listen on a selected port.
-    _ListenMsg = """\n\tFatal Error - cannot listen on port %s.
-    \tThis port may already be in use by another program.\n\n"""
-    
-    #print WEBPORT
-    f = open(os.path.join(Configs.APP_DIR,'launcher.html') , 'wb')
-    htmltext='<html><head>  <meta http-equiv="Refresh" content="0; url='
-    htmltext +='http://localhost:' + str(WEBPORT) + '/index.html"'
-    htmltext +='</head><body></body></html>'
-    f.write(htmltext)
-    f.close()  
-    
-    try:
-        reactor.listenTCP(WEBPORT, AulaSite)
-        if isTeacher:
-            reactor.callWhenRunning(MyClass.UpdateLists)
-    except CannotListenError:
-        # If we can't use this port, then exit.
-        print(_ListenMsg % str(WEBPORT))
-        if isTeacher:
-            sys.exit()     
-    
-            
+    #begin application loop:
     reactor.callWhenRunning(checkActivity)        
     reactor.run()
 

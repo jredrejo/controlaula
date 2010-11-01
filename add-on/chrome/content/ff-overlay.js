@@ -17,7 +17,10 @@ ControlAula.showFirefoxContextMenu = function(event) {
 var prefs = Components.classes["@mozilla.org/preferences-service;1"]
                     .getService(Components.interfaces.nsIPrefService);
 prefs = prefs.getBranch("extensions.ControlAula.")
-                      
+var dirService = Components.classes["@mozilla.org/file/directory_service;1"].
+                  getService(Components.interfaces.nsIProperties); 
+var homeDirFile = dirService.get("Home", Components.interfaces.nsIFile); 
+var homeDir = homeDirFile.path;                      
 window.addEventListener("load", ControlAula.onFirefoxLoad, false);
 
 
