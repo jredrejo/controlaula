@@ -65,7 +65,8 @@ class Plugins(object):
                 'getAllNodes':self.fileBrowserAll,
                 'getCaptures':self.getCaptures,
                 'getLoginTeacher':self.getLogin,
-                'errorLog':self.errorLog
+                'errorLog':self.errorLog,
+                'openFile':self.openSendFiles
                 }  
         
     def existCommand(self,command):
@@ -251,11 +252,7 @@ class Plugins(object):
             return self.getTreeHome()
 
         if path=='receivedFiles':
-            user=MyUtils.getLoginName()
-            path=  os.path.join(MyUtils.getHomeUser(),'recibidos_profesor')
-            if not os.path.isdir(path):
-                os.mkdir(path,0750)
-                os.chown(path,user,user)
+            path=Configs.FILES_DIR
             
         r=['<ul class="jqueryFileTree" style="display: none;">']
         try:
@@ -319,4 +316,24 @@ class Plugins(object):
 
     def errorLog(self,error_msg):
         logging.getLogger().debug('Error report from Frontend: %s ' %   (error_msg))
+        
+    def openSendFiles(self,path):
+        import os.path,subprocess            
+        commands={'gnome':'nautilus','kde':'konqueror','xfce':'thunar','lxde':'pcmanfm'}
+        desktop=MyUtils.guessDesktop()            
+        if desktop in commands:
+            command=commands[desktop]
+        else:
+            command='thunar'
+
+        if path=='dirReceivedTeacher':
+            file_path=Configs.FILES_DIR
+        else:
+            file_path=os.path.dirname( os.path.join(Configs.FILES_DIR,path))
+                   
+        try:
+            subprocess.Popen([command,file_path])
+        except:
+            pass #not recognized file browser
+                
         

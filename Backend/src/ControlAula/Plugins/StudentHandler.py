@@ -64,7 +64,8 @@ class Plugins(object):
                 'launchweb':self.launchUrl ,
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound,
-                'getAllNodes':self.fileBrowserAll         
+                'getAllNodes':self.fileBrowserAll,
+                'openFile':self.openSendFiles                
                 }  
         self.currentProcess=None
         self.filesQueue=DownloadFiles.DownloadQueue()
@@ -142,7 +143,6 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('messages','0')
 
     def sleep(self):
-        import os
         from twisted.internet import reactor
         if os.path.exists('/usr/sbin/ethtool'):
             subprocess.call(['ethtool','-s','eth0','wol','g'])
@@ -196,7 +196,6 @@ class Plugins(object):
         self.filesQueue.addRequest( url,file,self.got_list)
 
     def got_list(self,dloader,file):  
-        import os
         dirname=os.path.basename( file)[9:]
         dirpath=os.path.join(Configs.FILES_DIR,dirname)
         try:
@@ -259,11 +258,7 @@ class Plugins(object):
             return self.getTreeHome()
 
         if path=='receivedFiles':
-            user=MyUtils.getLoginName()
-            path=  os.path.join(MyUtils.getHomeUser(),'recibidos_profesor')
-            if not os.path.isdir(path):
-                os.mkdir(path,0750)
-                os.chown(path,user,user)
+            path=Configs.FILES_DIR
             
         r=['<ul class="jqueryFileTree" style="display: none;">']
         try:
@@ -294,7 +289,7 @@ class Plugins(object):
             r.append('Could not load directory: %s' % str(e))
         r.append('</ul>')
         
-        self.myteacher.getAnswer(  ''.join(r))
+        self.myteacher.getAnswer(MyUtils.getLoginName(),self.myIP,  ''.join(r))
 
     def getTreeHome(self):
         path=MyUtils.getHomeUser()
@@ -304,4 +299,23 @@ class Plugins(object):
         r.append('<li class="directory collapsed"><a href="#" rel="/media/">Media</a></li>' )        
         r.append('</ul>')
         
-        self.myteacher.getAnswer(  ''.join(r))    
+        self.myteacher.getAnswer(MyUtils.getLoginName(),self.myIP,  ''.join(r))   
+        
+    def openSendFiles(self,path):
+        import os.path            
+        commands={'gnome':'nautilus','kde':'konqueror','xfce':'thunar','lxde':'pcmanfm'}
+        desktop=MyUtils.guessDesktop()            
+        if desktop in commands:
+            command=commands[desktop]
+        else:
+            command='thunar'
+
+        if path=='dirReceivedTeacher':
+            file_path=Configs.FILES_DIR
+        else:
+            file_path=os.path.dirname( os.path.join(Configs.FILES_DIR,path))
+                   
+        try:
+            subprocess.Popen([command,file_path])
+        except:
+            pass #not recognized file browser        

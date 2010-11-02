@@ -112,19 +112,15 @@ class ControlAulaProtocol(resource.Resource):
         if request.path=='/RPC2':
             return self.teacher.render(request)
         
-        student_asks=False
-
-
         #Filter the command needed.
         command=request.path[1:]
 
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
-        #if command !='datosaula':
-        #    print command
-
-            
+        if command !='datosaula':
+            print command
+          
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
         
@@ -134,8 +130,7 @@ class ControlAulaProtocol(resource.Resource):
             command=command.replace('student/','')            
             if command=='':
                 return self._handle_chat(request)
-               
-      
+                    
         try:
             recvjson='{}'            
             request.content.read()          
@@ -155,9 +150,7 @@ class ControlAulaProtocol(resource.Resource):
                     args=request.args['message']    
             except:
                 pass
-                
-
-            
+                            
         if handler.existCommand(command):          
             #if it's a petition to execute some command
             try:
@@ -168,9 +161,14 @@ class ControlAulaProtocol(resource.Resource):
                 if student_asks:
                     if 'user_id' in request.args:                                         
                         user_key=request.args['user_id'][0] + '@' + request.client.host
-                        self.teacher.deferred_request=request
+                        if  type(args)!=type([]):
+                            args=[args]
                         self.teacher.classroom.addCommand( user_key,command,args)
-                        return server.NOT_DONE_YET                                           
+                        if command=='openFile':
+                            return {'result':'ack'}
+                        else:
+                            self.teacher.classroom.LoggedUsers[user_key].deferred_request=request
+                            return server.NOT_DONE_YET                                           
                     
                     #handler.args=['/opt/'+args]
                 if json.loads(recvjson).has_key('pclist'):
@@ -212,8 +210,6 @@ class ControlAulaProtocol(resource.Resource):
             except:
                 # The data wasn't found in the headers.
                 pass
-
-
 
         # Return the JSON response.
         return respjson

@@ -36,9 +36,6 @@ class RPCServer(xmlrpc.XMLRPC):
         if self.externalIP=='':
             self.externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         self.hostname=NetworkUtils.getHostName()
-        self.deferred_request=None
-            
-
         
     def xmlrpc_hostPing(self, login,hostip):
         """Return true to the client if he must sends its initial data.
@@ -55,7 +52,6 @@ class RPCServer(xmlrpc.XMLRPC):
                 return 'new'
             else:
                 self.classroom.updateUserTimeStamp(key)
-
                 
         if self.classroom.hasCommands(key):
             return 'commands' #getCommands must be called by the student        
@@ -75,15 +71,13 @@ class RPCServer(xmlrpc.XMLRPC):
             return False #the teacher host is not added to the list
         host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
         self.classroom.addHost(host)
-        return True
-    
+        return True   
     
     def xmlrpc_removeHost(self, ip):
         if not self.classroom.Hosts.has_key(ip):
             return False
         self.classroom.removeHost(ip)
         return True
-
 
     def xmlrpc_removeUser(self, login,ip):
         key=login +'@'+ ip
@@ -220,11 +214,13 @@ class RPCServer(xmlrpc.XMLRPC):
         return defer.succeed(("hello","world"))
 #        return defer.fail(12)
 
-    def xmlrpc_getAnswer(self,answer):
-        if self.deferred_request is not None:
-            self.deferred_request.write(answer)
-            self.deferred_request.finish()
-            self.deferred_request=None
+    def xmlrpc_getAnswer(self,login,hostip,answer):
+        key =login+'@'+hostip 
+        deferred_request=self.classroom.LoggedUsers[key].deferred_request
+        if  deferred_request is not None:
+            deferred_request.write(answer)
+            deferred_request.finish()
+            self.classroom.LoggedUsers[key].deferred_request=None
         return ""
 
        

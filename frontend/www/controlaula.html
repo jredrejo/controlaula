@@ -21,15 +21,13 @@
              $(location).attr('href','http://localhost:%(teacher_port)/index.html');                      
          } else {     
              url_teacher='http://'+ teacher_ip + ':%(teacher_port)/student/';
+             $("#student_form").get(0).setAttribute("action",url_teacher);
+             $('input[name=login]').val(login);              
+             if (teacher_ip !='') {
+                $("#student_form").submit(); 
+             }                
          }    
-         
-         $("#student_form").get(0).setAttribute("action",url_teacher);
-         $('input[name=login]').val(login);                
-         
-         if (isTeacher==false && teacher_ip !='') {
-            $("#student_form").submit(); 
-         }
-         
+                  
       });
     </script>
 	

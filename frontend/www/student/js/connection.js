@@ -13,8 +13,9 @@ function connection(url,data,action){
 	if(url=="datosaula" && data!=dataRefresh)
 		var data = $.JSON.encode({"args" : lastPClist});
 
-	datatosent=new Object()
-	datatosent.data=data
+	datatosent=new Object();
+	datatosent.data=data;
+    datatosent.user_id=conf.userName;
 
 	$.ajax({ 
 		url : url , 

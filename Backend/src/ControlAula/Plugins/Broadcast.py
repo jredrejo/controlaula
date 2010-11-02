@@ -183,7 +183,6 @@ class MyPP(protocol.ProcessProtocol):
         self.end=end
         
     def errReceived(self, data):
-        print data
         if  data.find('nothing to play')>-1 or data.find('cannot open source:')>-1:
             self.stop()
             return False        
