@@ -25,7 +25,7 @@ import logging,subprocess
 from ControlAula.Utils import Configs,MyUtils
 from ControlAula.Plugins import DownloadFiles
 import Actions
-import os
+import os,xmlrpclib
 import urllib,mimetypes
 class Plugins(object):
     
@@ -65,7 +65,8 @@ class Plugins(object):
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound,
                 'getAllNodes':self.fileBrowserAll,
-                'openFile':self.openSendFiles                
+                'openFile':self.openSendFiles ,
+                'sendFile':self.sendFile               
                 }  
         self.currentProcess=None
         self.filesQueue=DownloadFiles.DownloadQueue()
@@ -302,7 +303,10 @@ class Plugins(object):
         self.myteacher.getAnswer(MyUtils.getLoginName(),self.myIP,  ''.join(r))   
         
     def openSendFiles(self,path):
-        import os.path            
+        import os.path
+        if type(path)==type([]):
+            path=path[0]
+
         commands={'gnome':'nautilus','kde':'konqueror','xfce':'thunar','lxde':'pcmanfm'}
         desktop=MyUtils.guessDesktop()            
         if desktop in commands:
@@ -319,3 +323,11 @@ class Plugins(object):
             subprocess.Popen([command,file_path])
         except:
             pass #not recognized file browser        
+
+    def sendFile(self,path):
+        if type(path)==type([]):
+            path=path[0]
+         
+        f = xmlrpclib.Binary(open(path, 'rb').read())
+        self.myteacher.file(MyUtils.getLoginName(), f, os.path.basename(path) )
+                

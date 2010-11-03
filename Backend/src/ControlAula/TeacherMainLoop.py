@@ -164,12 +164,12 @@ class ControlAulaProtocol(resource.Resource):
                         if  type(args)!=type([]):
                             args=[args]
                         self.teacher.classroom.addCommand( user_key,command,args)
-                        if command=='openFile':
-                            return {'result':'ack'}
-                        else:
+                        if command=='getAllNodes':
                             self.teacher.classroom.LoggedUsers[user_key].deferred_request=request
-                            return server.NOT_DONE_YET                                           
-                    
+                            return server.NOT_DONE_YET                                 
+                        else:                        
+                            return json.dumps({'result':'ack'})
+                                                          
                     #handler.args=['/opt/'+args]
                 if json.loads(recvjson).has_key('pclist'):
                     first=json.loads(recvjson)['pclist'][0]

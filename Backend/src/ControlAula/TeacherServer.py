@@ -26,6 +26,8 @@ from twisted.internet import defer
 import User,Host
 from ControlAula.Utils import NetworkUtils,Configs
 import os,time
+import pynotify
+
 class RPCServer(xmlrpc.XMLRPC):
     """Object used to communicate students pcs with teacher pc
     """
@@ -36,6 +38,7 @@ class RPCServer(xmlrpc.XMLRPC):
         if self.externalIP=='':
             self.externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         self.hostname=NetworkUtils.getHostName()
+        pynotify.init('controlaula')
         
     def xmlrpc_hostPing(self, login,hostip):
         """Return true to the client if he must sends its initial data.
@@ -85,7 +88,7 @@ class RPCServer(xmlrpc.XMLRPC):
             return False
         self.classroom.removeUser(key)
         return True
-        
+        json.dumps
     def xmlrpc_getCommands(self, login,hostip):
         """Return the list of commands to be executed by the client"""
         if login=='root':
@@ -128,8 +131,30 @@ class RPCServer(xmlrpc.XMLRPC):
             self.classroom.addPhoto('/loginimages/' + login + '.png',key)
         except:
             pass
-        #os.spawnl(os.P_NOWAIT, '/usr/bin/display', '/tmp/gnu.jpg')   
+        
         return "ok"    
+    
+    def xmlrpc_file(self,login, file,filename):
+        datum = file.data
+        received_dir=os.path.join(Configs.FILES_DIR,self.classroom.classname,login)
+        if not os.path.exists(received_dir):
+            os.makedirs(received_dir)
+        
+        received_file=os.path.join(received_dir,filename)
+        try:
+            thefile = open(received_file, "wb")
+            thefile.write(datum)
+            thefile.close()
+            note=login + " ha enviado el fichero "
+            note +="<a href='file:///" + received_file + "'>" + filename +"</a>" 
+            n=pynotify.Notification("Fichero recibido",note,"dialog-information")
+            n.set_timeout(pynotify.EXPIRES_DEFAULT)
+            n.show()            
+            
+        except:
+            pass
+
+        return "ok"        
     
     ###########################
     # XML-RPC functions to be used while developping or testing
