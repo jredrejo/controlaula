@@ -58,7 +58,7 @@ function modalSendFile(){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				modalConfirm("¿Desea enviar el fichero seleccionado?","sendOrderSelected('sendFile','"+file+"','sendFile');");
+				modalConfirm("¿Desea enviar el fichero seleccionado?","sendOrder('sendFile','"+file+"','sendFile');");
 		});
 
 	return true;
