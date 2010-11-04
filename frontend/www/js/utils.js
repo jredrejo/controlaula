@@ -17,7 +17,7 @@ function selectNone(){
 	$("#selectable li").removeClass("ui-selected");
 }
 
-function computersSelected(){
+function computersSelected(url){
 	var selected = Array();
 	var i=0;
 	
@@ -25,6 +25,10 @@ function computersSelected(){
 		if($("#"+item.id).hasClass('ui-selected')==true){
 			selected[i] = $("#"+item.id + ":eq(0) > #pcName").html();
 			i++;
+
+			if(url=="wakeup"){
+				$("#"+item.id + " img").attr("src","img/icon_loading.gif");
+			}
 		}
 	});
 	return selected;
@@ -32,7 +36,7 @@ function computersSelected(){
 
 function sendOrderSelected(url,args,action){
 
-	var selected = computersSelected();
+	var selected = computersSelected(url);
 
 	if(selected.length==0){
 		modalAlert("Para realizar la acci&oacute;n debe seleccionar al menos un equipo");
