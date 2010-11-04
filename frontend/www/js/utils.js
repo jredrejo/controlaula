@@ -84,6 +84,19 @@ function sendClassroomConfig(){
 	connection("classroomConfig",dataString,"cambiaconfig");
 }
 
+function setMaxComputers(){
+	var maxComputers = parseInt($("#sliderColumns").slider("value")) * parseInt($("#sliderRows").slider("value"));
+
+	var afterMax = $("#sliderComputers").slider("option","max");
+
+	$("#sliderComputers").slider("option","max",maxComputers);
+
+	if(parseInt($("#computers").val())>parseInt(maxComputers) || afterMax==$("#computers").val()){
+		$("#sliderComputers").slider("value",maxComputers);
+		$("#computers").val(maxComputers);
+	}
+}
+
 function setColsRows(cols,rows){
 
 	$("#sliderRows").slider("value",rows);

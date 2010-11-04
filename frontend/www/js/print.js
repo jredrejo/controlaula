@@ -21,6 +21,9 @@ function printSliders(){
 			step: 1,
 			slide: function(event, ui) {
 				$("#rows").val(ui.value);
+			},
+			stop: function(event, ui) {
+				setMaxComputers();
 			}
 		});
 
@@ -30,6 +33,9 @@ function printSliders(){
 			step: 1,
 			slide: function(event, ui) {
 				$("#columns").val(ui.value);
+			},
+			stop: function(event, ui) {
+				setMaxComputers();
 			}
 		});
 
