@@ -18,7 +18,7 @@ var intervalBigBrother;
 //Init screens
 function initScreens(){
 	connection("datosaula",dataRefresh,"printClassroom");
-	setInterval('connection("datosaula","","refreshClassroom")',REFRESH_CLASSROOM);
+	//setInterval('connection("datosaula","","refreshClassroom")',REFRESH_CLASSROOM);
 }
 
 var lastPClist;
@@ -42,10 +42,12 @@ function connection(url,data,action){
 			switch(action){
 				case "printClassroom":{
 					printClassroom(result);
+					connection("datosaula","","refreshClassroom");
 					break;
 				}
 				case "refreshClassroom":{
 					refreshClassroom(result);
+					connection("datosaula","","refreshClassroom");
 					break;
 				}
 				case "broadcast":{
