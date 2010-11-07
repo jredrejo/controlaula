@@ -25,6 +25,7 @@ import datetime,logging
 import Desktop
 from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
 from ControlAula.Plugins import VNC,Broadcast
+import simplejson as json
 
 class Classroom(object):
     """Classroom data management
@@ -75,6 +76,7 @@ class Classroom(object):
 
         self.myVNC=VNC.VNC()
         self.broadcast=Broadcast.Vlc()
+        self.current_request=None
 
     def existUser(self,key):
         """Check if a logged user has already been added to the classroom"""
@@ -95,6 +97,7 @@ class Classroom(object):
             self.CommandStack[host.ip]=[]
             #save its mac address:
             Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)
+            
     
     
     def addUser(self,user):
@@ -113,6 +116,7 @@ class Classroom(object):
             if i.userkey==key:
                 i.photo=path
                 break
+        self.getJSONFrontend("")
     
     def removeUser(self,key):
         """Remove a logout user from the classroom data"""
@@ -123,6 +127,7 @@ class Classroom(object):
                 if self.Desktops[i].userkey==key:
                     self.Desktops[i].delUser()
                     break
+            self.getJSONFrontend("")
             
     def removeHost(self,hostip):
         """Remove a disconnected pc from the classroom data"""
@@ -294,6 +299,7 @@ class Classroom(object):
         self.Desktops[position].putHost(self.Hosts[key],key)
         self.recheckUsersDesktops()
         self.saveClassLayout()
+        self.getJSONFrontend("")
 
     def placeUserDesktop(self,key):
         user=self.LoggedUsers[key]
@@ -305,6 +311,7 @@ class Classroom(object):
             if self.Desktops[i].ip==validIP:
                 self.Desktops[i].putUser(user,key)
                 break
+        self.getJSONFrontend("")
        
     def recheckUsersDesktops(self):
         '''If for network issues the user connects before the host,
@@ -326,10 +333,11 @@ class Classroom(object):
                 self.Desktops[i].ip=''
                 self.Desktops[i].mainIP=''
                 break
+        self.getJSONFrontend("")
         
         
     def getJSONFrontend(self,oldList):
-        import simplejson as json
+        
         classroom={}
         classroom['pclist']=[]
         classroom['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
@@ -340,14 +348,18 @@ class Classroom(object):
         
         oldClass={'pclist':oldList}
         oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
-        oldJSON=json.dumps({'classroom':oldClass})
+        self.oldJSON=json.dumps({'classroom':oldClass})
 
         if self.myVNC.activeBB:
-            oldJSON=''
+            self.oldJSON=''
             
-        if newJSON==oldJSON:
+        if newJSON==self.oldJSON:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
+            
+        if self.current_request!=None:
+            self.current_request.write(newJSON)
+            self.current_request.finish()
         return newJSON
     
     def redistributeDesktops(self,targets):
@@ -386,3 +398,5 @@ class Classroom(object):
         self.classsetup['cols']=str(self.cols)
         
         Configs.MonitorConfigs.SetClassroomConfig(self.classname,self.classsetup)
+        self.getJSONFrontend("")
+        

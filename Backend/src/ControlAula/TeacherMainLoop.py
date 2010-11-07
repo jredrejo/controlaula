@@ -118,8 +118,8 @@ class ControlAulaProtocol(resource.Resource):
         handler=Handler.Plugins(self.teacher.classroom)
         respjson=None       
         args=''
-        if command !='datosaula':
-            print command
+        
+        #print command
           
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
@@ -193,20 +193,20 @@ class ControlAulaProtocol(resource.Resource):
         else:
             #it's sending the classroom data
             try:                
-                if command == 'datosAulaPrueba':
-                    #testing file used by Manu:
-                    inputFile=open(os.path.join(self.PageDir, 'datosAulaPrueba'),'r')
-                    #inputFile=open('/var/www/datosAulaPrueba','r')
-                    respjson= inputFile.read()
-                    inputFile.close()
-                elif command == 'datosaula':
-                    if args=='refresh':
-                        self.teacher.classroom.oldJSON=''
-                    respjson= self.teacher.classroom.getJSONFrontend(args)
-                    
+                if command == 'datosaula':
+                    if self.teacher.classroom.current_request==None or args=='refresh':
+                        if self.teacher.classroom.current_request!=None: #close previously open request
+                            self.teacher.classroom.current_request.finish()
+                            self.teacher.classroom.oldJSON=''                            
+                        self.teacher.classroom.current_request=request
+                        self.teacher.classroom.getJSONFrontend(args)
+                    else:
+                        self.teacher.classroom.current_request=request
+                    return server.NOT_DONE_YET                          
                 else:
                     # Analyse the request and construct a response.
                     respjson= self._HandleMessage(recvjson) 
+                    
             except:
                 # The data wasn't found in the headers.
                 pass
