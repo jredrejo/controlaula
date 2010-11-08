@@ -83,7 +83,8 @@
 	    title = options.title || "No Title",
 	    // chatbox
 	    uiChatbox = (self.uiChatbox = $('<div></div>'))
-		.appendTo(document.body)
+		.appendTo(document.body) //appendTo(document.getElementById("tabsClassroom-4")) //
+        //.appendTo(document.getElementById("tabsClassroom-4"))
 		.addClass('ui-widget ' + 
 			  'ui-corner-top ' + 
 			  'ui-chatbox'
@@ -239,6 +240,10 @@
 		case "width":
 		    this._setWidth(value);
 		    break;
+        case "append":
+            this.uiChatbox.appendTo(value);
+            this.uiChatbox.css("position", "relative");
+            break;        
 		case "title":
 		    this.uiChatboxTitle.html(value)
 		    break;            
@@ -257,7 +262,8 @@
 	},
 
 	_position: function(offset) {
-	    this.uiChatbox.css("right", offset);
+	   // this.uiChatbox.css("right", offset);
+       
 	}
     });
 

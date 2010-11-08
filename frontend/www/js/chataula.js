@@ -2,7 +2,7 @@
        if (response.status == 'ok')
            return false;
        for (var err in response.errors) {
-           $("#chat_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
+           $("#chataula_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
        };
        return true;
    };
@@ -14,7 +14,7 @@
    function getChatMessageCallback(response) {
        showIfError(response);
        
-       $("#chat_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
+       $("#chataula_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
        getChatMessage();
    };
 
@@ -31,11 +31,11 @@
     };
 
 	function showChatbox(){
-		$("#chat_div").chatbox("option", "hidden",false);
+		$("#chataula_div").chatbox("option", "hidden",false);
 	}
 
 	function hiddenChatbox(){
-		$("#chat_div").chatbox("option", "hidden",true);
+		$("#chataula_div").chatbox("option", "hidden",true);
 	}
 
 	function initChat(){
@@ -45,19 +45,21 @@
                if (data.login != "") {
                    conf.userName=data.login;        
                      
-                   $("#chat_div").chatbox({
-							  id : "chat_div",
+                   $("#chataula_div").chatbox({
+							  id : "chataula_div",
 	                    title : conf.userName|| "Chat ControlAula",
 	                    user : conf.userName,
-	                    offset: 20,
+	                    //offset: 20,
+                        width: 490,
 	                    hidden: true,
 	                    messageSent: function(id, user, msg){                                       
 	                         var data = conf.copyForRequest();
 	                         data['message'] = msg
 	                      $.post(conf.getChatURL(), data, cmdSubmitCallback, 'json');
-	                }});           
+	                }});                               
                     
-                    hiddenChatbox();
+                    $("#chataula_div").chatbox("option", "append",$('#tabsClassroom-4'));
+                    
 					}
 
      			}, "json");  
