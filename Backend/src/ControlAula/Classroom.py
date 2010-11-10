@@ -360,9 +360,10 @@ class Classroom(object):
         if self.current_request!=None:
             self.current_request.write(newJSON)
             self.current_request.finish()
+            
         return newJSON
     
-    def redistributeDesktops(self,targets):
+    def redistributeDesktops(self,targets,save=True):
         total=min(len(targets),len(self.Desktops))
         for i in range (0,total):
             name=targets[i]
@@ -372,7 +373,7 @@ class Classroom(object):
                 name='Unknown'                
             if name!=self.Desktops[i].hostname:
                 self.moveDesktopAt(name,i)
-        self.saveClassLayout()
+        if save: self.saveClassLayout()
                 
     def moveDesktopAt(self, desktop,position):
         '''Move a Destkop in the list of Desktops at a fixed position'''

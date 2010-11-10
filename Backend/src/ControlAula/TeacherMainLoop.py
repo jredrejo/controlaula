@@ -119,7 +119,7 @@ class ControlAulaProtocol(resource.Resource):
         respjson=None       
         args=''
         
-        #print command
+        print command
           
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
@@ -180,7 +180,7 @@ class ControlAulaProtocol(resource.Resource):
                 
                 if json.loads(recvjson).has_key('structure'):
                     structure=json.loads(recvjson)['structure']    
-                    handler.args=[structure['rows'],structure['cols']]
+                    handler.args=[structure['rows'],structure['cols'],structure['computers']]
                 result=handler.process(command)
                 #respjson= json.dumps({'result':'ack'})
                 if command not in ( 'getAllNodes' ,'getVideoNodes'):
