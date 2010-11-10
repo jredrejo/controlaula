@@ -80,7 +80,8 @@ function sendClassroomConfig(){
 		"pclist": computers, 
 		"structure":{
 			"cols": $("#sliderColumns").slider("value"),
-			"rows": $("#sliderRows").slider("value")
+			"rows": $("#sliderRows").slider("value"),
+			"computers": $("#sliderComputers").slider("value")
 		}
 	};
 
