@@ -438,6 +438,8 @@ if MyUtils. getLoginName()!='root':
     if not os.path.exists(NOBODY_IMG):
         shutil.copy2(os.path.join(path[0],'nobody.png'),NOBODY_IMG)
     LOG_FILENAME= os.path.join(MyUtils.getHomeUser(),'.controlaula/controlaula.log')
+    LOG_CHAT=os.path.join(MyUtils.getHomeUser(),'.controlaula/chat_log')
+
     
     PORT=8900
 #PAGES='/var/www'

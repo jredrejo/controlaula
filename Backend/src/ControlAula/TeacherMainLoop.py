@@ -29,7 +29,7 @@ from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs
 import cgi
 import simplejson as json
-import os
+import os,logging
 import TeacherServer
 from collections import defaultdict
 from time import strftime,time
@@ -119,7 +119,7 @@ class ControlAulaProtocol(resource.Resource):
         respjson=None       
         args=''
         
-        print command
+        #print command
           
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
@@ -270,6 +270,8 @@ class ControlAulaProtocol(resource.Resource):
                 return self.response_fail(['*message* not found', ])
             message = cgi.escape(message[0])
             response = self.response_ok(user= [  '('+strftime('%H:%M:%S') + ') '+ user[0]], message=message)
+            chat_logger = logging.getLogger('Chat')
+            chat_logger.info(user[0] + ": " + message )            
             for chann_request in self.channels['controlaula-chat']:
                 chann_request.write(response)
                 chann_request.finish()

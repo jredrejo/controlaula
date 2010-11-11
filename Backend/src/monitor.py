@@ -27,7 +27,7 @@
 
 import signal
 import sys
-import logging
+import logging,logging.handlers
 import os
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
@@ -112,11 +112,22 @@ if __name__ == '__main__':
     myapp = singleinstance(os.path.join (Configs.APP_DIR,'controlaula.pid')  )
     if myapp.alreadyrunning():
         sys.exit("Another instance of this program is already running")    
+                             
+    log_handler = logging.handlers.RotatingFileHandler(Configs.LOG_FILENAME, maxBytes=3000, backupCount=5)
+    log_formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',datefmt='%a, %d %b %Y %H:%M:%S')
+    log_handler.setFormatter(log_formatter)
+    root_logger=logging.getLogger() 
+    root_logger.addHandler(log_handler)
+    root_logger.level=logging.DEBUG
     
-    logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)-8s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename=LOG_FILENAME)        
+    chat_logger = logging.getLogger('Chat')
+    chat_logger.setLevel(logging.INFO)  
+    chat_logger.propagate=False
+    chat_handler = logging.handlers.TimedRotatingFileHandler(Configs.LOG_CHAT,'D',1)
+    chat_handler.suffix = "%Y-%m-%d" 
+    chat_formatter = logging.Formatter(fmt='%(asctime)-8s %(message)s',datefmt='%a, %d %b %Y %H:%M:%S')
+    chat_handler.setFormatter(chat_formatter)
+    chat_logger.addHandler(chat_handler)
     
     # Initialise the signal handler.
     signal.signal(signal.SIGINT, SigHandler)  

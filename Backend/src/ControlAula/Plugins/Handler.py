@@ -229,34 +229,32 @@ class Plugins(object):
                 self.classroom.redistributeDesktops(self.targets,False) 
                 
         #place empty desktops:
-        if computers < rows*cols:
-            nones=0
-            for i in self.classroom.Desktops:
-                if i.hostname=='none':
-                    nones +=1
-            empty_needed=rows*cols-computers-nones
-            
-            if empty_needed >0:        #if holes must be placed.  
-                #first try to place empties in unknown positions            
+        nones=0
+        for i in self.classroom.Desktops:
+            if i.hostname=='none':
+                nones +=1
+        empty_needed=rows*cols-computers-nones
+        
+        if empty_needed >0:        #if holes must be placed.  
+            #first try to place empties in unknown positions            
+            for host in reversed(self.classroom.Desktops):
+                if host.hostname=='Unknown':
+                    host.hostname='none'
+                    empty_needed -=1
+                    if empty_needed==0:break
+            #then remove any one of the latests
+            if empty_needed>0:
                 for host in reversed(self.classroom.Desktops):
-                    if host.hostname=='Unknown':
+                    if host.hostname!='none':
                         host.hostname='none'
                         empty_needed -=1
-                        if empty_needed==0:break
-                #then remove any one of the latests
-                if empty_needed>0:
-                    for host in reversed(self.classroom.Desktops):
-                        if host.hostname!='none':
-                            host.hostname='none'
-                            empty_needed -=1
-                            if empty_needed==0:break 
-                         
-            elif empty_needed<0: #if holes must be filled:   
-                for host in self.classroom.Desktops:
-                    if host.hostname=='none':
-                        host.hostname='Unknown'
-                        empty_needed+=1
-                        if empty_needed==0:break           
+                        if empty_needed==0:break                    
+        elif empty_needed<0: #if holes must be filled:   
+            for host in self.classroom.Desktops:
+                if host.hostname=='none':
+                    host.hostname='Unknown'
+                    empty_needed+=1
+                    if empty_needed==0:break           
                             
         self.classroom.oldJSON=''                                 
         self.classroom.saveClassLayout()
