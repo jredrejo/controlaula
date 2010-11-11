@@ -1,3 +1,9 @@
+controlaula (1.5.2-1) unstable; urgency=low
+
+  * Chat logging added.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 11 Nov 2010 12:48:46 +0100
+
 controlaula (1.5.1-1) unstable; urgency=low
 
   * Frontend changed to jquery

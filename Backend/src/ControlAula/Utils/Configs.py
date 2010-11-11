@@ -438,7 +438,7 @@ if MyUtils. getLoginName()!='root':
     if not os.path.exists(NOBODY_IMG):
         shutil.copy2(os.path.join(path[0],'nobody.png'),NOBODY_IMG)
     LOG_FILENAME= os.path.join(MyUtils.getHomeUser(),'.controlaula/controlaula.log')
-    LOG_CHAT=os.path.join(MyUtils.getHomeUser(),'.controlaula/chat_log')
+    
 
     
     PORT=8900
@@ -448,6 +448,8 @@ REFRESH=5
                 
 RootConfigs=SirvecoleConfig('/etc/sirvecole').GetConfig() 
 CONF_FILENAME=os.path.join(APP_DIR,'monitor.cfg')
+LOG_CHAT=os.path.join(MyUtils.getHomeUser(),'.controlaula','chat_' +  RootConfigs['classroomname']  )
+
 #if there is a config file from old versions of ControlAula and there's not
 # a config file for the current version, try to convert it
 if not os.path.exists(CONF_FILENAME):
