@@ -56,10 +56,14 @@ class ControlAulaProtocol(resource.Resource):
     def render_GET(self, request):
 
         pagename=request.path[1:].lower()
+        
         if  pagename=='':
             request.path='/index.html'
             pagename='index.html'
         
+        if request.host.host!='127.0.0.1' and pagename=='index.html':
+            request.path='/student/chat.html'
+            pagename='student/chat.html'
         
         # Check if requested file exists.    
         if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
