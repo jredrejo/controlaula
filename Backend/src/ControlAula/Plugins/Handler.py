@@ -217,17 +217,19 @@ class Plugins(object):
                 
 
         if rows!=0 or cols!=0:
-            if self.classroom.rows <rows:
-                self.classroom.addDesktopsRow()
-            elif self.classroom.rows >rows:
-                self.classroom.removeDesktopsRow()
-            if self.classroom.cols <cols:
-                self.classroom.addDesktopsCol()
-            elif self.classroom.cols >cols:
-                self.classroom.removeDesktopsCol()
+            if self.classroom.rows==rows and self.classroom.cols==cols:
+                self.classroom.redistributeDesktops(self.targets,False)
             else:
-                self.classroom.redistributeDesktops(self.targets,False) 
-                
+                while  self.classroom.rows <rows:                
+                    self.classroom.addDesktopsRow()
+                while self.classroom.rows >rows:
+                    self.classroom.removeDesktopsRow()
+                while self.classroom.cols <cols:
+                    self.classroom.addDesktopsCol()
+                while self.classroom.cols >cols:
+                    self.classroom.removeDesktopsCol()
+            
+                              
         #place empty desktops:
         nones=0
         for i in self.classroom.Desktops:

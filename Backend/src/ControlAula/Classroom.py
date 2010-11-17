@@ -356,6 +356,8 @@ class Classroom(object):
         if newJSON==self.oldJSON:
             classroom['pclist']=[]
             newJSON=json.dumps({'classroom':classroom})
+        else:
+            self.oldJSON=newJSON
             
         if self.current_request!=None:
             self.current_request.write(newJSON)

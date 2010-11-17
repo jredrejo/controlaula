@@ -1,3 +1,9 @@
+controlaula (1.5.3-1) unstable; urgency=low
+
+  * Some bug fixing 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 17 Nov 2010 20:07:07 +0100
+
 controlaula (1.5.2-1) unstable; urgency=low
 
   * Chat logging added.

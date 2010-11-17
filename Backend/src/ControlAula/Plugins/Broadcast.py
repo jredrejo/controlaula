@@ -133,9 +133,9 @@ class Vlc(object):
             ltspaudio=' PULSE_SERVER=127.0.0.1:4713 ESPEAKER=127.0.0.1:16001 '
                   
         command=ltspaudio 
-        #command +='vlc -I dummy ' 
-        #command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  udp://@239.255.255.0:'
-        command +='ffplay -fs -fast  udp://@239.255.255.0:'
+        command +='vlc -I dummy ' 
+        command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  udp://@239.255.255.0:'
+        #command +='ffplay -fs -fast  udp://@239.255.255.0:'
         command += self.port 
         NetworkUtils.addRoute('239.255.255.0')
         self.procRx=MyUtils.launchAsNobody(command)

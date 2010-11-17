@@ -1,7 +1,7 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          controlaula
-# Required-Start:    $local_fs $remote_fs 
+# Required-Start:    $local_fs $remote_fs hostname
 # Required-Stop:     $local_fs $remote_fs
 # Should-Start:      avahi
 # Should-Stop:       avahi
