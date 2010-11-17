@@ -72,7 +72,7 @@ function sendClassroomConfig(){
 	setColsRows($("#sliderColumns").slider("value"),$("#sliderRows").slider("value"));
 
 	$("#sortable li").each(function(i, item){
-			computers[i] = $("#"+item.id+" #pcName").html();
+            computers[i] = $("#"+item.id + ":eq(0) > #pcName").html();            
 			i++;
 	});
 
