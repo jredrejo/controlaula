@@ -1,7 +1,7 @@
 Source: controlaula
 Section: admin
 Priority: optional
-Maintainer: José L. Redrejo Rodríguez <jredrejo@debian.org>
+Maintainer: José L. Redrejo Rodríguez <jredrejo@debian.org>, Manu Mora <manuito@gmail.com>
 Standards-Version: 3.8.2
 Build-Depends: debhelper (>= 5.0.37.2), python-support (>= 0.3)
 Build-Depends-Indep: python
