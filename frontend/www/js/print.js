@@ -29,7 +29,7 @@ function printSliders(){
 
 		$("#sliderColumns").slider({
 			min: 1,
-			max: 5,
+			max: 6,
 			step: 1,
 			slide: function(event, ui) {
 				$("#columns").val(ui.value);

@@ -50,6 +50,10 @@ function connection(url,data,action){
 					connection("datosaula","","refreshClassroom");
 					break;
 				}
+				case "cambiaconfig":{
+					//connection("datosaula","","refreshClassroom");
+					break;
+				}
 				case "broadcast":{
 
 					$( "#dialogAlert" ).dialog( "close" );

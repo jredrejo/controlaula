@@ -110,8 +110,8 @@ function setColsRows(cols,rows){
 	$("#sliderColumns").slider("value",cols);
 	$("#columns").val(cols);
 
-	$("#selectable").css("width",cols*100);
-	$("#sortable").css("width",cols*100);
+	$("#selectable").css("width",cols*96);
+	$("#sortable").css("width",cols*96);
 
 	//setComputers();
 }
