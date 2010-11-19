@@ -59,6 +59,7 @@ class Classroom(object):
         #Dictionary with the Desktop positions to send to the frontend
         self.cols=int(self.classsetup['cols'])
         self.rows=int(self.classsetup['rows'])
+        self.computers=int(self.classsetup['computers'])
         self.Desktops=[]
         #creates the aula
         for i in range (0,self.cols*self.rows):
@@ -340,14 +341,14 @@ class Classroom(object):
         
         classroom={}
         classroom['pclist']=[]
-        classroom['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
+        classroom['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows,'computers':self.computers}
         for i in self.Desktops:
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
         
         oldClass={'pclist':oldList}
-        oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows}
+        oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows,'computers':self.computers}
         self.oldJSON=json.dumps({'classroom':oldClass})
 
         if self.myVNC.activeBB:
@@ -399,6 +400,7 @@ class Classroom(object):
         self.classsetup['structure']=layout[1:]
         self.classsetup['rows']=str(self.rows)
         self.classsetup['cols']=str(self.cols)
+        self.classsetup['computers']=str(self.computers)
         
         Configs.MonitorConfigs.SetClassroomConfig(self.classname,self.classsetup)
         self.getJSONFrontend("")

@@ -228,7 +228,8 @@ class Plugins(object):
                     self.classroom.addDesktopsCol()
                 while self.classroom.cols >cols:
                     self.classroom.removeDesktopsCol()
-            
+
+        self.classroom.computers = computers
                               
         #place empty desktops:
         nones=0

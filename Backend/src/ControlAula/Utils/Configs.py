@@ -171,6 +171,7 @@ class MonitorConfig(object):
             self._ConfigParser.add_section(classroom) 
             self._ConfigParser.set(classroom,'rows','5')
             self._ConfigParser.set(classroom,'cols','3')
+            self._ConfigParser.set(classroom,'computers','15')
             self._ConfigParser.set(classroom,'structure','')
             self.SaveConfig()
             sectionconfig = self._GetSectionItems('classroom', self._ConfigParser)
@@ -269,7 +270,7 @@ class MonitorConfig(object):
             or None if an error occured.
         """
         #Default values:
-        configuration={'rows':'5','cols':'3','structure':''}
+        configuration={'rows':'5','cols':'3','computers':'15','structure':''}
       
 
         # Now, go through all the remaining items in the section, 
@@ -324,6 +325,7 @@ def import_legacy_config(oldconfig,newconfig):
     macs={}
     cols=0
     rows=0
+    computers=0
     total=0
 
     def get_aula(posname):
@@ -374,6 +376,7 @@ def import_legacy_config(oldconfig,newconfig):
         new_configparser.add_section(i)
         new_configparser.set(i,'rows',rows)
         new_configparser.set(i,'cols',cols)
+        new_configparser.set(i,'computers',computers)
         for n in configaulas[i]:
             s=s+n + ","
         
