@@ -40,7 +40,6 @@ function printSliders(){
 		});
 
 		$("#sliderComputers").slider({
-			value:15,
 			min: 1,
 			max: 30,
 			step: 1,
@@ -59,8 +58,8 @@ function printClassroom(equipos){
 		return;
 //alert(class.classroom.structure.rows+" - "+class.classroom.structure.cols);
 
-	$("#computers").val(class.classroom.structure.computers);
 	setColsRows(class.classroom.structure.cols, class.classroom.structure.rows);   
+	setComputers(class.classroom.structure.computers);
 
 	//$('#selectable .ui-state-default').remove();
 

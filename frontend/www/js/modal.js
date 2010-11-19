@@ -173,8 +173,8 @@ function goToURL(url){
 	if(url=="")	
 		url=$("#url").val();
 
-/*	$("#frameWeb").attr("src","http://"+url);
-	$("#url").val(url);*/
+	$("#frameWeb").attr("src","http://"+url);
+	$("#url").val(url);
 }
 
 function modalWeb(){

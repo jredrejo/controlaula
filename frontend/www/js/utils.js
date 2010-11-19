@@ -89,19 +89,6 @@ function sendClassroomConfig(){
 	connection("classroomConfig",dataString,"cambiaconfig");
 }
 
-function setMaxComputers(){
-	var maxComputers = parseInt($("#sliderColumns").slider("value")) * parseInt($("#sliderRows").slider("value"));
-
-	var afterMax = $("#sliderComputers").slider("option","max");
-
-	$("#sliderComputers").slider("option","max",maxComputers);
-
-	if(parseInt($("#computers").val())>parseInt(maxComputers) || afterMax==$("#computers").val()){
-		$("#sliderComputers").slider("value",maxComputers);
-		$("#computers").val(maxComputers);
-	}
-}
-
 function setColsRows(cols,rows){
 
 	$("#sliderRows").slider("value",rows);
@@ -112,11 +99,30 @@ function setColsRows(cols,rows){
 
 	$("#selectable").css("width",cols*96);
 	$("#sortable").css("width",cols*96);
-
-	//setComputers();
 }
 
-function setComputers(){
+function setMaxComputers(){
+	var maxComputers = parseInt($("#sliderColumns").slider("value")) * parseInt($("#sliderRows").slider("value"));
+
+	var afterMax = $("#sliderComputers").slider("option","max");
+
+	$("#sliderComputers").slider("option","max",maxComputers);
+
+	if(parseInt($("#computers").val())>=parseInt(maxComputers) || afterMax==$("#computers").val()){
+		$("#computers").val(maxComputers);
+		$("#sliderComputers").slider("value",maxComputers);
+	}
+}
+
+function setComputers(computers){
+
+	$("#computers").val(computers);
+	$("#sliderComputers").slider("value",computers);
+
+	setMaxComputers();
+}
+
+/* function setComputers(){
 	var count = $("#sliderComputers").slider("value")-$("#sortable li").length;
 
 	if(count>0){
@@ -130,4 +136,4 @@ function setComputers(){
 			$('#sortable').remove("#sortable-"+i);
 		}
 	}
-}
+}*/
