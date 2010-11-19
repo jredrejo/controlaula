@@ -59,7 +59,8 @@ function printClassroom(equipos){
 		return;
 //alert(class.classroom.structure.rows+" - "+class.classroom.structure.cols);
 
-	setColsRows(class.classroom.structure.cols, class.classroom.structure.rows);
+	$("#computers").val(class.classroom.structure.computers);
+	setColsRows(class.classroom.structure.cols, class.classroom.structure.rows);   
 
 	//$('#selectable .ui-state-default').remove();
 
