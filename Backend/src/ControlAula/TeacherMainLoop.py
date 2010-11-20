@@ -25,6 +25,7 @@
 
 
 from twisted.web import server,resource,  static
+import twisted
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs
 import cgi
@@ -103,9 +104,11 @@ class ControlAulaProtocol(resource.Resource):
             
         if f.encoding:
             request.setHeader('content-encoding', f.encoding)
-        # Send the page.
-        static.FileTransfer(f.openForReading(), f.getFileSize(), request)
-        
+        # Send the page.               
+        if twisted.version.major >= 9:
+            static.NoRangeStaticProducer(request,f.openForReading()).start()
+        else:
+            static.FileTransfer(f.openForReading(), f.getFileSize(), request)
         return server.NOT_DONE_YET
 
 
@@ -123,7 +126,7 @@ class ControlAulaProtocol(resource.Resource):
         respjson=None       
         args=''
         
-        #print command
+        print command
           
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)

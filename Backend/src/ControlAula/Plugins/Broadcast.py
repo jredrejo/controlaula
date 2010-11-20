@@ -98,7 +98,7 @@ class Vlc(object):
         command +=["--sout"]
         #command +=["'#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"]
 
-        command +=["udp:239.255.255.0:" + self.port]
+        command +=["rtp:239.255.255.0:" + self.port]
         command +=["--sout-all","--ttl","5","--audio-desync","1100","--volume", "1024" ]
 
         try:
@@ -114,7 +114,7 @@ class Vlc(object):
         if not self.broadcasting:
             self.broadcasting=True
             
-            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','udp://@239.255.255.0:'+ self.port]) 
+            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
             for cb in self._callbacks['started']:            
                 cb(self.url,self.dvd)
             
