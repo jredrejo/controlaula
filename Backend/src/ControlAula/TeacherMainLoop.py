@@ -203,7 +203,10 @@ class ControlAulaProtocol(resource.Resource):
                 if command == 'datosaula':
                     if self.teacher.classroom.current_request==None or args=='refresh':
                         if self.teacher.classroom.current_request!=None: #close previously open request
-                            self.teacher.classroom.current_request.finish()
+                            try:
+                                self.teacher.classroom.current_request.finish()
+                            except:
+                                pass #the connection is lost
                             self.teacher.classroom.oldJSON=''                            
                         self.teacher.classroom.current_request=request
                         self.teacher.classroom.getJSONFrontend(args)

@@ -134,7 +134,7 @@ class Vlc(object):
                   
         command=ltspaudio 
         command +='vlc -I dummy ' 
-        command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  udp://@239.255.255.0:'
+        command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  rtp://@239.255.255.0:'
         #command +='ffplay -fs -fast  udp://@239.255.255.0:'
         command += self.port 
         NetworkUtils.addRoute('239.255.255.0')
