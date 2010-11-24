@@ -92,12 +92,13 @@ class Classroom(object):
         if not self.Hosts.has_key(host.ip):
             logging.getLogger().debug('The  host  %s has appeared' %   (host.ip))
             self.Hosts[host.ip]=host
-            if host.hostname!=NetworkUtils.getHostName(): #the teacher host is not added to the list when it's LTSP
-                self.placeHostDesktop(host.ip)
             #intialize list of commands for this client, if is a LTSP server, it needs to be added
-            self.CommandStack[host.ip]=[]
+            if not self.CommandStack.has_key(host.ip):                
+                self.CommandStack[host.ip]=[]
             #save its mac address:
             Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)
+            if host.hostname!=NetworkUtils.getHostName(): #the teacher host is not added to the list when it's LTSP
+                self.placeHostDesktop(host.ip)
             
     
     
@@ -107,9 +108,11 @@ class Classroom(object):
         if not self.LoggedUsers.has_key(key):
             logging.getLogger().debug('The  user  %s has appeared' %   (key))
             self.LoggedUsers[key]=user
-            self.placeUserDesktop(key)
             #intialize list of commands for this client
-            self.CommandStack[key]=[]  
+            if not self.CommandStack.has_key(key):
+                self.CommandStack[key]=[]              
+            self.placeUserDesktop(key)
+
                 
     def addPhoto(self,path,key):
         self.LoggedUsers[key].photo=path
@@ -123,7 +126,7 @@ class Classroom(object):
         """Remove a logout user from the classroom data"""
         if self.LoggedUsers.has_key(key):
             self.LoggedUsers.pop(key)
-            self.CommandStack.pop(key)
+            #self.CommandStack.pop(key)
             for i in range(0,len(self.Desktops)-1):
                 if self.Desktops[i].userkey==key:
                     self.Desktops[i].delUser()
@@ -134,7 +137,7 @@ class Classroom(object):
         """Remove a disconnected pc from the classroom data"""
         if self.Hosts.has_key(hostip):
             self.Hosts.pop(hostip)
-            self.CommandStack.pop(hostip)
+            #self.CommandStack.pop(hostip)
             self.removeDesktop(hostip)
             
     def addCommand(self,key,command,args=[]):
@@ -292,6 +295,8 @@ class Classroom(object):
                 if position >0:
                     #position -=1
                     position=len(self.Desktops)-position
+                    if position<1:
+                        position=self.placeHostFreely()                        
                 if self.Desktops[position].hostkey!='':
                     self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
             else:

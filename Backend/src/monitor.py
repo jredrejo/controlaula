@@ -32,7 +32,7 @@ import os
 from ControlAula.Utils import NetworkUtils, MyUtils, Configs
 from twisted.internet.error import CannotListenError
 from twisted.internet.task import LoopingCall
-
+from time import sleep
 
 LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     if myapp.alreadyrunning():
         sys.exit("Another instance of this program is already running")    
                              
-    log_handler = logging.handlers.RotatingFileHandler(Configs.LOG_FILENAME, maxBytes=3000, backupCount=5)
+    log_handler = logging.handlers.RotatingFileHandler(Configs.LOG_FILENAME, maxBytes=100000, backupCount=5)
     log_formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',datefmt='%a, %d %b %Y %H:%M:%S')
     log_handler.setFormatter(log_formatter)
     root_logger=logging.getLogger() 
@@ -148,6 +148,11 @@ if __name__ == '__main__':
         if externalIP=='':
             externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         service=Publications.Publications(port=Configs.PORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( Configs.PORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
+        try: #in case cache are filled with a previous "bad stopped" instance of controlaula
+            service.unpublish()
+            sleep( 0.2)
+        except:
+            pass
         service.publish()
         #Initialize classroom data
         MyClass=Classroom.Classroom(REFRESH)

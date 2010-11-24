@@ -85,6 +85,7 @@ class Plugins(object):
         for i in self.classroom.Desktops:
             if i.hostname in self.targets:
                 func(i,*args)
+        self.classroom.getJSONFrontend("")
                         
     def enableInternet(self):
         self.usersCommand(Desktop.enableInternet)
@@ -97,8 +98,7 @@ class Plugins(object):
         self.usersCommand(Desktop.enableKeyboardMouse)
               
     def disableMouse(self):
-        self.usersCommand(Desktop.disableKeyboardMouse)      
-
+        self.usersCommand(Desktop.disableKeyboardMouse)
                                     
     def enableMessages(self):
         self.usersCommand(Desktop.enableMessages)

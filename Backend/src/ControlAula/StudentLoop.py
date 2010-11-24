@@ -55,6 +55,7 @@ class Obey(object):
         self.myDisp=None
         self.isLTSP=MyUtils.isLTSP()
         self.monitor=None
+        self.myIp=None
         self.startScan()
         
     def startScan(self):
