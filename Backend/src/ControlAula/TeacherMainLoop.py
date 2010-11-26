@@ -27,7 +27,7 @@
 from twisted.web import server,resource,  static
 import twisted
 from ControlAula.Plugins  import Handler
-from ControlAula.Utils import Configs
+from ControlAula.Utils import Configs,MyUtils
 import cgi
 import simplejson as json
 import os,logging
@@ -126,7 +126,7 @@ class ControlAulaProtocol(resource.Resource):
         respjson=None       
         args=''
         
-        print command
+        #print command
           
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
@@ -272,8 +272,16 @@ class ControlAulaProtocol(resource.Resource):
                     <body><h1>No Such Resource</h1>
                     <p>File not found: %s - No such file.</p></body></html>
                     """ % requestedfile     
-        else: #chatting             
-            user = request.args.get('user', request.getClientIP())
+        else: #chatting
+            user_host=request.client.host             
+            user = request.args.get('user', user_host)
+            key=user[0] + '@' + user_host
+            try:
+                if MyUtils.getLoginName() + '@127.0.0.1'!=key: 
+                    if self.teacher.classroom.LoggedUsers[key].chat_enabled==False:return self.response_ok()
+            except:
+                return self.response_ok()
+                           
             message = request.args.get('message', None)
             
             if not message:
@@ -286,4 +294,4 @@ class ControlAulaProtocol(resource.Resource):
                 chann_request.write(response)
                 chann_request.finish()
             del self.channels['controlaula-chat']
-            return self.response_ok();            
+            return self.response_ok()         

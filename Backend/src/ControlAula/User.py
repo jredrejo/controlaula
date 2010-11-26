@@ -43,6 +43,8 @@ class User(object):
         self.timestamp=datetime.datetime.now()
         self.shotname=''
         self.deferred_request=None
-
+        self.chat_enabled=True
+        
+        
     def __str__(self):
         return str( (self.login,self.hostname,self.ip,self.ltsp,self.classname,self.username, self.ipLTSP, self.internet, self.mouse, self.sound, self.messages, self.photo,self.timestamp))

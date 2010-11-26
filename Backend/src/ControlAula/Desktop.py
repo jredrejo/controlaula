@@ -71,7 +71,12 @@ class Desktop(object):
         
     def disableSound(self):
         self._Sound('0','disableSound')
-               
+
+    def enableChat(self):
+        self.classroom.LoggedUsers[self.userkey].chat_enabled=True
+
+    def disableChat(self):
+        self.classroom.LoggedUsers[self.userkey].chat_enabled=False               
         
     def  _Internet(self,value,command):
         if self.userkey!='':

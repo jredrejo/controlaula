@@ -90,9 +90,9 @@ $(function() {
 			.click(function() { modalBigBrother(); });
 
 		printSplitButton("chat","ui-icon-video",' showChatbox() ');
-	   $("#enableChat").click(function() {  showChatbox(); });
- 	   $("#disableChat").click(function() { hiddenChatbox(); }); 
-
+	   $("#enableChat").click(function() { sendOrderSelected("enableChat","","cambiaconfig"); });
+ 	   $("#disableChat").click(function() { sendOrderSelected("disableChat","","cambiaconfig"); });
+	   
 		$( "#goToURL" )
 			.button({ icons: { primary: "ui-icon-search"}})
 			.click(function() { goToURL(""); }); 

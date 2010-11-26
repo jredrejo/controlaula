@@ -294,7 +294,7 @@ def cleanRoutes():
     l=s.splitlines()
     for route in l:
         target=route.split()[0]
-        if target[:8]=='239.255.':
+        if target[:4]=='239.':
             subprocess.Popen(['route','del','-net',target + '/24'])
             
 def addRoute(net,gw=''):

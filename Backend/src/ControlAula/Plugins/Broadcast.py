@@ -114,7 +114,7 @@ class Vlc(object):
         if not self.broadcasting:
             self.broadcasting=True
             
-            self.procRx=subprocess.Popen(['vlc','--udp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
+            self.procRx=subprocess.Popen(['vlc','--quiet' ,'--udp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
             for cb in self._callbacks['started']:            
                 cb(self.url,self.dvd)
             
@@ -134,7 +134,7 @@ class Vlc(object):
                   
         command=ltspaudio 
         command +='vlc -I dummy ' 
-        command +=  '--video-on-top --skip-frames --udp-caching 5000  -f  rtp://@239.255.255.0:'
+        command +=  '--quiet --video-on-top --skip-frames --udp-caching 5000  -f  rtp://@239.255.255.0:'
         #command +='ffplay -fs -fast  udp://@239.255.255.0:'
         command += self.port 
         NetworkUtils.addRoute('239.255.255.0')

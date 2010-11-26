@@ -40,7 +40,8 @@ class Plugins(object):
                 'bigbrother':self.bigBrother,
                 'disableBigBrother':self.disableBigBrother,
                 'enableProjector':self.enableProjector,
-                
+                'enableChat':self.enableChat,
+                'disableChat':self.disableChat,                
                 'disableProjector':self.disableProjector,
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
@@ -139,7 +140,12 @@ class Plugins(object):
                 
     def enableSound(self):
         self.usersCommand(Desktop.enableSound)                   
-        
+
+    def enableChat(self):
+        self.usersCommand(Desktop.enableChat) 
+            
+    def disableChat(self):
+        self.usersCommand(Desktop.disableChat)                    
         
     def wakeup(self):
         macs=[]
@@ -178,7 +184,7 @@ class Plugins(object):
     def stopbcast(self):
         for i in self.classroom.Desktops:
             i.stopBroadcast()
-                
+        self.classroom.getJSONFrontend("")
    
     def sendFile(self,url):
         import os.path

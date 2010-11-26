@@ -1,3 +1,9 @@
+controlaula (1.5.4-1) unstable; urgency=low
+
+  * Chat enabling/disabling for students.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 26 Nov 2010 08:59:48 +0100
+
 controlaula (1.5.3-1) unstable; urgency=low
 
   * Some bug fixing 
