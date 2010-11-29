@@ -125,7 +125,8 @@ class Obey(object):
         newteacher=self.Teachers[name]
         #pending: checkings to be sure this is the right teacher
         teacherIP=str( newteacher[0]) 
-        MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
+        if self.mylogin!='root':
+            MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
 
