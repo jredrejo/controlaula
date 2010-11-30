@@ -1,3 +1,16 @@
+controlaula (1.5.6-1) unstable; urgency=low
+
+  * More LTSP bug fixing.
+  * 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 30 Nov 2010 13:47:47 +0100
+
+controlaula (1.5.5-1) unstable; urgency=low
+
+  * LTSP bug fix.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 29 Nov 2010 14:04:28 +0100
+
 controlaula (1.5.4-1) unstable; urgency=low
 
   * Chat enabling/disabling for students.

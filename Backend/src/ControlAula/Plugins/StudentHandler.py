@@ -22,7 +22,7 @@
 #
 ##############################################################################
 import logging,subprocess
-from ControlAula.Utils import Configs,MyUtils
+from ControlAula.Utils import Configs,MyUtils,NetworkUtils
 from ControlAula.Plugins import DownloadFiles
 import Actions
 import os,xmlrpclib
@@ -47,7 +47,8 @@ class Plugins(object):
                 'enableInternet':self.enableInternet,
                 'disableInternet':self.disableInternet,
                 'rootenableInternet':self.rootEnableInternet,
-                'rootdisableInternet':self.rootDisableInternet,                
+                'rootdisableInternet':self.rootDisableInternet,    
+                'rootClean':self.rootClean,            
                 'enableMouse':self.enableMouse,
                 'disableMouse':self.disableMouse,
                 'enableSound':self.enableSound,
@@ -103,6 +104,10 @@ class Plugins(object):
               
     def disableInternet(self):
         Configs.MonitorConfigs.SetGeneralConfig('internet','0')
+        
+    def rootClean(self,bcastnet,gw):  
+        NetworkUtils.cleanRoutes()      
+        NetworkUtils.addRoute(bcastnet,gw)
         
     def rootEnableInternet(self,login):
         try:

@@ -144,13 +144,16 @@ if __name__ == '__main__':
         from twisted.web import server
         
         NetworkUtils.getWirelessData()
-        externalIP=NetworkUtils.get_ip_inet_address()
+        if MyUtils.isLTSPServer():
+            externalIP=NetworkUtils.get_ip_inet_address(NetworkUtils.ltspGW())
+        else:
+            externalIP=NetworkUtils.get_ip_inet_address()
         if externalIP=='':
             externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         service=Publications.Publications(port=Configs.PORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( Configs.PORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
         try: #in case cache are filled with a previous "bad stopped" instance of controlaula
             service.unpublish()
-            sleep( 0.2)
+            sleep( 0.1)
         except:
             pass
         service.publish()

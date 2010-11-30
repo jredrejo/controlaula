@@ -23,7 +23,7 @@
 ##############################################################################
 import logging,os
 import urllib,mimetypes
-from ControlAula.Utils import Configs,MyUtils
+from ControlAula.Utils import Configs,MyUtils,NetworkUtils
 from ControlAula.Plugins import Actions
 from ControlAula.Desktop import Desktop
 
@@ -168,7 +168,14 @@ class Plugins(object):
             url=''
         if not isDVD:
             if not isfile(url):
-                return {'result':'Bad file'}          
+                return {'result':'Bad file'} 
+
+        for i in NetworkUtils.all_interfaces():
+            if i[0]!='lo':
+                try:
+                    self.classroom.CommandStack[i[1]].append(['rootClean','239.255.255.0',NetworkUtils.ltspGW()])
+                except: #host not avaialble
+                    pass              
         self.classroom.broadcast.clean_callbacks() 
         self.classroom.broadcast.add_callback('started',self.startbcast)
         self.classroom.broadcast.add_callback('ended',self.stopbcast)

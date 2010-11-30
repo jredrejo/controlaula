@@ -81,7 +81,8 @@ def isLTSP():
 
     return ipLTSP
 
-
+def isLTSPServer():
+    return NetworkUtils.defaultGW()!=NetworkUtils.ltspGW()
 
 def snapshot(thumbpath,x=300,y=300):
     try:

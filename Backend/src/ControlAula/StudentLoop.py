@@ -28,7 +28,7 @@ from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging,sys
 from Xlib.display import Display
-
+from twisted.internet import reactor     
 
             
 class Obey(object):
@@ -75,7 +75,7 @@ class Obey(object):
         if address.find(":") == -1:            
             if not self.Teachers.has_key(name):
                 logging.getLogger().debug('New teacher detected: ' + name)
-                self.Teachers[name]=(address,port)
+                self.Teachers[name]=(data['ipINET'],port)
                 if self.checkClass(data):
                     self.newTeacher(name)
                 else:
@@ -90,31 +90,21 @@ class Obey(object):
                 logging.getLogger().debug('teacher disappeared: ' + name)
                 self.Teachers.pop(name)
                         
-    def listen(self):
-        from twisted.internet import reactor           
-        if     self.catched !='':
-
+    def listen(self):             
+        if self.catched !='':
             if self.myDisp is None:
                 self.getDisplay()
-                self.handler.display=self.myDisp
-            
-            #Keep the user as an active user                        
+                self.handler.display=self.myDisp            
+            #Keep the user as an active user :                       
             try:                
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
                 self.sendData(order)
-            except:
-                self.removeMyTeacher()                                   
-        else:
-            try:
-                pass
-                #PENDING: find a way to restart the avahi browsing
-                #self.startScan() 
-            except:
-                pass
-                
-            if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
-                Actions.setSound('mute')
-                                        
+            except: #network jam or teacher left
+                pass 
+        #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()     ?
+                            
+        if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
+            Actions.setSound('mute')                                        
         reactor.callLater(self.interval, self.listen)
         
     def newTeacher(self,name):
@@ -140,8 +130,8 @@ class Obey(object):
         try:                
             order=self.myteacher.hostPing( self.mylogin, self.myIp )
             self.sendData(order)
-        except:
-            self.removeMyTeacher()
+        except: #network jam, try again later
+            pass
             
         
         
@@ -175,8 +165,6 @@ class Obey(object):
 
                      
             else:
-                #_addHost(self, login,hostname,hostip,mac,ltsp=False,
-                #classname='',internetEnabled=True):
                 logging.getLogger().debug('Sending to the teacher this info: %s,%s,%s,%s,%s' % (self.myHostname,self.myIp, self.myMAC,
                                        self.isLTSP,Configs.RootConfigs['classroomname']))
                 self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
@@ -210,7 +198,8 @@ class Obey(object):
             self.Teachers.pop(self.catched)        
         self.catched=''
         self.myteacher=None
-        MyUtils.putLauncher()
+        if self.mylogin!='root':
+            MyUtils.putLauncher()
         
     def getTeacherData(self):
         vncrp,vncwp,vncport,bcastport=self.myteacher.connData()

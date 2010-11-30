@@ -26,6 +26,7 @@ import Desktop
 from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
 from ControlAula.Plugins import VNC,Broadcast
 import simplejson as json
+from time import sleep
 
 class Classroom(object):
     """Classroom data management
@@ -351,7 +352,7 @@ class Classroom(object):
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
-        
+        if oldList=="": sleep(0.5)
         oldClass={'pclist':oldList}
         oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows,'computers':self.computers}
         self.oldJSON=json.dumps({'classroom':oldClass})

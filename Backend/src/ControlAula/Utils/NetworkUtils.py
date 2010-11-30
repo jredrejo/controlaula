@@ -268,7 +268,7 @@ def defaultGW():
     global gateway
     if gateway=='0':
         try:
-            s=subprocess.Popen('route -n|grep "0.0.0.0"|grep UG',shell=True,stdout=subprocess.PIPE).communicate()[0]
+            s=subprocess.Popen('/sbin/route -n|grep "0.0.0.0"|grep UG',shell=True,stdout=subprocess.PIPE).communicate()[0]
             gateway=s.splitlines()[0].split()[1]
         except:
             gateway='0'
