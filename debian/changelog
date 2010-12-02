@@ -1,7 +1,12 @@
+controlaula (1.5.7-1) unstable; urgency=low
+
+  * Improving comet behaviour.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 02 Dec 2010 19:41:19 +0100
+
 controlaula (1.5.6-1) unstable; urgency=low
 
   * More LTSP bug fixing.
-  * 
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 30 Nov 2010 13:47:47 +0100
 

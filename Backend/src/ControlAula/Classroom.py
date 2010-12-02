@@ -100,7 +100,7 @@ class Classroom(object):
             Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)
             if host.hostname!=NetworkUtils.getHostName(): #the teacher host is not added to the list when it's LTSP
                 self.placeHostDesktop(host.ip)
-            
+        self.getJSONFrontend("")
     
     
     def addUser(self,user):
@@ -113,7 +113,7 @@ class Classroom(object):
             if not self.CommandStack.has_key(key):
                 self.CommandStack[key]=[]              
             self.placeUserDesktop(key)
-
+        self.getJSONFrontend("")
                 
     def addPhoto(self,path,key):
         self.LoggedUsers[key].photo=path
@@ -306,7 +306,7 @@ class Classroom(object):
         self.Desktops[position].putHost(self.Hosts[key],key)
         self.recheckUsersDesktops()
         self.saveClassLayout()
-        self.getJSONFrontend("")
+        
 
     def placeUserDesktop(self,key):
         user=self.LoggedUsers[key]
@@ -318,7 +318,7 @@ class Classroom(object):
             if self.Desktops[i].ip==validIP:
                 self.Desktops[i].putUser(user,key)
                 break
-        self.getJSONFrontend("")
+        
        
     def recheckUsersDesktops(self):
         '''If for network issues the user connects before the host,
@@ -339,6 +339,7 @@ class Classroom(object):
                 self.Desktops[i].hostkey=''
                 self.Desktops[i].ip=''
                 self.Desktops[i].mainIP=''
+                self.Desktops[i].delUser()
                 break
         self.getJSONFrontend("")
         
