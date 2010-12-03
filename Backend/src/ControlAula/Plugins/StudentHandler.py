@@ -152,8 +152,7 @@ class Plugins(object):
         from twisted.internet import reactor
         if os.path.exists('/usr/sbin/ethtool'):
             subprocess.call(['ethtool','-s','eth0','wol','g'])
-            
-                    
+                                
         if MyUtils.isLTSP()=='':                      
             subprocess.Popen(['killall','-9','x-session-manager']).wait()            
         else:
@@ -164,9 +163,7 @@ class Plugins(object):
                     subprocess.Popen(['ssh','-O','exit','-S',socket,server]).wait()           
             except:
                 pass            
-           
-            
-        self.myteacher.removeHost( self.myIP )
+
         reactor.callLater(1,self.switchoff)
          
     def switchoff(self):

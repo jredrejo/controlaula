@@ -203,6 +203,13 @@ class Desktop(object):
         else:
             self.mainIP=user.ip
 
+    def delHost(self):
+        '''After the host is off
+        '''
+        self.hostkey=''
+        self.ip=''
+        self.mainIP=''
+        self.delUser()
 
     def delUser(self):
         '''After the user logouts

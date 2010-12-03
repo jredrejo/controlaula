@@ -26,7 +26,7 @@ import Desktop
 from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
 from ControlAula.Plugins import VNC,Broadcast
 import simplejson as json
-from time import sleep
+from twisted.internet import reactor
 
 class Classroom(object):
     """Classroom data management
@@ -100,7 +100,7 @@ class Classroom(object):
             Configs.MonitorConfigs.SaveMAC(host.hostname, host.mac)
             if host.hostname!=NetworkUtils.getHostName(): #the teacher host is not added to the list when it's LTSP
                 self.placeHostDesktop(host.ip)
-        self.getJSONFrontend("")
+        self.getJSONFrontend("refresh")
     
     
     def addUser(self,user):
@@ -113,7 +113,7 @@ class Classroom(object):
             if not self.CommandStack.has_key(key):
                 self.CommandStack[key]=[]              
             self.placeUserDesktop(key)
-        self.getJSONFrontend("")
+        self.getJSONFrontend("refresh")
                 
     def addPhoto(self,path,key):
         self.LoggedUsers[key].photo=path
@@ -121,7 +121,7 @@ class Classroom(object):
             if i.userkey==key:
                 i.photo=path
                 break
-        self.getJSONFrontend("")
+        self.getJSONFrontend("refresh")
     
     def removeUser(self,key):
         """Remove a logout user from the classroom data"""
@@ -132,7 +132,7 @@ class Classroom(object):
                 if desktop.userkey==key:
                     desktop.delUser()
                     break
-            self.getJSONFrontend("")
+            self.getJSONFrontend("refresh")
             
     def removeHost(self,hostip):
         """Remove a disconnected pc from the classroom data"""
@@ -336,12 +336,10 @@ class Classroom(object):
     def removeDesktop(self,ip):
         for desktop in self.Desktops:
             if desktop.mainIP==ip:                
-                desktop.hostkey=''
-                desktop.ip=''
-                desktop.mainIP=''
-                desktop.delUser()
+                desktop.delHost()
                 break
-        self.getJSONFrontend("")
+
+        self.getJSONFrontend("refresh")
         
         
     def getJSONFrontend(self,oldList):
@@ -353,7 +351,7 @@ class Classroom(object):
             classroom['pclist'].append(i.getFrontendInfo())
         
         newJSON=json.dumps({'classroom':classroom})
-        if oldList=="": sleep(0.5)
+        
         oldClass={'pclist':oldList}
         oldClass['structure']={'classname':self.classname,'cols':self.cols,'rows':self.rows,'computers':self.computers}
         self.oldJSON=json.dumps({'classroom':oldClass})
@@ -368,8 +366,11 @@ class Classroom(object):
             self.oldJSON=newJSON
             
         if self.current_request!=None:
-            self.current_request.write(newJSON)
-            self.current_request.finish()
+            if not  self.current_request.finished:
+                self.current_request.write(newJSON)
+                self.current_request.finish()                
+            else:           
+                reactor.callLater(2,self.getJSONFrontend,"refresh")
             
         return newJSON
     
@@ -410,5 +411,5 @@ class Classroom(object):
         self.classsetup['computers']=str(self.computers)
         
         Configs.MonitorConfigs.SetClassroomConfig(self.classname,self.classsetup)
-        self.getJSONFrontend("")
+        self.getJSONFrontend("refresh")
         
