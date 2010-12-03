@@ -128,9 +128,9 @@ class Classroom(object):
         if self.LoggedUsers.has_key(key):
             self.LoggedUsers.pop(key)
             #self.CommandStack.pop(key)
-            for i in range(0,len(self.Desktops)-1):
-                if self.Desktops[i].userkey==key:
-                    self.Desktops[i].delUser()
+            for desktop in self.Desktops:
+                if desktop.userkey==key:
+                    desktop.delUser()
                     break
             self.getJSONFrontend("")
             
@@ -314,9 +314,9 @@ class Classroom(object):
         if user.ltsp:
             validIP=user.ipLTSP
             
-        for i in range(0,len(self.Desktops)):
-            if self.Desktops[i].ip==validIP:
-                self.Desktops[i].putUser(user,key)
+        for desktop in self.Desktops:
+            if desktop.ip==validIP:
+                desktop.putUser(user,key)
                 break
         
        
@@ -334,12 +334,12 @@ class Classroom(object):
             
         
     def removeDesktop(self,ip):
-        for i in range(0,len(self.Desktops)):
-            if self.Desktops[i].mainIP==ip:                
-                self.Desktops[i].hostkey=''
-                self.Desktops[i].ip=''
-                self.Desktops[i].mainIP=''
-                self.Desktops[i].delUser()
+        for desktop in self.Desktops:
+            if desktop.mainIP==ip:                
+                desktop.hostkey=''
+                desktop.ip=''
+                desktop.mainIP=''
+                desktop.delUser()
                 break
         self.getJSONFrontend("")
         
@@ -385,12 +385,12 @@ class Classroom(object):
                 self.moveDesktopAt(name,i)
         if save: self.saveClassLayout()
                 
-    def moveDesktopAt(self, desktop,position):
+    def moveDesktopAt(self, desktop_name,position):
         '''Move a Destkop in the list of Desktops at a fixed position'''
         previousDesktop=self.Desktops[position]
         oldposition=-1
         for i in range(0,len(self.Desktops)):
-            if self.Desktops[i].hostname==desktop:
+            if self.Desktops[i].hostname==desktop_name:
                 newDesktop=self.Desktops[i]
                 oldposition=i
                 break
@@ -401,8 +401,8 @@ class Classroom(object):
 
     def saveClassLayout(self):
         layout=''
-        for i in range (0,len(self.Desktops)):
-            layout +=',' + self.Desktops[i].hostname
+        for desktop in self.Desktops:
+            layout +=',' + desktop.hostname
             
         self.classsetup['structure']=layout[1:]
         self.classsetup['rows']=str(self.rows)

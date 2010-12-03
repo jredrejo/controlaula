@@ -1,3 +1,9 @@
+controlaula (1.5.8.1) unstable; urgency=low
+
+  * Optimized classroom setups.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 03 Dec 2010 11:20:02 +0100
+
 controlaula (1.5.7-1) unstable; urgency=low
 
   * Improving comet behaviour.
