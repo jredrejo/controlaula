@@ -73,6 +73,7 @@ class Obey(object):
     def _add_teacher(self, func, name, address, port,data={}):
         #discard ipv6 entries
         if address.find(":") == -1:            
+            if MyUtils.isLTSPServer() and NetworkUtils.ltspGW()!=str(address): return                
             if not self.Teachers.has_key(name):
                 logging.getLogger().debug('New teacher detected: ' + name)
                 self.Teachers[name]=(data['ipINET'],port)

@@ -74,9 +74,11 @@ class Desktop(object):
 
     def enableChat(self):
         self.classroom.LoggedUsers[self.userkey].chat_enabled=True
+        self._Messages('1', 'enableMessages') 
 
     def disableChat(self):
-        self.classroom.LoggedUsers[self.userkey].chat_enabled=False               
+        self.classroom.LoggedUsers[self.userkey].chat_enabled=False 
+        self._Messages('0', 'enableMessages')               
         
     def  _Internet(self,value,command):
         if self.userkey!='':
