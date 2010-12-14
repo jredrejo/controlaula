@@ -67,7 +67,8 @@ class Plugins(object):
                 'getCaptures':self.getCaptures,
                 'getLoginTeacher':self.getLogin,
                 'errorLog':self.errorLog,
-                'openFile':self.openSendFiles
+                'openFile':self.openSendFiles,
+                'language':self.language
                 }  
         
     def existCommand(self,command):
@@ -380,4 +381,33 @@ class Plugins(object):
         except:
             pass #not recognized file browser
                 
-        
+    def language(self):
+        return {
+					"selectAll" : "Select All",
+					"turnOn" : "Turn On",
+					"selectNone" : "Select None",
+					"turnOff" : "Turn Off",
+					"internet" : "Internet",
+					"enableInternet" : "Enable",
+					"disableInternet" : "Disable",
+					"sound" : "Sound",
+					"enableSound" : "Enable",
+					"disableSound" : "Disable",
+					"mouse" : "Mouse",
+					"enableMouse" : "Enable",
+					"disableMouse" : "Disable",
+					"chat" : "Chat",
+					"enableChat" : "Enable",
+					"disableChat" : "Disable",
+					"projector" : "Projector",
+					"enableProjector" : "Enable",
+					"disableProjector" : "Disable",
+					"video" : "Video",
+					"enableVideo" : "Video Broadcast",
+					"enableDVD" : "DVD Broadcast",
+					"sendMessage" : "Send Message",
+					"sendFile" : "Send File",
+					"receivedFiles" : "Received Files",
+					"web" : "Web",
+					"bigBrother" : "Big Brother",
+				}
