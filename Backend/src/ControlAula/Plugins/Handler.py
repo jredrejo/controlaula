@@ -410,4 +410,11 @@ class Plugins(object):
 					"receivedFiles" : "Received Files",
 					"web" : "Web",
 					"bigBrother" : "Big Brother",
+					"goToURL" : "Go",
+					"computers" : "Computers",
+					"actions" : "Actions",
+					"tabClassroom" : "Classroom",
+					"tabChat" : "Chat",
+					"tabOrderClassroom" : "Order Classroom",
+					"tabConfiguration" : "Configuration",
 				}
