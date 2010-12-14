@@ -417,4 +417,11 @@ class Plugins(object):
 					"tabChat" : "Chat",
 					"tabOrderClassroom" : "Order Classroom",
 					"tabConfiguration" : "Configuration",
+					"configStructure" : "Structure of the classroom",
+					"configRows" : "Rows",
+					"configColumns" : "Columns",
+					"configComputers" : "Computers",
+					"saveConfiguration" : "Save configuration",
+					"licenseText" : "Copyright (C) 2010 - ControlAula is a program under GPL version 2 or later.",
+					"licenseInfo" : "+Infor",
 				}
