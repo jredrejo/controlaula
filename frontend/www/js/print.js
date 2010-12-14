@@ -212,3 +212,14 @@ function refreshBigBrother(equipos){
 			refreshCapture(photo);
 	}
 }
+
+function languageRequest(){
+	connection("language","","translate");
+}
+
+
+function translate(data){
+	$.each(data, function(key, value) { 
+		$("#"+key).html(value);
+	});
+}

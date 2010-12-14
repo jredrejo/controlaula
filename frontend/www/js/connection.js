@@ -54,6 +54,10 @@ function connection(url,data,action){
 					//connection("datosaula","","refreshClassroom");
 					break;
 				}
+				case "translate":{
+					translate(res);
+					break;
+				}
 				case "broadcast":{
 
 					$( "#dialogAlert" ).dialog( "close" );
