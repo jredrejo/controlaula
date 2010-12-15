@@ -27,6 +27,7 @@ from ControlAula.Utils import Configs,MyUtils,NetworkUtils
 from ControlAula.Plugins import Actions
 from ControlAula.Desktop import Desktop
 from locale import getdefaultlocale
+import simplejson as json
 
 class Plugins(object):
     
@@ -382,7 +383,7 @@ class Plugins(object):
         except:
             pass #not recognized file browser
                 
-    def language(self):
+    def language(self):      
         mylocale=getdefaultlocale()[0]
         if mylocale == None:
             mylocale = 'en_EN'
@@ -395,7 +396,7 @@ class Plugins(object):
             locale_file=os.path.join(Configs.LANG,mylocale + '.json')
             
         try:
-            translation=open(locale_file, "r").read()
+            translation=json.loads(open(locale_file, "r").read())
         except:
             translation='{}'
         return translation
