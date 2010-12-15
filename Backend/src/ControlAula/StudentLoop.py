@@ -89,7 +89,10 @@ class Obey(object):
         if address.find(":") == -1:
             if  self.Teachers.has_key(name):
                 logging.getLogger().debug('teacher disappeared: ' + name)
-                self.Teachers.pop(name)
+                if self.catched==name:
+                    self.removeMyTeacher()
+                else:
+                    self.Teachers.pop(name)
                         
     def listen(self):             
         if self.catched !='':
@@ -109,7 +112,7 @@ class Obey(object):
         reactor.callLater(self.interval, self.listen)
         
     def newTeacher(self,name):
-        self.getDisplay()         
+        #self.getDisplay()         
                   
         if self.myteacher is not None:
             self.removeMyTeacher()
@@ -214,7 +217,8 @@ class Obey(object):
  
 
             
-    def getDisplay(self):    
+    def getDisplay(self): 
+        if self.myIp==self.handler.teacherIP:return   #sirvecole running in the same computer as the teacher
         if self.mylogin=='root' and self.myDisp==None:
             disp=MyUtils.getXttyAuth()[0]
             if disp!='':

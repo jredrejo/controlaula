@@ -1,3 +1,9 @@
+controlaula (1.5.10-1) unstable; urgency=low
+
+  * Internationalization.
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 15 Dec 2010 09:41:43 +0100
+
 controlaula (1.5.9-1) unstable; urgency=low
 
   * Optimized ltsp detection.

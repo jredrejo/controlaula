@@ -26,6 +26,7 @@ import urllib,mimetypes
 from ControlAula.Utils import Configs,MyUtils,NetworkUtils
 from ControlAula.Plugins import Actions
 from ControlAula.Desktop import Desktop
+from locale import getdefaultlocale
 
 class Plugins(object):
     
@@ -382,46 +383,20 @@ class Plugins(object):
             pass #not recognized file browser
                 
     def language(self):
-        return {
-					"selectAll" : "Select All",
-					"turnOn" : "Turn On",
-					"selectNone" : "Select None",
-					"turnOff" : "Turn Off",
-					"internet" : "Internet",
-					"enableInternet" : "Enable",
-					"disableInternet" : "Disable",
-					"sound" : "Sound",
-					"enableSound" : "Enable",
-					"disableSound" : "Disable",
-					"mouse" : "Mouse",
-					"enableMouse" : "Enable",
-					"disableMouse" : "Disable",
-					"chat" : "Chat",
-					"enableChat" : "Enable",
-					"disableChat" : "Disable",
-					"projector" : "Projector",
-					"enableProjector" : "Enable",
-					"disableProjector" : "Disable",
-					"video" : "Video",
-					"enableVideo" : "Video Broadcast",
-					"enableDVD" : "DVD Broadcast",
-					"sendMessage" : "Send Message",
-					"sendFile" : "Send File",
-					"receivedFiles" : "Received Files",
-					"web" : "Web",
-					"bigBrother" : "Big Brother",
-					"goToURL" : "Go",
-					"computers" : "Computers",
-					"actions" : "Actions",
-					"tabClassroom" : "Classroom",
-					"tabChat" : "Chat",
-					"tabOrderClassroom" : "Order Classroom",
-					"tabConfiguration" : "Configuration",
-					"configStructure" : "Structure of the classroom",
-					"configRows" : "Rows",
-					"configColumns" : "Columns",
-					"configComputers" : "Computers",
-					"saveConfiguration" : "Save configuration",
-					"licenseText" : "Copyright (C) 2010 - ControlAula is a program under GPL version 2 or later.",
-					"licenseInfo" : "+Infor",
-				}
+        mylocale=getdefaultlocale()[0]
+        if mylocale == None:
+            mylocale = 'en_EN'
+        if mylocale.strip()  == '':
+            mylocale = 'en_EN'
+            
+        locale_file=os.path.join(Configs.LANG,mylocale + '.json')
+        if not os.path.exists(locale_file):
+            mylocale = 'en_EN'
+            locale_file=os.path.join(Configs.LANG,mylocale + '.json')
+            
+        try:
+            translation=open(locale_file, "r").read()
+        except:
+            translation='{}'
+        return translation
+    

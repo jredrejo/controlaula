@@ -213,7 +213,9 @@ def getXttyAuth():
     else:
         command='COLUMNS=300  ps aux|grep -v grep|grep ldm'
         
-    t=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True).communicate()[0]
+    prt=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
+    prt.wait()
+    t=prt.communicate()[0]
     p=t.strip().split()       
     for i in range(0,len(p)):
         if p[i][:1]==':':

@@ -422,6 +422,7 @@ def import_newmacs(oldconfig,newconfig):
 
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
 WWWPAGES='/usr/share/controlaula/frontend/www'
+LANG='/usr/share/controlaula/lang'
 
 if not os.path.isdir(APP_DIR):
         os.mkdir(APP_DIR)
