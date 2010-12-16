@@ -258,7 +258,7 @@ class Desktop(object):
         dict['name']=self.login
         dict['pcname']=self.hostname
         if self.userkey=='':
-            dict['url']=''
+            dict['url']='no_screenshot'
         else:
             dict['url']='loginimages/screenshots/'+ self.classroom.LoggedUsers[self.userkey].shotname
     
