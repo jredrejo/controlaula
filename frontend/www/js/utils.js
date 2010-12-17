@@ -27,7 +27,8 @@ function computersSelected(url){
 			i++;
 
 			if(url=="wakeup"){
-				$("#"+item.id + " img").attr("src","img/icon_loading.gif");
+				$("#"+item.id+" .thumb-image").attr("src","img/icon_loading.gif");
+				$("#"+item.id).removeClass("ui-selected");
 			}
 		}
 	});
@@ -72,7 +73,7 @@ function sendClassroomConfig(){
 	setColsRows($("#sliderColumns").slider("value"),$("#sliderRows").slider("value"));
 
 	$("#sortable li").each(function(i, item){
-            computers[i] = $("#"+item.id + ":eq(0) > #pcName").html();            
+      computers[i] = $("#"+item.id + ":eq(0) > #pcName").html();            
 			i++;
 	});
 
