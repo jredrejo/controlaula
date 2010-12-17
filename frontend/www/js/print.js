@@ -194,6 +194,9 @@ function refreshBigBrother(equipos){
 		var name = equipos.images[i].name;
 		var photo = equipos.images[i].url;
 		var pcname = equipos.images[i].pcname;
+
+		if(photo=="no_screenshot")
+			photo = "img/pcNone.png";		
 		
 		if(equipos.images[i].pcname=="Unknown"){
 			pcname = "&nbsp;";
@@ -208,7 +211,6 @@ function refreshBigBrother(equipos){
 
 			if(photo!=$('#thumbCapture_'+i).val())
 				$('#thumbCapture_'+i).attr("src",photo);
-
 		}
 
 		if(computerSelected==pcname)
