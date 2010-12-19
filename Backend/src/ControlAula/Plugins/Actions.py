@@ -23,28 +23,38 @@
 ##############################################################################
 
 from twisted.internet.utils import getProcessValue
-#import subprocess
-from ControlAula.Utils import NetworkUtils
+from ControlAula.Utils import NetworkUtils,MyUtils
 from Xlib import X
+from Xlib.display import Display
+used_display=None
 
 def setSound(value):
     '''value must be mute or unmute'''
     d=getProcessValue('amixer', ['-c','0','--','sset','Master',value])
     #'amixer -c 0 -- sset Master ' + value
     
-def disableKeyboardAndMouse(display):   
-    if display is not None:
-        root = display.screen().root
+def disableKeyboardAndMouse():   
+    global used_display
+    try:
+        disp=MyUtils.getXtty()[0]     
+        if used_display is None:
+            used_display=Display(disp)
+        root = used_display.screen().root
         root.grab_pointer(1, X.PointerMotionMask|X.ButtonReleaseMask|X.ButtonPressMask,  
                     X.GrabModeAsync, X.GrabModeAsync, X.NONE, X.NONE, X.CurrentTime) 
-        root.grab_keyboard(1,X.GrabModeAsync, X.GrabModeAsync,X.CurrentTime)
-    
-        
-def enableKeyboardAndMouse(display):
-    if display is  not None:
-        display.ungrab_keyboard(X.CurrentTime)
-        display.ungrab_pointer(X.CurrentTime)
-        display.flush()       
+        root.grab_keyboard(1,X.GrabModeAsync, X.GrabModeAsync,X.CurrentTime)                    
+    except:
+        pass           
+
+def enableKeyboardAndMouse():
+    global used_display
+    try:
+        used_display.ungrab_keyboard(X.CurrentTime)
+        used_display.ungrab_pointer(X.CurrentTime)
+        used_display.flush()       
+        used_display=None 
+    except:
+        pass
   
 def sendWOLBurst(macs,throttle):    
     from twisted.internet.task import LoopingCall    

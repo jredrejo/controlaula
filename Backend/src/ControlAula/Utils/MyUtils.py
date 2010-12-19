@@ -185,27 +185,11 @@ def getLDMinfo():
 
     return (server.strip(),socket.strip())
 
-def getXtty():
-    from tempfile import mkstemp
-    from shutil import copyfile    
-    from time import sleep
-    disp,auth=getXttyAuth()
-        
-    if disp!='':
-        display='DISPLAY=' + disp
-        
-    if auth!='':
-        xfile=mkstemp()[1]
-        sleep(0.5)
-        copyfile(auth,xfile)
-        os.chown(xfile,65534,0)
-        xauth='XAUTHORITY='+xfile
-    else:
-        xauth=''
-        
-    return (display,xauth)
-    
-def getXttyAuth():
+
+
+
+
+def _get_disp_tty():
     xauth=''
     display=''
     if isLTSP()=='':
@@ -226,20 +210,37 @@ def getXttyAuth():
 
     if xauth=='':
         xauth=os.path.join(getHomeUser(),  '.Xauthority'   )
-                    
+                                
+    return (display,xauth)    
+    
+def getXtty():
+    from tempfile import mkstemp
+    from shutil import copyfile    
+    from time import sleep
+    disp,xauth=_get_disp_tty()
+    
     if getLoginName()=='root':       
-
-        command='xauth -f ' + xauth + ' add `hostname -s`/unix' + display + ' . ' + generateUUID(24)
+        command='xauth -f ' + xauth + ' add `hostname -s`/unix' + disp + ' . ' + generateUUID(24)
         subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
         os.environ['XAUTHORITY']=xauth
-               
-    if display!='':
-        display=display + '.0'
-                                
-    return (display,xauth)
-    
+        
+    if disp!='':
+        disp=disp + '.0'            
+        display='DISPLAY=' + disp
+        
+    if xauth!='':
+        xfile=mkstemp()[1]
+        sleep(0.5)
+        copyfile(xauth,xfile)
+        os.chown(xfile,65534,0)
+        xauth='XAUTHORITY='+xfile
+    else:
+        xauth=''
+        
+    return (disp,display,xauth)
+        
 def launchAsNobody(command):
-    display,xauth=getXtty()
+    disp,display,xauth=getXtty()
     finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
     logging.getLogger().debug(finalcommand)
     proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    

@@ -27,7 +27,6 @@ from ControlAula.Utils import NetworkUtils, MyUtils,Configs
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging,sys
-from Xlib.display import Display
 from twisted.internet import reactor     
 
             
@@ -52,7 +51,6 @@ class Obey(object):
         self.handler=StudentHandler.Plugins(None,None)
         self.myVNC=None
         self.broadcast=None
-        self.myDisp=None
         self.isLTSP=MyUtils.isLTSP()
         self.monitor=None
         self.myIp=None
@@ -95,10 +93,7 @@ class Obey(object):
                     self.Teachers.pop(name)
                         
     def listen(self):             
-        if self.catched !='':
-            if self.myDisp is None:
-                self.getDisplay()
-                self.handler.display=self.myDisp            
+        if self.catched !='':         
             #Keep the user as an active user :                       
             try:                
                 order=self.myteacher.hostPing( self.mylogin, self.myIp )
@@ -211,21 +206,6 @@ class Obey(object):
         self.broadcast=Broadcast.Vlc(bcastport)
         self.handler.myVNC=self.myVNC
         self.handler.myBcast=self.broadcast
-        if self.myDisp is None:
-            self.getDisplay()
-        self.handler.display=self.myDisp        
- 
-
-            
-    def getDisplay(self): 
-        if self.myIp==self.handler.teacherIP:return   #sirvecole running in the same computer as the teacher
-        if self.mylogin=='root' and self.myDisp==None:
-            disp=MyUtils.getXttyAuth()[0]
-            if disp!='':
-                try:
-                    self.myDisp=Display(disp)
-                except:
-                    pass              
 
     def getCommands(self):
         commands=self.myteacher.getCommands( self.mylogin, self.myIp )

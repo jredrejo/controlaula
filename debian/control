@@ -29,7 +29,7 @@ Description: Classroom management tool
 
 Package: ltsp-controlaula
 Architecture: all
-Depends: ${python:Depends}, python-avahi, python-gobject, python-xlib, xvnc4viewer | xtightvncviewer, vlc, ldm, sshfs (>= 2.0-1), iptables
+Depends: ${python:Depends}, python-avahi, python-gobject, python-twisted-web, python-xlib, xvnc4viewer | xtightvncviewer, vlc, ldm, sshfs (>= 2.0-1), iptables
 Recommends: ethtool
 Conflicts: controlaula
 Description: Classroom management tool with ltsp clients

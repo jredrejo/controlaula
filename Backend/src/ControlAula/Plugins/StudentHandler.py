@@ -38,7 +38,6 @@ class Plugins(object):
         self.myBcast=None
         self.teacherIP=''
         self.teacher_port='8900'
-        self.display=  None
         self.handlers = { 
                 'bigbrother':self.bigBrother,
                 'disablebigbrother':self.disableBigBrother,
@@ -128,12 +127,12 @@ class Plugins(object):
         
     def enableMouse(self):
         if MyUtils.getLoginName()=='root':
-            Actions.enableKeyboardAndMouse(self.display)
+            Actions.enableKeyboardAndMouse()
         else:
             Configs.MonitorConfigs.SetGeneralConfig('mouse','1')       
     def disableMouse(self):
         if MyUtils.getLoginName()=='root':
-            Actions.disableKeyboardAndMouse(self.display)
+            Actions.disableKeyboardAndMouse()
         else:
             Configs.MonitorConfigs.SetGeneralConfig('mouse','0')    
     def enableSound(self):
