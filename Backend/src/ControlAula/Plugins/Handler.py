@@ -70,7 +70,8 @@ class Plugins(object):
                 'getLoginTeacher':self.getLogin,
                 'errorLog':self.errorLog,
                 'openFile':self.openSendFiles,
-                'language':self.language
+                'language':self.language,
+		'launchwebToAll':self.launchwebToAll
                 }  
         
     def existCommand(self,command):
@@ -400,4 +401,6 @@ class Plugins(object):
         except:
             translation='{}'
         return translation
-    
+
+    def launchwebToAll(self):
+        print "hola"
