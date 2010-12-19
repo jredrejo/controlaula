@@ -1,0 +1,4 @@
+<!ENTITY prefwindow.title "Preferencias de ControlAula">
+<!ENTITY pane1.title "Preferencias de ControlAula">
+<!ENTITY stringpref.label "Puerto en localhost:">
+<!ENTITY stringpref.accesskey "P">

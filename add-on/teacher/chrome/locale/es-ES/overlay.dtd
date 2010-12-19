@@ -1,0 +1,4 @@
+<!ENTITY ControlAulaToolbarButton.label "Botón para ControlAula">
+<!ENTITY ControlAulaToolbarButton.tooltip "ControlAula">
+<!ENTITY ControlAulaToolbarButton2.label "Botón de ControlAula para enviar una Web">
+<!ENTITY ControlAulaToolbarButton2.tooltip "Enviar Web a los alumnos">

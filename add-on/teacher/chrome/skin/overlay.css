@@ -1,0 +1,53 @@
+
+#ControlAula-toolbar-button
+{
+  list-style-image: url("chrome://ControlAula/skin/controlaula-button.png");
+  -moz-image-region: rect(24px 24px 48px 0px);
+}
+#ControlAula-toolbar-button:hover
+{
+  -moz-image-region: rect(0px 24px 24px  0px);
+}
+
+#ControlAula-toolbar-button[disabled="true"] { 
+  -moz-image-region: rect(48px 24px 72px 0px);
+}
+
+toolbar[iconsize="small"] #ControlAula-toolbar-button {
+	list-style-image: url("chrome://ControlAula/skin/controlaula-button-small.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+toolbar[iconsize="small"] #ControlAula-toolbar-button:hover {
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+toolbar[iconsize="small"] #ControlAula-toolbar-button[disabled="true"] {
+  -moz-image-region: rect(32px 16px 48px 0px);
+}
+
+
+#ControlAula-toolbar-button2
+{
+  list-style-image: url("chrome://ControlAula/skin/controlaula-button2.png");
+  -moz-image-region: rect(24px 32px 48px 0px);
+}
+#ControlAula-toolbar-button2:hover
+{
+  -moz-image-region: rect(0px 32px 24px  0px);
+}
+
+#ControlAula-toolbar-button2[disabled="true"] { 
+  -moz-image-region: rect(48px 24px 72px 0px);
+}
+
+toolbar[iconsize="small"] #ControlAula-toolbar-button2 {
+	list-style-image: url("chrome://ControlAula/skin/controlaula-button2-small.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+toolbar[iconsize="small"] #ControlAula-toolbar-button2:hover {
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+toolbar[iconsize="small"] #ControlAula-toolbar-button2[disabled="true"] {
+  -moz-image-region: rect(32px 16px 48px 0px);
+}
+
+
