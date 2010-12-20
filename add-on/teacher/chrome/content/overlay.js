@@ -52,6 +52,9 @@ window.addEventListener("load", ControlAula.onLoad, false);
 
 function sendLink() {
 
+	if(!confirm("¿Desea realmente enviar la dirección web a los alumnos?"))
+		return false;
+
 	var doc = gBrowser.contentDocument,
 		href = doc.location.href;
 
