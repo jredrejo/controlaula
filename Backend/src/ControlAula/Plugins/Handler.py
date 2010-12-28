@@ -62,6 +62,7 @@ class Plugins(object):
                 'sendFile':self.sendFile,
                 'startapplication':self.startApp,
                 'launchweb':self.launchUrl ,
+                'launchwebToAll':self.launchUrlAll,
                 'disableSound':self.disableSound,
                 'enableSound':self.enableSound,
                 'getVideoNodes':self.fileBrowserVideo,
@@ -70,8 +71,7 @@ class Plugins(object):
                 'getLoginTeacher':self.getLogin,
                 'errorLog':self.errorLog,
                 'openFile':self.openSendFiles,
-                'language':self.language,
-		'launchwebToAll':self.launchwebToAll
+                'language':self.language
                 }  
         
     def existCommand(self,command):
@@ -225,7 +225,12 @@ class Plugins(object):
                 
     def launchUrl(self,url):
         self.usersCommand(Desktop.launchWeb,[url])
-         
+
+    def launchUrlAll(self,url):
+        self.targets=[]
+        for user in self.classroom.LoggedUsers:
+            self.targets.append(self.classroom.LoggedUsers[user].hostname)
+        self.usersCommand(Desktop.launchWeb,[url])         
           
     def classroomConfig(self,rows=0,cols=0,computers=0):
         for i in range(0, len(self.targets)-1):
@@ -401,6 +406,4 @@ class Plugins(object):
         except:
             translation='{}'
         return translation
-
-    def launchwebToAll(self):
-        print "hola"
+    

@@ -1,8 +1,0 @@
-content   ControlAula                 chrome/content/
-skin      ControlAula   classic/1.0   chrome/skin/
-locale    ControlAula   en-US         chrome/locale/en-US/
-locale    ControlAula   es-ES         chrome/locale/es-ES/
-
-
-overlay   chrome://browser/content/browser.xul   chrome://ControlAula/content/ff-overlay.xul
-style chrome://global/content/customizeToolbar.xul chrome://ControlAula/skin/overlay.css

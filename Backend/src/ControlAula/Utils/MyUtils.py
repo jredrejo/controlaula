@@ -315,3 +315,9 @@ def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
     f.write(html_to_save)
     f.close()
     
+    if isTeacher: teacher_ip='localhost'
+    addon_info='{"url": "http://' + teacher_ip +'", "isTeacher": ' + str(isTeacher).lower() + ', "port": "' +str(teacher_port) +'"}'    
+    f2=open(os.path.join(APP_DIR,'data.json'),'wb')
+    f2.write(addon_info)
+    f2.close()
+    

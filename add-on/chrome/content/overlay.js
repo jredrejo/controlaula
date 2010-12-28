@@ -45,6 +45,14 @@ var ControlAula = {
      document.persist("nav-bar", "currentset");
 	}
 
+    if (prefs.getBoolPref("isTeacher")!=true) {   
+        if (curSet.indexOf("ControlAula-toolbar-button2") != -1)   		   		
+        {
+            var buttonnav = document.getElementById("ControlAula-toolbar-button2");			
+            buttonnav.hidden=true;
+        }
+     }
+
    // If you don't do the following call, funny things happen
    try {
      BrowserToolboxCustomizeDone(true);
@@ -63,7 +71,7 @@ window.addEventListener("load", ControlAula.onLoad, false);
 
 function sendLink() {
 
-	if(!confirm("¿Desea realmente enviar la dirección web a los alumnos?"))
+	if(!confirm(this.strings.getString("confirmWeb")))
 		return false;
 
 	var doc = gBrowser.contentDocument,
@@ -82,9 +90,11 @@ function sendLink() {
 
 	// send link with Ajax
 	xmlhttp = new XMLHttpRequest(); 
-	xmlhttp.open("POST", "http://localhost:8900/launchwebToAll",true);
+	var nuevaurl= prefs.getCharPref("url") + ":" +  prefs.getCharPref("port") + "/launchwebToAll"
+	 Components.utils.reportError(nuevaurl);
+	xmlhttp.open("POST",  nuevaurl,true);
 	xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xmlhttp.send("url="+href+"&title="+doc.title);
+	xmlhttp.send('data={"args":"'+href + '"}');
 }
 
 function isMapsURL(url){
