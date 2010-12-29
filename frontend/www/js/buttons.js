@@ -97,6 +97,14 @@ $(function() {
 			.button({ icons: { primary: "ui-icon-search"}})
 			.click(function() { goToURL(""); }); 
 
+		$( "#sendWebToSelected" )
+			.button({ icons: { primary: "ui-icon-refresh"}})
+			.click(function() { sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); }); 
+
+		$( "#sendWebToAll" )
+			.button({ icons: { primary: "ui-icon-refresh"}})
+			.click(function() { selectAll(); sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); }); 
+
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
 		$( "#scanNet" ).button({ icons: { primary: "ui-icon-refresh"}});
 

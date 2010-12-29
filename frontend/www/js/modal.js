@@ -186,12 +186,7 @@ function modalWeb(){
 			title: "Navegaci&oacute;n Web",
 			modal: true,
 			width: 950,
-			resizable: false,
-			buttons: {
-				"Enviar Web a seleccionados": function() { sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); },
-				"Enviar Web a todos": function() { selectAll(); sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); },
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			resizable: false
 		})
 		.dialog('open'); 
 	return true;
