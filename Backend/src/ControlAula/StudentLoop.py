@@ -26,9 +26,37 @@ import xmlrpclib
 from ControlAula.Utils import NetworkUtils, MyUtils,Configs
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
-import logging,sys
+import logging
 from twisted.internet import reactor     
+from twisted.internet.protocol import DatagramProtocol
 
+MCAST_ADDR = "224.0.0.1"
+MCAST_PORT = 11011
+
+class MulticastClientUDP(DatagramProtocol):
+    def __init__(self, obey):
+        self.obey=obey
+
+    def datagramReceived(self, datagram, address):
+        data={}
+        port=0
+        div1=datagram.split("]")
+        try:
+            name=div1[1]
+            div2=div1[0].split("'")
+            for i in div2:
+                div3=i.split("=")
+                if len(div3)==2:
+                    if div3[0]=="web":
+                        port=int(div3[1])
+                        data["web"]=port
+                    else:
+                        data[div3[0]]=div3[1]              
+            
+            self.obey._add_teacher(None, name, address[0], port,data)
+        except: #bad data received
+            pass
+            
             
 class Obey(object):
     '''
@@ -65,7 +93,7 @@ class Obey(object):
         
         except Exception, ex:
             logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
-            sys.exit()        
+            #sys.exit()        
         
 
     def _add_teacher(self, func, name, address, port,data={}):
@@ -100,7 +128,9 @@ class Obey(object):
                 self.sendData(order)
             except: #network jam or teacher left
                 pass 
-        #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()     ?
+        else:
+            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+            #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
                             
         if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
             Actions.setSound('mute')                                        

@@ -23,7 +23,25 @@
 ##############################################################################
 import avahi
 import dbus
+from twisted.internet.protocol import DatagramProtocol
+from twisted.internet import reactor
+from twisted.application.internet import MulticastServer
 
+MCAST_ADDR = "224.0.0.1"
+MCAST_PORT = 11011
+
+class MulticastServerUDP(DatagramProtocol):
+    def __init__(self,name,text):
+        self.data=str(text) + name
+    
+    def startProtocol(self):
+        self.transport.joinGroup(MCAST_ADDR)
+
+    def datagramReceived(self, datagram, address):
+        if datagram == 'ControlAula':
+            print "ok-datagram"
+            self.transport.write(self.data, address)
+            
 class Publications(object):
     '''
        """A simple class to publish a network service with zeroconf using
@@ -42,6 +60,10 @@ class Publications(object):
         self.host = host
         self.port = port
         self.text = text
+        try:
+            reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(name,text))
+        except: #port not usable, plan B is not valid, trusting only in avahi
+            pass 
 
     def publish(self):
         bus = dbus.SystemBus()

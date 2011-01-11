@@ -2,6 +2,7 @@ controlaula (1.5.11-1) unstable; urgency=low
 
   * Dependencies fix.
   * Light refactorization
+  * Reforce teacher detection
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sun, 19 Dec 2010 11:04:17 +0100
 
