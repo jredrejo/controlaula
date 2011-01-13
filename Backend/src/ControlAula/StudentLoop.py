@@ -216,7 +216,10 @@ class Obey(object):
             return True#it's a teacher of my classroom
         
         if Configs.RootConfigs['classroomname']=="noclassroomname":
-            return (self.myteacher==None) #There's no classroomname, so link to the first one
+            try:
+                return (self.myteacher==None) #There's no classroomname, so link to the first one
+            except: #if there is already a myteacher, self.myteacher==None will fail:
+                return True
             #PENDING = CHECK MAC
         
         

@@ -1,10 +1,6 @@
    function showIfError(response) {
-       if (response.status == 'ok')
+    
            return false;
-       for (var err in response.errors) {
-           $("#chat_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
-       };
-       return true;
    };
 
    function cmdSubmitCallback(response) {

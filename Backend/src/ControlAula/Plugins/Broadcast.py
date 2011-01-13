@@ -25,6 +25,7 @@
 
 import subprocess,os,logging,dbus
 from ControlAula.Utils import MyUtils,NetworkUtils
+from ControlAula.Plugins import Actions
 from signal import  SIGKILL
 from twisted.internet import protocol
 from twisted.internet import reactor
@@ -139,6 +140,7 @@ class Vlc(object):
         command += self.port 
         NetworkUtils.addRoute('239.255.255.0')
         self.procRx=MyUtils.launchAsNobody(command)
+        Actions.disableKeyboardAndMouse(False)
             
     def stop(self):
         logging.getLogger().debug('vlc stopped')

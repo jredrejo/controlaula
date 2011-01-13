@@ -26,7 +26,7 @@
 import pwd,os,subprocess,logging
 import shutil
 import NetworkUtils
-
+from glob import glob
 loginname=''
 fullusername=''
 homeuser=''
@@ -219,7 +219,8 @@ def getXtty():
     from time import sleep
     disp,xauth=_get_disp_tty()
     
-    if getLoginName()=='root':       
+    semaphore= len(glob('/tmp/*.controlaula'))==0
+    if getLoginName()=='root' and semaphore:       
         command='xauth -f ' + xauth + ' add `hostname -s`/unix' + disp + ' . ' + generateUUID(24)
         subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
         os.environ['XAUTHORITY']=xauth
@@ -227,19 +228,21 @@ def getXtty():
     if disp!='':
         disp=disp + '.0'            
         display='DISPLAY=' + disp
-        
-    if xauth!='':
-        xfile=mkstemp()[1]
-        sleep(0.5)
-        copyfile(xauth,xfile)
-        os.chown(xfile,65534,0)
-        xauth='XAUTHORITY='+xfile
-    else:
-        xauth=''
+    if semaphore:    
+        if xauth!='':
+            xfile=mkstemp(suffix='.controlaula')[1]
+            sleep(0.5)
+            copyfile(xauth,xfile)
+            os.chown(xfile,65534,0)
+            xauth='XAUTHORITY='+xfile
+        else:
+            xauth=''
         
     return (disp,display,xauth)
         
 def launchAsNobody(command):
+    for i in glob('/tmp/*.controlaula'):
+        os.remove( i)
     disp,display,xauth=getXtty()
     finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
     logging.getLogger().debug(finalcommand)

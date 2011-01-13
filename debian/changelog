@@ -1,3 +1,9 @@
+controlaula (1.5.12-1) unstable; urgency=low
+
+  * Fix video errors
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 13 Jan 2011 11:44:40 +0100
+
 controlaula (1.5.11-1) unstable; urgency=low
 
   * Dependencies fix.

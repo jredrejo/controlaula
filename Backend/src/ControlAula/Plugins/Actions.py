@@ -26,6 +26,8 @@ from twisted.internet.utils import getProcessValue
 from ControlAula.Utils import NetworkUtils,MyUtils
 from Xlib import X
 from Xlib.display import Display
+from os import remove
+from glob import glob
 used_display=None
 
 def setSound(value):
@@ -33,8 +35,11 @@ def setSound(value):
     d=getProcessValue('amixer', ['-c','0','--','sset','Master',value])
     #'amixer -c 0 -- sset Master ' + value
     
-def disableKeyboardAndMouse():   
+def disableKeyboardAndMouse(newAction=True):   
     global used_display
+    if newAction:
+        for i in glob('/tmp/*.controlaula'):
+            remove( i)        
     try:
         disp=MyUtils.getXtty()[0]     
         if used_display is None:

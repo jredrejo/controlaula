@@ -145,8 +145,7 @@ class Desktop(object):
             
     def sendBroadcast(self,url,isDVD):
         if self.hostkey!='':
-            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD])
-            self.disableKeyboardMouse()     
+            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD])  
             self.video=True 
                   
     def stopBroadcast(self):
