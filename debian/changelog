@@ -1,3 +1,9 @@
+controlaula (1.5.12-2) unstable; urgency=low
+
+  * Fix addon installation
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 13 Jan 2011 19:32:44 +0100
+
 controlaula (1.5.12-1) unstable; urgency=low
 
   * Fix video errors

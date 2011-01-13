@@ -3,9 +3,7 @@ var ControlAula = {
     // initialization code
     this.initialized = true;
     this.strings = document.getElementById("ControlAula-strings");
-    
-    this.addToolbarButton();
-    
+
   },
 
 
@@ -21,30 +19,29 @@ var ControlAula = {
  try {
    var firefoxnav = document.getElementById("nav-bar");
    var curSet = firefoxnav.currentSet;
+   var index1=curSet.indexOf("ControlAula-toolbar-button")
+   var index2=curSet.indexOf("ControlAula-toolbar-button2")
 
-   if (curSet.indexOf("ControlAula-toolbar-button") == -1){
+
+   if (index1 == -1 || index1==index2 ||index2 ==-1 && prefs.getBoolPref("isTeacher")==true ){
      var set;
      // Place the button before the urlbar
      if (curSet.indexOf("urlbar-container") != -1)
-       set = curSet.replace(/urlbar-container/, "ControlAula-toolbar-button,urlbar-container");
+       if (prefs.getBoolPref("isTeacher")==true)
+       		set = curSet.replace(/urlbar-container/, "ControlAula-toolbar-button,ControlAula-toolbar-button2,urlbar-container");
+       else
+       		set = curSet.replace(/urlbar-container/, "ControlAula-toolbar-button,urlbar-container");
      else  // at the end
-       set = curSet + ",ControlAula-toolbar-button";
+     	if (prefs.getBoolPref("isTeacher")==true)
+     		set = curSet + ",ControlAula-toolbar-button,ControlAula-toolbar-button2";
+     	else
+       		set = curSet + ",ControlAula-toolbar-button";
      firefoxnav.setAttribute("currentset", set);
      firefoxnav.currentSet = set;
      document.persist("nav-bar", "currentset");
+     
 	}
-   if (curSet.indexOf("ControlAula-toolbar-button2") == -1){
-     var set;
-     // Place the button before the urlbar
-     if (curSet.indexOf("urlbar-container") != -1)
-       set = curSet.replace(/urlbar-container/, "ControlAula-toolbar-button2,urlbar-container");
-     else  // at the end
-       set = curSet + ",ControlAula-toolbar-button2";
-     firefoxnav.setAttribute("currentset", set);
-     firefoxnav.currentSet = set;
-     document.persist("nav-bar", "currentset");
-	}
-
+	
     if (prefs.getBoolPref("isTeacher")!=true) {   
         if (curSet.indexOf("ControlAula-toolbar-button2") != -1)   		   		
         {
