@@ -44,10 +44,10 @@ function printSliders(){
 			max: 30,
 			step: 1,
 			slide: function(event, ui) {
-				$("#computers").val(ui.value);
+				$("#numComputers").val(ui.value);
 			}
 		});
-		$("#computers").val($("#sliderComputers").slider("value"));
+		$("#numComputers").val($("#sliderComputers").slider("value"));
 }
 
 function printClassroom(equipos){

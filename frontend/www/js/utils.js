@@ -109,15 +109,15 @@ function setMaxComputers(){
 
 	$("#sliderComputers").slider("option","max",maxComputers);
 
-	if(parseInt($("#computers").val())>=parseInt(maxComputers) || afterMax==$("#computers").val()){
-		$("#computers").val(maxComputers);
+	if(parseInt($("#numComputers").val())>=parseInt(maxComputers) || afterMax==$("#numComputers").val()){
+		$("#numComputers").val(maxComputers);
 		$("#sliderComputers").slider("value",maxComputers);
 	}
 }
 
 function setComputers(computers){
 
-	$("#computers").val(computers);
+	$("#numComputers").val(computers);
 	$("#sliderComputers").slider("value",computers);
 
 	setMaxComputers();
