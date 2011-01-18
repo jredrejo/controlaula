@@ -1,3 +1,10 @@
+controlaula (1.6.0-1) unstable; urgency=low
+
+  * Cleaning some javascript code
+  * Added dhcp hook
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 18 Jan 2011 10:26:02 +0100
+
 controlaula (1.5.12-2) unstable; urgency=low
 
   * Fix addon installation

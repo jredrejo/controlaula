@@ -1,14 +1,8 @@
-   function showIfError(response) {
-    
-           return false;
-   };
-
    function cmdSubmitCallback(response) {
-       showIfError(response);
+       return false;
    };
 
    function getChatMessageCallback(response) {
-       showIfError(response);
        
        $("#chat_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
        getChatMessage();

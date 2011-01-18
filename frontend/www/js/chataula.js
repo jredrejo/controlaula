@@ -1,19 +1,8 @@
-   function showIfError(response) {
-       if (response.status == 'ok')
-           return false;
-       for (var err in response.errors) {
-           $("#chataula_div").chatbox("option", "boxManager").addMsg(response.status , response.errors[err]);
-       };
-       return true;
-   };
-
    function cmdSubmitCallback(response) {
-       showIfError(response);
+       return false;
    };
 
    function getChatMessageCallback(response) {
-       showIfError(response);
-       
        $("#chataula_div").chatbox("option", "boxManager").addMsg(response.user, response.message);
        getChatMessage();
    };

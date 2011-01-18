@@ -1,1 +1,4 @@
 usr/share/xul-ext-controlaula usr/share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/jredrejo@debian.org
+etc/dhcp3/dhclient-exit-hooks.d/controlaula.dhcp etc/dhcp/dhclient-exit-hooks.d/controlaula
+etc/network/if-up.d/controlaula.ifup etc/network/if-down.d/controlaula
+etc/network/if-up.d/controlaula.ifup etc/network/if-post-down.d/controlaula
