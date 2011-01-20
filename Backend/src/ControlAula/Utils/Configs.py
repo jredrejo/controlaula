@@ -144,7 +144,7 @@ class MonitorConfig(object):
         
 
         #List of optional items
-        self._OptionalItems=['internet','mouse','sound','messages']
+        self._OptionalItems=['internet','mouse','sound','messages','theme']
 
         
         # Dictionary for services .
@@ -227,10 +227,10 @@ class MonitorConfig(object):
         # The parser should have returned the name of the requested file. 
         try:
             if (filename[0] != self._ConfigFileName):
-                logging.getLogger().error('Wrong /etc/sirvecole config file. Using default values')
+                logging.getLogger().error('Wrong monitor.cfg file. Using default values')
                 self._GeneralConfig=self._GetGeneralItems(self._ConfigParser)
         except:
-            logging.getLogger().debug('Could not find an /etc/sirvecole config file. Using default values')
+            logging.getLogger().debug('Could not find a monitor.cfg. Using default values')
             self._GeneralConfig=self._GetGeneralItems(self._ConfigParser)
             return
 
@@ -294,7 +294,7 @@ class MonitorConfig(object):
             or None if an error occured.
         """
         #Default values:
-        configuration={'internet':'1','mouse':'1','sound':'1','messages':'1'}
+        configuration={'internet':'1','mouse':'1','sound':'1','messages':'1','theme':'js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css'}
       
 
         # Now, go through all the remaining items in the section, 

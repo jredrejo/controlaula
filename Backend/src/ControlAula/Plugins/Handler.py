@@ -71,7 +71,9 @@ class Plugins(object):
                 'getLoginTeacher':self.getLogin,
                 'errorLog':self.errorLog,
                 'openFile':self.openSendFiles,
-                'language':self.language
+                'language':self.language,
+                'newtheme':self.save_theme,
+                'gettheme':self.recover_theme
                 }  
         
     def existCommand(self,command):
@@ -406,4 +408,10 @@ class Plugins(object):
         except:
             translation='{}'
         return translation
+    
+    def save_theme(self,theme_path):
+        Configs.MonitorConfigs.SetGeneralConfig('theme', theme_path)
+        
+    def recover_theme(self):
+        return Configs.MonitorConfigs.GetGeneralConfig('theme')
     

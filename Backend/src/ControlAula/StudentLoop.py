@@ -129,7 +129,10 @@ class Obey(object):
             except: #network jam or teacher left
                 pass 
         else:
-            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+            try:
+                reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+            except:
+                logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
             #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
                             
         if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
