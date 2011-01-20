@@ -106,18 +106,18 @@
 		$("#dialogSendMessage").dialog({ autoOpen: false });
 		$("#dialogWeb").dialog({ autoOpen: false });
 
-		//theme switcher
 		$('#set').hide();
 		$('#changeItUp').hover(function(){$('#set').fadeIn();}, function(){});
 		$('#themes a').click(function(){
 			var theme = $(this).attr('href');
 			$('head').append('<link href="'+ theme +'" rel="Stylesheet" type="text/css" />');
+
+			sendOrder("newtheme",theme,"newtheme");
 			return false;
 		});
 		$('#set').hover(function(){}, function(){$(this).fadeOut();});
 
        initChat();
-
 
 		$('div.media-player').jmeControl();
 	});
@@ -218,7 +218,6 @@
 						<a href="js/jquery/ui/css/gray/jquery-ui-1.8.5.custom.css" title="Gray"><img src="img/themes/gray.png" alt="image" width="100" height="50" /></a>
 						<a href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" title="Orange"><img src="img/themes/orange.png" alt="image" width="100" height="50" /></a>
 						<a href="js/jquery/ui/css/green/jquery-ui-1.8.5.custom.css" title="Green"><img src="img/themes/green.png" alt="image" width="100" height="50" /></a>
-						<a onClick="location.href='js/jquery/ui/css/green/jquery-ui-1.8.5.custom.css'" title="Green"><img src="img/themes/green.png" alt="image" width="100" height="50" /></a>
 					</span></p>
 				</div>
 				<div id="tabsClassroom-4" style="padding:2px;">
