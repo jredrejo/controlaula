@@ -52,6 +52,10 @@ function connection(url,data,action){
 			var res = $.parseJSON(result);
 
 			switch(action){
+				case "gettheme":{
+					$('head').append('<link href="'+ res +'" rel="Stylesheet" type="text/css" />');
+					break;
+				}
 				case "printClassroom":{
 					printClassroom(result);
 					connection("datosaula","","refreshClassroom");
