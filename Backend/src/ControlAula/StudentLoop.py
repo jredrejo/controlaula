@@ -207,23 +207,13 @@ class Obey(object):
             else:
                 self.getTeacherData()
 
-    def checkClass(self,data={}):
-        NetworkUtils.getWirelessData()
- 
-                
-                
+    def checkClass(self,data={}):                        
         if Configs.RootConfigs['classroomname']==data['classroomname']:
             return True#it's a teacher of my classroom
-        
-        if Configs.RootConfigs['classroomname']=="noclassroomname":
-            try:
-                return (self.myteacher==None) #There's no classroomname, so link to the first one
-            except: #if there is already a myteacher, self.myteacher==None will fail:
-                return True
-            #PENDING = CHECK MAC
-        
-        
-        return False
+        elif MyUtils.classroomName()==data['classroomname']:
+            return True #network has changed and the computer now is associated to a new network
+        else:
+            return False
     
     def removeMyTeacher(self):
         if self.Teachers.has_key(self.catched): #in case avahi hasn't detected the teacher has already gone..

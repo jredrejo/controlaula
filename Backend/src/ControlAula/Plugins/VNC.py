@@ -110,7 +110,7 @@ class VNC(object):
     def startROViewer(self,target):
         from random import randrange
         from twisted.internet import reactor
-        delay=randrange(1,30)/10.0
+        delay=randrange(25,60)/10.0
         reactor.callLater(delay,self.startdelayedViewer,target)
     
     def startdelayedViewer(self,target):        

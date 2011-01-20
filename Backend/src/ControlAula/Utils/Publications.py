@@ -39,7 +39,7 @@ class MulticastServerUDP(DatagramProtocol):
 
     def datagramReceived(self, datagram, address):
         if datagram == 'ControlAula':
-            print "ok-datagram"
+            #print "ok-datagram", str(address)
             self.transport.write(self.data, address)
             
 class Publications(object):
