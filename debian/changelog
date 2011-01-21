@@ -1,5 +1,6 @@
 controlaula (1.6.1-1) unstable; urgency=low
 
+  * New themes for the frontend
   * Frontend themes are saved and recovered
   * Cleaned some code in the backend
   * Improved detection of the classroom
