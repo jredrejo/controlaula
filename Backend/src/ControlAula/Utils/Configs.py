@@ -294,7 +294,7 @@ class MonitorConfig(object):
             or None if an error occured.
         """
         #Default values:
-        configuration={'internet':'1','mouse':'1','sound':'1','messages':'1','theme':'js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css'}
+        configuration={'internet':'1','mouse':'1','sound':'1','messages':'1','theme':'ui-lightness'}
       
 
         # Now, go through all the remaining items in the section, 
