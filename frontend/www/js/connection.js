@@ -53,7 +53,7 @@ function connection(url,data,action){
 
 			switch(action){
 				case "gettheme":{
-					$('head').append('<link href="'+ res +'" rel="Stylesheet" type="text/css" />');
+				  $('head').append('<link href="js/jquery/ui/css/'+ res +'/jquery-ui-1.8.8.custom.css" rel="Stylesheet" type="text/css" />');
 					break;
 				}
 				case "printClassroom":{
