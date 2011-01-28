@@ -197,6 +197,6 @@ if __name__ == '__main__':
         reactor.callWhenRunning(MyStudent.startScan)    
     
     #begin application loop:
-    reactor.callWhenRunning(checkActivity)        
+    #reactor.callWhenRunning(checkActivity)        
     reactor.run()
 

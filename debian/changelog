@@ -1,3 +1,10 @@
+controlaula (1.6.2-1) unstable; urgency=low
+
+  * Fixed some memory leaks
+  * Fixed laptops detection
+
+ -- jose <jose@aula1-pro>  Fri, 28 Jan 2011 13:56:42 +0100
+
 controlaula (1.6.1-1) unstable; urgency=low
 
   * New themes for the frontend

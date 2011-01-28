@@ -81,8 +81,9 @@ class Desktop(object):
         self._Messages('0', 'enableMessages')               
         
     def  _Internet(self,value,command):
-        self.internet=value
-        self.classroom.Hosts[self.mainIP].internetEnabled=value
+        if self.mainIP !='':
+            self.internet=value
+            self.classroom.Hosts[self.mainIP].internetEnabled=value
         if self.userkey!='':
             self.classroom.CommandStack[self.userkey].append([command])
             #the host must disable internet to this user:

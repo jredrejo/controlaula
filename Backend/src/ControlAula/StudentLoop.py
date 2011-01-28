@@ -215,8 +215,16 @@ class Obey(object):
             return True#it's a teacher of my classroom
         elif MyUtils.classroomName()==data['classroomname']:
             return True #network has changed and the computer now is associated to a new network
+        elif Configs.RootConfigs['classroomname']=="noclassroomname":
+            try:
+                if self.myteacher==None: #There's no classroomname, so link to the first one
+                    return (data["ipINET"][:7]==NetworkUtils.get_ip_inet_address()[:7])
+            except: #if there is already a myteacher, self.myteacher==None will fail:
+                return False
+            
         else:
-            return False
+            return False    
+    
     
     def removeMyTeacher(self):
         if self.Teachers.has_key(self.catched): #in case avahi hasn't detected the teacher has already gone..
