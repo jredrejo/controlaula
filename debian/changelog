@@ -1,3 +1,16 @@
+controlaula (1.6.4-1) unstable; urgency=low
+
+  * Avoid keeping monitor as a zombie app.
+  * Take into account if the number of hosts is greater than cols*rows
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 03 Feb 2011 20:23:14 +0100
+
+controlaula (1.6.3-1) unstable; urgency=low
+
+  * Importing legacy configurations work even if legacy conf is wrong
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 31 Jan 2011 13:51:15 +0100
+
 controlaula (1.6.2-1) unstable; urgency=low
 
   * Fixed some memory leaks

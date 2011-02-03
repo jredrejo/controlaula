@@ -352,8 +352,11 @@ def import_legacy_config(oldconfig,newconfig):
         aula,index=get_aula(i[0])
         rname=aula+'-o'+ '%0*d' % (2, int(i[1]))
         if aula not in configaulas:            
-            configaulas[aula]=['Unknown']*total
-        configaulas[aula][index]=rname
+            configaulas[aula]=['Unknown']*(total +1)
+        try:
+            configaulas[aula][index]=rname
+        except:
+            pass
 
     itemlist=old_configparser.items('MAC')
     for i in itemlist:

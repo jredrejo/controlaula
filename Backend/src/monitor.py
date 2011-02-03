@@ -61,7 +61,7 @@ def checkActivity():
             sys.exit()
              
     loop = LoopingCall(sendNext)
-    loop.start(2.5)
+    loop.start(5)
     return     
         
 class singleinstance(object):
@@ -197,6 +197,6 @@ if __name__ == '__main__':
         reactor.callWhenRunning(MyStudent.startScan)    
     
     #begin application loop:
-    #reactor.callWhenRunning(checkActivity)        
+    reactor.callWhenRunning(checkActivity)        
     reactor.run()
 

@@ -13,7 +13,7 @@ Architecture: all
 Depends: ${python:Depends}, python-avahi, python-gtk2 | python-qt4, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, x11vnc (>= 0.8.2), iptables
 Recommends: cups-client, ethtool
 Suggests: libdvdcss2
-Provides: ltsp-controlaula
+Conflicts: ltsp-controlaula
 Description: Classroom management tool
  Assists teachers in the management of a classroom with computers in 
  the students desktops.

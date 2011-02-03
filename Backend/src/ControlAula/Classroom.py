@@ -61,15 +61,16 @@ class Classroom(object):
         self.cols=int(self.classsetup['cols'])
         self.rows=int(self.classsetup['rows'])
         self.computers=int(self.classsetup['computers'])
-        self.Desktops=[]
+        
         #creates the aula
-        for i in range (0,self.cols*self.rows):
-            self.Desktops.append(Desktop.Desktop(self))
+        total=self.cols*self.rows
+        self.Desktops=[Desktop.Desktop(self)]*total
         #if there is a saved structure, it recovers it:        
         if self.classsetup['structure']!='':
                 targets=self.classsetup['structure'].split(',')
+                if len(targets)>total:self.Desktops=[Desktop.Desktop(self)]*len(targets)
                 for i in range(0,len(targets)):
-                    if targets[i]!='None':
+                    if targets[i].lower()!='none':
                         self.Desktops[i].hostname=targets[i]
         
                     

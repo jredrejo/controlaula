@@ -285,10 +285,14 @@ def restoreDir(src,dst):
         backupDir(src,dst)
 
 def isActive():
-    logged = subprocess.Popen("who|cut -f1 -d' '|uniq", shell=True,stdout=subprocess.PIPE).communicate()[0]  
-    loggedusers=logged.splitlines()
+    """Detect if the user who launch this process is still logged in the system, to avoid zombies """
+    #logged = subprocess.Popen("who|cut -f1 -d' '|uniq", shell=True,stdout=subprocess.PIPE).communicate()[0]  
+    logged=subprocess.Popen(["who"],stdout=subprocess.PIPE).communicate()[0]
+    lista=logged.split("\n")
+    total=[i.split() for i in lista if i!='']    
+    loggedusers=zip(*total)[0]
     user= getLoginName()
-    active=(user in loggedusers)
+    active=user in loggedusers
 
     return active 
 
