@@ -290,7 +290,10 @@ def isActive():
     logged=subprocess.Popen(["who"],stdout=subprocess.PIPE).communicate()[0]
     lista=logged.split("\n")
     total=[i.split() for i in lista if i!='']    
-    loggedusers=zip(*total)[0]
+    try:
+        loggedusers=zip(*total)[0]
+    except:
+        loggedusers=[]
     user= getLoginName()
     active=user in loggedusers
 
