@@ -287,13 +287,8 @@ def restoreDir(src,dst):
 def isActive():
     """Detect if the user who launch this process is still logged in the system, to avoid zombies """
     #logged = subprocess.Popen("who|cut -f1 -d' '|uniq", shell=True,stdout=subprocess.PIPE).communicate()[0]  
-    logged=subprocess.Popen(["who"],stdout=subprocess.PIPE).communicate()[0]
-    lista=logged.split("\n")
-    total=[i.split() for i in lista if i!='']    
-    try:
-        loggedusers=zip(*total)[0]
-    except:
-        loggedusers=[]
+    logged=subprocess.Popen(["users"],stdout=subprocess.PIPE).communicate()[0]
+    loggedusers=logged.split()
     user= getLoginName()
     active=user in loggedusers
 

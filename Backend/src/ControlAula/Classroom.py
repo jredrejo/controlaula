@@ -64,16 +64,19 @@ class Classroom(object):
         
         #creates the aula
         total=self.cols*self.rows
-        self.Desktops=[Desktop.Desktop(self)]*total
+        self.Desktops=[]
+        for i in range(0,total):
+            self.Desktops.append(Desktop.Desktop(self))
         #if there is a saved structure, it recovers it:        
         if self.classsetup['structure']!='':
                 targets=self.classsetup['structure'].split(',')
-                if len(targets)>total:self.Desktops=[Desktop.Desktop(self)]*len(targets)
-                for i in range(0,len(targets)):
-                    if targets[i].lower()!='none':
-                        self.Desktops[i].hostname=targets[i]
-        
-                    
+                for i in range(0,total):
+                    try:
+                        if targets[i]!='None':
+                            self.Desktops[i].hostname=targets[i]
+                    except:
+                        pass #total is greater than len(targets)
+                                          
         self.interval=refreshInterval
         self.oldJSON=''
 

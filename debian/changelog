@@ -1,3 +1,10 @@
+controlaula (1.6.5-1) unstable; urgency=low
+
+  * Fix regression introduced in 1.6.4.
+  * Improve zombie terminate routine
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 04 Feb 2011 11:40:56 +0100
+
 controlaula (1.6.4-1) unstable; urgency=low
 
   * Avoid keeping monitor as a zombie app.
