@@ -36,6 +36,7 @@ MCAST_PORT = 11011
 class MulticastClientUDP(DatagramProtocol):
     def __init__(self, obey):
         self.obey=obey
+        reactor.callLater(10, self.timedOut)
 
     def datagramReceived(self, datagram, address):
         data={}
@@ -56,7 +57,19 @@ class MulticastClientUDP(DatagramProtocol):
             self.obey._add_teacher(None, name, address[0], port,data)
         except: #bad data received
             pass
-            
+
+    def timedOut(self):
+        logging.getLogger().debug("UDP timed out")
+        try:
+            self.doStop()
+        except:
+            pass #avoid ugly errors when stopping the daemon         
+        if self.obey.catched =='':     
+            try:
+                reactor.listenUDP(0, MulticastClientUDP(self.obey)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+            except:
+                logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
+           
             
 class Obey(object):
     '''
@@ -94,6 +107,10 @@ class Obey(object):
         except Exception, ex:
             logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
             #sys.exit()        
+        try:
+            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+        except:
+            logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
         
 
     def _add_teacher(self, func, name, address, port,data={}):
@@ -128,12 +145,8 @@ class Obey(object):
                 self.sendData(order)
             except: #network jam or teacher left
                 pass 
-        else:
-            try:
-                reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
-            except:
-                logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
-            #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
+ 
+      #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
                             
         if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
             Actions.setSound('mute')                                        
@@ -233,6 +246,12 @@ class Obey(object):
         self.myteacher=None
         if self.mylogin!='root':
             MyUtils.putLauncher()
+            
+        try: #begin again udp scanning
+            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
+        except:
+            logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
+            
         
     def getTeacherData(self):
         vncrp,vncwp,vncport,bcastport=self.myteacher.connData()

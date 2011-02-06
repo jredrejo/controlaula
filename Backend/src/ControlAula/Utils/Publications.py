@@ -23,6 +23,7 @@
 ##############################################################################
 import avahi
 import dbus
+import logging
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 from twisted.application.internet import MulticastServer
@@ -67,25 +68,29 @@ class Publications(object):
 
     def publish(self):
         bus = dbus.SystemBus()
-        server = dbus.Interface(
-                         bus.get_object(
-                                 avahi.DBUS_NAME,
-                                 avahi.DBUS_PATH_SERVER),
-                        avahi.DBUS_INTERFACE_SERVER)
-
-        g = dbus.Interface(
-                    bus.get_object(avahi.DBUS_NAME,
-                                   server.EntryGroupNew()),
-                    avahi.DBUS_INTERFACE_ENTRY_GROUP)
-
-        g.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC,dbus.UInt32(0),
-                     self.name, self.stype, self.domain, self.host,
-                     dbus.UInt16(self.port), avahi.string_array_to_txt_array(self.text ))
-            
-
-
-        g.Commit()
-        self.group = g
+        try:
+            server = dbus.Interface(
+                             bus.get_object(
+                                     avahi.DBUS_NAME,
+                                     avahi.DBUS_PATH_SERVER),
+                            avahi.DBUS_INTERFACE_SERVER)
+    
+            g = dbus.Interface(
+                        bus.get_object(avahi.DBUS_NAME,
+                                       server.EntryGroupNew()),
+                        avahi.DBUS_INTERFACE_ENTRY_GROUP)
+    
+            g.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC,dbus.UInt32(0),
+                         self.name, self.stype, self.domain, self.host,
+                         dbus.UInt16(self.port), avahi.string_array_to_txt_array(self.text ))
+                
+    
+    
+            g.Commit()
+            self.group = g
+        
+        except:
+            logging.getLogger().error('Avahi is not working in this computer, relay on plan B to work')
     
     def unpublish(self):
         self.group.Reset()
