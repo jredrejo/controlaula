@@ -25,6 +25,11 @@
 ##############################################################################
 
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
 import signal
 import sys
 import logging,logging.handlers
@@ -156,7 +161,7 @@ if __name__ == '__main__':
             sleep( 0.1)
         except:
             pass
-        service.publish()
+        
         #Initialize classroom data
         MyClass=Classroom.Classroom(REFRESH)
         
@@ -172,6 +177,8 @@ if __name__ == '__main__':
         # Start up the web service.     
         AulaRoot = TeacherMainLoop.ControlAulaProtocol() #Resource object
         AulaRoot.PageDir=Configs.WWWPAGES
+        AulaRoot.publish_service=service
+#        service.publish()
         AulaRoot.teacher.classroom=MyClass        
 
         AulaSite = server.Site(AulaRoot) #Factory object

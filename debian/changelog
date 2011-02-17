@@ -1,3 +1,9 @@
+controlaula (1.6.7-1) unstable; urgency=low
+
+  * The teacher begin its announces only after first web hit
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Sun, 13 Feb 2011 20:09:05 +0100
+
 controlaula (1.6.6-1) unstable; urgency=low
 
   * Added more checks to avoid ugly warn or error messages in logs

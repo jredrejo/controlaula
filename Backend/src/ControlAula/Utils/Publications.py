@@ -61,10 +61,7 @@ class Publications(object):
         self.host = host
         self.port = port
         self.text = text
-        try:
-            reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(name,text))
-        except: #port not usable, plan B is not valid, trusting only in avahi
-            pass 
+        self.online = False
 
     def publish(self):
         bus = dbus.SystemBus()
@@ -88,10 +85,18 @@ class Publications(object):
     
             g.Commit()
             self.group = g
+            
+            try:
+                reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(self.name,self.text))
+            except: #port not usable, plan B is not valid, trusting only in avahi
+                pass
+                         
+            self.online=True
         
         except:
             logging.getLogger().error('Avahi is not working in this computer, relay on plan B to work')
     
     def unpublish(self):
         self.group.Reset()
+        self.online=False
                 

@@ -24,7 +24,11 @@
 # 
 ##############################################################################
 
-
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
 import signal
 import sys
 import logging
@@ -32,8 +36,6 @@ import subprocess
 import os
 from ControlAula.Utils import NetworkUtils
 from twisted.application import service
-
-
 
 LOG_FILENAME= "/var/log/controlaula.log"
 HOSTNAME=''

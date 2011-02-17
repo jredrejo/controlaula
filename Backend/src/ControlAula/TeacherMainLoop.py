@@ -49,7 +49,7 @@ class ControlAulaProtocol(resource.Resource):
         self.PageDir=""
         self.teacher = TeacherServer.RPCServer()
         self.channels = defaultdict(list)
-
+        self.publish_service=None
 
     ########################################################
     # Return the page for a GET. This will handle requests
@@ -65,7 +65,11 @@ class ControlAulaProtocol(resource.Resource):
         if request.host.host!='127.0.0.1' and pagename=='index.html':
             request.path='/student/chat.html'
             pagename='student/chat.html'
-        
+
+        #Announce the teacher after the first try of accesing the web interface            
+        if not self.publish_service.online:
+            self.publish_service.publish()
+            
         # Check if requested file exists.    
         if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
             requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
