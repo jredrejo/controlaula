@@ -420,7 +420,16 @@ def import_newmacs(oldconfig,newconfig):
     if modified:  
         configfile=open(newconfig, 'wb')
         new_configparser.write(configfile)
-        configfile.close()                                 
+        configfile.close()                         
+        
+def config_exist(newconfig):
+    """Checks if a classroom is already configured
+    in the current config file"""
+    new_configparser = ConfigParser.ConfigParser()  
+    new_configparser.read(newconfig)    
+    aula = RootConfigs['classroomname'] 
+    return new_configparser.has_section(aula)
+                     
 ########################################################                                
 
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
@@ -459,20 +468,22 @@ LOG_CHAT=os.path.join(MyUtils.getHomeUser(),'.controlaula','chat_' +  RootConfig
 
 #if there is a config file from old versions of ControlAula and there's not
 # a config file for the current version, try to convert it
-if not os.path.exists(CONF_FILENAME):
+if not os.path.exists(CONF_FILENAME) or not config_exist(CONF_FILENAME):
     if os.path.exists('/var/lib/monitorprofe/monitorprofe.cfg'):
         import_legacy_config('/var/lib/monitorprofe/monitorprofe.cfg',CONF_FILENAME)
     else:
-        config = ConfigParser.RawConfigParser()                
-        config.add_section('General')
-        config.set('General','internet','1')
-        config.set('General','mouse','1')
-        config.set('General','sound','1')       
-        config.set('General','messages','1')     
-        configfile=open(CONF_FILENAME, 'wb')
-        config.write(configfile)
-        configfile.close()
-elif os.path.exists('/var/lib/monitorprofe/monitorprofe.cfg'):
-    import_newmacs('/var/lib/monitorprofe/monitorprofe.cfg',CONF_FILENAME)    
+        try:
+            config = ConfigParser.RawConfigParser()                
+            config.add_section('General')
+            config.set('General','internet','1')
+            config.set('General','mouse','1')
+            config.set('General','sound','1')       
+            config.set('General','messages','1')     
+            configfile=open(CONF_FILENAME, 'wb')
+            config.write(configfile)
+            configfile.close()
+        except:
+            pass 
+    
     
 MonitorConfigs=MonitorConfig(CONF_FILENAME)

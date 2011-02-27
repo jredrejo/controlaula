@@ -36,7 +36,7 @@ MCAST_PORT = 11011
 class MulticastClientUDP(DatagramProtocol):
     def __init__(self, obey):
         self.obey=obey
-        reactor.callLater(10, self.timedOut)
+        reactor.callLater(15, self.timedOut)
 
     def datagramReceived(self, datagram, address):
         data={}
@@ -61,7 +61,7 @@ class MulticastClientUDP(DatagramProtocol):
     def timedOut(self):
         logging.getLogger().debug("UDP timed out")
         try:
-            self.doStop()
+            self.protocol.stopListening()
         except:
             pass #avoid ugly errors when stopping the daemon         
         if self.obey.catched =='':     

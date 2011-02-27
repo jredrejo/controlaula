@@ -235,20 +235,13 @@ class Plugins(object):
         
     def startApp(self,command):
         pass
-    def launchUrl(self,url):
-        self.destroyProcess()
-        self.currentProcess=subprocess.Popen(['x-www-browser',self.args[0]])
-        
-    def destroyProcess(self):
-        from signal import  SIGTERM
-        from os import kill
-        if self.currentProcess!=None:
-            try:
-            #self.procServer.terminate(): not available in python 2.5
-                pid=self.currentProcess.pid
-                kill(pid, SIGTERM)
-            except:
-                pass     
+    
+    def launchUrl(self,url):       
+        try:
+            import webbrowser
+            webbrowser.open(url)
+        except:
+            logging.getLogger().error('Unable to detect your browser when launching %s' %   (url))
           
     def getPathUser(self):
         return MyUtils.getHomeUser()
