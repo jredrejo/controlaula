@@ -1,3 +1,13 @@
+controlaula (1.6.8-1) unstable; urgency=low
+
+  * Improved import of legacy configurations (thanks to Juan Antonio
+    Cristin)
+  * gnome-screensaver is stopped in the student after a teacher order
+  * Improved udp protocol behaviour
+  * Improved web browser launching
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 28 Feb 2011 13:35:14 +0100
+
 controlaula (1.6.7-1) unstable; urgency=low
 
   * The teacher begin its announces only after first web hit

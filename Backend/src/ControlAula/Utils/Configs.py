@@ -168,12 +168,6 @@ class MonitorConfig(object):
     def GetClassroomConfig(self,classroom):
         if not self._ConfigDict.has_key(classroom):
             #the classroom is not in the config file, so an entry is created:
-            self._ConfigParser.add_section(classroom) 
-            self._ConfigParser.set(classroom,'rows','5')
-            self._ConfigParser.set(classroom,'cols','3')
-            self._ConfigParser.set(classroom,'computers','15')
-            self._ConfigParser.set(classroom,'structure','')
-            self.SaveConfig()
             sectionconfig = self._GetSectionItems('classroom', self._ConfigParser)
             self._ConfigDict[classroom] = sectionconfig
             
@@ -371,26 +365,33 @@ def import_legacy_config(oldconfig,newconfig):
             configaulas[aula][index]='none' 
 
 
-    new_configparser = ConfigParser.RawConfigParser()         
+    new_configparser = ConfigParser.RawConfigParser()
+    new_configparser.read(newconfig)
+    
         
     for i in  configaulas:
-
-        s=""
-        new_configparser.add_section(i)
-        new_configparser.set(i,'rows',rows)
-        new_configparser.set(i,'cols',cols)
-        new_configparser.set(i,'computers',computers)
-        for n in configaulas[i]:
-            s=s+n + ","
+        if not new_configparser.has_section(i):
+            s=""
+            new_configparser.add_section(i)
+            new_configparser.set(i,'rows',rows)
+            new_configparser.set(i,'cols',cols)
+            new_configparser.set(i,'computers',computers)
+            for n in configaulas[i]:
+                s=s+n + ","
+            
+            new_configparser.set(i,'structure',s[:-1])        
         
-        new_configparser.set(i,'structure',s[:-1])        
-        
-    new_configparser.add_section('MAC')
+    try:
+        new_configparser.add_section('MAC')
+        new_configparser.add_section('General')
+    except:
+        pass #these section already exists, created in another computer
+      
     for mac in macs:    
         new_configparser.set('MAC',mac,macs[mac])    
 
-    new_configparser.add_section('General')  
-      
+    
+
     configfile=open(newconfig, 'wb')
     new_configparser.write(configfile)
     configfile.close()    

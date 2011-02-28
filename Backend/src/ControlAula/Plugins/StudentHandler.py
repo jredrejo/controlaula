@@ -75,7 +75,9 @@ class Plugins(object):
         return self.handlers.has_key(command)
     
     def process(self,command):        
-        if self.handlers.has_key(command):            
+        if self.handlers.has_key(command):
+            #whenever a order arrives, the screensaver is killed  
+            subprocess.Popen(["gnome-screensaver-command","--exit"])
             handler=self.handlers[command]
             
             handler(*self.args)
