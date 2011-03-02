@@ -193,7 +193,11 @@ class MonitorConfig(object):
         for i in valuesdict:
             value=valuesdict[i]
             self._ConfigDict[classroom][i]=value
-            self._ConfigParser.set(classroom,i,value)
+            try:
+                self._ConfigParser.set(classroom,i,value)
+            except ConfigParser.NoSectionError:
+                self._ConfigParser.add_section(classroom)
+                self._ConfigParser.set(classroom,i,value)
             self.SaveConfig()         
             
     def SaveMAC(self,hostname,mac):
@@ -375,7 +379,7 @@ def import_legacy_config(oldconfig,newconfig):
             new_configparser.add_section(i)
             new_configparser.set(i,'rows',rows)
             new_configparser.set(i,'cols',cols)
-            new_configparser.set(i,'computers',computers)
+            new_configparser.set(i,'computers',total)
             for n in configaulas[i]:
                 s=s+n + ","
             
