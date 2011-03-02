@@ -34,6 +34,7 @@ import os,logging
 import TeacherServer
 from collections import defaultdict
 from time import strftime,time
+from urllib import unquote
 
 class ControlAulaProtocol(resource.Resource):
     """Respond with the appropriate ControlAUla  protocol response.
@@ -81,7 +82,7 @@ class ControlAulaProtocol(resource.Resource):
         else:    
                 requestedfile = os.path.join(self.PageDir,request.path[1:])
 
-        
+        requestedfile=unquote(requestedfile)
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.
             request.setResponseCode(404)

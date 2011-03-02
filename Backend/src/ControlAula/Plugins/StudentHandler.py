@@ -190,13 +190,13 @@ class Plugins(object):
     def receiveFile(self,url):
         from os.path import join
         file=join(Configs.FILES_DIR,url)        
-        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + url
+        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + urllib.quote(url)
         self.filesQueue.addRequest( url, file,self.got_file)
 
     def receiveDir(self,url):
         from os.path import join
         file=join(Configs.FILES_DIR, '_dirlist_' + url)        
-        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/_dirlist_' + url
+        url='http://' + self.myteacher._ServerProxy__host + '/sendfile/_dirlist_' + urllib.quote(url)
         self.filesQueue.addRequest( url,file,self.got_list)
 
     def got_list(self,dloader,file):  
