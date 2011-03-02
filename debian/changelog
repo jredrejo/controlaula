@@ -3,7 +3,7 @@ controlaula (1.6.9-1) unstable; urgency=low
   * Fixed bug in Config importation
   * Fixed bug when sending files with spaces in their filenames
 
- -- José L. Redrejo Rodríguez <jredrejo@debian.org> Wed, 02 Mar 2011 12:47:36 +0100
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 02 Mar 2011 12:47:36 +0100
 
 controlaula (1.6.8-1) unstable; urgency=low
 
