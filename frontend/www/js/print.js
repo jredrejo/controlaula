@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
 ############################################################################## */
+var translations
 
 function printInterface(){
 		$("#tabsComputers").tabs();
@@ -97,7 +98,7 @@ function printClassroom(equipos){
 			name = "&nbsp;";
 			photo = "img/pcNone.png";			
 		}else if(class.classroom.pclist[i].ON=="0"){
-			name = "Apagado";
+			name =  translations["Off"];
 			photo = "img/turnOff.png";
 		}else if(class.classroom.pclist[i].loginname=="" && class.classroom.pclist[i].ON=="1"){
 			name = "Login";
@@ -137,7 +138,7 @@ function refreshClassroom(equipos){
 			name = "&nbsp;";
 			photo = "img/pcNone.png";			
 		}else if(class.classroom.pclist[i].ON=="0"){
-			name = "Apagado";
+			name = translations["Off"];
 			photo = "img/turnOff.png";
 		}else if(class.classroom.pclist[i].loginname=="" && class.classroom.pclist[i].ON=="1"){
 			name = "Login";
@@ -249,4 +250,5 @@ function translate(data){
 	$.each(data, function(key, value) { 
 		$("#"+key).html(value);
 	});
+    translations=data
 }

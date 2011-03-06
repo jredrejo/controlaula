@@ -42,16 +42,18 @@ function modalAlert(message){
 function modalConfirm(message, funct){
 
 	$("#dialogAlertMessage").html(message);
-
+    var noButton = translations["No"];
+    var yesButton = translations["Yes"];
+    var dlgButtons = {};
+    dlgButtons[noButton]=function() { $( this ).dialog( "close" ); };
+    dlgButtons[yesButton]=function() { eval(funct); };
+    
 	$("#dialogAlert")
 		.dialog({
 			modal: true,
 			width: 350,
 			resizable: false,
-			buttons: {
-				"Si": function() { eval(funct); },
-				"No": function() { $( this ).dialog( "close" ); }
-			}
+			buttons: dlgButtons
 		})
 		.dialog('open'); 
 
@@ -62,19 +64,21 @@ function modalSendFile(){
 	var selected = computersSelected();
 
 	if(selected.length==0){
-		modalAlert("Para enviar un fichero debe seleccionar al menos un equipo");
+		modalAlert(translations["OnePCAtLeast"]);
 		return;
 	}
-
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
+    
 	$("#dialogSendFile")
 		.dialog({
-			title: "Enviar Fichero",
+			title: translations["sendFile"],
 			modal: true,
 			width: 550,
 			resizable: false,
-			buttons: {
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			buttons: dlgButtons
+			
 		})
 		.dialog('open'); 
 
@@ -86,7 +90,7 @@ function modalSendFile(){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				modalConfirm("¿Desea enviar el fichero seleccionado?","sendOrderSelected('sendFile','"+file+"','sendFile');");
+				modalConfirm(translations["confirmFile" ],"sendOrderSelected('sendFile','"+file+"','sendFile');");
 		});
 
 	return true;
@@ -94,16 +98,19 @@ function modalSendFile(){
 
 function modalReceivedFiles(){
 
+    var opnButton = translations["OpenReceivedFolder"];
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
+    dlgButtons[ opnButton ] = function() { sendOrder('openFile','dirReceivedTeacher','openFile'); };
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
+
 	$("#dialogSendFile")
 		.dialog({
-			title: "Ficheros Recibidos",
+			title: translations["ReceivedFiles"],
 			modal: true,
 			width: 550,
 			resizable: false,
-			buttons: {
-				"Abrir Carpeta Recibidos": function() { sendOrder('openFile','dirReceivedTeacher','openFile'); },
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			buttons: dlgButtons
 		})
 		.dialog('open'); 
 
@@ -123,29 +130,33 @@ function modalReceivedFiles(){
 
 function modalSendMessage(){
 	var selected = computersSelected();
+    
 
 	if(selected.length==0){
-		modalAlert("Para enviar un mensaje debe seleccionar al menos un equipo");
+		modalAlert(translations["mustSelectOneSend"]);
 		return;
 	}
 
 	$("#message").val("");
+    
+    var sndButton = translations["Send"];
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
+    dlgButtons[ sndButton ] = function() { 
+					if($("#message").val()=="")
+						modalAlert(translations["mustTypeMessage"]);
+					else
+						sendOrderSelected("sendMessage",$("#message").val(),"sendMessage");
+				};
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
 
 	$("#dialogSendMessage")
 		.dialog({
-			title: "Enviar Mensaje",
+			title: translations["SendMessage"],
 			modal: true,
 			width: 550,
 			resizable: false,
-			buttons: {
-				"Enviar": function() { 
-					if($("#message").val()=="")
-						modalAlert("Debe escribir un mensaje");
-					else
-						sendOrderSelected("sendMessage",$("#message").val(),"sendMessage");
-				},
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			buttons: dlgButtons
 		})
 		.dialog('open'); 
 
@@ -160,19 +171,25 @@ function modalSendVideo(dir){
 	var selected = computersSelected();
 
 	if(selected.length==0){
-		modalAlert("Para realizar una emisi&oacute;n de v&iacute;deo debe seleccionar al menos un equipo");
+		modalAlert(translations["mustSelectOneVideo"]);
 		return;
 	}
 
+    
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
+
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
+
+
+
 	$("#dialogSendFile")
 		.dialog({
-			title: "Emitir V&iacute;deo",
+			title: translations["enableVideo"],
 			modal: true,
 			width: 550,
 			resizable: false,
-			buttons: {
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			}
+			buttons: dlgButtons
 		})
 		.dialog('open'); 
 
@@ -184,7 +201,7 @@ function modalSendVideo(dir){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				modalConfirm("¿Desea comenzar la emisi&oacute;n del v&iacute;deo seleccionado?","sendOrderSelected('broadcast','"+file+"','broadcast');");
+				modalConfirm(translations["ConfirmVideo"],"sendOrderSelected('broadcast','"+file+"','broadcast');");
 		});
 
 	return true;
@@ -201,11 +218,11 @@ function goToURL(url){
 
 function modalWeb(){
 
-	goToURL("www.educarex.es");
+	goToURL("www.google.es");
 
 	$("#dialogWeb")
 		.dialog({
-			title: "Navegaci&oacute;n Web",
+			title: translations["WebBrowsing"],
 			modal: true,
 			width: 950,
 			resizable: false
@@ -218,7 +235,7 @@ function modalBigBrother(){
 
 	$("#dialogBigBrother")
 		.dialog({
-			title: "Gran Hermano",
+			title: translations["bigBrother"],
 			modal: true,
 			width: 950,
 			resizable: false,
