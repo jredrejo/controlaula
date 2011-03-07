@@ -47,6 +47,10 @@ function connection(url,data,action){
 					}
 					break;
 				}
+				case "translate":{
+					translate(res);
+					break;
+				}                
 				case "sendMessage":{
 
 					if(res.result=="Bad send"){

@@ -170,7 +170,7 @@ class ControlAulaProtocol(resource.Resource):
                     handler.args=[args] 
                 else:
                     handler.args=[]
-                if student_asks:
+                if student_asks and command!='language':
                     if 'user_id' in request.args:                                         
                         user_key=request.args['user_id'][0] + '@' + request.client.host
                         if  type(args)!=type([]):

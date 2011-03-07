@@ -23,6 +23,7 @@
 "sendMessage" : "Send Message",
 "sendFile" : "Send File",
 "receivedFiles" : "Received Files",
+"receivedFilesStudent" : "Received Files",
 "web" : "Web",
 "bigBrother" : "Big Brother",
 "goToURL" : "Go",
@@ -54,4 +55,6 @@
 "No" : "No",
 "Yes" : "Yes",
 "changeItUp" : "Desktop themes",
+"Actions" : "Actions",
+"classroomChat" : "Classroom Chat",
 "licenseInfo" : "+Infor"}

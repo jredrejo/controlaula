@@ -393,7 +393,7 @@ class Plugins(object):
                 
     def language(self):      
         mylocale=getdefaultlocale()[0]
-        if mylocale == None:
+        if mylocale is None:
             mylocale = 'en_EN'
         if mylocale.strip()  == '':
             mylocale = 'en_EN'

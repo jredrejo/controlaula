@@ -22,14 +22,15 @@
 
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="demos.css" /> 
 
 	<!-- JQuery Library -->
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery-1.4.2.min.js"></script>
 
 	<!-- JQuery UI Library -->
-	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/orange/jquery-ui-1.8.5.custom.css" />
-	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.5.custom.min.js"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href="js/jquery/ui/css/ui-lightness/jquery-ui-1.8.8.custom.css" />
+    
+	<script type="text/JavaScript" language="javascript" src="js/jquery/ui/jquery-ui-1.8.8.custom.min.js"></script>
 
 	<!-- JQuery JSON Library -->
 	<script type="text/JavaScript" language="javascript" src="js/jquery/jquery.json.js"></script>
@@ -46,8 +47,7 @@
     <!-- Our Functions -->
 	<script type="text/JavaScript" language="javascript" src="student/js/buttons.js"></script>
 	<script type="text/JavaScript" language="javascript" src="student/js/modal.js"></script>
-	<script type="text/JavaScript" language="javascript" src="student/js/print.js"></script>
-	<script type="text/JavaScript" language="javascript" src="student/js/utils.js"></script>
+	 <script type="text/JavaScript" language="javascript" src="student/js/print.js"></script>
 	<script type="text/JavaScript" language="javascript" src="student/js/connection.js"></script>
 
 	<meta charset="UTF-8" />
@@ -71,7 +71,7 @@
 
     <script type="text/javascript" charset="utf-8">
 
-    
+      
       $(document).ready(function(){
 
 
@@ -94,6 +94,7 @@
 
                 conf = new Configuration(); 
                 initChat();
+                languageRequest();
                 
 		 
       });
@@ -105,16 +106,16 @@
 
 	<div id="tabsStudent" style="width:60%">
 		<ul>
-			<li><a href="#tabs-1">Acciones</a></li>
+			<li><a href="#tabs-1"><span id="Actions">Acciones</span></a></li>
 		</ul>
 		<div id="tabs-1" style="padding:2px;">
 			<table width="100%">
 				<tr>
-					<td style="text-align:center; padding:30px;"><button id="sendFileStudent" style="width:160px;">Enviar Fichero</button></td>
-					<td style="text-align:center;"><button id="receivedFileStudent" style="width:160px;">Ficheros Recibidos</button></td>
+					<td style="text-align:center; padding:30px;"><button id="sendFileStudent" style="width:160px;"><span id="sendFile">Enviar Fichero</span></button></td>
+					<td style="text-align:center;"><button id="receivedFileStudent" style="width:160px;"><span id="receivedFiles">Ficheros Recibidos</span></button></td>
 				</tr>
 				<tr>
-					<td style="text-align:center; padding:30px;"><button id="chatClassroom" style="width:160px;">Chat de clase</button></td>
+					<td style="text-align:center; padding:30px;"><button id="chatClassroom" style="width:160px;"><span id="classroomChat">Chat de Clase</span></button></td>
 					<!--- <td style="text-align:center;"><button id="chatTeacher" style="width:160px;">Chat con Profesor</button></td>  -->
 				</tr>
 			</table>
