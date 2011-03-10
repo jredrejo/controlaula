@@ -33,12 +33,12 @@ function selectNone(){
 
 function computersSelected(url){
 	var selected = Array();
-	var j=0;
+	var i=0;
 	
 	$("#selectable li").each(function(i, item){
 		if($("#"+item.id).hasClass('ui-selected')==true){
-			selected[j] = $("#"+item.id + ":eq(0) > #pcName").html();
-			j++;
+			selected[i] = $("#"+item.id + ":eq(0) > #pcName").html();
+			i++;
 
 			if(url=="wakeup"){
 				$("#"+item.id+" .thumb-image").attr("src","img/icon_loading.gif");
