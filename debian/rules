@@ -26,9 +26,8 @@ install: build
 	python setup.py install --prefix=/usr    --root=$(CURDIR)/debian/controlaula
 	# Remove embedded Javascript libraries:
 	ln -sf /usr/share/javascript/jquery/jquery.min.js $(JQUERYPREFIX)/jquery.min.js
-	rm -Rf $(JQUERYPREFIX)/ui
-	ln -sf /usr/share/javascript/jquery-ui  $(JQUERYPREFIX)/ui	
-
+	ln -sf /usr/share/javascript/jquery-ui/jquery-ui.js $(JQUERYPREFIX)/ui/jquery-ui.custom.min.js
+	
 # Build architecture-independent files here.
 binary-indep: build install
 	dh_pysupport -pcontrolaula
