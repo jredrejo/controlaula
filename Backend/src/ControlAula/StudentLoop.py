@@ -61,7 +61,7 @@ class MulticastClientUDP(DatagramProtocol):
     def timedOut(self):
         logging.getLogger().debug("UDP timed out")
         try:
-            self.protocol.stopListening()
+            self.transport.stopListening()
         except:
             pass #avoid ugly errors when stopping the daemon         
         if self.obey.catched =='':     
