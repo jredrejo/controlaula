@@ -301,7 +301,7 @@ def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
     if not os.path.exists(local_web_dir):
         try:
             os.mkdir(local_web_dir)
-            shutil.copy(os.path.join(WWWPAGES,'js/jquery/jquery-1.4.2.min.js') , os.path.join(local_web_dir,'jquery-1.4.2.min.js'))
+            shutil.copy(os.path.join(WWWPAGES,'js/jquery/jquery.min.js') , os.path.join(local_web_dir,'jquery.min.js'))
             shutil.copy(os.path.join(WWWPAGES,'img/controlaula.png') , os.path.join(local_web_dir,'controlaula.png'))
         except:
             logging.getLogger().debug('Error copying www pages to user directory')

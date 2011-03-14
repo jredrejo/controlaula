@@ -1,4 +1,4 @@
-frontend usr/share/controlaula
+#frontend usr/share/controlaula
 lang usr/share/controlaula
 controlaula.png usr/share/pixmaps
 controlaula.desktop usr/share/applications
