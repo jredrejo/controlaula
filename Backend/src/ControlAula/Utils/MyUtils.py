@@ -300,12 +300,16 @@ def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
     local_web_dir=os.path.join(APP_DIR,'www')
     if not os.path.exists(local_web_dir):
         try:
-            os.mkdir(local_web_dir)
-            shutil.copy(os.path.join(WWWPAGES,'js/jquery/jquery.min.js') , os.path.join(local_web_dir,'jquery.min.js'))
-            shutil.copy(os.path.join(WWWPAGES,'img/controlaula.png') , os.path.join(local_web_dir,'controlaula.png'))
+            os.mkdir(local_web_dir)          
+            shutil.copy(os.path.join(WWWPAGES,'img','controlaula.png') , os.path.join(local_web_dir,'controlaula.png'))
         except:
             logging.getLogger().debug('Error copying www pages to user directory')
-                        
+    if not os.path.exists(os.path.join(local_web_dir,'js','jquery','jquery.min.js')):                
+        try:
+            shutil.copy(os.path.join(WWWPAGES,'js','jquery','jquery.min.js') , os.path.join(local_web_dir,'jquery.min.js'))
+        except:
+            logging.getLogger().debug('Error copying www pages to user directory')
+            
         
     page_to_send =open(requestedfile, "r").read()
     html_to_save=page_to_send.replace('%(user_id)', getLoginName())

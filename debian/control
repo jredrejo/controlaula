@@ -10,7 +10,7 @@ Homepage:http://controlaula.sourceforge.net
 
 Package: controlaula
 Architecture: all
-Depends: ${python:Depends}, python-avahi, python-gtk2 | python-qt4, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, x11vnc (>= 0.8.2), iptables, libjs-jquery-ui (>=1.7.2),  libjs-jquery (>= 1.4.2)
+Depends: ${python:Depends}, python-avahi, python-gtk2 | python-qt4, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, xvnc4viewer | xtightvncviewer, vlc, libdvdplay0 | libdvdnav4, x11vnc (>= 0.8.2), iptables, libjs-jquery (>= 1.4.2)
 Recommends: cups-client, ethtool
 Suggests: libdvdcss2
 Conflicts: ltsp-controlaula

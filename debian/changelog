@@ -2,6 +2,7 @@ controlaula (1.6.10-1) unstable; urgency=low
 
   * i18n finished
   * Fixed bug in student javascript
+  * debian/control: added dependency on libjs-jquery
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 07 Mar 2011 14:02:42 +0100
 
