@@ -77,7 +77,10 @@ class Plugins(object):
     def process(self,command):        
         if self.handlers.has_key(command):
             #whenever a order arrives, the screensaver is killed  
-            subprocess.Popen(["gnome-screensaver-command","--exit"])
+            try:
+                subprocess.Popen(["gnome-screensaver-command","--exit"])
+            except OSError, e: 
+                logging.getLogger().debug('Killing screensaver failed with this error number: %s and text: %s' %  (e.errno, e.strerror) )
             handler=self.handlers[command]
             
             handler(*self.args)
