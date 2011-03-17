@@ -2,6 +2,7 @@ controlaula (1.6.11-1) unstable; urgency=low
 
   * Fix error in thin clients
   * Complete some untranslated strings
+  * Fix error when the student sent a file to the teacher
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 17 Mar 2011 10:01:12 +0100
 

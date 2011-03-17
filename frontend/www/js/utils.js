@@ -54,7 +54,7 @@ function sendOrderSelected(url,args,action){
 	var selected = computersSelected(url);
 
 	if(selected.length==0){
-		modalAlert("Para realizar la acci&oacute;n debe seleccionar al menos un equipo");
+		modalAlert(translations["SelectOnePCAtLeast"]);
 		return;
 	}
 

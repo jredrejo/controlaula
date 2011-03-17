@@ -84,7 +84,7 @@ function modalSendFile(){
 			collapseSpeed: 750, 
 			multiFolder: false },
 			function(file) { 
-				modalConfirm(translations["confirmFile" ],"sendOrderSelected('sendFile','"+file+"','sendFile');");
+				modalConfirm(translations["confirmFile" ],"sendOrder('sendFile','"+file+"','sendFile');");
 		});
 
 	return true;
