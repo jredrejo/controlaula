@@ -232,16 +232,18 @@ function modalWeb(){
 }
 
 function modalBigBrother(){
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
 
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
+    
 	$("#dialogBigBrother")
 		.dialog({
 			title: translations["bigBrother"],
 			modal: true,
 			width: 950,
 			resizable: false,
-			buttons: {
-				"Cerrar": function() { $( this ).dialog( "close" ); }
-			},
+			buttons: dlgButtons,
 			beforeClose: function(event, ui) { connection("disableBigBrother","","disableBigBrother"); }
 		})
 		.dialog('open'); 

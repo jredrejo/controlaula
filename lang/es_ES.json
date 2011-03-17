@@ -46,6 +46,8 @@
 "Send" : "Enviar" ,
 "ConfirmVideo" : "¿Desea comenzar la emisi&oacute;n del v&iacute;deo seleccionado?",
 "WebBrowsing" : "Navegaci&oacute;n Web",
+"sendWebToSelected" : "Enviar web a seleccionados",
+"sendWebToAll" : "Enviar web a todos",
 "mustSelectOneVideo" : "Para realizar una emisi&oacute;n de v&iacute;deo debe seleccionar al menos un equipo",
 "mustSelectOneSend" : "Para enviar un mensaje debe seleccionar al menos un equipo",
 "OpenReceivedFolder" : "Abrir carpeta con los ficheros recibidos",
@@ -56,4 +58,6 @@
 "changeItUp" : "Temas de escritorio",
 "Actions" : "Acciones",
 "classroomChat" : "Chat de clase",
+"ShowPC" : "Ver equipo",
+"SelectOnePCAtLeast" : "Para realizar la acci&oacute;n debe seleccionar al menos un equipo",
 "licenseInfo" : "+ info"}

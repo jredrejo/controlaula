@@ -172,7 +172,7 @@ function showCapture(element,computer){
 	
 	computerSelected = computer;
 
-    $("#imageBigBrother").html("<img src='"+$('#thumbCapture_'+element).attr("src")+"' id='imageCoputer-"+computer+"'/><br><br><input type='button' value='Ver equipo' onClick='javascript:connection(\"openVNC\",\"{\\\"args\\\":\\\""+computer+"\\\"}\"   ,\"\");'>");
+    $("#imageBigBrother").html("<img src='"+$('#thumbCapture_'+element).attr("src")+"' id='imageCoputer-"+computer+"'/><br><br><input type='button' value='" + translations["ShowPC"] + "' onClick='javascript:connection(\"openVNC\",\"{\\\"args\\\":\\\""+computer+"\\\"}\"   ,\"\");'>");
 	$("#imageBigBrother").show("slide",{},500);
 }
 
