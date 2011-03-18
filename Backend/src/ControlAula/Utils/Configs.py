@@ -338,9 +338,9 @@ def import_legacy_config(oldconfig,newconfig):
     itemlist=old_configparser.items('General')
     for i in itemlist:
         if i[0]=='filas':
-            cols=int(i[1].replace('"',''))
-        elif i[0]=='columnas':
             rows=int(i[1].replace('"',''))
+        elif i[0]=='columnas':
+            cols=int(i[1].replace('"',''))
 
     total=cols*rows
     if total==0: return
