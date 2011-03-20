@@ -55,7 +55,7 @@ class RPCServer(xmlrpc.XMLRPC):
                 return 'new'
             else:
                 self.classroom.updateUserTimeStamp(key)
-                
+        #print time.strftime('%H:%M:%S') , key
         if self.classroom.hasCommands(key):
             return 'commands' #getCommands must be called by the student        
         #return if the new host has to send its data

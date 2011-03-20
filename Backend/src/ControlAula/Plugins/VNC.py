@@ -84,7 +84,7 @@ class VNC(object):
                     self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
                 else:
                     if self.isLTSP=='':
-                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-rfbport', self.port, '-passwd',  self.writePasswd])                       
+                        self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10','-rfbport', self.port, '-passwd',  self.writePasswd])                       
                     else:
                         self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
         except:

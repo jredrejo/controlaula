@@ -223,8 +223,8 @@ class Classroom(object):
     def _checkInterval(self,data,interval):
         if self.broadcast.broadcasting or self.myVNC.activeBB:
             return False
-        """check if current time has passed data timestamp + 1+ interval (in seconds)"""         
-        return (datetime.datetime.now()>data.timestamp+ datetime.timedelta(seconds=(1+interval)))
+        """check if current time has passed data timestamp + 2 + interval (in seconds)"""         
+        return (datetime.datetime.now()>data.timestamp+ datetime.timedelta(seconds=(2+interval)))
 
 
     def shiftDesktop(self,index):

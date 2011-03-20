@@ -199,7 +199,7 @@ if __name__ == '__main__':
         logging.getLogger().debug("The user is NOT a teacher")
         from ControlAula import StudentLoop
         
-        MyStudent=StudentLoop.Obey(int(REFRESH/2))
+        MyStudent=StudentLoop.Obey(REFRESH)
         reactor.callWhenRunning(MyStudent.listen)
         reactor.callWhenRunning(MyStudent.startScan)    
     

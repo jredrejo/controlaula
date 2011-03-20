@@ -94,7 +94,7 @@ if not os.path.isdir('/nonexistent'):
     except:
         pass
 
-MyStudent=StudentLoop.Obey(int(REFRESH/2))
+MyStudent=StudentLoop.Obey(REFRESH)
 reactor.callWhenRunning(MyStudent.listen)
 reactor.callWhenRunning(MyStudent.startScan)
 
