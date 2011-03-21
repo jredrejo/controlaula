@@ -223,8 +223,8 @@ class Classroom(object):
     def _checkInterval(self,data,interval):
         if self.broadcast.broadcasting or self.myVNC.activeBB:
             return False
-        """check if current time has passed data timestamp + 2 + interval (in seconds)"""         
-        return (datetime.datetime.now()>data.timestamp+ datetime.timedelta(seconds=(2+interval)))
+        """check if current time has passed data timestamp + 3 + interval (in seconds)"""         
+        return (datetime.datetime.now()>data.timestamp+ datetime.timedelta(seconds=(3 +interval)))
 
 
     def shiftDesktop(self,index):
@@ -267,7 +267,10 @@ class Classroom(object):
         self.rows-=1
         position=self.cols*self.rows 
         for i in range(0,self.cols):
-            self.Desktops.pop(position)     
+            deleted=self.Desktops.pop(position)
+            if deleted.hostname !='Unknown':                
+                new_pos=self.findNamePosition(deleted.hostname)
+                self.Desktops[new_pos]=deleted              
 
     def addDesktopsCol(self):
         cols=self.cols
@@ -279,8 +282,10 @@ class Classroom(object):
         cols=self.cols
         self.cols-=1
         for i in range (self.rows-1,-1,-1):
-            self.Desktops.pop(i*cols +self.cols)
-            
+            deleted=self.Desktops.pop(i*cols +self.cols)
+            if deleted.hostname !='Unknown':                
+                new_pos=self.findNamePosition(deleted.hostname)
+                self.Desktops[new_pos]=deleted
             
     def placeHostDesktop(self,key):
         '''Puts a pc in the list of Desktops, according to its position'''
@@ -294,23 +299,28 @@ class Classroom(object):
                     self.shiftDesktop(position) #The position was busy by a host and it has to be moved  
                 break
         if position ==-1:#if it's not in the classroom setup, let's look for somewhere to place it:            
-            number=MyUtils.getDesktopNumber(hostname)
-            if number !='':
-                position=int(number)            
-                if position >0:
-                    #position -=1
-                    position=len(self.Desktops)-position
-                    if position<1:
-                        position=self.placeHostFreely()                        
-                if self.Desktops[position].hostkey!='':
-                    self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
-            else:
-                position=self.placeHostFreely()
+            position=findNamePosition(hostname)
             
         self.Desktops[position].putHost(self.Hosts[key],key)
         self.recheckUsersDesktops()
         self.saveClassLayout()
         
+    def findNamePosition(self,hostname):
+        position=-1
+        number=MyUtils.getDesktopNumber(hostname)
+        if number !='':
+            position=int(number)            
+            if position >0:
+                #position -=1
+                position=len(self.Desktops)-position
+                if position<1:
+                    position=self.placeHostFreely()                        
+            if self.Desktops[position].hostkey!='':
+                self.shiftDesktop(position) #The position was busy by a host and it has to be moved    
+        else:
+            position=self.placeHostFreely()
+            
+        return position
 
     def placeUserDesktop(self,key):
         user=self.LoggedUsers[key]
