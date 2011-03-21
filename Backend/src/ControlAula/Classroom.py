@@ -299,7 +299,7 @@ class Classroom(object):
                     self.shiftDesktop(position) #The position was busy by a host and it has to be moved  
                 break
         if position ==-1:#if it's not in the classroom setup, let's look for somewhere to place it:            
-            position=findNamePosition(hostname)
+            position=self.findNamePosition(hostname)
             
         self.Desktops[position].putHost(self.Hosts[key],key)
         self.recheckUsersDesktops()
