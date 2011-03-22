@@ -35,7 +35,7 @@ class VNC(object):
 
     
 
-    def __init__(self,readonly=True,readpasswd='',writepasswd='',clientport=5900):
+    def __init__(self,readonly=True,readpasswd='',writepasswd='',clientport=5400):
         '''
         Parameters:
         readonly=True if the server won't allow keyboard and mouse control
@@ -56,12 +56,12 @@ class VNC(object):
         self.isLTSP=MyUtils.isLTSP()
             
         if self.isLTSP=='':
-            self.port=str(NetworkUtils.getUsableTCPPort('127.0.0.1',5900))
+            self.port=str(NetworkUtils.getUsableTCPPort('127.0.0.1',5400))
         else:
             d=self.isLTSP.split('.')
             if len(d)<4: #sometimes, it needs two tries :(
                 d=self.isLTSP.split('.')
-            self.port=str(5900 + int(d[3]))
+            self.port=str(5400 + int(d[3]))
             
         self.readonly=readonly
         
@@ -81,12 +81,12 @@ class VNC(object):
         try:
             if self.procServer==None:
                 if self.readonly:
-                    self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
+                    self.procServer=subprocess.Popen(['x11vnc', '-shared', '-forever', '-noxdamage','-noncache', '-passwd',  self.writePasswd, '-viewpasswd', self.readPasswd,'-rfbport',self.port])
                 else:
                     if self.isLTSP=='':
                         self.procServer=subprocess.Popen(['x11vnc',  '-forever','-ncache','10','-rfbport', self.port, '-passwd',  self.writePasswd])                       
                     else:
-                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
+                        self.procServer=subprocess.Popen(['x11vnc', '-forever', '-noxdamage', '-ncache','10', '-noshm', '-rfbport', self.port, '-passwd',  self.writePasswd])
         except:
             logging.getLogger().error('x11vnc is not working in this system')
             
@@ -123,10 +123,10 @@ class VNC(object):
         self.procViewer=MyUtils.launchAsNobody(command)      
         
     def startViewer(self,target,ltsp,ip):
-        port=5900
+        port=5400
         if ltsp:
             d=ip.split('.')
-            port=str(5900 + int(d[3]))
+            port=str(5400 + int(d[3]))
             ip='127.0.0.1'
                         
         passwd=tempfile.mkstemp()[1]
