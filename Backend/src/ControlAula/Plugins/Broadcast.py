@@ -54,10 +54,17 @@ class Vlc(object):
         self.url=''
         self.dvd=False
         self.broadcasting=False
+        self.codec_h264=self.is_h264_available()
         
     def __del__(self):
         self.stop()
-            
+        
+    def is_h264_available(self):
+        """ check if encoding with h264 is possible """
+        guess=subprocess.Popen(["vlc","-l"],stdout=subprocess.PIPE)
+        guess.wait()
+        output=guess.communicate()[0]
+        return 'x264' in output
             
     def get_disk_info(self):
         disc_info=('',0,0,'')
@@ -94,13 +101,15 @@ class Vlc(object):
             else:
                 return mount_point
         else:
-            command+=[str(url)]
+            command+=[str(url) ]
             
-        command +=["--sout"]
-        #command +=["'#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mpga,ab=32,channels=1}:duplicate{dst=std{access=udp,mux=ts,dst=239.255.255.0:"+ self.port + "}}'"]
-
-        command +=["rtp:239.255.255.0:" + self.port]
-        command +=["--sout-all","--ttl","5","--audio-desync","1100","--volume", "1024" ]
+        command +=["--sout"]        
+        if self.codec_h264:
+            command += ["#transcode{vcodec=h264,vb=250,scale=0.75,acodec=mp4a,ab=32,channels=1,samplerate=48000}:rtp{dst=239.255.255.0,port=" + self.port + ",mux=ts}"]
+        else:
+            command += ["#rtp{dst=239.255.255.0,port=" + self.port + ",mux=ts}"]
+        #command +=["rtp:239.255.255.0:" + self.port]
+        command +=["--sout-all","--ttl","5","--no-sout-rtp-sap","--sout-keep","--volume", "1024","--avi-index=1","--no-qt-error-dialogs" ]
 
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
@@ -115,7 +124,7 @@ class Vlc(object):
         if not self.broadcasting:
             self.broadcasting=True
             
-            self.procRx=subprocess.Popen(['vlc','--quiet' ,'--udp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
+            self.procRx=subprocess.Popen(['vlc','--quiet' ,'--rtp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
             for cb in self._callbacks['started']:            
                 cb(self.url,self.dvd)
             

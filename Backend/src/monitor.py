@@ -54,7 +54,8 @@ def SigHandler(signum, frame):
         pass
     if isTeacher:
         MyClass.myVNC.stop()
-    sys.exit()                                                   
+    sys.exit()       
+                                             
 
 
 def checkActivity():
