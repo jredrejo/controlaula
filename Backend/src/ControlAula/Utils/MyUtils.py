@@ -192,10 +192,11 @@ def getLDMinfo():
 def _get_disp_tty():
     xauth=''
     display=''
+
     if isLTSP()=='':
         command='COLUMNS=300  ps aux|grep -v grep|grep "\-auth"'
     else:
-        command='COLUMNS=300  ps aux|grep -v grep|grep ldm'
+        command='COLUMNS=300  ps aux|grep -v grep|grep ldm|grep -v ssh'
         
     prt=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
     prt.wait()
@@ -208,10 +209,24 @@ def _get_disp_tty():
             xauth=p[i+1]
             break
 
+    if getLoginName()!='root':
+        display=os.environ["DISPLAY"].split(".")[0]
+
     if xauth=='':
         xauth=os.path.join(getHomeUser(),  '.Xauthority'   )
+
                                 
     return (display,xauth)    
+
+def ltsp_logged():
+    if isLTSP()!='' and getLoginName()=='root':
+        command='COLUMNS=300  ps aux|grep -v grep|grep ldm_socket'
+        prt=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
+        prt.wait()
+        t=prt.communicate()[0]     
+        return  t==''
+    else:
+        return True
     
 def getXtty():
     from tempfile import mkstemp
@@ -219,7 +234,10 @@ def getXtty():
     from time import sleep
     disp,xauth=_get_disp_tty()
     
-    semaphore= len(glob('/tmp/*.controlaula'))==0
+
+    
+    semaphore= len(glob('/tmp/*.controlaula'))==0 and ltsp_logged()
+        
     if getLoginName()=='root' and semaphore:       
         command='xauth -f ' + xauth + ' add `hostname -s`/unix' + disp + ' . ' + generateUUID(24)
         subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
@@ -233,7 +251,10 @@ def getXtty():
             xfile=mkstemp(suffix='.controlaula')[1]
             sleep(0.5)
             copyfile(xauth,xfile)
-            os.chown(xfile,65534,0)
+            try:
+                os.chown(xfile,65534,0)
+            except:
+                pass 
             xauth='XAUTHORITY='+xfile
         else:
             xauth=''
@@ -244,7 +265,10 @@ def launchAsNobody(command):
     for i in glob('/tmp/*.controlaula'):
         os.remove( i)
     disp,display,xauth=getXtty()
-    finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
+    if  isLTSP()!='' and getLoginName()=='root' and not ltsp_logged() :
+        finalcommand='su -c \"' +  display + ' ' + command + '\" nobody'
+    else:
+        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
     logging.getLogger().debug(finalcommand)
     proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
     return proc    

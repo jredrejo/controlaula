@@ -54,6 +54,7 @@ class Vlc(object):
         self.url=''
         self.dvd=False
         self.broadcasting=False
+        self.myIP=NetworkUtils.get_ip_inet_address()
         self.codec_h264=self.is_h264_available()
         
     def __del__(self):
@@ -140,7 +141,7 @@ class Vlc(object):
         NetworkUtils.cleanRoutes()              
         ltspaudio=' '
         if MyUtils.isLTSP()!='':
-            ltspaudio=' PULSE_SERVER=127.0.0.1:4713 ESPEAKER=127.0.0.1:16001 '
+            ltspaudio=' PULSE_SERVER=tcp:' + self.myIP + ':4713 ESPEAKER=' + self.myIP+  ':16001 '
                   
         command=ltspaudio 
         command +='vlc -I dummy ' 

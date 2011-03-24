@@ -37,6 +37,7 @@ def setSound(value):
     
 def disableKeyboardAndMouse(newAction=True):   
     global used_display
+    
     if newAction:
         for i in glob('/tmp/*.controlaula'):
             remove( i)        

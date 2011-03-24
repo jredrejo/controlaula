@@ -130,15 +130,13 @@ class Plugins(object):
         command +=['21,23,80,143,194,443,445','-m','owner','--uid-owner',login,'-j','DROP']
         subprocess.Popen(command)
         
-    def enableMouse(self):
-        if MyUtils.getLoginName()=='root':
-            Actions.enableKeyboardAndMouse()
-        else:
+    def enableMouse(self):        
+        Actions.enableKeyboardAndMouse()
+        if MyUtils.getLoginName()!='root':
             Configs.MonitorConfigs.SetGeneralConfig('mouse','1')       
     def disableMouse(self):
-        if MyUtils.getLoginName()=='root':
-            Actions.disableKeyboardAndMouse()
-        else:
+        Actions.disableKeyboardAndMouse()
+        if MyUtils.getLoginName()!='root':            
             Configs.MonitorConfigs.SetGeneralConfig('mouse','0')    
     def enableSound(self):
         Configs.MonitorConfigs.SetGeneralConfig('sound','1')
