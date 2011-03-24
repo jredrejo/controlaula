@@ -43,10 +43,10 @@ class SirvecoleConfig(object):
         
         #List of optional items
         self._OptionalItems=['seapaga','offactivated','iniciosininet','startwithoutinternet','iniciosinraton',
-                             'startwithoutmouse','iniciosinsonido','startwithoutsound','iniciosinmensajes',
-                             'startwithoutmessages', 'classroomname','allowburstwol']
+                             'startwithoutmouse','iniciosinsonido','startwithoutsound','iniciosinmensajes','monitornecesario',
+                            'offteacher', 'startwithoutmessages', 'classroomname','allowburstwol','offtimeout','offwithoutlogin']
         #to be used with legacy versions of ControlAula
-        self._translatedict={'seapaga':'offactivated','iniciosininet':'startwithoutinternet',
+        self._translatedict={'seapaga':'offactivated','iniciosininet':'startwithoutinternet','monitornecesario':'offteacher',
                              'iniciosinraton':'startwithoutmouse','iniciosinsonido':'startwithoutsound',
                              'iniciosinmensajes':   'startwithoutmessages'}
         
@@ -106,8 +106,8 @@ class SirvecoleConfig(object):
             or None if an error occured.
         """
         #Default values:
-        configuration={'offactivated':'0','startwithoutinternet':'0',
-                             'startwithoutmouse':'0','startwithoutsound':'0',
+        configuration={'offactivated':'0','startwithoutinternet':'0','offtimeout':'360',
+                             'startwithoutmouse':'0','startwithoutsound':'0','offteacher':'0','offwithoutlogin':'0',
                              'startwithoutmessages':'0', 'classroomname':MyUtils.classroomName(),'allownurstwol':'1'}
       
 

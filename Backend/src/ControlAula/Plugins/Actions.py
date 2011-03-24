@@ -24,6 +24,7 @@
 
 from twisted.internet.utils import getProcessValue
 from ControlAula.Utils import NetworkUtils,MyUtils
+import subprocess
 from Xlib import X
 from Xlib.display import Display
 from os import remove
@@ -84,3 +85,28 @@ def sendWOLBurst(macs,throttle):
     loop = LoopingCall(sendNext)
     loop.start(throttle)
     return d
+
+def switch_off():
+    from twisted.internet import reactor
+    import os.path
+    if os.path.exists('/usr/sbin/ethtool'):
+        subprocess.call(['ethtool','-s','eth0','wol','g'])
+                            
+    if MyUtils.isLTSP()=='':                      
+        subprocess.call(['killall','-9','x-session-manager'])            
+    else:
+        subprocess.call(['poweroff','-w'])
+        try:
+            server,socket = MyUtils.getLDMinfo()
+            if server!='':
+                subprocess.call(['ssh','-O','exit','-S',socket,server])           
+        except:
+            pass            
+
+    reactor.callLater(1,die)    
+    
+def die():
+    if MyUtils.isLTSP()=='':
+        subprocess.Popen(['poweroff','-hp'])
+    else:
+        subprocess.Popen(['poweroff','-fp'])    

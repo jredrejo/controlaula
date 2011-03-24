@@ -151,29 +151,8 @@ class Plugins(object):
         Configs.MonitorConfigs.SetGeneralConfig('messages','0')
 
     def sleep(self):
-        from twisted.internet import reactor
-        if os.path.exists('/usr/sbin/ethtool'):
-            subprocess.call(['ethtool','-s','eth0','wol','g'])
-                                
-        if MyUtils.isLTSP()=='':                      
-            subprocess.Popen(['killall','-9','x-session-manager']).wait()            
-        else:
-            subprocess.call(['poweroff','-w'])
-            try:
-                server,socket = MyUtils.getLDMinfo()
-                if server!='':
-                    subprocess.Popen(['ssh','-O','exit','-S',socket,server]).wait()           
-            except:
-                pass            
-
-        reactor.callLater(1,self.switchoff)
-         
-    def switchoff(self):
-        if MyUtils.isLTSP()=='':
-            subprocess.Popen(['poweroff','-hp'])
-        else:
-            subprocess.Popen(['poweroff','-fp'])
-            
+        Actions.switch_off()
+        
     def broadcast(self, url='', isDVD=False):
         self.myBcast.receive()
         

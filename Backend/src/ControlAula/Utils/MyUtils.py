@@ -219,6 +219,7 @@ def _get_disp_tty():
     return (display,xauth)    
 
 def ltsp_logged():
+    """returns True if not user is logged"""
     if isLTSP()!='' and getLoginName()=='root':
         command='COLUMNS=300  ps aux|grep -v grep|grep ldm_socket'
         prt=subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
@@ -227,6 +228,15 @@ def ltsp_logged():
         return  t==''
     else:
         return True
+    
+def not_ltsp_logged():
+    """returns True if not user is logged"""
+    logged=subprocess.Popen(["users"],stdout=subprocess.PIPE).communicate()[0]
+    loggedusers=logged.split()
+    not_root=[i for i in loggedusers if i!='root']
+    return len(not_root)==0
+ 
+    
     
 def getXtty():
     from tempfile import mkstemp

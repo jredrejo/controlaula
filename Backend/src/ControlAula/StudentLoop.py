@@ -23,10 +23,11 @@
 ##############################################################################
 
 import xmlrpclib
-from ControlAula.Utils import NetworkUtils, MyUtils,Configs
+from ControlAula.Utils import NetworkUtils, MyUtils,Configs,ping
 from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging
+import datetime
 from twisted.internet import reactor     
 from twisted.internet.protocol import DatagramProtocol
 
@@ -95,7 +96,9 @@ class Obey(object):
         self.isLTSP=MyUtils.isLTSP()
         self.monitor=None
         self.myIp=None
-        self.startScan()
+        self.last_ping=datetime.datetime.now()
+        self.last_logged=self.last_ping
+        self.last_teacher=self.last_ping
         
     def startScan(self):
         try:
@@ -145,8 +148,33 @@ class Obey(object):
                 self.sendData(order)
             except: #network jam or teacher left
                 pass 
+
+        #check different reasons to switch off:
+        if self.mylogin=='root':
+            if Configs.RootConfigs['offactivated']=='1' and self.isLTSP!='':
+                p=ping.do_one("192.168.0.254", 0.1)
+                if p is not None: 
+                    self.last_ping=datetime.datetime.now()
+                else:
+                    self.off_if_timeout(self.last_ping)                  
+                
+            if Configs.RootConfigs['offteacher']=='1':
+                if self.catched=='':
+                    self.off_if_timeout(self.last_teacher)
+                else:
+                    self.last_teacher= datetime.datetime.now()                                       
+            
+            if Configs.RootConfigs['offwithoutlogin']=='1':
+                if self.isLTSP=='':
+                    not_user_logged=MyUtils.not_ltsp_logged()
+                else:
+                    not_user_logged=MyUtils.ltsp_logged()
+                if not_user_logged:
+                    self.off_if_timeout(self.last_logged)
+                else:
+                    self.last_logged=datetime.datetime.now()
  
-      #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
+        #PENDING: when catched=='' find a way to restart the avahi browsing ¿self.startScan()  , restart controlaula    ?
                             
         if Configs.MonitorConfigs.GetGeneralConfig('sound')=='0':
             Actions.setSound('mute')                                        
@@ -267,3 +295,6 @@ class Obey(object):
                 self.handler.args=i[1:]
                 self.handler.process(i[0])
         
+    def off_if_timeout(self,initial_time):
+        if datetime.datetime.now()>(initial_time+ datetime.timedelta(seconds=int(Configs.RootConfigs['offtimeout'] ))):
+            Actions.switch_off()
