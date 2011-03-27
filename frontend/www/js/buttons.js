@@ -132,4 +132,23 @@ $(function() {
 		$( "#saveConfiguration" )
 			.button({ icons: { primary: "ui-icon-disk"}})
 			.click(function(){ sendClassroomConfig(); });
+		
+		// Video Buttons
+		$( "#movieRewind" )
+			.button({ icons: { primary: "ui-icon-seek-prev"}})
+			.click(function() { sendOrder("movie_rewind", "", "movie_rewind"); }); 
+
+		$( "#moviePlay" )
+			.button({ icons: { primary: "ui-icon-play"}})
+			.click(function() { sendOrder("movie_play", "", "movie_play"); }); 
+
+		$( "#moviePause" )
+			.button({ icons: { primary: "ui-icon-pause"}})
+			.click(function() { sendOrder("movie_pause", "", "movie_pause"); }); 
+			
+		$( "#movieFF" )
+			.button({ icons: { primary: "ui-icon-seek-next"}})
+			.click(function() { sendOrder("movie_ff", "", "movie_ff"); }); 
+
+
 });

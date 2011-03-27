@@ -103,6 +103,7 @@
 		$("#dialogSendFile").dialog({ autoOpen: false });
 		$("#dialogSendMessage").dialog({ autoOpen: false });
 		$("#dialogWeb").dialog({ autoOpen: false });
+		$("#dialogVideoButtons").dialog({ autoOpen: false });
 
 		$('#set').hide();
 		$('#changeItUp').hover(function(){$('#set').fadeIn();}, function(){});
@@ -368,6 +369,11 @@
 			<td><div id="imageBigBrother" style="text-align:center; vertical-align:middle;"></div></td>
 		</tr>
 		</table>
+	</div>
+
+	<div id="dialogVideoButtons" style="text-align:center;">	
+		<br>
+		<button id="movieRewind" style="width:70px;">Rew</button>&nbsp;&nbsp;<button id="moviePlay" style="width:70px;">Play</button>&nbsp;&nbsp;<button id="moviePause" style="width:70px;">Pause</button>&nbsp;&nbsp;<button id="movieFF" style="width:70px;">FF</button>
 	</div>
 
 	<div id="dialogWeb" style="text-align:center;">

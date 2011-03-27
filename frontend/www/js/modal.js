@@ -193,16 +193,36 @@ function modalSendVideo(dir){
 		})
 		.dialog('open'); 
 
-		$('#sendFileTree').fileTree({
-			root: dir, 
-			script: 'getVideoNodes',
-			folderEvent: 'click', 
-			expandSpeed: 750, 
-			collapseSpeed: 750, 
-			multiFolder: false },
-			function(file) { 
-				modalConfirm(translations["ConfirmVideo"],"sendOrderSelected('broadcast','"+file+"','broadcast');");
-		});
+	$('#sendFileTree').fileTree({
+		root: dir, 
+		script: 'getVideoNodes',
+		folderEvent: 'click', 
+		expandSpeed: 750, 
+		collapseSpeed: 750, 
+		multiFolder: false },
+		function(file) { 
+			modalConfirm(translations["ConfirmVideo"],"sendOrderSelected('broadcast','"+file+"','broadcast');");
+	});
+
+	return true;
+}
+
+function modalVideoButtons(){
+    var clsButton = translations["Close"];
+    var dlgButtons = {};
+
+    dlgButtons[clsButton]=function() { $( this ).dialog( "close" ); };
+    
+	$("#dialogVideoButtons")
+		.dialog({
+			title: translations["videoButtons"],
+			modal: true,
+			width: 950,
+			resizable: false,
+			buttons: dlgButtons,
+			beforeClose: function(event, ui) { connection("movie_close","","movie_close"); }
+		})
+		.dialog('open'); 
 
 	return true;
 }
