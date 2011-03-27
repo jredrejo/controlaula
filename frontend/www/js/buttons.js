@@ -135,20 +135,29 @@ $(function() {
 		
 		// Video Buttons
 		$( "#movieRewind" )
-			.button({ icons: { primary: "ui-icon-seek-prev"}})
+			.button({ icons: { primary: "ui-icon-seek-prev"}, text: false})
 			.click(function() { sendOrder("movie_rewind", "", "movie_rewind"); }); 
 
 		$( "#moviePlay" )
-			.button({ icons: { primary: "ui-icon-play"}})
+			.button({ icons: { primary: "ui-icon-play"}, text: false})
 			.click(function() { sendOrder("movie_play", "", "movie_play"); }); 
 
 		$( "#moviePause" )
-			.button({ icons: { primary: "ui-icon-pause"}})
+			.button({ icons: { primary: "ui-icon-pause"}, text: false})
 			.click(function() { sendOrder("movie_pause", "", "movie_pause"); }); 
 			
 		$( "#movieFF" )
-			.button({ icons: { primary: "ui-icon-seek-next"}})
+			.button({ icons: { primary: "ui-icon-seek-next"}, text: false})
 			.click(function() { sendOrder("movie_ff", "", "movie_ff"); }); 
 
+		$( "#movieSubtitles" )
+			.button()
+			.click(function() {
+				if($( "#movieSubtitles" ).is(':checked')){
+					sendOrder("movie_subtitles", "", "movie_subtitles");
+				}else{
+					sendOrder("movie_nosubtitles", "", "movie_nosubtitles");
+				}
+			}); 
 
 });

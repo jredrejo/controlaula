@@ -217,7 +217,7 @@ function modalVideoButtons(){
 		.dialog({
 			title: translations["videoButtons"],
 			modal: true,
-			width: 950,
+			width: 450,
 			resizable: false,
 			buttons: dlgButtons,
 			beforeClose: function(event, ui) { connection("movie_close","","movie_close"); }
