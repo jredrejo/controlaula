@@ -2,6 +2,7 @@ controlaula (1.6.15-1) unstable; urgency=low
 
   * Some improvements in video broadcast
   * Fix a bug when sirvecole runs on teacher computer (killed vncviewer)
+  * When used with non-LTSP clients, students receive sound
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 28 Mar 2011 18:18:22 +0200
 

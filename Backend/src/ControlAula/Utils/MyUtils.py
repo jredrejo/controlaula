@@ -236,6 +236,19 @@ def not_ltsp_logged():
     not_root=[i for i in loggedusers if i!='root']
     return len(not_root)==0
  
+def logged_user():
+    logged=getLoginName()
+    if logged =='root':
+        if isLTSP()!='' :
+            pass #PENDING
+            
+        else:
+            all_users=subprocess.Popen(["users"],stdout=subprocess.PIPE).communicate()[0]
+            loggedusers=all_users.split()        
+            non_root=[n for n in loggedusers if n!='root']
+            if len(non_root)>0: logged=non_root[0]
+        
+    return logged
     
     
 def getXtty():
@@ -271,17 +284,23 @@ def getXtty():
         
     return (disp,display,xauth)
         
-def launchAsNobody(command):
+def launchAsNobody(command):  
+    return launchAs(command) 
+
+
+
+def launchAs(command,login="nobody"):
     for i in glob('/tmp/*.controlaula'):
         os.remove( i)
     disp,display,xauth=getXtty()
     if  isLTSP()!='' and getLoginName()=='root' and not ltsp_logged() :
-        finalcommand='su -c \"' +  display + ' ' + command + '\" nobody'
+        finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     else:
-        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" nobody'
+        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" %s' % (login)
     logging.getLogger().debug(finalcommand)
     proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
-    return proc    
+    return proc  
+
         
 def parse(url):
     import urlparse

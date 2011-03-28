@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 ##############################################################################
 # Project:     Controlaula/Monitor
@@ -30,6 +30,7 @@ import ControlAula.Plugins.vlc as vlc
 import subprocess
 import os
 import gobject
+import getopt
 
 
 # Create a single vlc.Instance() to be share by (possible) multiple players.
@@ -52,6 +53,15 @@ class VLCWidget(gtk.DrawingArea):
             return True
         self.connect("map-event", handle_embed)
         self.set_size_request(640, 400)
+
+
+class LightVLCWidget(gtk.VBox):
+     def __init__(self, *p):
+        gtk.VBox.__init__(self)
+        self._vlc_widget=VLCWidget(*p)
+        self.player=instance.media_player_new()
+        self.pack_start(self._vlc_widget, expand=True)   
+    
 
 class DecoratedVLCWidget(gtk.VBox):
     """Decorated VLC widget.
@@ -123,6 +133,30 @@ class DecoratedVLCWidget(gtk.VBox):
         tb.show_all()
 
         return tb
+
+
+class RootPlayer:
+    def __init__(self,port,encodec=False,teacherIP=''):  
+        self.vlc = LightVLCWidget()   
+        self.port=port
+        self.codec=encodec
+        self.teacherIP=teacherIP
+    
+    def main(self):
+        
+        if self.codec:
+            self.vlc.player.set_media(instance.media_new("http://%s:%s"  % (self.teacherIP,self.port),":http-caching=10000",":fullscreen",":skip-frames"))
+        else:
+            self.vlc.player.set_media(instance.media_new("rtp://@239.255.255.0:%s"  % (self.port),":udp-caching=5000",":fullscreen",":skip-frames"))            
+        self.vlc.player.play()
+        w=gtk.Window()
+        w.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DESKTOP)
+        w.maximize()
+        w.add(self.vlc)
+        w.show_all()  
+        w.stick()  
+        gtk.main()
+        
 
 class VideoPlayer:
 
@@ -200,7 +234,31 @@ if __name__ == '__main__':
         print "You must provide at least 1 movie filename"
         sys.exit(1)
     if len(sys.argv[1:]) == 1:
-
         p=VideoPlayer()
         p.main(sys.argv[1])
+    else:
+        try:
+            opts, args = getopt.getopt(sys.argv[1:], "-c", ["ip=", "port="])
+        except getopt.GetoptError, err:
+            # print help information and exit:
+            print str(err) 
+            print "You must provide right arguments to read a stream"
+            sys.exit(2)
+            
+        encode = False
+        port=''
+        ip=''
+        for o, a in opts:
+            if o == "--ip":
+                ip = a
+            elif o =="--port":
+                port=a
+            elif o=="-c":
+                encode=True
+            else:
+                assert False, "unhandled option"
+                sys.exit(2)
+        
+        p=RootPlayer(port,encode,ip)
+        p.main()
 
