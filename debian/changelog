@@ -1,3 +1,10 @@
+controlaula (1.6.15-1) unstable; urgency=low
+
+  * Some improvements in video broadcast
+  * Fix a bug when sirvecole runs on teacher computer (killed vncviewer)
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 28 Mar 2011 18:18:22 +0200
+
 controlaula (1.6.14-1) unstable; urgency=low
 
   * New video streaming interfaz

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-exec python "/usr/share/controlaula/controlaula_vlc.py" "$@"
-

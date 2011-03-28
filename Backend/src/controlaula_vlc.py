@@ -29,6 +29,7 @@ import sys
 import ControlAula.Plugins.vlc as vlc
 import subprocess
 import os
+import gobject
 
 
 # Create a single vlc.Instance() to be share by (possible) multiple players.
@@ -142,7 +143,7 @@ class VideoPlayer:
         if self.codec:
             command=":sout=#transcode{vcodec=h264,vb=128,fps=16,scale=1,acodec=mp4a,ab=32,channels=1,samplerate=44100}:http{mux=ts,dst=:"+ self.port + "/}"
             try:
-                media=instance.media_new(fname,command,":sout-keep",":sout-all",":sout-x264-cabac",":sout-x264-qp=24",":sout-x264-keyint=50",":volume=1024")
+                media=instance.media_new(fname,command,":sout-keep",":sout-all",":sout-x264-cabac",":sout-x264-qp=32",":sout-x264-keyint=50",":volume=1024")
                 self.vlc.emitter.set_media(media)
             except:
                 sys.exit(1)
@@ -154,17 +155,12 @@ class VideoPlayer:
             except:
                 sys.exit(1)
         
-        try:
-            self.vlc.emitter.play()
-        except:
-            sys.exit(1)
-        
         if self.codec:
-            self.vlc.player.set_media(instance.media_new("http://localhost:" + self.port,":tcp-caching=5000"))
+            self.vlc.player.set_media(instance.media_new("http://localhost:" + self.port,":http-caching=10000"))
         else:
             self.vlc.player.set_media(instance.media_new("rtp://@239.255.255.0:"+ self.port,":rtp-caching=5000"))
         
-        self.vlc.player.play()   
+        
         
         
         events = vlc.EventType
@@ -175,6 +171,9 @@ class VideoPlayer:
         manager.event_attach(events.VlmMediaInstanceStatusError,self.vlc_error,None)    
         
         self.popup()
+        gobject.timeout_add(500, self.vlc.emitter.play)
+        gobject.timeout_add(1000, self.vlc.player.play)
+
         gtk.main()
         
     @vlc.callbackmethod    
@@ -183,7 +182,7 @@ class VideoPlayer:
 
     def popup(self):
         w=gtk.Window()
-        icon_file="controlaula.png"
+        icon_file="/usr/share/pixmaps/controlaula.png"
         w.set_title("ControlAula")
         try:
             w.set_icon_from_file(icon_file)

@@ -149,8 +149,9 @@ class Obey(object):
             except: #network jam or teacher left
                 pass 
 
-        #check different reasons to switch off:
-        if self.mylogin=='root':
+        #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:
+        number=MyUtils.getDesktopNumber(self.myHostname)
+        if self.mylogin=='root' and number!='':
             if Configs.RootConfigs['offactivated']=='1' and self.isLTSP!='':
                 p=ping.do_one("192.168.0.254", 0.1)
                 if p is not None: 

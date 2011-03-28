@@ -17,10 +17,9 @@ datafiles.append(('share/applications',['controlaula.desktop']))
 datafiles.append(('/etc/xdg/autostart',['startcontrolaula.desktop']))
 datafiles.append(('share/controlaula',['nobody.png']))
 datafiles.append(('share/controlaula',['Backend/src/monitor.py']))
-datafiles.append(('share/controlaula',['Backend/src/controlaula_vlc.py']))
 
 setup(name='ControlAula',
-	version='1.5',
+	version='1.6',
 	description='Classroom management tool',
 	long_description = """Really long text here.""",
 	author = 'José L. Redrejo Rodríguez and Manu Mora',
@@ -31,7 +30,7 @@ setup(name='ControlAula',
 #	package_data={'ControlAula': ['nobody.png']},    
 	url = 'http://www.itais.net/en/',
 	# Those are going to be installed on /usr/bin/
-	scripts=['controlaula','Backend/src/sirvecole.py','controlaula_vlc'],
+	scripts=['controlaula','Backend/src/sirvecole.py','Backend/src/controlaula_vlc.py'],
 
 	data_files=datafiles 
     )

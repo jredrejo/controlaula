@@ -88,7 +88,7 @@ class Vlc(object):
         self.broadcasting=False
         self.url=url
         self.dvd=dvd
-        command=["controlaula_vlc"]      
+        command=["controlaula_vlc.py"]      
         if dvd:
             device,isdvd,isvcd,mount_point=self.get_disk_info()
             if device=='':
@@ -104,7 +104,7 @@ class Vlc(object):
             
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
-            reactor.spawnProcess(self.procTx , 'controlaula_vlc',command,env=os.environ) 
+            reactor.spawnProcess(self.procTx , 'controlaula_vlc.py',command,env=os.environ) 
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
@@ -135,7 +135,7 @@ class Vlc(object):
         command +='vlc -I dummy ' 
         command +=  '--quiet --video-on-top --skip-frames '
         if encodec:
-            command +=' --tcp-caching 5000  -f  http://' + teacherIP + ':'
+            command +=' --http-caching 10000  -f  http://' + teacherIP + ':'
         else:
             command +=' --udp-caching 5000  -f  rtp://@239.255.255.0:'
         #command +='ffplay -fs -fast  udp://@239.255.255.0:'
