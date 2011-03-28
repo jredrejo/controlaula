@@ -153,8 +153,8 @@ class Plugins(object):
     def sleep(self):
         Actions.switch_off()
         
-    def broadcast(self, url='', isDVD=False):
-        self.myBcast.receive()
+    def broadcast(self, url='', isDVD=False,encodec=False):
+        self.myBcast.receive(encodec=encodec,teacherIP=self.teacherIP)
         
     def stopBroadcast(self):
         if self.myBcast is not None:

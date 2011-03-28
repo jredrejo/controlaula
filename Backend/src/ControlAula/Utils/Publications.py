@@ -41,7 +41,10 @@ class MulticastServerUDP(DatagramProtocol):
     def datagramReceived(self, datagram, address):
         if datagram == 'ControlAula':
             #print "ok-datagram", str(address)
-            self.transport.write(self.data, address)
+            try:
+                self.transport.write(self.data, address)
+            except:
+                pass #network not available right now
             
 class Publications(object):
     '''

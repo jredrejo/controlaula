@@ -1,3 +1,9 @@
+controlaula (1.6.14-1) unstable; urgency=low
+
+  * New video streaming interfaz
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 28 Mar 2011 08:26:38 +0200
+
 controlaula (1.6.13-1) unstable; urgency=low
 
   * New options to switch off student computers

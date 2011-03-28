@@ -191,8 +191,7 @@ class Plugins(object):
             return {'result':result} 
 
     def startbcast(self,url,isDVD):      
-        
-        self.usersCommand(Desktop.sendBroadcast,[url,isDVD])
+        self.usersCommand(Desktop.sendBroadcast,[url,isDVD,self.classroom.broadcast.codec_h264])
 
     def stopbcast(self):
         for i in self.classroom.Desktops:

@@ -35,8 +35,6 @@ class Vlc(object):
     It needs vlc (videolan) to work 
     '''
 
-    
-
     def __init__(self,bcastport=0):
         '''
         Parameters:
@@ -57,15 +55,15 @@ class Vlc(object):
         self.myIP=NetworkUtils.get_ip_inet_address()
         self.codec_h264=self.is_h264_available()
         
-    def __del__(self):
-        self.stop()
-        
     def is_h264_available(self):
         """ check if encoding with h264 is possible """
         guess=subprocess.Popen(["vlc","-l"],stdout=subprocess.PIPE)
         guess.wait()
         output=guess.communicate()[0]
-        return 'x264' in output
+        return 'x264' in output              
+        
+    def __del__(self):
+        self.stop()
             
     def get_disk_info(self):
         disc_info=('',0,0,'')
@@ -90,7 +88,7 @@ class Vlc(object):
         self.broadcasting=False
         self.url=url
         self.dvd=dvd
-        command=["vlc","--no-ipv6"]      
+        command=["controlaula_vlc"]      
         if dvd:
             device,isdvd,isvcd,mount_point=self.get_disk_info()
             if device=='':
@@ -104,17 +102,9 @@ class Vlc(object):
         else:
             command+=[str(url) ]
             
-        command +=["--sout"]        
-        if self.codec_h264:
-            command += ["#transcode{vcodec=h264,vb=250,scale=0.75,acodec=mp4a,ab=32,channels=1,samplerate=48000}:rtp{dst=239.255.255.0,port=" + self.port + ",mux=ts}"]
-        else:
-            command += ["#rtp{dst=239.255.255.0,port=" + self.port + ",mux=ts}"]
-        #command +=["rtp:239.255.255.0:" + self.port]
-        command +=["--sout-all","--ttl","5","--no-sout-rtp-sap","--sout-keep","--volume", "1024","--avi-index=1","--no-qt-error-dialogs" ]
-
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
-            reactor.spawnProcess(self.procTx , 'vlc',command,env=os.environ) 
+            reactor.spawnProcess(self.procTx , 'controlaula_vlc',command,env=os.environ) 
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
@@ -124,8 +114,6 @@ class Vlc(object):
     def started(self):
         if not self.broadcasting:
             self.broadcasting=True
-            
-            self.procRx=subprocess.Popen(['vlc','--quiet' ,'--rtp-caching','5000','rtp://@239.255.255.0:'+ self.port]) 
             for cb in self._callbacks['started']:            
                 cb(self.url,self.dvd)
             
@@ -136,7 +124,7 @@ class Vlc(object):
         self.broadcasting=False   
         self.clean_callbacks() 
             
-    def receive(self):
+    def receive(self,encodec=False,teacherIP=''):
         self.destroyProcess(self.procRx) 
         NetworkUtils.cleanRoutes()              
         ltspaudio=' '
@@ -145,7 +133,11 @@ class Vlc(object):
                   
         command=ltspaudio 
         command +='vlc -I dummy ' 
-        command +=  '--quiet --video-on-top --skip-frames --udp-caching 5000  -f  rtp://@239.255.255.0:'
+        command +=  '--quiet --video-on-top --skip-frames '
+        if encodec:
+            command +=' --tcp-caching 5000  -f  http://' + teacherIP + ':'
+        else:
+            command +=' --udp-caching 5000  -f  rtp://@239.255.255.0:'
         #command +='ffplay -fs -fast  udp://@239.255.255.0:'
         command += self.port 
         NetworkUtils.addRoute('239.255.255.0')
@@ -190,17 +182,24 @@ class Vlc(object):
 class MyPP(protocol.ProcessProtocol):
     def __init__(self,stop,start,end):
         self.data = ""
-        self.stop=stop
-        self.start=start
+        self.stop_all=stop
+        self.start_viewer=start
         self.end=end
+        self.active=False
         
     def errReceived(self, data):
+        if self.active:return
         if  data.find('nothing to play')>-1 or data.find('cannot open source:')>-1:
-            self.stop()
+            self.stop_all()
             return False        
         else:
-            if data.find('VLC media player')>-1:
-                self.start()
+            self.active=data.find('VLC media player')>-1
+            if self.active:
+                try:
+                    reactor.callLater(2.0,self.start_viewer)
+                    pass
+                except:
+                    pass
         
     def processExited(self, reason):
         self.end()
