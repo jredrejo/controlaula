@@ -1,3 +1,9 @@
+controlaula (1.6.17-1) unstable; urgency=low
+
+  * Revert streaming interfaz to vlc
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 29 Mar 2011 21:56:37 +0200
+
 controlaula (1.6.16-1) unstable; urgency=low
 
   * More improvements for video broadcast 

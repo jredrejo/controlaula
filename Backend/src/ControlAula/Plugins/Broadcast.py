@@ -88,7 +88,7 @@ class Vlc(object):
         self.broadcasting=False
         self.url=url
         self.dvd=dvd
-        command=["controlaula_vlc.py"]      
+        command=["vlc","--no-ipv6"]   
         if dvd:
             device,isdvd,isvcd,mount_point=self.get_disk_info()
             if device=='':
@@ -102,9 +102,19 @@ class Vlc(object):
         else:
             command+=[str(url) ]
             
+        command +=["--sout"]    
+        if self.codec_h264:
+            command +=["#transcode{vcodec=h264,vb=128,fps=32,scale=1,acodec=mp4a,ab=16,channels=1}:duplicate{dst=display, dst=rtp{mux=ts,dst=239.255.255.0,port=" + self.port +"}}"]
+            command +=["--sout-x264-cabac","--sout-x264-qp=32","--sout-x264-keyint=50"]
+        else:
+            command +=["rtp:239.255.255.0:" + self.port]
+            
+        command +=[ "--sout-all","--volume=1024","--netsync-master","--sout-display-delay=2200"]
+            
+            
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
-            reactor.spawnProcess(self.procTx , 'controlaula_vlc.py',command,env=os.environ) 
+            reactor.spawnProcess(self.procTx , 'vlc',command,env=os.environ) 
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
@@ -135,14 +145,14 @@ class Vlc(object):
                   
         command=ltspaudio 
         command +='vlc -I dummy ' 
-        command +=  '--quiet --video-on-top --skip-frames '
-        if encodec:
-            command +=' --http-caching 10000  -f  http://' + teacherIP + ':'
-        else:
-            command +=' --udp-caching 5000  -f  rtp://@239.255.255.0:'
-            if my_login == 'root': NetworkUtils.addRoute('239.255.255.0')
-        #command +='ffplay -fs -fast  udp://@239.255.255.0:'
+        command +=  '--quiet --video-on-top --skip-frames --sout-display-delay=1100  --sub-track=0 '
+        command += '--netsync-master-ip=' + teacherIP
+        
+        command +='  -f  rtp://@239.255.255.0:'
         command += self.port 
+        if my_login == 'root': NetworkUtils.addRoute('239.255.255.0')
+        #command +='ffplay -fs -fast  udp://@239.255.255.0:'
+
         
         logged=MyUtils.logged_user()
         if not isLTSP and my_login != 'root':

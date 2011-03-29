@@ -30,7 +30,7 @@ setup(name='ControlAula',
 #	package_data={'ControlAula': ['nobody.png']},    
 	url = 'http://www.itais.net/en/',
 	# Those are going to be installed on /usr/bin/
-	scripts=['controlaula','Backend/src/sirvecole.py','Backend/src/controlaula_vlc.py'],
+	scripts=['controlaula','Backend/src/sirvecole.py'],
 
 	data_files=datafiles 
     )
