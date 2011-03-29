@@ -53,11 +53,7 @@ class Vlc(object):
         self.dvd=False
         self.broadcasting=False
         self.myIP=NetworkUtils.get_ip_inet_address()
-        if MyUtils.getLoginName() != 'root':
-            self.codec_h264=self.is_h264_available()
-        else:
-            self.codec_h264=False
-            
+        self.codec_h264=self.is_h264_available()
         
     def is_h264_available(self):
         """ check if encoding with h264 is possible """
@@ -130,25 +126,33 @@ class Vlc(object):
             
     def receive(self,encodec=False,teacherIP=''):
         self.destroyProcess(self.procRx) 
-        NetworkUtils.cleanRoutes()
-        isLTSP=(MyUtils.isLTSP()!='')
-               
+        my_login = MyUtils.getLoginName()
+        isLTSP = (MyUtils.isLTSP()!='')
+        if my_login == 'root': NetworkUtils.cleanRoutes()              
         ltspaudio=' '
         if isLTSP:
-            ltspaudio=' PULSE_SERVER=tcp:' + self.myIP + ':4713 ESPEAKER=' + self.myIP+  ':16001 '                
+            ltspaudio=' PULSE_SERVER=tcp:' + self.myIP + ':4713 ESPEAKER=' + self.myIP+  ':16001 '
+                  
         command=ltspaudio 
-        command +='controlaula_vlc.py ' 
+        command +='vlc -I dummy ' 
+        command +=  '--quiet --video-on-top --skip-frames '
         if encodec:
-            command +='-c  --ip=' + teacherIP 
+            command +=' --http-caching 10000  -f  http://' + teacherIP + ':'
         else:
-            NetworkUtils.addRoute('239.255.255.0')         
-        command += ' --port=' + self.port 
+            command +=' --udp-caching 5000  -f  rtp://@239.255.255.0:'
+            if my_login == 'root': NetworkUtils.addRoute('239.255.255.0')
+        #command +='ffplay -fs -fast  udp://@239.255.255.0:'
+        command += self.port 
         
         logged=MyUtils.logged_user()
-        if logged !='root':
-            self.procRx=MyUtils.launchAs(command, logged)
-        else:
-            self.procRx=MyUtils.launchAsNobody(command)
+        if not isLTSP and my_login != 'root':
+            self.procRx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True) 
+        else:    
+            if logged !='root':
+                self.procRx=MyUtils.launchAs(command, logged)
+            else:        
+                self.procRx=MyUtils.launchAsNobody(command)  
+        
         Actions.disableKeyboardAndMouse(False)
             
     def stop(self):
@@ -159,7 +163,6 @@ class Vlc(object):
             if self.procTx is not None:
                 self.destroyProcess(self.procTx,True)
             subprocess.Popen(['killall','vlc'])  
-            subprocess.Popen(['killall','controlaula_vlc.py'])              
         except:
             pass
         

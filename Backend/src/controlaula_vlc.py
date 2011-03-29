@@ -175,7 +175,7 @@ class VideoPlayer:
     def main(self, fname):
 
         if self.codec:
-            command=":sout=#transcode{vcodec=h264,vb=128,fps=16,scale=1,acodec=mp4a,ab=32,channels=1,samplerate=44100}:http{mux=ts,dst=:"+ self.port + "/}"
+            command=":sout=#transcode{vcodec=h264,vb=128,fps=25,scale=1,acodec=mp4a,ab=32,channels=1,samplerate=44100}:http{mux=ts,dst=:"+ self.port + "/}"
             try:
                 media=instance.media_new(fname,command,":sout-keep",":sout-all",":sout-x264-cabac",":sout-x264-qp=32",":sout-x264-keyint=50",":volume=1024")
                 self.vlc.emitter.set_media(media)

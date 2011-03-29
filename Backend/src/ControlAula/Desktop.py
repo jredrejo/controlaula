@@ -147,8 +147,12 @@ class Desktop(object):
             self.bigbrother=False 
             
     def sendBroadcast(self,url,isDVD,encodec=False):
-        if self.hostkey!='':
-            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD,encodec])  
+        if self.hostkey != '':
+            if self.userkey != '' and not self.ltsp and encodec:
+                key = self.userkey
+            else:
+                key = self.mainIP
+            self.classroom.CommandStack[key].append(['broadcast',url,isDVD,encodec])  
             self.video=True 
                   
     def stopBroadcast(self):

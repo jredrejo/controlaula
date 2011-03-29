@@ -296,7 +296,9 @@ def launchAs(command,login="nobody"):
     if  isLTSP()!='' and getLoginName()=='root' and not ltsp_logged() :
         finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     else:
-        finalcommand='su -c \"' + xauth + ' ' + display + ' ' + command + '\" %s' % (login)
+        if login=="nobody":
+            display=xauth + ' ' + display 
+        finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     logging.getLogger().debug(finalcommand)
     proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
     return proc  

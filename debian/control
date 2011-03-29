@@ -10,7 +10,7 @@ Homepage:http://controlaula.sourceforge.net
 
 Package: controlaula
 Architecture: all
-Depends: ${python:Depends}, python-avahi, python-gtk2 | python-qt4, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, xvnc4viewer | xtightvncviewer, vlc (>= 1.0.2), libdvdplay0 | libdvdnav4, x11vnc (>= 0.8.2), iptables, libjs-jquery (>= 1.4.2)
+Depends: ${python:Depends}, python-avahi, python-gtk2, python-gobject, python-notify, python-simplejson, python-twisted-web, python-xlib, avahi-daemon, xvnc4viewer | xtightvncviewer, vlc (>= 1.0.2), libdvdplay0 | libdvdnav4, x11vnc (>= 0.8.2), iptables, libjs-jquery (>= 1.4.2)
 Recommends: cups-client, ethtool
 Suggests: libdvdcss2
 Conflicts: ltsp-controlaula
@@ -29,7 +29,7 @@ Description: Classroom management tool
 
 Package: ltsp-controlaula
 Architecture: all
-Depends: ${python:Depends}, python-avahi, python-gobject, python-twisted-web, python-xlib, xvnc4viewer | xtightvncviewer, vlc, ldm, sshfs (>= 2.0-1), iptables
+Depends: ${python:Depends}, python-avahi, python-gobject, python-twisted-web, python-xlib, xvnc4viewer | xtightvncviewer, vlc, ldm, iptables
 Recommends: ethtool
 Conflicts: controlaula
 Description: Classroom management tool with ltsp clients

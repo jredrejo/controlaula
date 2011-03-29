@@ -1,3 +1,9 @@
+controlaula (1.6.16-1) unstable; urgency=low
+
+  * More improvements for video broadcast 
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Tue, 29 Mar 2011 11:43:34 +0200
+
 controlaula (1.6.15-1) unstable; urgency=low
 
   * Some improvements in video broadcast
