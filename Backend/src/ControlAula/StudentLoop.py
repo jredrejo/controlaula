@@ -173,7 +173,7 @@ class Obey(object):
                         active=(self.myVNC.procViewer.poll() is None)
                 if self.broadcast is not None:
                     if self.broadcast.procRx is not None:
-                        active=(self.broadcast.procRx.poll() is None)
+                        active=active or (self.broadcast.procRx.poll() is None)
                                     
                 if self.isLTSP=='':
                     not_user_logged=MyUtils.not_ltsp_logged()

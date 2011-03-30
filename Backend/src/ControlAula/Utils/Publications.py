@@ -88,16 +88,16 @@ class Publications(object):
     
             g.Commit()
             self.group = g
-            
-            try:
-                reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(self.name,self.text))
-            except: #port not usable, plan B is not valid, trusting only in avahi
-                pass
-                         
-            self.online=True
-        
+                    
         except:
             logging.getLogger().error('Avahi is not working in this computer, relay on plan B to work')
+            
+        try:
+            reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(self.name,self.text))
+        except : #port not usable, plan B is not valid, trusting only in avahi
+            pass
+                     
+        self.online=True            
     
     def unpublish(self):
         self.group.Reset()
