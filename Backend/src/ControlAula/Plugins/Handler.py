@@ -229,8 +229,9 @@ class Plugins(object):
 
     def launchUrlAll(self,url):
         self.targets=[]
-        for user in self.classroom.LoggedUsers:
-            self.targets.append(self.classroom.LoggedUsers[user].hostname)
+        for desk in self.classroom.Desktops:
+            self.targets.append(desk.hostname)
+   
         self.usersCommand(Desktop.launchWeb,[url])         
           
     def classroomConfig(self,rows=0,cols=0,computers=0):

@@ -150,9 +150,10 @@ class Obey(object):
                 pass 
 
         #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:
-        number=MyUtils.getDesktopNumber(self.myHostname)
-        if self.mylogin=='root' and number!='':
-            if Configs.RootConfigs['offactivated']=='1' and self.isLTSP!='':
+        
+        if self.mylogin=='root' :
+            number=MyUtils.getDesktopNumber(self.myHostname)            
+            if Configs.RootConfigs['offactivated'] == '1' and self.isLTSP != '' and number != '':
                 p=ping.do_one("192.168.0.254", 0.1)
                 if p is not None: 
                     self.last_ping=datetime.datetime.now()
@@ -166,11 +167,19 @@ class Obey(object):
                     self.last_teacher= datetime.datetime.now()                                       
             
             if Configs.RootConfigs['offwithoutlogin']=='1':
+                active=False
+                if self.myVNC is not None:
+                    if self.myVNC.procViewer is not None:
+                        active=(self.myVNC.procViewer.poll() is None)
+                if self.broadcast is not None:
+                    if self.broadcast.procRx is not None:
+                        active=(self.broadcast.procRx.poll() is None)
+                                    
                 if self.isLTSP=='':
                     not_user_logged=MyUtils.not_ltsp_logged()
                 else:
                     not_user_logged=MyUtils.ltsp_logged()
-                if not_user_logged:
+                if not_user_logged and not active:
                     self.off_if_timeout(self.last_logged)
                 else:
                     self.last_logged=datetime.datetime.now()

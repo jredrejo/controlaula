@@ -132,7 +132,7 @@ class ControlAulaProtocol(resource.Resource):
         args=''
         
         #print command
-          
+
         if 'controlaula-chat' in request.path:
             return self._handle_chat(request)
         

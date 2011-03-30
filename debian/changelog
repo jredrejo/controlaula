@@ -1,3 +1,10 @@
+controlaula (1.6.18-1) unstable; urgency=low
+
+  * 'offwithoutlogin' is not active while executing Proyector o Video
+  * Fixed bug with web launching from firefox button
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 30 Mar 2011 14:40:48 +0200
+
 controlaula (1.6.17-1) unstable; urgency=low
 
   * Revert streaming interfaz to vlc
