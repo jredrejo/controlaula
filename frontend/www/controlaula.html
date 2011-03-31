@@ -39,7 +39,13 @@
          teacher_ip='%(teacher_ip)';
          
          if (isTeacher==true) {             
-             $(location).attr('href','http://localhost:%(teacher_port)/index.html');                      
+             //$(location).attr('href','http://localhost:%(teacher_port)/index.html'); 
+             url_teacher='http://localhost:%(teacher_port)/index.html';
+             $("#student_form").get(0).setAttribute("action",url_teacher);
+             login='{"args":"' + login + '"}'
+             $('input[name=data]').val(login);
+             $("#student_form").submit(); 
+                                  
          } else {     
              url_teacher='http://'+ teacher_ip + ':%(teacher_port)/student/';
              $("#student_form").get(0).setAttribute("action",url_teacher);
@@ -58,6 +64,7 @@
 
     <form id="student_form"  method="POST" action="">
       <input type="hidden" name="login" value=""> 
+      <input type="hidden" name="data" value=""> 
     </form>
 
 </body>

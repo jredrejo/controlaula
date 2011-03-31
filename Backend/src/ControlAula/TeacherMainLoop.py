@@ -25,6 +25,8 @@
 
 
 from twisted.web import server,resource,  static
+from twisted.web.server import Session
+from twisted.web.util import redirectTo
 import twisted
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs,MyUtils
@@ -51,6 +53,7 @@ class ControlAulaProtocol(resource.Resource):
         self.teacher = TeacherServer.RPCServer()
         self.channels = defaultdict(list)
         self.publish_service=None
+        self.teacher_login=''
 
     ########################################################
     # Return the page for a GET. This will handle requests
@@ -58,12 +61,13 @@ class ControlAulaProtocol(resource.Resource):
     def render_GET(self, request):
 
         pagename=request.path[1:].lower()
-        
+        session = request.getSession()
+                    
         if  pagename=='':
             request.path='/index.html'
             pagename='index.html'
-        
-        if request.host.host!='127.0.0.1' and pagename=='index.html':
+
+        if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and pagename=='index.html':
             request.path='/student/chat.html'
             pagename='student/chat.html'
 
@@ -154,6 +158,13 @@ class ControlAulaProtocol(resource.Resource):
                 args=json.loads(recvjson)['args']
         except:
             pass
+        
+        if command=='index.html':
+            session = request.getSession()    
+            self.teacher_login=session.uid
+            request.redirect('index.html')
+            return '{}'
+        
         if args=='':
             try:
                 if 'dir' in request.args:

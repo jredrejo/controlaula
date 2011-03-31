@@ -1,3 +1,9 @@
+controlaula (1.6.19-1) unstable; urgency=low
+
+  * Fixed bug that allowed students in thin clients hijack teacher interface
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 31 Mar 2011 19:33:41 +0200
+
 controlaula (1.6.18-1) unstable; urgency=low
 
   * 'offwithoutlogin' is not active while executing Proyector o Video
