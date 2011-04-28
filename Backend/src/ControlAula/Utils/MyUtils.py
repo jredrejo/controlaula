@@ -187,6 +187,12 @@ def getLDMinfo():
 
 
 
+def dpms_on():
+    disp,xauth=_get_disp_tty()
+    try:
+        subprocess.Popen('xset -d ' + disp + ' dpms force on',shell=True)
+    except:
+        pass
 
 
 def _get_disp_tty():
@@ -240,7 +246,7 @@ def logged_user():
     logged=getLoginName()
     if logged =='root':
         if isLTSP()!='' :
-            pass #PENDING
+            pass
             
         else:
             all_users=subprocess.Popen(["users"],stdout=subprocess.PIPE).communicate()[0]
@@ -300,7 +306,10 @@ def launchAs(command,login="nobody"):
             display=xauth + ' ' + display 
         finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     logging.getLogger().debug(finalcommand)
-    proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)    
+    try:
+        proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)
+    except:
+        proc=None    
     return proc  
 
         
@@ -350,7 +359,7 @@ def isActive():
     return active 
 
 def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
-    from Configs import WWWPAGES,APP_DIR
+    from Configs import WWWPAGES,APP_DIR,TEACHER_UID
     requestedfile=os.path.join(WWWPAGES,'controlaula.html')
     local_web_dir=os.path.join(APP_DIR,'www')
     if not os.path.exists(local_web_dir):
@@ -372,6 +381,7 @@ def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
     html_to_save=html_to_save.replace('%(teacher_port)',str(teacher_port))
     if isTeacher:
         html_to_save=html_to_save.replace('%(isteacher)', 'true')
+        html_to_save=html_to_save.replace('%(teacher_uid)',TEACHER_UID)
     else:
         html_to_save=html_to_save.replace('%(isteacher)', 'false')
         

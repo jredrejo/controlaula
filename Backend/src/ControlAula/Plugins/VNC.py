@@ -121,7 +121,8 @@ class VNC(object):
         command += passwd 
         command += ' ' + target +':' + self.clientport
         self.procViewer=MyUtils.launchAsNobody(command)      
-        
+        MyUtils.dpms_on()
+                
     def startViewer(self,target,ltsp,ip):
         port=5400
         if ltsp:

@@ -1,3 +1,10 @@
+controlaula (1.6.20-1) unstable; urgency=low
+
+  * Increased security for teacher detection
+  * Disable dpms on students when executing vnc or video broadcast
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Wed, 27 Apr 2011 12:30:12 +0200
+
 controlaula (1.6.19-1) unstable; urgency=low
 
   * Fixed bug that allowed students in thin clients hijack teacher interface

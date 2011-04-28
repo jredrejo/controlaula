@@ -134,7 +134,7 @@ class Vlc(object):
         self.broadcasting=False   
         self.clean_callbacks() 
             
-    def receive(self,encodec=False,teacherIP=''):
+    def receive(self,encodec=False,teacherIP=''):        
         self.destroyProcess(self.procRx) 
         my_login = MyUtils.getLoginName()
         isLTSP = (MyUtils.isLTSP()!='')
@@ -151,18 +151,19 @@ class Vlc(object):
         command +='  -f  rtp://@239.255.255.0:'
         command += self.port 
         if my_login == 'root': NetworkUtils.addRoute('239.255.255.0')
-        #command +='ffplay -fs -fast  udp://@239.255.255.0:'
-
         
         logged=MyUtils.logged_user()
         if not isLTSP and my_login != 'root':
-            self.procRx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True) 
+            self.procRx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
+            MyUtils.launchAs("xset s off",my_login)
         else:    
             if logged !='root':
                 self.procRx=MyUtils.launchAs(command, logged)
+                MyUtils.launchAs("xset s off",logged)                
             else:        
-                self.procRx=MyUtils.launchAsNobody(command)  
-        
+                self.procRx=MyUtils.launchAsNobody(command)
+                  
+        MyUtils.dpms_on()        
         Actions.disableKeyboardAndMouse(False)
             
     def stop(self):

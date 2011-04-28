@@ -23,7 +23,11 @@
 ##############################################################################
 import MyUtils
 
-import ConfigParser,os,shutil, logging
+import ConfigParser
+import os
+import uuid
+import shutil
+import logging
 from sys import path
 
 class SirvecoleConfig(object):
@@ -440,6 +444,7 @@ def config_exist(newconfig):
 APP_DIR=os.path.join(MyUtils.getHomeUser(),'.controlaula')
 WWWPAGES='/usr/share/controlaula/frontend/www'
 LANG='/usr/share/controlaula/lang'
+TEACHER_UID=''
 
 if not os.path.isdir(APP_DIR):
         os.mkdir(APP_DIR)
@@ -463,6 +468,8 @@ if MyUtils. getLoginName()!='root':
 
     
     PORT=8900
+    TEACHER_UID=str(uuid.uuid1())
+    
 #PAGES='/var/www'
 #Interval to check if the hosts are off or users have logout
 REFRESH=5

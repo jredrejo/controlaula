@@ -158,9 +158,10 @@ class ControlAulaProtocol(resource.Resource):
             pass
         
         if command=='index.html':
-            session = request.getSession()    
-            self.teacher_login=session.uid
-            request.redirect('index.html')
+            if args==Configs.TEACHER_UID:
+                session = request.getSession()    
+                self.teacher_login=session.uid
+                request.redirect('index.html')
             return '{}'
         
         if args=='':

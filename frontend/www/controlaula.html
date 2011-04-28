@@ -37,13 +37,12 @@
          isTeacher=%(isteacher);
          login='%(user_id)';
          teacher_ip='%(teacher_ip)';
+         teacher_uid='{"args":"%(teacher_uid)"}';
          
          if (isTeacher==true) {             
-             //$(location).attr('href','http://localhost:%(teacher_port)/index.html'); 
              url_teacher='http://localhost:%(teacher_port)/index.html';
              $("#student_form").get(0).setAttribute("action",url_teacher);
-             login='{"args":"' + login + '"}'
-             $('input[name=data]').val(login);
+             $('input[name=data]').val(teacher_uid);
              $("#student_form").submit(); 
                                   
          } else {     
