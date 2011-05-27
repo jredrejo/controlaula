@@ -43,6 +43,9 @@ LOG_FILENAME = Configs.LOG_FILENAME
 PORT=8900
 #Interval to check if the hosts are off or users have logout
 REFRESH=5
+myIp="None"
+
+exitStatus=0
     
 def SigHandler(signum, frame):
     print 'Stopping Monitor'
@@ -61,10 +64,19 @@ def SigHandler(signum, frame):
 def checkActivity():
 
     def sendNext():
-
+        global myIp
+        global exitStatus
+        nuevaIP=NetworkUtils.get_ip_inet_address()        
+        
+        if myIp != "None" and myIp != nuevaIP:
+            exitStatus=97
+            reactor.stop()
+        else:
+            myIp= nuevaIP
+            
         if not MyUtils.isActive():
             reactor.stop()
-            sys.exit()
+            
              
     loop = LoopingCall(sendNext)
     loop.start(5)
@@ -205,6 +217,9 @@ if __name__ == '__main__':
         reactor.callWhenRunning(MyStudent.startScan)    
     
     #begin application loop:
-    reactor.callWhenRunning(checkActivity)        
+    reactor.callWhenRunning(checkActivity)    
+    logging.getLogger().debug("Starting controlaula")    
     reactor.run()
+    if exitStatus==97: logging.getLogger().debug("Restarting controlaula due to network changes")
+    sys.exit(exitStatus)
 

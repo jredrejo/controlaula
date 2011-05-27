@@ -3,4 +3,8 @@
 [ "$IFACE" != "lo" ] || exit 0
 
 #ensure wol is programmed
-/usr/sbin/ethtool -s $IFACE wol g
+case $IFACE in
+eth*) /usr/sbin/ethtool -s $IFACE wol g ;;
+*) echo " no eth in  $IFACE" ;;
+esac
+

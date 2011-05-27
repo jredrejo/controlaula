@@ -1,3 +1,9 @@
+controlaula (1.6.21-1) unstable; urgency=low
+
+  * Modified to improve compatibility with network-manager
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Fri, 27 May 2011 13:46:09 +0200
+
 controlaula (1.6.20-1) unstable; urgency=low
 
   * Increased security for teacher detection

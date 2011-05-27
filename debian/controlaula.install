@@ -6,3 +6,4 @@ startcontrolaula.desktop etc/xdg/autostart
 add-on/* usr/share/xul-ext-controlaula
 debian/controlaula.dhcp etc/dhcp3/dhclient-exit-hooks.d
 debian/controlaula.ifup etc/network/if-up.d
+debian/99controlaula etc/NetworkManager/dispatcher.d

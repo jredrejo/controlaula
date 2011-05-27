@@ -8,3 +8,4 @@ usr/share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}
 usr/share/xul-ext-controlaula
 etc/dhcp3/dhclient-exit-hooks.d
 etc/dhcp/dhclient-exit-hooks.d
+etc/NetworkManager/dispatcher.d

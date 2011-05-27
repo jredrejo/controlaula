@@ -90,7 +90,10 @@ def switch_off():
     from twisted.internet import reactor
     import os.path
     if os.path.exists('/usr/sbin/ethtool'):
-        subprocess.call(['ethtool','-s','eth0','wol','g'])
+        try:
+            subprocess.call(['ethtool','-s','eth0','wol','g'])
+        except:
+            pass #this will fail if eth0 does not exist
                             
     if MyUtils.isLTSP()=='':                      
         subprocess.call(['killall','-9','x-session-manager'])            

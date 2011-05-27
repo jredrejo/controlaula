@@ -1,4 +1,4 @@
 #!/bin/sh
 
-exec python "/usr/share/controlaula/monitor.py"
+exec python "/usr/share/controlaula/controlaula.py"
 

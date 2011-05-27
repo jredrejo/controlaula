@@ -77,8 +77,6 @@ logging.basicConfig(level=logging.DEBUG,
                 datefmt='%a, %d %b %Y %H:%M:%S',
                 filename=LOG_FILENAME)
 
-if os.path.exists('/usr/sbin/ethtool'):
-    subprocess.call(['ethtool','-s','eth0','wol','g'])
 ######### Begin the application loop #######
 
 from ControlAula import StudentLoop
