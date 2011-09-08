@@ -1,3 +1,10 @@
+controlaula (1.6.21-2) unstable; urgency=low
+
+  * Modified extension to be compatible with newer versions of Firefox/Iceweasel
+  * Fixed javascript for compatibility with newer versions of Firefox
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 08 Sep 2011 10:50:24 +0200
+
 controlaula (1.6.21-1) unstable; urgency=low
 
   * Modified to improve compatibility with network-manager
