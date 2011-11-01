@@ -1,7 +1,14 @@
+controlaula (1.6.21-3) unstable; urgency=low
+
+  * 
+
+ -- jose <jose@joseluis>  Tue, 01 Nov 2011 18:40:08 +0100
+
 controlaula (1.6.21-2) unstable; urgency=low
 
   * Modified extension to be compatible with newer versions of Firefox/Iceweasel
   * Fixed javascript for compatibility with newer versions of Firefox
+  * Changed man page route (Closes: #628733)
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 08 Sep 2011 10:50:24 +0200
 
