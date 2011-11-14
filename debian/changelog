@@ -5,7 +5,6 @@ controlaula (1.6.22-1) unstable; urgency=low
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 14 Nov 2011 17:05:13 +0100
 
-
 controlaula (1.6.21-2) unstable; urgency=low
 
   * Modified extension to be compatible with newer versions of Firefox/Iceweasel
