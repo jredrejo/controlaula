@@ -1,8 +1,9 @@
-controlaula (1.6.21-3) unstable; urgency=low
+controlaula (1.6.22-1) unstable; urgency=low
 
-  * 
+  * Modified extension to be compatible with newer versions of Firefox/Iceweasel
+  * Active avahi in the teacher in udp for other apps to interact with ControlAuyla
 
- -- jose <jose@joseluis>  Tue, 01 Nov 2011 18:40:08 +0100
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 14 Nov 2011 17:05:13 +0100
 
 controlaula (1.6.21-2) unstable; urgency=low
 
