@@ -143,6 +143,7 @@ if __name__ == '__main__':
     
     #Get and save some global variables:        
     isTeacher=MyUtils.userIsTeacher()
+    isTeacher=True
     #isTeacher=False#enable for debugging
     USERNAME=MyUtils.getLoginName()
     HOSTNAME=NetworkUtils.getHostName()
@@ -169,8 +170,11 @@ if __name__ == '__main__':
         if externalIP=='':
             externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         service=Publications.Publications(port=Configs.PORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( Configs.PORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
+        service_controlies=Publications.Publications(stype="_controlaula._udp",port=Configs.PORT,name=USERNAME+'@'+HOSTNAME,text=["ipINET=" + externalIP,"web=" + str( Configs.PORT),"classroomname=" + Configs.RootConfigs['classroomname'] ])
+        service_controlies.publish()
         try: #in case cache are filled with a previous "bad stopped" instance of controlaula
             service.unpublish()
+            service_controlies.unpublish()
             sleep( 0.1)
         except:
             pass
