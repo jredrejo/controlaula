@@ -143,7 +143,6 @@ if __name__ == '__main__':
     
     #Get and save some global variables:        
     isTeacher=MyUtils.userIsTeacher()
-    isTeacher=True
     #isTeacher=False#enable for debugging
     USERNAME=MyUtils.getLoginName()
     HOSTNAME=NetworkUtils.getHostName()
