@@ -80,9 +80,9 @@ function connection(url,data,action){
 					if(res.result=="ack"){
 						$( "#dialogSendFile" ).dialog( "close" );
 
-						modalVideoButtons();
-						//modalAlert("Comienza la emisi&oacute;n de v&iacute;deo");
-						//setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
+						//modalVideoButtons();
+						modalAlert("Comienza la emisi&oacute;n de v&iacute;deo");
+						setTimeout('$( "#dialogAlert" ).dialog( "close" )',3000);
 					}else{
 						modalAlert("Surgi&oacute; un error, puede volver a intentarlo");
 					}
