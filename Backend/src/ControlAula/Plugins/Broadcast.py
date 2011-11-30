@@ -100,21 +100,21 @@ class Vlc(object):
             else:
                 return mount_point
         else:
-            command+=[str(url) ]
+            command+=[str(url)  ]
             
-        command +=["--sout"]    
+        command +=["--netsync-master"]    
         if self.codec_h264:
-            command +=["#transcode{vcodec=h264,vb=128,fps=32,scale=1,acodec=mp4a,ab=16,channels=1}:duplicate{dst=display, dst=rtp{mux=ts,dst=239.255.255.0,port=" + self.port +"}}"]
+            command +=["--sout","#transcode{vcodec=h264,vb=128,fps=32,scale=1,acodec=mp4a,ab=16,channels=1}:duplicate{dst=rtp{mux=ts,dst=239.255.255.0,port=" + self.port +"}}"]
             command +=["--sout-x264-cabac","--sout-x264-qp=32","--sout-x264-keyint=50"]
         else:
-            command +=["rtp:239.255.255.0:" + self.port]
             
-        command +=[ "--sout-all","--volume=1024","--netsync-master","--sout-display-delay=2200"]
-            
-            
+            command += [ "--sout","#rtp{dst=239.255.255.0,port=" + self.port + ",mux=ts}"]
+           
         try:
             self.procTx = MyPP(self.stop,self.started,self.ended)
             reactor.spawnProcess(self.procTx , 'vlc',command,env=os.environ) 
+            
+            self.procRx=subprocess.Popen(['vlc','--qt-minimal-view','rtp://@239.255.255.0:'+ self.port]) 
             logging.getLogger().debug(str(command))
         except:
             logging.getLogger().error('vlc is not working in this system')
