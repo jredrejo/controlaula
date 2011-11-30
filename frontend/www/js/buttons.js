@@ -120,11 +120,11 @@ $(function() {
 
 		$( "#sendWebToSelected" )
 			.button({ icons: { primary: "ui-icon-refresh"}})
-			.click(function() { sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); }); 
+			.click(function() { sendOrderSelected("launchweb",  $("#url").val(), "launchweb"); }); 
 
 		$( "#sendWebToAll" )
 			.button({ icons: { primary: "ui-icon-refresh"}})
-			.click(function() { selectAll(); sendOrderSelected("launchweb", $("#frameWeb").attr("src"), "launchweb"); }); 
+			.click(function() { selectAll(); sendOrderSelected("launchweb",  $("#url").val(), "launchweb"); }); 
 
 		$( "#connectLDAP" ).button({ icons: { primary: "ui-icon-refresh"}});
 		$( "#scanNet" ).button({ icons: { primary: "ui-icon-refresh"}});
