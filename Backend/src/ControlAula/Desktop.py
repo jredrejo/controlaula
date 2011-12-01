@@ -152,7 +152,8 @@ class Desktop(object):
                 key = self.userkey
             else:
                 key = self.mainIP
-            self.classroom.CommandStack[key].append(['broadcast',url,isDVD,encodec])  
+            #self.classroom.CommandStack[key].append(['broadcast',url,isDVD,encodec])  
+            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD,encodec])  
             self.video=True 
                   
     def stopBroadcast(self):
