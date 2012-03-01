@@ -24,7 +24,7 @@
 import datetime
 class User(object):
     
-    def __init__(self,login,hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,soundEnabled,messagesEnabled,photo=''):
+    def __init__(self,login,hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,soundEnabled,messagesEnabled,photo='',uid=''):
         self.login=login
         self.hostname=hostname
         self.ip=hostip
@@ -44,6 +44,7 @@ class User(object):
         self.shotname=''
         self.deferred_request=None
         self.chat_enabled=True
+        self.uid=uid
         
         
     def __str__(self):
