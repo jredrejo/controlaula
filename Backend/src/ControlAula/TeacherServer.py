@@ -22,8 +22,6 @@
 #
 ##############################################################################
 from twisted.web import xmlrpc
-from twisted.internet import defer
-import User,Host
 from ControlAula.Utils import NetworkUtils,Configs
 import os,time
 import pynotify
@@ -39,56 +37,7 @@ class RPCServer(xmlrpc.XMLRPC):
             self.externalIP=NetworkUtils.get_ip_inet_address('192.168.0.254')
         self.hostname=NetworkUtils.getHostName()
         pynotify.init('controlaula')
-        
-    def xmlrpc_hostPing(self, login,hostip):
-        """Return true to the client if he must sends its initial data.
-        executing addUser or addHost"""
-        if login=='root':
-            key=hostip
-            if not self.classroom.existPC(key):
-                return 'new'
-            else:
-                self.classroom.updateHostTimeStamp(key)
-        else:
-            key =login+'@'+hostip
-            if not self.classroom.existUser(key):
-                return 'new'
-            else:
-                self.classroom.updateUserTimeStamp(key)
-        #print time.strftime('%H:%M:%S') , key
-        if self.classroom.hasCommands(key):
-            return 'commands' #getCommands must be called by the student        
-        #return if the new host has to send its data
-        return False
-            
-    
-    def xmlrpc_addUser(self,login, hostname,hostip,ltsp=False,classname='',username='',ipLTSP='',internetEnabled=True,mouseEnabled=True,soundEnabled=True,messagesEnabled=False,photo=''):
-        user=User.User(login,hostname,hostip,ltsp,classname,username,ipLTSP,internetEnabled,mouseEnabled,soundEnabled,messagesEnabled,photo)
-        self.classroom.addUser(user)
-        return True
-   
-    def xmlrpc_addHost(self, login,hostname,hostip,mac,ltsp=False,classname='',internetEnabled=True):
-        if self.classroom.Hosts.has_key(hostip):
-            return False
-        #if self.externalIP== hostip and self.hostname==hostname:
-        #    return False #the teacher host is not added to the list
-        host=Host.Host(login,hostname,hostip,mac,ltsp,classname,internetEnabled)
-        self.classroom.addHost(host)
-        return True   
-    
-    def xmlrpc_removeHost(self, ip):
-        if not self.classroom.Hosts.has_key(ip):
-            return False
-        self.classroom.removeHost(ip)
-        return True
-
-    def xmlrpc_removeUser(self, login,ip):
-        key=login +'@'+ ip
-        if not self.classroom.Users.has_key(key):
-            return False
-        self.classroom.removeUser(key)
-        return True
-        
+                    
     def xmlrpc_getCommands(self, login,hostip):
         """Return the list of commands to be executed by the client"""
         if login=='root':
@@ -98,11 +47,14 @@ class RPCServer(xmlrpc.XMLRPC):
         commands=self.classroom.getCommands(key)    
         return commands
     
-    def xmlrpc_screenshot(self,login,hostip, file):
+    def xmlrpc_connData(self):
+        return self.classroom.myVNC.getData() + (self.classroom.broadcast.getData(),)
+        
+    def xmlrpc_screenshot(self,login,hostip, sfile):
         key =login+'@'+hostip
         if  not self.classroom.LoggedUsers.has_key(key):
             return   "ok"
-        datum = file.data
+        datum = sfile.data
         shotname=login + time.strftime('%Y%m%d%H%M%S',time.localtime()) + '.png'
         try:
             os.remove(os.path.join(Configs.IMAGES_DIR + '/screenshots',self.classroom.LoggedUsers[key].shotname))
@@ -120,9 +72,9 @@ class RPCServer(xmlrpc.XMLRPC):
         #os.spawnl(os.P_NOWAIT, '/usr/bin/display', '/tmp/gnu.jpg')   
         return "ok"
     
-    def xmlrpc_facepng(self,login,hostip, file):
+    def xmlrpc_facepng(self,login,hostip, sfile):
         key =login+'@'+hostip
-        datum = file.data
+        datum = sfile.data
         thefacename=os.path.join(Configs.IMAGES_DIR,login + '.png')
         try:
             theface = open(thefacename, "wb")
@@ -134,8 +86,8 @@ class RPCServer(xmlrpc.XMLRPC):
         
         return "ok"    
     
-    def xmlrpc_file(self,login, file,filename):
-        datum = file.data
+    def xmlrpc_file(self,login, sfile,filename):
+        datum = sfile.data
         received_dir=os.path.join(Configs.FILES_DIR,self.classroom.classname,login)
         if not os.path.exists(received_dir):
             os.makedirs(received_dir)
@@ -155,89 +107,6 @@ class RPCServer(xmlrpc.XMLRPC):
             pass
 
         return "ok"        
-    
-    ###########################
-    # XML-RPC functions to be used while developping or testing
-    # the application. 
-    #
-    # For security reasons, they must be disabled for the 
-    # final app to be used in production:
-    #
-    ##########################
-    
-    def xmlrpc_showCommands(self, login,hostip):
-        """Return the list of commands to be executed by the client"""
-        if login=='root':
-            key=hostip
-        else:
-            key =login+'@'+hostip    
-            
-        return self.classroom.showCommands(key)
-        
-    def xmlrpc_echo(self, *args):
-        """Return all passed args.
-        Only to be used with test purposes"""
-        print args
-        return args
-
-    def xmlrpc_hello(self):
-        """Return 'hello, world'.
-        Only to be used with test purposes"""
-        return 'hello, world!'
-            
-    def xmlrpc_Hosts(self):
-        """Return the list of the detected hosts
-        Only to be used with test purposes"""
-        list=[]
-        for i in self.classroom.Hosts:
-            list.append(i.__str__())
-        return list
-
-    def xmlrpc_Desktops(self):
-        """Return the list of the classroom structure
-        Only to be used with test purposes"""
-        list=[]
-        for i in self.classroom.Desktops:
-            list.append(i.__str__())
-        return list
-        
-    def xmlrpc_Users(self):
-        """Return the list of the detected hosts
-        Only to be used with test purposes"""
-        list=[]
-        for i in self.classroom.LoggedUsers:
-            list.append(i.__str__())
-        return list        
-        
-    def xmlrpc_Json(self):
-        """Return the list of the json structure for the frontend
-        Only to be used with test purposes"""
-
-        return self.classroom.getJSONFrontend()
-    
-    def xmlrpc_connData(self):
-        return self.classroom.myVNC.getData() + (self.classroom.broadcast.getData(),)
-        
-    def xmlrpc_Commands(self):
-        """Return the list of the remaining commands
-        Only to be used with test purposes"""
-        return self.classroom.CommandStack
-    
-    def xmlrpc_addCommand(self,key,command,args=[]):
-        """Add a new command to the list of commands for the key
-        Only to be used with test purposes"""        
-        self.classroom.addCommand(key,command,args)
-        return ""
-               
-                
-    def xmlrpc_deferCommand(self,hostip,login):
-        """
-        Return a deferred object with the command 
-        and args if the client must do
-        something, or an error if it doesn't need it
-        Show how xmlrpc methods can return Deferred."""
-        return defer.succeed(("hello","world"))
-#        return defer.fail(12)
 
     def xmlrpc_getAnswer(self,login,hostip,answer):
         key =login+'@'+hostip 
@@ -247,5 +116,4 @@ class RPCServer(xmlrpc.XMLRPC):
             deferred_request.finish()
             self.classroom.LoggedUsers[key].deferred_request=None
         return ""
-
-       
+    

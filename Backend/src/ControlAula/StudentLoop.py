@@ -30,10 +30,22 @@ import logging
 import datetime
 from twisted.internet import reactor     
 from twisted.internet.protocol import DatagramProtocol
+from twisted.internet.protocol import ReconnectingClientFactory
+from ClassProtocol import ControlProtocol
 
 MCAST_ADDR = "224.0.0.1"
 MCAST_PORT = 11011
 
+class ControlFactory(ReconnectingClientFactory):
+    protocol = ControlProtocol
+
+    def buildProtocol(self, address):
+        self.resetDelay()        
+        proto = ReconnectingClientFactory.buildProtocol(self, address)
+        return proto
+
+        
+            
 class MulticastClientUDP(DatagramProtocol):
     def __init__(self, obey):
         self.obey=obey
@@ -141,16 +153,8 @@ class Obey(object):
                     self.Teachers.pop(name)
                         
     def listen(self):             
-        if self.catched !='':         
-            #Keep the user as an active user :                       
-            try:                
-                order=self.myteacher.hostPing( self.mylogin, self.myIp )
-                self.sendData(order)
-            except: #network jam or teacher left
-                pass 
-
-        #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:
         
+        #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:       
         if self.mylogin=='root' :
             number=MyUtils.getDesktopNumber(self.myHostname)            
             if Configs.RootConfigs['offactivated'] == '1' and self.isLTSP != '' and number != '':
@@ -202,7 +206,11 @@ class Obey(object):
             MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
-
+        f = ControlFactory()
+        reactor.connectTCP(teacherIP, newteacher[1] + 1, f)
+        f.protocol.add_callback("lost", self.removeMyTeacher)
+        f.protocol.add_callback("connected", self.listen)        
+        f.protocol.add_callback("commands",self.handleCommands)
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(teacherIP) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
@@ -210,57 +218,23 @@ class Obey(object):
         self.handler.teacherIP=teacherIP
         self.handler.teacher_port=str(newteacher[1])
         self.handler.myIP=self.myIp
-        try:                
-            order=self.myteacher.hostPing( self.mylogin, self.myIp )
-            self.sendData(order)
-        except: #network jam, try again later
-            pass
-            
+        self.sendPhoto()
+        self.getTeacherData()
         
         
-    def sendData(self,order):
-        if order=='new':
-
-            if self.mylogin !='root':
-                #pending catch configurations and photo
-                #self,login, hostname,hostip,ltsp=False,classname='',username='',
-                #ipLTSP='',internetEnabled=True,mouseEnabled=True,
-                #soundEnabled=True,messagesEnabled=False,photo=''):
-                            
-                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, (self.isLTSP!=''),
-                                      Configs.RootConfigs['classroomname']  ,self.myFullName,self.isLTSP,
-                                      Configs.MonitorConfigs.GetGeneralConfig('internet') ,
-                                      Configs.MonitorConfigs.GetGeneralConfig('mouse') ,
-                                      Configs.MonitorConfigs.GetGeneralConfig('sound'),
-                                      Configs.MonitorConfigs.GetGeneralConfig('messages'), '')       
-                
-                face=MyUtils.getFaceFile()
-                if face=='':
-                    logging.getLogger().debug('The user %s has not photo to send' % (self.mylogin))
-                else:
-                    try:
-                        f = xmlrpclib.Binary(open(face, 'rb').read())
-                        self.myteacher.facepng(self.mylogin,self.myIp,f)         
-                    except:
-                        logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
-                        
-
-
-                     
+    def sendPhoto(self):  
+        if self.mylogin !='root':
+            face=MyUtils.getFaceFile()
+            if face=='':
+                logging.getLogger().debug('The user %s has not photo to send' % (self.mylogin))
             else:
-                logging.getLogger().debug('Sending to the teacher this info: %s,%s,%s,%s,%s' % (self.myHostname,self.myIp, self.myMAC,
-                                       self.isLTSP,Configs.RootConfigs['classroomname']))
-                self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       self.isLTSP,Configs.RootConfigs['classroomname'],1)
+                try:
+                    f = xmlrpclib.Binary(open(face, 'rb').read())
+                    self.myteacher.facepng(self.mylogin,self.myIp,f)         
+                except:
+                    logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
                 
-                self.getTeacherData()
                 
-        elif order == 'commands':
-            if self.myVNC is not None:
-                self.getCommands()
-            else:
-                self.getTeacherData()
-
     def checkClass(self,data={}):                        
         if Configs.RootConfigs['classroomname']==data['classroomname']:
             return True#it's a teacher of my classroom
@@ -298,9 +272,8 @@ class Obey(object):
         self.handler.myVNC=self.myVNC
         self.handler.myBcast=self.broadcast
 
-    def getCommands(self):
-        commands=self.myteacher.getCommands( self.mylogin, self.myIp )
-        for i in commands:
+    def handleCommands(self, orders):
+        for i in orders:
             if self.handler.existCommand(i[0]):
                 self.handler.args=i[1:]
                 self.handler.process(i[0])

@@ -72,7 +72,7 @@ class AvahiMonitor(object):
     def stop(self):
         self.bus.close()
 
-    def new_service(self, interface, protocol, name, type, domain, flags):
+    def new_service(self, interface, protocol, name, stype, domain, flags):
         
         def resolve_service_reply(*service):
             address, port = service[-4:-2]
@@ -98,12 +98,12 @@ class AvahiMonitor(object):
                 logging.getLogger().debug('could not resolve controlaula service %s %s: %s' %   (name, domain, exception))
                 print exception
 
-        self.server.ResolveService(interface, protocol, name, type, domain,
+        self.server.ResolveService(interface, protocol, name, stype, domain,
                 avahi.PROTO_UNSPEC, dbus.UInt32(0),
                 reply_handler=resolve_service_reply,
                 error_handler=resolve_service_error)
 
-    def remove_service(self, interface, protocol, name, type, domain,server):
+    def remove_service(self, interface, protocol, name, stype, domain,server):
         address, port = self._plugged[name]
         for cb in self._callbacks['remove-service']:
             cb(self,name, address, port)

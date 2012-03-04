@@ -27,6 +27,10 @@ from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
 from ControlAula.Plugins import VNC,Broadcast
 import simplejson as json
 from twisted.internet import reactor
+from twisted.internet.protocol import Factory
+from ClassProtocol import ControlProtocol
+from Host import Host
+from User import User
 
 class Classroom(object):
     """Classroom data management
@@ -57,6 +61,19 @@ class Classroom(object):
         #Dictionary with the data of the classroom setup
         self.classsetup=Configs.MonitorConfigs.GetClassroomConfig(self.classname)
         
+        #ControlProtocol boot up:
+        pf = Factory()
+        pf.protocol = ControlProtocol
+        pf.protocol.add_callback("connected", self.addClient)
+        pf.protocol.add_callback("alive", self.update_time_stamp)
+        pf.protocol.add_callback("commands", self.getCommands)
+        pf.protocol.add_callback("lost", self.removeClient)
+        try:
+            reactor.listenTCP(Configs.PORT+1, pf)
+        except:
+            reactor.listenTCP(Configs.PORT+2, pf)
+                    
+        
         #Dictionary with the Desktop positions to send to the frontend
         self.cols=int(self.classsetup['cols'])
         self.rows=int(self.classsetup['rows'])
@@ -65,12 +82,12 @@ class Classroom(object):
         #creates the aula
         total=self.cols*self.rows
         self.Desktops=[]
-        for i in range(0,total):
+        for i in range(total):
             self.Desktops.append(Desktop.Desktop(self))
         #if there is a saved structure, it recovers it:        
         if self.classsetup['structure']!='':
                 targets=self.classsetup['structure'].split(',')
-                for i in range(0,total):
+                for i in range(total):
                     try:
                         if targets[i]!='None':
                             self.Desktops[i].hostname=targets[i]
@@ -91,6 +108,23 @@ class Classroom(object):
     def existPC(self, ip):
         """Check if a pc has already been added to the classroom"""
         return self.Hosts.has_key(ip)
+
+    def addClient(self, protocol_data, client_data):
+        is_host_not_user = client_data["isHostnotUser"]        
+        if is_host_not_user:        
+            host = Host(client_data['login'], client_data['hostname'],
+                      client_data['hostip'], client_data['mac'],
+                      client_data['ltsp'], client_data['classname'],
+                      client_data['internetEnabled'], client_data['uuid'])
+            self.addHost(host)
+        else:
+            user = User(client_data['login'], client_data['hostname'],
+                      client_data['hostip'], client_data['ltsp'],
+                      client_data['classname'], client_data['username'],
+                      client_data['ipLTSP'], client_data['internetEnabled'],
+                      client_data['mouseEnabled'], client_data['soundEnabled'],
+                      client_data['messagesEnabled'], client_data['photo'], client_data['uuid'])
+            self.addUser(user)
     
     def addHost(self, host):
         """Add a pc to the classroom"""
@@ -109,14 +143,16 @@ class Classroom(object):
     
     def addUser(self,user):
         """Add a logged user to the classroom"""
-        key=user.login+'@'+user.ip
+        key = user.login + '@' + user.ip
         if not self.LoggedUsers.has_key(key):
-            logging.getLogger().debug('The  user  %s has appeared' %   (key))
+            logging.getLogger().debug('The user %s has appeared' % (key))
             self.LoggedUsers[key]=user
             #intialize list of commands for this client
             if not self.CommandStack.has_key(key):
                 self.CommandStack[key]=[]              
             self.placeUserDesktop(key)
+        else:
+            self.LoggedUsers[key].uid=user.uid  # The user has reconnected
         self.getJSONFrontend("refresh")
                 
     def addPhoto(self,path,key):
@@ -127,11 +163,19 @@ class Classroom(object):
                 break
         self.getJSONFrontend("refresh")
     
-    def removeUser(self,key):
+    def removeClient(self, login, hostip):
+        if login == 'root':
+            self.removeHost(hostip)
+        else:
+            key = login + '@' + hostip
+            self.removeUser(key)
+    
+    def removeUser(self, key):
         """Remove a logout user from the classroom data"""
         if self.LoggedUsers.has_key(key):
             self.LoggedUsers.pop(key)
             #self.CommandStack.pop(key)
+            logging.getLogger().debug('The user %s has disappeared' % key)
             for desktop in self.Desktops:
                 if desktop.userkey==key:
                     desktop.delUser()
@@ -141,6 +185,7 @@ class Classroom(object):
     def removeHost(self,hostip):
         """Remove a disconnected pc from the classroom data"""
         if self.Hosts.has_key(hostip):
+            logging.getLogger().debug('The  host %s has disappeared' % hostip)            
             self.Hosts.pop(hostip)
             #self.CommandStack.pop(hostip)
             self.removeDesktop(hostip)
@@ -173,31 +218,48 @@ class Classroom(object):
     def getCommands(self,key):
         """Returns the list of commands to be executed by an user or pc
         and remove them from the list"""
-        commands=self.CommandStack[key]
-        self.CommandStack[key]=[]
-        return commands
+        if self.CommandStack.has_key(key):
+            commands=self.CommandStack[key]
+            self.CommandStack[key]=[]
+            return commands
+        else:
+            return []
 
     def showCommands(self,key):
         """Returns the list of commands to be executed by an user or pc
-        but keep them in the list"""
-        commands=self.CommandStack[key]
-        return commands
+        but keep them in the list"""  
+        if self.CommandStack.has_key(key):            
+            return self.CommandStack[key]
+        else:
+            return []
         
         
     def hasCommands(self,key):
-        """Returns True if there are commands to be executed by an user or pc"""        
-        return (self.CommandStack[key]!=[])      
-        
+        """Returns True if there are commands to be executed by an user or pc""" 
+        if self.CommandStack.has_key(key):
+            return self.CommandStack[key] != []
+        else:
+            return False
+   
+
+    def update_time_stamp(self, login, hostip):
+        if login == 'root':
+            self.updateHostTimeStamp(hostip)
+        else:
+            key = login + '@' + hostip
+            self.updateUserTimeStamp(key)
+                
     def updateHostTimeStamp(self,hostip):
         """Updates the last time the host contacted the teacher"""
-        self.Hosts[hostip].timestamp=datetime.datetime.now() 
+        if self.Hosts.has_key(hostip):
+            self.Hosts[hostip].timestamp = datetime.datetime.now() 
         
     def updateUserTimeStamp(self,key):
         """Updated the last time the logged user contacted the teacher"""
-        self.LoggedUsers[key].timestamp=datetime.datetime.now()    
+        if self.LoggedUsers.has_key(key):
+            self.LoggedUsers[key].timestamp = datetime.datetime.now()    
                 
     def UpdateLists(self):   
-        from twisted.internet import reactor        
         """Remove the users or hosts that haven't contacted the teacher during
         the (seconds) interval"""
 
@@ -206,7 +268,6 @@ class Classroom(object):
                 self.updateUserTimeStamp(self.LoggedUsers[i].key)
             else:            
                 if self._checkInterval(self.LoggedUsers[i],self.interval):
-                    logging.getLogger().debug('The  user %s has disappeared' %   (i))
                     self.removeUser(i)
                 
         for i in self.Hosts.keys():
@@ -214,7 +275,6 @@ class Classroom(object):
                 self.updateHostTimeStamp(self.Hosts[i].ip)
             else:
                 if self._checkInterval(self.Hosts[i],self.interval):
-                    logging.getLogger().debug('The  host  %s has disappeared' %   (i))
                     self.removeHost(i)
                 
         reactor.callLater(self.interval, self.UpdateLists)
@@ -246,7 +306,7 @@ class Classroom(object):
     def placeHostFreely(self):
         '''returns the first available position in the list of Desktops'''
         position=-1
-        for i in range(0, self.cols*self.rows):
+        for i in range(self.cols*self.rows):
             if self.Desktops[i].hostkey=='':
                 position=i
                 break
@@ -259,14 +319,14 @@ class Classroom(object):
     def addDesktopsRow(self):
         newPosition=self.cols*self.rows
         self.rows+=1
-        for i in range(0,self.cols):
+        for i in range(self.cols):
             self.Desktops.append(Desktop.Desktop(self))     
         return newPosition
         
     def removeDesktopsRow(self):
         self.rows-=1
         position=self.cols*self.rows 
-        for i in range(0,self.cols):
+        for i in range(self.cols):
             deleted=self.Desktops.pop(position)
             if deleted.hostname !='Unknown':                
                 new_pos=self.findNamePosition(deleted.hostname)
@@ -275,13 +335,13 @@ class Classroom(object):
     def addDesktopsCol(self):
         cols=self.cols
         self.cols +=1
-        for i in range (0,self.rows):
+        for i in range(self.rows):
             self.Desktops.insert(i*self.cols +cols, Desktop.Desktop(self))
         
     def removeDesktopsCol(self):
         cols=self.cols
         self.cols-=1
-        for i in range (self.rows-1,-1,-1):
+        for i in range(self.rows-1,-1,-1):
             deleted=self.Desktops.pop(i*cols +self.cols)
             if deleted.hostname !='Unknown':                
                 new_pos=self.findNamePosition(deleted.hostname)
@@ -292,7 +352,7 @@ class Classroom(object):
         #first, check if the position is already saved in the classroom setup:
         hostname=self.Hosts[key].hostname
         position=-1
-        for i in range(0,len(self.Desktops)):
+        for i in range(len(self.Desktops)):
             if self.Desktops[i].hostname==hostname:
                 position=i
                 if self.Desktops[position].hostkey!='':
@@ -390,7 +450,7 @@ class Classroom(object):
     
     def redistributeDesktops(self,targets,save=True):
         total=min(len(targets),len(self.Desktops))
-        for i in range (0,total):
+        for i in range (total):
             name=targets[i]
             if name=='&nbsp;':
                 name='none'
@@ -404,7 +464,7 @@ class Classroom(object):
         '''Move a Destkop in the list of Desktops at a fixed position'''
         previousDesktop=self.Desktops[position]
         oldposition=-1
-        for i in range(0,len(self.Desktops)):
+        for i in range(len(self.Desktops)):
             if self.Desktops[i].hostname==desktop_name:
                 newDesktop=self.Desktops[i]
                 oldposition=i
