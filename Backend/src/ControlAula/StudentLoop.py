@@ -207,10 +207,10 @@ class Obey(object):
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
         f = ControlFactory()
-        con=reactor.connectTCP(teacherIP, newteacher[1] + 1, f)
-        con.addErrback("lost", self.removeMyTeacher)
-        con.addCallback("connected", self.listen)        
-        con.addCallback("commands",self.getCommands)
+        reactor.connectTCP(teacherIP, newteacher[1] + 1, f)
+        f.protocol.add_callback("lost", self.removeMyTeacher)
+        f.protocol.add_callback("connected", self.listen)        
+        f.protocol.add_callback("commands",self.handleCommands)
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(teacherIP) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
@@ -272,9 +272,8 @@ class Obey(object):
         self.handler.myVNC=self.myVNC
         self.handler.myBcast=self.broadcast
 
-    def getCommands(self):
-        commands=self.myteacher.getCommands( self.mylogin, self.myIp )
-        for i in commands:
+    def handleCommands(self, orders):
+        for i in orders:
             if self.handler.existCommand(i[0]):
                 self.handler.args=i[1:]
                 self.handler.process(i[0])

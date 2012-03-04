@@ -85,11 +85,7 @@ class RequestRegister(amp.Command):
     errors = {Exception: 'EXCEPTION'}
 
 
-class GetCommands(amp.Command):
-    arguments = [('login', amp.String()),('hostip', amp.String(True))]
-    response = [('commands', amp.AmpList([('command', amp.String()),('args', ListOf(amp.Unicode(),True))]))]
-
 
 class Ping(amp.Command):
     arguments = [('login', amp.String()),('hostip', amp.String(True))]
-    response = [('ping', amp.Boolean())]
+    response = [('commands', amp.AmpList([('args', ListOf(amp.Unicode(),True))],True))]

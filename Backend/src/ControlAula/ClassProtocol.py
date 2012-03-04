@@ -26,7 +26,7 @@ from twisted.internet import reactor
 from twisted.internet.protocol import Factory
 from twisted.protocols import policies
 from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
-from commands import RequestRegister, Ping, GetCommands
+from commands import RequestRegister, Ping
 
 class ControlProtocol(amp.AMP, policies.TimeoutMixin):
     connection_pool = {}
@@ -53,7 +53,7 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
             
             for cb in ControlProtocol._callbacks['connected']:
                 cb(self.transport.getPeer(), v['result'])
-        print "conectado"
+        
         amp.AMP.connectionMade(self)
         self.setTimeout(ControlProtocol.timeout_delay)
         #If I am the server, do things:
@@ -131,30 +131,44 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
         self.client_hostip = hostip
         for cb in ControlProtocol._callbacks['alive']:
             cb(login,hostip)
-            
-        result = False
+
         if login == 'root':
             key = hostip
         else:
             key =login + '@' + hostip
 
+        new_commands=[]
+        added_commands=[]
         for cb in ControlProtocol._callbacks['commands']:
-            if len(cb(key)) > 0:
-                result = True
-                break
-                    
-        return {'ping': result}
+            add_command=cb(key)
+            if len(add_command) >0 : 
+                for command in add_command:
+                    # convert to String all the elements:
+                    safe_command = [str(i) for i in command]
+                    added_commands.append(safe_command)
 
-    def resetTimer(self, *args):
+        if len(added_commands) > 0:
+            for command in added_commands:
+                new_commands.append({'args':command})
+        #return {'commands':[{'args':["1","2","3"]},{'args':['hola',]}]} 
+        return {'commands': new_commands}
+
+    def resetTimer(self, instructions):
         """Reset the timeout when a ping succeeds"""
         self.resetTimeout()
-        if args["ping"]:
+        print instructions
+        
+        if len(instructions["commands"]) > 0:
+            orders=[]
+            for order in instructions["commands"]:
+                received_order=order['args']
+                orders.append([True if i=='True' else False if i=='False' else i for i in received_order])
             for cb in ControlProtocol._callbacks['commands']:
-                print "hola"
+                cb(orders)
 
     def pingFailed(self, *args):
         """Error callback for pings"""
-        print "Conexión perdida con %s" % self.my_server
+        print "Conexión perdida con %s" % self.my_server , args
 
     def doPing(self):
         """Do pings to the server whenever a connection exists:"""

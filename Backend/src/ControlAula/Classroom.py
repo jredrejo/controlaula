@@ -66,7 +66,7 @@ class Classroom(object):
         pf.protocol = ControlProtocol
         pf.protocol.add_callback("connected", self.addClient)
         pf.protocol.add_callback("alive", self.update_time_stamp)
-        pf.protocol.add_callback("commands", self.showCommands)
+        pf.protocol.add_callback("commands", self.getCommands)
         pf.protocol.add_callback("lost", self.removeClient)
         try:
             reactor.listenTCP(Configs.PORT+1, pf)
@@ -218,9 +218,12 @@ class Classroom(object):
     def getCommands(self,key):
         """Returns the list of commands to be executed by an user or pc
         and remove them from the list"""
-        commands=self.CommandStack[key]
-        self.CommandStack[key]=[]
-        return commands
+        if self.CommandStack.has_key(key):
+            commands=self.CommandStack[key]
+            self.CommandStack[key]=[]
+            return commands
+        else:
+            return []
 
     def showCommands(self,key):
         """Returns the list of commands to be executed by an user or pc
