@@ -222,5 +222,7 @@ if __name__ == '__main__':
     reactor.callWhenRunning(checkActivity)
     logging.getLogger().debug("Starting controlaula")
     reactor.run()
-    if exitStatus == 97: logging.getLogger().debug("Restarting controlaula due to network changes")
+    if exitStatus == 97: 
+        logging.getLogger().debug("Restarting controlaula due to network changes")
+        reactor.run()
     sys.exit(exitStatus)

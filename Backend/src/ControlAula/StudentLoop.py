@@ -206,11 +206,12 @@ class Obey(object):
             MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
-        f = ControlFactory()
-        reactor.connectTCP(teacherIP, newteacher[1] + 1, f)
-        f.protocol.add_callback("lost", self.removeMyTeacher)
-        f.protocol.add_callback("connected", self.listen)        
-        f.protocol.add_callback("commands",self.handleCommands)
+        self.factory = ControlFactory()
+        self.factory.maxRetries = 10
+        reactor.connectTCP(teacherIP, newteacher[1] + 1, self.factory)
+        self.factory.protocol.add_callback("lost", self.removeMyTeacher)
+        self.factory.protocol.add_callback("connected", self.listen)        
+        self.factory.protocol.add_callback("commands",self.handleCommands)
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(teacherIP) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
@@ -235,7 +236,7 @@ class Obey(object):
                     logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
                 
                 
-    def checkClass(self,data={}):                        
+    def checkClass(self,data={}):
         if Configs.RootConfigs['classroomname']==data['classroomname']:
             return True#it's a teacher of my classroom
         elif MyUtils.classroomName()==data['classroomname']:
@@ -258,7 +259,12 @@ class Obey(object):
         self.myteacher=None
         if self.mylogin!='root':
             MyUtils.putLauncher()
-            
+
+        try:
+            self.factory.stopTrying()
+        except:
+            pass
+                  
         try: #begin again udp scanning
             reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
         except:

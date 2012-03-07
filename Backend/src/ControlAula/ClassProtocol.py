@@ -23,6 +23,7 @@
 ##############################################################################
 from twisted.protocols import amp
 from twisted.internet import reactor
+from twisted.internet.error import ConnectionDone
 from twisted.internet.protocol import Factory
 from twisted.protocols import policies
 from ControlAula.Utils import  Configs, MyUtils,NetworkUtils
@@ -70,25 +71,43 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
             self.server = False  # I am a client, not a server
 
     def timeoutConnection(self):
+        if self.server:
+            self.server_unplug()
+        else:
+            self.client_unplug()
+                    
         if self.transport:
             self.transport.loseConnection()
+
 
     def connectionLost(self, reason):
         amp.AMP.connectionLost(self, reason)
         if self.server:
-            #Pop the client from the connection_pool:            
-            key = self._transportPeer.host + ':' + str(self._transportPeer.port)
-            unplugged = ControlProtocol.connection_pool[key]
-            ControlProtocol.connection_pool.pop(key)
-            if len(unplugged) >0 :
-                for cb in ControlProtocol._callbacks['lost']:
-                    cb(unplugged['login'], unplugged['hostip'])
+            self.server_unplug()
         else:
             try:
+                if reason.check(ConnectionDone):  #desconectado correctamente
+                    self.client_unplug()
                 print "Conexión perdida con %s" % self.my_server
             except:
                 pass
 
+    def client_unplug(self):
+        """unplug teacher for this client"""
+        for cb in ControlProtocol._callbacks['lost']:
+            cb()
+                   
+    def server_unplug(self):
+        """Pop the client from the connection_pool, unplugging this student
+        from the list of clients for this teacher"""            
+        key = self._transportPeer.host + ':' + str(self._transportPeer.port)
+        if ControlProtocol.connection_pool.has_key(key):  #else it has already been unplugged            
+            unplugged = ControlProtocol.connection_pool[key]
+            ControlProtocol.connection_pool.pop(key)
+            if len(unplugged) >0 :
+                for cb in ControlProtocol._callbacks['lost']:
+                    cb(unplugged['login'], unplugged['hostip'])  
+                      
     @RequestRegister.responder
     def requestRegister(self, uid):
         """The client sends the registration data to the server
@@ -156,7 +175,6 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
     def resetTimer(self, instructions):
         """Reset the timeout when a ping succeeds"""
         self.resetTimeout()
-        print instructions
         
         if len(instructions["commands"]) > 0:
             orders=[]
@@ -166,9 +184,10 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
             for cb in ControlProtocol._callbacks['commands']:
                 cb(orders)
 
-    def pingFailed(self, *args):
+    def pingFailed(self, reason):
         """Error callback for pings"""
-        print "Conexión perdida con %s" % self.my_server , args
+        if reason.check(ConnectionDone):  #desconectado correctamente
+            self.client_unplug()                
 
     def doPing(self):
         """Do pings to the server whenever a connection exists:"""
