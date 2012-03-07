@@ -299,15 +299,23 @@ def launchAs(command,login="nobody"):
     for i in glob('/tmp/*.controlaula'):
         os.remove( i)
     disp,display,xauth=getXtty()
+    environment={"DISPLAY":disp}
     if  isLTSP()!='' and getLoginName()=='root' and not ltsp_logged() :
         finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     else:
         if login=="nobody":
             display=xauth + ' ' + display 
+            xauth_splitted=xauth.split("=")
+            environment[xauth_splitted[0]]=xauth_splitted[1]
         finalcommand='su -c \"' +  display + ' ' + command + '\" %s' % (login)
     logging.getLogger().debug(finalcommand)
     try:
-        proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True)
+        #pid=os.fork()
+        #if pid:
+        #    return pid
+        #else:
+        proc=subprocess.Popen(finalcommand, stdout=subprocess.PIPE,shell=True,env=environment)
+        #   return None
     except:
         proc=None    
     return proc  
