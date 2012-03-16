@@ -31,6 +31,19 @@ function selectNone(){
 	$("#selectable li").removeClass("ui-selected");
 }
 
+
+function selectList(list_selected){
+    
+	$("#selectable li").each(function(i, item){
+            if (list_selected[i] == $("#"+item.id + ":eq(0) > #pcName").html() ){
+                $("#"+item.id).addClass("ui-selected");
+            }
+            i++;
+            			
+		});
+    
+}
+
 function computersSelected(url){
 	var selected = Array();
 	var i=0;
