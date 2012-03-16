@@ -124,8 +124,9 @@ function refreshClassroom(equipos){
 	if(myclass.classroom.pclist.length==0)
 		return;
 
-	//$('#selectable .ui-state-default').remove();
-
+    var selected = computersSelected("nothing");          
+                
+    
 	for(var i=0;i<myclass.classroom.pclist.length;i++){
 
 		var name = myclass.classroom.pclist[i].loginname;
@@ -163,6 +164,7 @@ function refreshClassroom(equipos){
 		$('#sortable').append('<li class="ui-state-default" id="sortable-'+i+'"><div id="pcName">'+pcname+'</div><img class="thumb-image" src="'+photo+'"/><div id="userName">'+name+'</div></li>');
 
 	}
+    selectList(selected);
 	lastPClist = myclass.classroom.pclist;
 }
 
