@@ -23,6 +23,7 @@
 ##############################################################################
 
 from twisted.protocols import amp
+from twisted import version
 from twisted.protocols.basic import Int16StringReceiver
 from struct import pack
 
@@ -88,4 +89,10 @@ class RequestRegister(amp.Command):
 
 class Ping(amp.Command):
     arguments = [('login', amp.String()),('hostip', amp.String(True))]
-    response = [('commands', amp.AmpList([('args', ListOf(amp.Unicode(),True))],True))]
+    if version.major >= 9:
+        response = [('commands', amp.AmpList([('args', ListOf(amp.Unicode(),True)),],True))]
+    else:        
+        milista= amp.AmpList([('args', ListOf(amp.Unicode(),True)),])
+        milista.optional = True
+        response = [('commands', milista)]
+    

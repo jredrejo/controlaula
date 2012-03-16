@@ -282,6 +282,12 @@ class Obey(object):
         for i in orders:
             if self.handler.existCommand(i[0]):
                 self.handler.args=i[1:]
+                if self.handler.args[0][0] == '[' and self.handler.args[0][-1] == ']':
+                    # convert strings back to lists
+                    lista_string=self.handler.args[0][1:-1]
+                    lista_convertida=lista_string.split("',")
+                    self.handler.args[0]=[item[1:-1] for item in lista_convertida]
+                   
                 self.handler.process(i[0])
         
     def off_if_timeout(self,initial_time):
