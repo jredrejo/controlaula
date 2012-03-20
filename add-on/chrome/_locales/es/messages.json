@@ -1,0 +1,23 @@
+{
+  "name": {
+    "message": "ControlAula"
+  },
+  "description": {
+    "message": "Añade un botón para usar ControlAula desde el navegador"
+  },
+
+  "see_classroom": {
+    "message": "Mostrar y controlar el aula con ControlAula"
+  },
+  
+    "launch_web": {
+    "message": "Enviar esta página web a todos los alumnos"
+  },
+  
+    "confirmWeb": {
+    "message": "¿Desea realmente enviar la dirección web a los alumnos?"
+  }  
+
+  
+}
+

@@ -1,7 +1,7 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
 # Project:     Controlaula
-# Module:    SutdentLoop.py
+# Module:    StudentLoop.py
 # Purpose:     Class listen to the teacher and execute his orders
 # Language:    Python 2.5
 # Date:        22-Jan-2010.
@@ -28,7 +28,11 @@ from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging
 import datetime
-from twisted.internet import reactor     
+import os
+import simplejson as json
+from twisted.internet import reactor
+from twisted import version
+from twisted.web import resource, static, server  
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet.protocol import ReconnectingClientFactory
 from ClassProtocol import ControlProtocol
@@ -36,6 +40,61 @@ from ClassProtocol import ControlProtocol
 MCAST_ADDR = "224.0.0.1"
 MCAST_PORT = 11011
 
+class ControlAulaProtocol(resource.Resource):
+    """Respond with the appropriate ControlAUla  protocol response.
+    A GET should return a file. A POST should use JSON to retrieve and send data
+    """
+    isLeaf = True  # This is a resource end point.
+
+    def render_GET(self, request):
+        pagename = request.path[1:].lower()   
+        # Check if requested file exists.    
+        if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
+            requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
+        else:    
+            requestedfile = os.path.join(self.PageDir,request.path[1:])
+        
+        if pagename == "controlaula":
+            requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')                    
+
+        if not os.path.isfile(requestedfile):
+            # Didn't find it? Return an error.
+            request.setResponseCode(404)
+            return"""
+            <html><head><title>404 - No Such Resource</title></head>
+            <body><h1>No Such Resource</h1>
+            <p>File not found: %s - No such file.</p></body></html>
+            """ % requestedfile
+
+        f=static.File(requestedfile)
+        
+        if f.type is None:
+            f.type, f.encoding = static.getTypeAndEncoding(requestedfile,
+                f.contentTypes,
+                f.contentEncodings,
+                f.defaultType)        
+        
+        if f.type:
+            ctype=f.type.split(":")[0]
+            # Send the headers.
+            request.setHeader('content-type', ctype)
+            
+        if f.encoding:
+            request.setHeader('content-encoding', f.encoding)
+        # Send the page.               
+        if version.major >= 9:
+            static.NoRangeStaticProducer(request,f.openForReading()).start()
+        else:
+            static.FileTransfer(f.openForReading(), f.getFileSize(), request)
+        return server.NOT_DONE_YET
+    
+    def render_POST(self, request):
+        if request.path == '/BROWSER':
+            data_to_return = MyUtils.launcherData()
+            return json.dumps(data_to_return)
+        else:
+            return {}
+        
 class ControlFactory(ReconnectingClientFactory):
     protocol = ControlProtocol
 

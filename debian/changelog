@@ -1,6 +1,6 @@
-controlaula (1.7.1-1) unstable; urgency=low
+controlaula (1.7.0-1) unstable; urgency=low
 
-  * New release with improvements in protocols
+  * New release with improvements in protocols and chromium extension
 
  -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Mon, 12 Mar 2012 19:01:58 +0100
 

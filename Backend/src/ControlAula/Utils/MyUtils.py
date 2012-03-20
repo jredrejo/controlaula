@@ -57,6 +57,7 @@ def userIsTeacher(teachersGroup='teachers'):
     p2 = subprocess.Popen(["grep", teachersGroup], stdin=p1.stdout, stdout=subprocess.PIPE)
     output = p2.communicate()[0]
     return (output != '')
+    #return False
 
 def isLTSP():
     global ipLTSP
@@ -366,19 +367,28 @@ def isActive():
 
     return active 
 
+
+def launcherData():
+    homeuser = getHomeUser()
+    loginuser = getLoginName()
+    teacher = userIsTeacher()
+    return {"home" : homeuser, "login":loginuser, "teacher": teacher}
+
 def putLauncher(teacher_ip='',teacher_port=8900,isTeacher=False):
     from Configs import WWWPAGES,APP_DIR,TEACHER_UID
     requestedfile=os.path.join(WWWPAGES,'controlaula.html')
-    local_web_dir=os.path.join(APP_DIR,'www')
-    if not os.path.exists(local_web_dir):
+    local_img_dir=os.path.join(APP_DIR,'img')
+    local_js_dir=os.path.join(APP_DIR,'js','jquery')
+    if not os.path.exists(local_img_dir):
         try:
-            os.mkdir(local_web_dir)          
-            shutil.copy(os.path.join(WWWPAGES,'img','controlaula.png') , os.path.join(local_web_dir,'controlaula.png'))
+            os.mkdir(local_img_dir)          
+            shutil.copy(os.path.join(WWWPAGES,'img','controlaula.png') , os.path.join(local_img_dir,'controlaula.png'))
         except:
             logging.getLogger().debug('Error copying www pages to user directory')
-    if not os.path.exists(os.path.join(local_web_dir,'js','jquery','jquery.min.js')):                
+    if not os.path.exists(os.path.join(local_js_dir, 'jquery.min.js')):                
         try:
-            shutil.copy(os.path.join(WWWPAGES,'js','jquery','jquery.min.js') , os.path.join(local_web_dir,'jquery.min.js'))
+            os.makedirs(local_js_dir)
+            shutil.copy(os.path.join(WWWPAGES,'js','jquery','jquery.min.js') , os.path.join(local_js_dir,'jquery.min.js'))
         except:
             logging.getLogger().debug('Error copying www pages to user directory')
             

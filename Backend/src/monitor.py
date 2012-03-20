@@ -143,7 +143,7 @@ if __name__ == '__main__':
     #Get and save some global variables:
     isTeacher = MyUtils.userIsTeacher()
 
-    #isTeacher=False#enable for debugging
+    #isTeacher=False  #enable for debugging
     USERNAME = MyUtils.getLoginName()
     HOSTNAME = NetworkUtils.getHostName()
     Configs.PORT = NetworkUtils.getUsableTCPPort("localhost", PORT)
@@ -153,13 +153,13 @@ if __name__ == '__main__':
         from twisted.internet import glib2reactor
         glib2reactor.install()
     from twisted.internet import reactor
-
+    from twisted.web import server
+    
     ######### Begin the application loop #######
     if  isTeacher:
         logging.getLogger().debug("The user is a teacher")
         from ControlAula import TeacherMainLoop, Classroom
         from ControlAula.Utils  import Publications
-        from twisted.web import server
 
         NetworkUtils.getWirelessData()
         if MyUtils.isLTSPServer():
@@ -211,13 +211,16 @@ if __name__ == '__main__':
             sys.exit()
 
     else:
-        logging.getLogger().debug("The user is NOT a teacher")
-        from ControlAula import StudentLoop
-
+        from ControlAula import StudentLoop        
+        logging.getLogger().debug("The user is NOT a teacher")  
+        # Start up the web launch service.
+        launchRoot = StudentLoop.ControlAulaProtocol()  # Resource object
+        launchRoot.PageDir = Configs.WWWPAGES
+        launchSite = server.Site(launchRoot)        
         MyStudent = StudentLoop.Obey(REFRESH)
         reactor.callWhenRunning(MyStudent.listen)
         reactor.callWhenRunning(MyStudent.startScan)
-
+        reactor.listenTCP(Configs.PORT, launchSite)
     #begin application loop:
     reactor.callWhenRunning(checkActivity)
     logging.getLogger().debug("Starting controlaula")
