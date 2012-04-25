@@ -169,27 +169,27 @@ class Plugins(object):
         
     def receiveFile(self,url):
         from os.path import join
-        file=join(Configs.FILES_DIR,url)        
+        ufile=join(Configs.FILES_DIR,url)        
         url='http://' + self.myteacher._ServerProxy__host + '/sendfile/' + urllib.quote(url)
-        self.filesQueue.addRequest( url, file,self.got_file)
+        self.filesQueue.addRequest( url, ufile,self.got_file)
 
     def receiveDir(self,url):
         from os.path import join
-        file=join(Configs.FILES_DIR, '_dirlist_' + url)        
+        ufile=join(Configs.FILES_DIR, '_dirlist_' + url)        
         url='http://' + self.myteacher._ServerProxy__host + '/sendfile/_dirlist_' + urllib.quote(url)
-        self.filesQueue.addRequest( url,file,self.got_list)
+        self.filesQueue.addRequest( url,ufile,self.got_list)
 
-    def got_list(self,dloader,file):  
-        dirname=os.path.basename( file)[9:]
+    def got_list(self,dloader,ufile):  
+        dirname=os.path.basename( ufile)[9:]
         dirpath=os.path.join(Configs.FILES_DIR,dirname)
         try:
             os.mkdir(dirpath)
         except:
             pass
         
-        filelist=open(file, "r").read().strip().split()
+        filelist=open(ufile, "r").read().strip().split()
         try:
-            os.remove(file)
+            os.remove(ufile)
         except:
             pass
 
@@ -200,7 +200,7 @@ class Plugins(object):
         
         self.got_file(None,dirpath + os.sep)
         
-    def got_file(self,dloader,file):        
+    def got_file(self,dloader,ufile):        
         import os.path
         commands={'gnome':'nautilus','kde':'konqueror','xfce':'thunar','lxde':'pcmanfm'}
 
@@ -211,7 +211,7 @@ class Plugins(object):
             command='thunar'
             
         try:
-            subprocess.Popen([command,os.path.dirname(file)])
+            subprocess.Popen([command,os.path.dirname(ufile)])
         except:
             pass #not recognized file browser
         
@@ -228,7 +228,9 @@ class Plugins(object):
     def getPathUser(self):
         return MyUtils.getHomeUser()
 
-    def fileBrowserAll(self,node,video=False):
+    def fileBrowserAll(self,node,video=False):       
+        if node.__class__ is not list:
+            node=[node,]
         path=urllib.unquote(unicode(node[0])).encode( "utf-8" )
 
         if path=='home':
@@ -253,10 +255,10 @@ class Plugins(object):
                 else:
                     if video:
                         mtype=mimetypes.guess_type(f,True)[0]
-                        type=''
+                        utype=''
                         if mtype!=None:
-                            type=mtype[:5] 
-                        if type not in ['audio','video']:#skip non-multimedia files
+                            utype=mtype[:5] 
+                        if utype not in ['audio','video']:#skip non-multimedia files
                             continue                                 
                     
                     e=os.path.splitext(f)[1][1:] # get .ext and remove dot

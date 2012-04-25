@@ -153,7 +153,10 @@ class Desktop(object):
             else:
                 key = self.mainIP
             #self.classroom.CommandStack[key].append(['broadcast',url,isDVD,encodec])  
-            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD,encodec])  
+            self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD,encodec])
+            if self.userkey!='':
+                self.classroom.CommandStack[self.userkey].append(['disableMouse'])
+                self.classroom.LoggedUsers[self.userkey].mouse=False             
             self.video=True 
                   
     def stopBroadcast(self):
