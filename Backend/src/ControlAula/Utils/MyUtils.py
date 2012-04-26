@@ -29,13 +29,14 @@ import subprocess
 import logging
 import shutil
 import NetworkUtils
+import uuid
 from glob import glob
 loginname = ''
 fullusername = ''
 homeuser = ''
 bssid = ''
 ipLTSP = 'unknown'
-
+PROC_TCP = "/proc/net/tcp"
 
 def getLoginName():
     global loginname
@@ -397,11 +398,20 @@ def isActive():
     return active
 
 
-def launcherData():
-    homeuser = getHomeUser()
+def launcherData(filter_port=None):
+    from Configs import TEACHER_UID
     loginuser = getLoginName()
+    homeuser = getHomeUser()   
     teacher = userIsTeacher()
-    return {"home": homeuser, "login": loginuser, "teacher": teacher}
+    user_uid = TEACHER_UID
+    if filter_port:
+        connected = user_conn(filter_port,loginuser)
+        if connected != loginuser:
+            loginuser = connected
+            teacher = False
+            homeuser = pwd.getpwnam(connected)[5]
+            user_uid = str(uuid.uuid1())
+    return {"home": homeuser, "login": loginuser, "teacher": teacher, "uid": user_uid}
 
 
 def putLauncher(teacher_ip='', teacher_port=8900, isTeacher=False):
@@ -444,3 +454,41 @@ def putLauncher(teacher_ip='', teacher_port=8900, isTeacher=False):
     f2 = open(os.path.join(APP_DIR, 'data.json'), 'wb')
     f2.write(addon_info)
     f2.close()
+
+def _hex2dec(s):
+    return str(int(s,16))
+
+
+def _ip(s):
+    ip = [(_hex2dec(s[6:8])),(_hex2dec(s[4:6])),(_hex2dec(s[2:4])),(_hex2dec(s[0:2]))]
+    return '.'.join(ip)
+
+
+def _remove_empty(array):
+    return [x for x in array if x !='']
+
+
+def _convert_ip_port(array):
+    host,port = array.split(':')
+    return _ip(host),_hex2dec(port)
+
+
+def user_conn(filter_port,user):
+    connected = user
+    try:
+        f = open(PROC_TCP,'r')
+        content = f.readlines()
+        content.pop(0)
+    except:
+        return
+    for line in content:
+        line_array = _remove_empty(line.split(' '))
+        l_host,l_port = _convert_ip_port(line_array[1])
+        r_host,r_port = _convert_ip_port(line_array[2])
+        if filter_port:
+            if filter_port != r_port and filter_port != l_port:
+                continue
+        uid = pwd.getpwuid(int(line_array[7]))[0]
+        if uid != user:
+            connected = uid                    
+    return connected

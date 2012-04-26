@@ -23,8 +23,14 @@
 ##############################################################################
 
 
-import array,fcntl,socket,struct,os,re
-import logging,subprocess
+import array
+import fcntl
+import socket
+import struct
+import os
+import re
+import logging
+import subprocess
 
 gateway='0'
 ltspGateway='0'

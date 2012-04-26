@@ -1,3 +1,10 @@
+controlaula (1.7.1-1) unstable; urgency=low
+
+  * New upstream release fixing bug when using google chrome
+  * Added logrotate config for controlaula logs
+
+ -- José L. Redrejo Rodríguez <jredrejo@debian.org>  Thu, 26 Apr 2012 12:36:14 +0200
+
 controlaula (1.7.0-1) unstable; urgency=low
 
   * New release with improvements in protocols and chromium extension

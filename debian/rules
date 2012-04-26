@@ -34,6 +34,7 @@ binary-indep: build install
 	dh_testroot
 	dh_installchangelogs 
 	dh_installdocs
+	dh_installlogrotate
 	dh_installmenu
 	dh_installinit  --init-script controlaula -r --no-start -u"start 24 2 3 4 5 . stop 20 1 	." 
 	dh_installman 

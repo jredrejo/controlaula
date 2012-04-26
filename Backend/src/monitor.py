@@ -213,14 +213,16 @@ if __name__ == '__main__':
     else:
         from ControlAula import StudentLoop        
         logging.getLogger().debug("The user is NOT a teacher")  
-        # Start up the web launch service.
-        launchRoot = StudentLoop.ControlAulaProtocol()  # Resource object
-        launchRoot.PageDir = Configs.WWWPAGES
-        launchSite = server.Site(launchRoot)        
         MyStudent = StudentLoop.Obey(REFRESH)
         reactor.callWhenRunning(MyStudent.listen)
         reactor.callWhenRunning(MyStudent.startScan)
-        reactor.listenTCP(Configs.PORT, launchSite)
+        if MyUtils.isLTSP() == '':
+            # Start up the web launch service.
+            launchRoot = StudentLoop.ControlAulaProtocol()  # Resource object
+            launchRoot.PageDir = Configs.WWWPAGES
+            launchSite = server.Site(launchRoot)
+            reactor.listenTCP(Configs.PORT, launchSite)         
+        
     #begin application loop:
     reactor.callWhenRunning(checkActivity)
     logging.getLogger().debug("Starting controlaula")
