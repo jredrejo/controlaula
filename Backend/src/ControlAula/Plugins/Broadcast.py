@@ -96,7 +96,7 @@ class Vlc(object):
             elif isdvd==1:
                 command+=["dvdsimple://" + device]
             elif isvcd==1:
-                command+=[" vcdx://" + device]
+                command+=["vcdx://" + device]
             else:
                 return mount_point
         else:
