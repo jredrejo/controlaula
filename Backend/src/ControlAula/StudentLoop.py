@@ -54,8 +54,15 @@ class ControlAulaProtocol(resource.Resource):
         else:    
             requestedfile = os.path.join(self.PageDir,request.path[1:])
         
-        if pagename == "controlaula":
-            requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')                    
+        if '/controlaula/' in request.path:
+            pagename = request.path[13:]
+            if "-" in pagename:
+                request.path = request.path[12:]
+                                
+                requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')
+            else:
+                requestedfile = os.path.join(Configs.APP_DIR,pagename)
+                               
 
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.

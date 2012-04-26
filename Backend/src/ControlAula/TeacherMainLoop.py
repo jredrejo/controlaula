@@ -57,7 +57,6 @@ class ControlAulaProtocol(resource.Resource):
     # Return the page for a GET. This will handle requests
     # to read data.
     def render_GET(self, request):
-
         pagename = request.path[1:].lower()
         session = request.getSession()          
         if 'controlaula/' in pagename:
@@ -73,8 +72,8 @@ class ControlAulaProtocol(resource.Resource):
         if  pagename == '':
             request.path='/index.html'
             pagename='index.html'
-
-        if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and pagename=='index.html':
+        #if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and pagename=='index.html':
+        if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and (pagename[-4:] == 'html' or pagename[-1:] == '/'):
             request.path='/student/chat.html'
             pagename='student/chat.html'
 
