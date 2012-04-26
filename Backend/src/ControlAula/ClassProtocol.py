@@ -163,13 +163,19 @@ class ControlProtocol(amp.AMP, policies.TimeoutMixin):
             if len(add_command) >0 : 
                 for command in add_command:
                     # convert to String all the elements:
-                    safe_command = [str(i) for i in command]
+                    safe_command=[]
+                    for i in command:
+                        if type(i) is list:
+                            str_i=[str(n) for n in i]
+                            safe_command = safe_command + str_i                            
+                        else:
+                            safe_command.append(str(i))
                     added_commands.append(safe_command)
 
         if len(added_commands) > 0:
             for command in added_commands:
                 new_commands.append({'args':command})
-        #return {'commands':[{'args':["1","2","3"]},{'args':['hola',]}]} 
+        #return {'commands':[{'args':["1","2","3"]},{'args':['hola',]}]}
         return {'commands': new_commands}
 
     def resetTimer(self, instructions):

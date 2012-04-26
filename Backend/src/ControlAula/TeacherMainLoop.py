@@ -25,6 +25,7 @@
 
 
 from twisted.web import server, resource, static
+from twisted.web.util import redirectTo
 import twisted
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs, MyUtils
@@ -58,10 +59,23 @@ class ControlAulaProtocol(resource.Resource):
     # to read data.
     def render_GET(self, request):
 
-        pagename=request.path[1:].lower()
+        pagename = request.path[1:].lower()
         session = request.getSession()
-                
-        if  pagename=='':
+
+        if pagename == 'controlaula':
+            requestedfile=os.path.join(Configs.APP_DIR,'controlaula.html')
+            return """
+            <html>
+                <head>
+                    <meta http-equiv=\"refresh\" content=\"20;URL=%(url)s\">
+                </head>
+                <body bgcolor=\"#FFFFFF\" text=\"#000000\">
+                <a href=\"%(url)s\">click here</a>
+                </body>
+            </html>
+            """ % {'url': requestedfile}
+
+        if  pagename == '':
             request.path='/index.html'
             pagename='index.html'
 
