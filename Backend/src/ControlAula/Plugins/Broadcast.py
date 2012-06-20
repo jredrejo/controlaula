@@ -139,19 +139,13 @@ class Vlc(object):
         my_login = MyUtils.getLoginName()
         isLTSP = (MyUtils.isLTSP()!='')
         if my_login == 'root': NetworkUtils.cleanRoutes()              
-        ltspaudio=' '
+        command = 'vlc -I dummy ' 
         if isLTSP:
-            ltspaudio=' PULSE_SERVER=tcp:' + self.myIP + ':4713 ESPEAKER=' + self.myIP+  ':16001 '
-                  
-        command=ltspaudio 
-        command +='vlc -I dummy ' 
-        command +=  '--quiet --video-on-top --skip-frames --sout-display-delay=1100  --sub-track=0 '
-        #command += '--netsync-master-ip=' + teacherIP
+            command +=  ' --no-overlay --vout=xcb_x11 '
+        command +=  '--quiet --video-on-top --skip-frames --sout-display-delay=1100  --sub-track=0 --no-overlay '
         
         command +='  -f  rtp://@239.255.255.0:'
         command += self.port 
-        if my_login == 'root': NetworkUtils.addRoute('239.255.255.0')
-        
         logged=MyUtils.logged_user()
         if not isLTSP and my_login != 'root':
             self.procRx=subprocess.Popen(command, stdout=subprocess.PIPE,shell=True)
@@ -215,11 +209,10 @@ class MyPP(protocol.ProcessProtocol):
             self.stop_all()
             return False        
         else:
-            self.active=data.find('VLC media player')>-1
-            if self.active:
+            if  not self.active:
                 try:
+                    self.active=True
                     reactor.callLater(2.0,self.start_viewer)
-                    pass
                 except:
                     pass
         

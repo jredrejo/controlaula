@@ -23,8 +23,14 @@
 ##############################################################################
 
 
-import array,fcntl,socket,struct,os,re
-import logging,subprocess
+import array
+import fcntl
+import socket
+import struct
+import os
+import re
+import logging
+import subprocess
 
 gateway='0'
 ltspGateway='0'
@@ -290,16 +296,16 @@ def ltspGW():
     return ltspGateway
 
 def cleanRoutes():
-    s=subprocess.Popen(['route','-n'],stdout=subprocess.PIPE).communicate()[0]
+    s=subprocess.Popen(['/sbin/route','-n'],stdout=subprocess.PIPE).communicate()[0]
     l=s.splitlines()
     for route in l:
         target=route.split()[0]
         if target[:4]=='239.':
-            subprocess.Popen(['route','del','-net',target + '/24'])
+            subprocess.Popen(['/sbin/route','del','-net',target + '/24'])
             
 def addRoute(net,gw=''):
     if gw=='':
         newgw=defaultGW()
     else:
         newgw=gw
-    subprocess.Popen(['route','add','-net',net+ '/24','gw',newgw])
+    subprocess.Popen(['/sbin/route','add','-net',net+ '/24','gw',newgw])

@@ -29,19 +29,23 @@ import subprocess
 import logging
 import shutil
 import NetworkUtils
+import uuid
 from glob import glob
 loginname = ''
 fullusername = ''
 homeuser = ''
 bssid = ''
 ipLTSP = 'unknown'
-
+PROC_TCP = "/proc/net/tcp"
 
 def getLoginName():
     global loginname
     #loginname = ''
     if loginname == '':
         loginname = pwd.getpwuid(os.getuid())[0]
+
+
+
     return loginname
 
 
@@ -72,6 +76,9 @@ def isLTSP():
     global ipLTSP
     if ipLTSP != 'unknown':
         return ipLTSP
+
+    for i in glob('/tmp/*.controlaula'):
+        os.remove(i)
 
     ipLTSP = ''
     if getLoginName() == 'root':
@@ -218,11 +225,7 @@ def dpms_on():
 def _get_disp_tty():
     xauth = ''
     display = ''
-
-    if isLTSP() == '':
-        command = 'COLUMNS=300  ps aux|grep -v grep|grep "\-auth"'
-    else:
-        command = 'COLUMNS=300  ps aux|grep -v grep|grep ldm|grep -v ssh'
+    command = 'COLUMNS=300  ps aux|grep -v grep|grep "\-auth"'
 
     prt = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
     prt.wait()
@@ -234,6 +237,8 @@ def _get_disp_tty():
         if p[i] == '-auth':
             xauth = p[i + 1]
             break
+    if isLTSP() != '':
+    	xauth=os.path.join(glob("/var/run/ldm-xauth*")[0],"Xauthority")
 
     if getLoginName() != 'root':
         display = os.environ["DISPLAY"].split(".")[0]
@@ -286,11 +291,11 @@ def getXtty():
     from tempfile import mkstemp
     from shutil import copyfile
     from time import sleep
+
     disp, xauth = _get_disp_tty()
+    semaphore = len(glob('/tmp/*.controlaula')) == 0 
 
-    semaphore = len(glob('/tmp/*.controlaula')) == 0 and ltsp_logged()
-
-    if getLoginName() == 'root' and semaphore:
+    if semaphore:
         command = 'xauth -f ' + xauth + ' add `hostname -s`/unix' + disp + ' . ' + generateUUID(24)
         subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         os.environ['XAUTHORITY'] = xauth
@@ -308,8 +313,14 @@ def getXtty():
             except:
                 pass
             xauth = 'XAUTHORITY=' + xfile
+            os.environ['XAUTHORITY'] = xfile
         else:
             xauth = ''
+
+    if 'XAUTHORITY' in os.environ:
+        xauth =  'XAUTHORITY=' + os.environ['XAUTHORITY']
+    else:
+        os.environ['XAUTHORITY']=xauth
 
     return (disp, display, xauth)
 
@@ -319,29 +330,20 @@ def launchAsNobody(command):
 
 
 def launchAs(command, login="nobody"):
-    for i in glob('/tmp/*.controlaula'):
-        os.remove(i)
     disp, display, xauth = getXtty()
-    environment = {"DISPLAY": disp}
-    if  isLTSP() != '' and getLoginName() == 'root' and not ltsp_logged():
+    environment = {"DISPLAY": disp,"XAUTHORITY":os.environ['XAUTHORITY']}
+    if  isLTSP() != '' and getLoginName() == 'kkroot' and not ltsp_logged():
         finalcommand = 'su -c \"' + display + ' ' + command + '\" %s' % (login)
     else:
-        if login == "nobody":
-            display = xauth + ' ' + display
-            xauth_splitted = xauth.split("=")
-            environment[xauth_splitted[0]] = xauth_splitted[1]
         finalcommand = 'su -c \"' + display + ' ' + command + '\" %s' % (login)
     logging.getLogger().debug(finalcommand)
     try:
-        #pid=os.fork()
-        #if pid:
-        #    return pid
-        #else:
         proc = subprocess.Popen(finalcommand, stdout=subprocess.PIPE,
                                 shell=True, env=environment)
-        #   return None
     except:
         proc = None
+
+
     return proc
 
 
@@ -397,11 +399,20 @@ def isActive():
     return active
 
 
-def launcherData():
-    homeuser = getHomeUser()
+def launcherData(filter_port=None):
+    from Configs import TEACHER_UID
     loginuser = getLoginName()
+    homeuser = getHomeUser()   
     teacher = userIsTeacher()
-    return {"home": homeuser, "login": loginuser, "teacher": teacher}
+    user_uid = TEACHER_UID
+    if filter_port:
+        connected = user_conn(filter_port,loginuser)
+        if connected != loginuser:
+            loginuser = connected
+            teacher = False
+            homeuser = pwd.getpwnam(connected)[5]
+            user_uid = str(uuid.uuid1())
+    return {"home": homeuser, "login": loginuser, "teacher": teacher, "uid": user_uid}
 
 
 def putLauncher(teacher_ip='', teacher_port=8900, isTeacher=False):
@@ -444,3 +455,41 @@ def putLauncher(teacher_ip='', teacher_port=8900, isTeacher=False):
     f2 = open(os.path.join(APP_DIR, 'data.json'), 'wb')
     f2.write(addon_info)
     f2.close()
+
+def _hex2dec(s):
+    return str(int(s,16))
+
+
+def _ip(s):
+    ip = [(_hex2dec(s[6:8])),(_hex2dec(s[4:6])),(_hex2dec(s[2:4])),(_hex2dec(s[0:2]))]
+    return '.'.join(ip)
+
+
+def _remove_empty(array):
+    return [x for x in array if x !='']
+
+
+def _convert_ip_port(array):
+    host,port = array.split(':')
+    return _ip(host),_hex2dec(port)
+
+
+def user_conn(filter_port,user):
+    connected = user
+    try:
+        f = open(PROC_TCP,'r')
+        content = f.readlines()
+        content.pop(0)
+    except:
+        return
+    for line in content:
+        line_array = _remove_empty(line.split(' '))
+        l_host,l_port = _convert_ip_port(line_array[1])
+        r_host,r_port = _convert_ip_port(line_array[2])
+        if filter_port:
+            if filter_port != r_port and filter_port != l_port:
+                continue
+        uid = pwd.getpwuid(int(line_array[7]))[0]
+        if uid != user:
+            connected = uid                    
+    return connected
