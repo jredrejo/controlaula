@@ -60,7 +60,7 @@ def get_ip_inet_address(connection_ip='198.41.0.4'):
     except:
         inet_address=''
     s.close()
-    logging.getLogger().debug("Inet Address:" + inet_address)
+    #logging.getLogger().debug("Inet Address:" + inet_address)
     return inet_address 
 
 

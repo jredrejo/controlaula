@@ -1,0 +1,19 @@
+{
+  "name": "__MSG_name__",  
+  "version": "0.1",
+  "description": "__MSG_description__",  
+  "background_page": "background.html",
+  "homepage_url": "http://controlaula.sourceforge.net",
+  "icons": { "48": "controlaula_48x48.png", "128": "controlaula_128x128.png"  },
+  "browser_action": {
+    "default_icon": "controlaula-button.png",
+    "default_title": "ControlAula",
+    "name": "Click to see your classroom with ControlAula"
+  },
+  "permissions": [
+    "tabs", "http://localhost/*"
+  ],
+  "default_locale": "en"
+}
+
+

@@ -1,7 +1,7 @@
 ##############################################################################
 # -*- coding: utf-8 -*-
 # Project:     Controlaula
-# Module:    SutdentLoop.py
+# Module:    StudentLoop.py
 # Purpose:     Class listen to the teacher and execute his orders
 # Language:    Python 2.5
 # Date:        22-Jan-2010.
@@ -28,12 +28,83 @@ from ControlAula.Plugins  import StudentHandler,Actions,VNC, Broadcast
 from ControlAula import ScanTeachers
 import logging
 import datetime
-from twisted.internet import reactor     
+import os
+import simplejson as json
+from twisted.internet import reactor
+from twisted import version
+from twisted.web import resource, static, server  
 from twisted.internet.protocol import DatagramProtocol
+from twisted.internet.protocol import ReconnectingClientFactory
+from ClassProtocol import ControlProtocol
 
 MCAST_ADDR = "224.0.0.1"
 MCAST_PORT = 11011
 
+class ControlAulaProtocol(resource.Resource):
+    """Respond with the appropriate ControlAUla  protocol response.
+    A GET should return a file. A POST should use JSON to retrieve and send data
+    """
+    isLeaf = True  # This is a resource end point.
+
+    def render_GET(self, request):
+        pagename = request.path[1:].lower()   
+        # Check if requested file exists.    
+        if request.path[:13]=='/loginimages/' or request.path[:10]=='/sendfile/':
+            requestedfile=os.path.join(Configs.APP_DIR ,request.path[1:])
+        else:    
+            requestedfile = os.path.join(self.PageDir,request.path[1:])
+        
+        if pagename == "controlaula":
+            requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')                    
+
+        if not os.path.isfile(requestedfile):
+            # Didn't find it? Return an error.
+            request.setResponseCode(404)
+            return"""
+            <html><head><title>404 - No Such Resource</title></head>
+            <body><h1>No Such Resource</h1>
+            <p>File not found: %s - No such file.</p></body></html>
+            """ % requestedfile
+
+        f=static.File(requestedfile)
+        
+        if f.type is None:
+            f.type, f.encoding = static.getTypeAndEncoding(requestedfile,
+                f.contentTypes,
+                f.contentEncodings,
+                f.defaultType)        
+        
+        if f.type:
+            ctype=f.type.split(":")[0]
+            # Send the headers.
+            request.setHeader('content-type', ctype)
+            
+        if f.encoding:
+            request.setHeader('content-encoding', f.encoding)
+        # Send the page.               
+        if version.major >= 9:
+            static.NoRangeStaticProducer(request,f.openForReading()).start()
+        else:
+            static.FileTransfer(f.openForReading(), f.getFileSize(), request)
+        return server.NOT_DONE_YET
+    
+    def render_POST(self, request):
+        if request.path == '/BROWSER':
+            data_to_return = MyUtils.launcherData()
+            return json.dumps(data_to_return)
+        else:
+            return {}
+        
+class ControlFactory(ReconnectingClientFactory):
+    protocol = ControlProtocol
+
+    def buildProtocol(self, address):
+        self.resetDelay()        
+        proto = ReconnectingClientFactory.buildProtocol(self, address)
+        return proto
+
+        
+            
 class MulticastClientUDP(DatagramProtocol):
     def __init__(self, obey):
         self.obey=obey
@@ -141,16 +212,8 @@ class Obey(object):
                     self.Teachers.pop(name)
                         
     def listen(self):             
-        if self.catched !='':         
-            #Keep the user as an active user :                       
-            try:                
-                order=self.myteacher.hostPing( self.mylogin, self.myIp )
-                self.sendData(order)
-            except: #network jam or teacher left
-                pass 
-
-        #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:
         
+        #check different reasons to switch off (if you're root and your hostname has a classroom-oXX format:       
         if self.mylogin=='root' :
             number=MyUtils.getDesktopNumber(self.myHostname)            
             if Configs.RootConfigs['offactivated'] == '1' and self.isLTSP != '' and number != '':
@@ -202,7 +265,12 @@ class Obey(object):
             MyUtils.putLauncher( teacherIP,newteacher[1]  , False)
         
         self.myteacher=xmlrpclib.Server('http://'+teacherIP+ ':' + str(newteacher[1]) + '/RPC2')
-
+        self.factory = ControlFactory()
+        self.factory.maxRetries = 10
+        reactor.connectTCP(teacherIP, newteacher[1] + 1, self.factory)
+        self.factory.protocol.add_callback("lost", self.removeMyTeacher)
+        self.factory.protocol.add_callback("connected", self.listen)        
+        self.factory.protocol.add_callback("commands",self.handleCommands)
         self.catched=name
         self.myIp=NetworkUtils.get_ip_inet_address(teacherIP) 
         self.myMAC=NetworkUtils.get_inet_HwAddr(teacherIP)
@@ -210,58 +278,24 @@ class Obey(object):
         self.handler.teacherIP=teacherIP
         self.handler.teacher_port=str(newteacher[1])
         self.handler.myIP=self.myIp
-        try:                
-            order=self.myteacher.hostPing( self.mylogin, self.myIp )
-            self.sendData(order)
-        except: #network jam, try again later
-            pass
-            
+        self.sendPhoto()
+        self.getTeacherData()
         
         
-    def sendData(self,order):
-        if order=='new':
-
-            if self.mylogin !='root':
-                #pending catch configurations and photo
-                #self,login, hostname,hostip,ltsp=False,classname='',username='',
-                #ipLTSP='',internetEnabled=True,mouseEnabled=True,
-                #soundEnabled=True,messagesEnabled=False,photo=''):
-                            
-                self.myteacher.addUser(self.mylogin,self.myHostname,self.myIp, (self.isLTSP!=''),
-                                      Configs.RootConfigs['classroomname']  ,self.myFullName,self.isLTSP,
-                                      Configs.MonitorConfigs.GetGeneralConfig('internet') ,
-                                      Configs.MonitorConfigs.GetGeneralConfig('mouse') ,
-                                      Configs.MonitorConfigs.GetGeneralConfig('sound'),
-                                      Configs.MonitorConfigs.GetGeneralConfig('messages'), '')       
-                
-                face=MyUtils.getFaceFile()
-                if face=='':
-                    logging.getLogger().debug('The user %s has not photo to send' % (self.mylogin))
-                else:
-                    try:
-                        f = xmlrpclib.Binary(open(face, 'rb').read())
-                        self.myteacher.facepng(self.mylogin,self.myIp,f)         
-                    except:
-                        logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
-                        
-
-
-                     
+    def sendPhoto(self):  
+        if self.mylogin !='root':
+            face=MyUtils.getFaceFile()
+            if face=='':
+                logging.getLogger().debug('The user %s has not photo to send' % (self.mylogin))
             else:
-                logging.getLogger().debug('Sending to the teacher this info: %s,%s,%s,%s,%s' % (self.myHostname,self.myIp, self.myMAC,
-                                       self.isLTSP,Configs.RootConfigs['classroomname']))
-                self.myteacher.addHost('root',self.myHostname,self.myIp, self.myMAC,
-                                       self.isLTSP,Configs.RootConfigs['classroomname'],1)
+                try:
+                    f = xmlrpclib.Binary(open(face, 'rb').read())
+                    self.myteacher.facepng(self.mylogin,self.myIp,f)         
+                except:
+                    logging.getLogger().error('The user %s could not send its photo' % (self.mylogin))
                 
-                self.getTeacherData()
                 
-        elif order == 'commands':
-            if self.myVNC is not None:
-                self.getCommands()
-            else:
-                self.getTeacherData()
-
-    def checkClass(self,data={}):                        
+    def checkClass(self,data={}):
         if Configs.RootConfigs['classroomname']==data['classroomname']:
             return True#it's a teacher of my classroom
         elif MyUtils.classroomName()==data['classroomname']:
@@ -284,7 +318,12 @@ class Obey(object):
         self.myteacher=None
         if self.mylogin!='root':
             MyUtils.putLauncher()
-            
+
+        try:
+            self.factory.stopTrying()
+        except:
+            pass
+                  
         try: #begin again udp scanning
             reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
         except:
@@ -298,11 +337,10 @@ class Obey(object):
         self.handler.myVNC=self.myVNC
         self.handler.myBcast=self.broadcast
 
-    def getCommands(self):
-        commands=self.myteacher.getCommands( self.mylogin, self.myIp )
-        for i in commands:
-            if self.handler.existCommand(i[0]):
-                self.handler.args=i[1:]
+    def handleCommands(self, orders):
+        for i in orders:
+            if self.handler.existCommand(i[0]):                
+                self.handler.args=i[1:]               
                 self.handler.process(i[0])
         
     def off_if_timeout(self,initial_time):

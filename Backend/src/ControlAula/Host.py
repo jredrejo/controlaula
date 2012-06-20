@@ -24,7 +24,7 @@
 import datetime
 class Host(object):
     
-    def __init__(self,login,hostname,hostip,mac,ltsp,classname,internetEnabled):
+    def __init__(self,login,hostname,hostip,mac,ltsp,classname,internetEnabled,uid):
         self.login=login
         self.hostname=hostname
         self.ip=hostip
@@ -33,6 +33,7 @@ class Host(object):
         self.classname=classname
         self.internet=internetEnabled
         self.timestamp=datetime.datetime.now()
+        self.uid=uid
 
     def __str__(self):
         return str((self.login,self.hostname,self.hostip,self.mac,self.ltsp,self.classname,self.internet,self.timestamp))

@@ -1,0 +1,4 @@
+<!ENTITY ControlAulaToolbarButton.label "ControlAula Button">
+<!ENTITY ControlAulaToolbarButton.tooltip "Show and control your classroom with ControlAula">
+<!ENTITY ControlAulaToolbarButton2.label "ControlAula Button to send WebPage">
+<!ENTITY ControlAulaToolbarButton2.tooltip "Send this webpage to every student">

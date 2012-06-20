@@ -9,3 +9,5 @@ usr/share/xul-ext-controlaula
 etc/dhcp3/dhclient-exit-hooks.d
 etc/dhcp/dhclient-exit-hooks.d
 etc/NetworkManager/dispatcher.d
+etc/opt/chrome/policies/managed
+etc/chromium/policies/managed

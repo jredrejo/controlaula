@@ -24,10 +24,11 @@
 
 
 
-from twisted.web import server,resource,  static
+from twisted.web import server, resource, static
+from twisted.web.util import redirectTo
 import twisted
 from ControlAula.Plugins  import Handler
-from ControlAula.Utils import Configs,MyUtils
+from ControlAula.Utils import Configs, MyUtils
 import cgi
 import simplejson as json
 import os,logging
@@ -58,10 +59,23 @@ class ControlAulaProtocol(resource.Resource):
     # to read data.
     def render_GET(self, request):
 
-        pagename=request.path[1:].lower()
+        pagename = request.path[1:].lower()
         session = request.getSession()
-                    
-        if  pagename=='':
+
+        if pagename == 'controlaula':
+            requestedfile=os.path.join(Configs.APP_DIR,'controlaula.html')
+            return """
+            <html>
+                <head>
+                    <meta http-equiv=\"refresh\" content=\"20;URL=%(url)s\">
+                </head>
+                <body bgcolor=\"#FFFFFF\" text=\"#000000\">
+                <a href=\"%(url)s\">click here</a>
+                </body>
+            </html>
+            """ % {'url': requestedfile}
+
+        if  pagename == '':
             request.path='/index.html'
             pagename='index.html'
 
@@ -84,6 +98,9 @@ class ControlAulaProtocol(resource.Resource):
         else:    
                 requestedfile = os.path.join(self.PageDir,request.path[1:])
 
+        if pagename == "controlaula":
+            requestedfile=os.path.join(Configs.APP_DIR,'controlaula.html')
+            
         requestedfile=unquote(requestedfile)
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.
@@ -125,6 +142,9 @@ class ControlAulaProtocol(resource.Resource):
         """        
         if request.path=='/RPC2':
             return self.teacher.render(request)
+        elif request.path == '/BROWSER':
+            data_to_return = MyUtils.launcherData()
+            return json.dumps(data_to_return)
         
         #Filter the command needed.
         command=request.path[1:]

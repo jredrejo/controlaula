@@ -159,7 +159,7 @@ class Plugins(object):
             mac=Configs.MonitorConfigs.GetMAC(i)
             if mac !='':                
                 macs.append(mac)                
-        Actions.sendWOLBurst(macs, 2)                         
+        Actions.sendWOLBurst(macs, 4)                         
                 
     def sleep(self):
         self.usersCommand(Desktop.sleep)
