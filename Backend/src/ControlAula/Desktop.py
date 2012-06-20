@@ -152,6 +152,8 @@ class Desktop(object):
                 key = self.userkey
             else:
                 key = self.mainIP
+            if self.ltsp:
+                self.classroom.CommandStack[self.ip].append(['rootmulticast','192.168.0.254'])                
             #self.classroom.CommandStack[key].append(['broadcast',url,isDVD,encodec])  
             self.classroom.CommandStack[self.mainIP].append(['broadcast',url,isDVD,encodec])
             if self.userkey!='':
