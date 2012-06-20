@@ -24,34 +24,12 @@
 import avahi
 import dbus
 import logging
-from twisted.internet.protocol import DatagramProtocol
-from twisted.internet import reactor
-from twisted.application.internet import MulticastServer
 
-MCAST_ADDR = "224.0.0.1"
-MCAST_PORT = 11011
-
-class MulticastServerUDP(DatagramProtocol):
-    def __init__(self,name,text):
-        self.data=str(text) + name
-    
-    def startProtocol(self):
-        self.transport.joinGroup(MCAST_ADDR)
-
-    def datagramReceived(self, datagram, address):
-        if datagram == 'ControlAula':
-            #print "ok-datagram", str(address)
-            try:
-                self.transport.write(self.data, address)
-            except:
-                pass #network not available right now
-            
 class Publications(object):
     '''
        """A simple class to publish a network service with zeroconf using
     avahi.
     '''
-
 
     def __init__(self, name,  port,stype="_controlaula._tcp",text="", domain="", host=""):        
         '''
@@ -91,12 +69,7 @@ class Publications(object):
                     
         except:
             logging.getLogger().error('Avahi is not working in this computer, relay on plan B to work')
-            
-        try:
-            reactor.listenMulticast(MCAST_PORT, MulticastServerUDP(self.name,self.text))
-        except : #port not usable, plan B is not valid, trusting only in avahi
-            pass
-                     
+                                 
         self.online=True            
     
     def unpublish(self):

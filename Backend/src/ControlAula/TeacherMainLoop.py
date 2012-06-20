@@ -25,7 +25,6 @@
 
 
 from twisted.web import server, resource, static
-from twisted.web.util import redirectTo
 import twisted
 from ControlAula.Plugins  import Handler
 from ControlAula.Utils import Configs, MyUtils
@@ -58,28 +57,23 @@ class ControlAulaProtocol(resource.Resource):
     # Return the page for a GET. This will handle requests
     # to read data.
     def render_GET(self, request):
-
         pagename = request.path[1:].lower()
-        session = request.getSession()
-
-        if pagename == 'controlaula':
-            requestedfile=os.path.join(Configs.APP_DIR,'controlaula.html')
-            return """
-            <html>
-                <head>
-                    <meta http-equiv=\"refresh\" content=\"20;URL=%(url)s\">
-                </head>
-                <body bgcolor=\"#FFFFFF\" text=\"#000000\">
-                <a href=\"%(url)s\">click here</a>
-                </body>
-            </html>
-            """ % {'url': requestedfile}
-
+        session = request.getSession()          
+        if 'controlaula/' in pagename:
+            if Configs.TEACHER_UID == pagename[12:]:
+                self.teacher_login = Configs.TEACHER_UID
+                session.uid = Configs.TEACHER_UID
+                request.redirect('/index.html')
+                return '{}'
+            else:
+                request.redirect('/student/chat.html')
+                return '{}'            
+            
         if  pagename == '':
             request.path='/index.html'
             pagename='index.html'
-
-        if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and pagename=='index.html':
+        #if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and pagename=='index.html':
+        if (request.host.host!='127.0.0.1' or self.teacher_login!=session.uid) and (pagename[-4:] == 'html' or pagename[-1:] == '/'):
             request.path='/student/chat.html'
             pagename='student/chat.html'
 
@@ -143,7 +137,8 @@ class ControlAulaProtocol(resource.Resource):
         if request.path=='/RPC2':
             return self.teacher.render(request)
         elif request.path == '/BROWSER':
-            data_to_return = MyUtils.launcherData()
+            filter_port = request.client.port
+            data_to_return = MyUtils.launcherData(str(filter_port))
             return json.dumps(data_to_return)
         
         #Filter the command needed.

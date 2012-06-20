@@ -33,12 +33,8 @@ import simplejson as json
 from twisted.internet import reactor
 from twisted import version
 from twisted.web import resource, static, server  
-from twisted.internet.protocol import DatagramProtocol
 from twisted.internet.protocol import ReconnectingClientFactory
 from ClassProtocol import ControlProtocol
-
-MCAST_ADDR = "224.0.0.1"
-MCAST_PORT = 11011
 
 class ControlAulaProtocol(resource.Resource):
     """Respond with the appropriate ControlAUla  protocol response.
@@ -54,8 +50,15 @@ class ControlAulaProtocol(resource.Resource):
         else:    
             requestedfile = os.path.join(self.PageDir,request.path[1:])
         
-        if pagename == "controlaula":
-            requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')                    
+        if '/controlaula/' in request.path:
+            pagename = request.path[13:]
+            if "-" in pagename:
+                request.path = request.path[12:]
+                                
+                requestedfile = os.path.join(Configs.APP_DIR,'controlaula.html')
+            else:
+                requestedfile = os.path.join(Configs.APP_DIR,pagename)
+                               
 
         if not os.path.isfile(requestedfile):
             # Didn't find it? Return an error.
@@ -103,45 +106,6 @@ class ControlFactory(ReconnectingClientFactory):
         proto = ReconnectingClientFactory.buildProtocol(self, address)
         return proto
 
-        
-            
-class MulticastClientUDP(DatagramProtocol):
-    def __init__(self, obey):
-        self.obey=obey
-        reactor.callLater(15, self.timedOut)
-
-    def datagramReceived(self, datagram, address):
-        data={}
-        port=0
-        div1=datagram.split("]")
-        try:
-            name=div1[1]
-            div2=div1[0].split("'")
-            for i in div2:
-                div3=i.split("=")
-                if len(div3)==2:
-                    if div3[0]=="web":
-                        port=int(div3[1])
-                        data["web"]=port
-                    else:
-                        data[div3[0]]=div3[1]              
-            
-            self.obey._add_teacher(None, name, address[0], port,data)
-        except: #bad data received
-            pass
-
-    def timedOut(self):
-        logging.getLogger().debug("UDP timed out")
-        try:
-            self.transport.stopListening()
-        except:
-            pass #avoid ugly errors when stopping the daemon         
-        if self.obey.catched =='':     
-            try:
-                reactor.listenUDP(0, MulticastClientUDP(self.obey)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
-            except:
-                logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
-           
             
 class Obey(object):
     '''
@@ -180,12 +144,7 @@ class Obey(object):
         
         except Exception, ex:
             logging.getLogger().error("Couldn't initialize Avahi monitor: %s" % str(ex))
-            #sys.exit()        
-        try:
-            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
-        except:
-            logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
-        
+            #sys.exit()               
 
     def _add_teacher(self, func, name, address, port,data={}):
         #discard ipv6 entries
@@ -324,11 +283,7 @@ class Obey(object):
         except:
             pass
                   
-        try: #begin again udp scanning
-            reactor.listenUDP(0, MulticastClientUDP(self)).write('ControlAula', (MCAST_ADDR, MCAST_PORT))
-        except:
-            logging.getLogger().debug("couldn't create an udp socket")#due to network issues, there's no chance to do an udp connection
-            
+
         
     def getTeacherData(self):
         vncrp,vncwp,vncport,bcastport=self.myteacher.connData()

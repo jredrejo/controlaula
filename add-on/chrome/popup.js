@@ -22,7 +22,7 @@ function sendLink() {
 
 
 function openPage() {
-    var nuevaurl= "http://localhost:" + localStorage.port + "/controlaula"
+    var nuevaurl= "http://localhost:" + localStorage.port + "/controlaula/" + localStorage.uid 
     newwindow = window.open(nuevaurl);
 }
 
