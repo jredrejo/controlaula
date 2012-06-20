@@ -24,6 +24,7 @@ function onData(data) {
         localStorage.homeDir = data["home"];
         localStorage.login = data["login"];
         localStorage.teacher = data["teacher"];
+        localStorage.uid = data["uid"];
         localStorage.port = port;
         if (localStorage.teacher == "true")
         {//crear barra de launchall
