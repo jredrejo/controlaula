@@ -1,4 +1,0 @@
-#!/bin/sh
-
-#restart controlaula to get new network addresses
-invoke-rc.d controlaula restart
