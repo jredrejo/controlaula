@@ -97,5 +97,5 @@ reactor.callWhenRunning(MyStudent.listen)
 reactor.callWhenRunning(MyStudent.startScan)
 reactor.callWhenRunning(prepareBroadcast)
 
-#application = service.Application('controlaula',uid=0,gid=0)
-reactor.run()
+application = service.Application('controlaula',uid=0,gid=0)
+#reactor.run()

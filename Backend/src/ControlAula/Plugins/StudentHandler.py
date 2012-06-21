@@ -47,7 +47,8 @@ class Plugins(object):
                 'disableInternet':self.disableInternet,
                 'rootenableInternet':self.rootEnableInternet,
                 'rootdisableInternet':self.rootDisableInternet,    
-                'rootClean':self.rootClean,            
+                'rootClean':self.rootClean,
+                'rootmulticast': self.rootmulticast,         
                 'enableMouse':self.enableMouse,
                 'disableMouse':self.disableMouse,
                 'enableSound':self.enableSound,
@@ -112,6 +113,9 @@ class Plugins(object):
     def rootClean(self,bcastnet,gw):  
         NetworkUtils.cleanRoutes()      
         NetworkUtils.addRoute(bcastnet,gw)
+    
+    def rootmulticast(self,gw):
+        if MyUtils.getLoginName() == 'root': NetworkUtils.addRoute('239.255.255.0',gw)
         
     def rootEnableInternet(self,login):
         try:
